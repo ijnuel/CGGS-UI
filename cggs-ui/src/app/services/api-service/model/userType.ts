@@ -10,10 +10,11 @@
  * Do not edit the class manually.
  */
 
-export type UserType = 0 | 1 | 2;
+export type UserType = 0 | 1 | 2 | 3;
 
 export const UserType = {
     NUMBER_0: 0 as UserType,
     NUMBER_1: 1 as UserType,
-    NUMBER_2: 2 as UserType
+    NUMBER_2: 2 as UserType,
+    NUMBER_3: 3 as UserType
 };

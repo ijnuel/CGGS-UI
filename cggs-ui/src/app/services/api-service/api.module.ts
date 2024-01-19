@@ -4,6 +4,17 @@ import { HttpClient } from '@angular/common/http';
 
 
 import { AccountService } from './api/account.service';
+import { ClassService } from './api/class.service';
+import { ClassSubjectService } from './api/classSubject.service';
+import { ClassSubjectResultService } from './api/classSubjectResult.service';
+import { CountryService } from './api/country.service';
+import { LocalGovernmentAreaService } from './api/localGovernmentArea.service';
+import { SchoolConfigurationService } from './api/schoolConfiguration.service';
+import { SessionService } from './api/session.service';
+import { StateService } from './api/state.service';
+import { StudentService } from './api/student.service';
+import { SubjectService } from './api/subject.service';
+import { TeacherService } from './api/teacher.service';
 import { WeatherForecastService } from './api/weatherForecast.service';
 
 @NgModule({
@@ -12,6 +23,17 @@ import { WeatherForecastService } from './api/weatherForecast.service';
   exports:      [],
   providers: [
     AccountService,
+    ClassService,
+    ClassSubjectService,
+    ClassSubjectResultService,
+    CountryService,
+    LocalGovernmentAreaService,
+    SchoolConfigurationService,
+    SessionService,
+    StateService,
+    StudentService,
+    SubjectService,
+    TeacherService,
     WeatherForecastService ]
 })
 export class ApiModule {

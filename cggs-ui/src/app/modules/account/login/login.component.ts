@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { AccountService, UserLoginDto } from '../../../services/api-service';
 import { LocalService } from '../../../services/local-service/local.service';
 import { Router } from '@angular/router';
+import { errorHandler } from 'src/app/helpers/errorHandler';
 
 @Component({
   selector: 'app-login',
@@ -16,14 +17,17 @@ export class LoginComponent {
   ) { }
   login() {
     let payload: UserLoginDto = {
-      email: "a@a.com",
-      password: "Ijesudunsin1."
+      email: "me@me.com",
+      password: "12345678Aa"
     }
     this.accountService.apiAccountLoginPost(payload).subscribe(x => {
       if (x.succeeded) {
         this.localService.setCurrentUser(x.entity);
         this.router.navigate(['/home']);
       }
+    },
+    (err) => {
+      errorHandler(err);
     });
   }
 }

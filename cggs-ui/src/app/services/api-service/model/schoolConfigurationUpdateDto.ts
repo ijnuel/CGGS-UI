@@ -9,10 +9,12 @@
  * https://github.com/swagger-api/swagger-codegen.git
  * Do not edit the class manually.
  */
-import { UserType } from './userType';
+import { Term } from './term';
 
-export interface CreateUserDto { 
-    email?: string;
-    password?: string;
-    userType?: UserType;
+export interface SchoolConfigurationUpdateDto { 
+    currentTerm?: Term;
+    currentSessionId?: string;
+    caTotal?: number;
+    examTotal?: number;
+    id?: string;
 }

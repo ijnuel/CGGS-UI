@@ -1,37 +1,21 @@
 import { Injectable } from '@angular/core';
-import  *  as CryptoJS from  'crypto-js';
-import { UserDto } from '../api-service';
+import { UserDto, UserResponseDto } from '../api-service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class LocalService {
 
-  key = "294013";
 
   constructor() { }
 
   public saveData(key: string, value: any) {
-    // localStorage.setItem(key, this.encrypt(value));
-    localStorage.setItem(key, value);
+    localStorage.setItem(key, JSON.stringify(value));
   }
 
-  public getData(key: string): any | undefined {
-    // let data = localStorage.getItem(key) || "";
-    // return this.decrypt(data);
+  public getData(key: string): any {
     let data = localStorage.getItem(key) || undefined;
-    return data;
-  }
-
-  public setCurrentUser(value: any) {
-    localStorage.setItem("currentUser", value);
-  }
-  public getCurrentUser(): any | undefined {
-    let data = localStorage.getItem("currentUser") || undefined;
-    return data;
-  }
-  public clearCurrentUser() {
-    localStorage.removeItem("currentUser");
+    return data ? JSON.parse(data) : null;
   }
 
   public removeData(key: string) {
@@ -42,11 +26,14 @@ export class LocalService {
     localStorage.clear();
   }
 
-  private encrypt(txt: any): string {
-    return CryptoJS.AES.encrypt(txt, this.key).toString();
+  public setCurrentUser(value: UserResponseDto | undefined) {
+    localStorage.setItem("currentUser", JSON.stringify(value));
   }
-
-  private decrypt(txtToDecrypt: string): any {
-    return CryptoJS.AES.decrypt(txtToDecrypt, this.key).toString(CryptoJS.enc.Utf8);
+  public getCurrentUser(): UserResponseDto {
+    let data = localStorage.getItem("currentUser");
+    return data ? JSON.parse(data) : null;
+  }
+  public clearCurrentUser() {
+    localStorage.removeItem("currentUser");
   }
 }

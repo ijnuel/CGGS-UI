@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
-import { AccountService } from 'src/app/services/api-service';
+import { errorHandler } from 'src/app/helpers/errorHandler';
+import { AccountService, UserLoginDto, UserResponseDto } from 'src/app/services/api-service';
 import { LocalService } from 'src/app/services/local-service/local.service';
 
 @Component({
@@ -13,14 +14,22 @@ export class HomeComponent {
     private accountService: AccountService,
     private localService: LocalService, 
     private router: Router
-  ) { }
+  ) {
+   }
+
+
   logout() {
-    this.localService.clearCurrentUser();
-    this.accountService.apiAccountLogoutPost().subscribe(x => {
-      if (x.succeeded) {
-        this.router.navigate(['']);
-      }
-    });
+    this.accountService.apiAccountLogoutPost().subscribe(
+      res => {
+        console.log(res)
+        if (res.succeeded) {
+          this.localService.clearCurrentUser();
+          this.router.navigate(['']);
+        }
+      },
+      (err) => {
+        errorHandler(err);
+      });
   }
 
 }

@@ -18,7 +18,9 @@ import { CustomHttpUrlEncodingCodec }                        from '../encoder';
 import { Observable }                                        from 'rxjs';
 
 import { CreateUserDto } from '../model/createUserDto';
+import { ProblemDetails } from '../model/problemDetails';
 import { UserLoginDto } from '../model/userLoginDto';
+import { UserProfileDtoResult } from '../model/userProfileDtoResult';
 import { UserResponseDtoResult } from '../model/userResponseDtoResult';
 
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
@@ -97,6 +99,44 @@ export class AccountService {
         return this.httpClient.request<UserResponseDtoResult>('post',`${this.basePath}/api/Account/CreateAccount`,
             {
                 body: body,
+                withCredentials: this.configuration.withCredentials,
+                headers: headers,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * 
+     * 
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public apiAccountGetUserProfileGet(observe?: 'body', reportProgress?: boolean): Observable<UserProfileDtoResult>;
+    public apiAccountGetUserProfileGet(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<UserProfileDtoResult>>;
+    public apiAccountGetUserProfileGet(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<UserProfileDtoResult>>;
+    public apiAccountGetUserProfileGet(observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+
+        let headers = this.defaultHeaders;
+
+        // to determine the Accept header
+        let httpHeaderAccepts: string[] = [
+            'text/plain',
+            'application/json',
+            'text/json'
+        ];
+        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        if (httpHeaderAcceptSelected != undefined) {
+            headers = headers.set('Accept', httpHeaderAcceptSelected);
+        }
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+        ];
+
+        return this.httpClient.request<UserProfileDtoResult>('get',`${this.basePath}/api/Account/GetUserProfile`,
+            {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
                 observe: observe,

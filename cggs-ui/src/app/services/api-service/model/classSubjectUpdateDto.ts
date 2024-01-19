@@ -9,10 +9,11 @@
  * https://github.com/swagger-api/swagger-codegen.git
  * Do not edit the class manually.
  */
-import { UserType } from './userType';
 
-export interface CreateUserDto { 
-    email?: string;
-    password?: string;
-    userType?: UserType;
+export interface ClassSubjectUpdateDto { 
+    isActive?: boolean;
+    classId?: string;
+    subjectId?: string;
+    teacherId?: string;
+    id?: string;
 }

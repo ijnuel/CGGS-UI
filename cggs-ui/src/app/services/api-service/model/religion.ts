@@ -9,10 +9,12 @@
  * https://github.com/swagger-api/swagger-codegen.git
  * Do not edit the class manually.
  */
-import { UserType } from './userType';
 
-export interface CreateUserDto { 
-    email?: string;
-    password?: string;
-    userType?: UserType;
-}
+export type Religion = 0 | 1 | 2 | 3;
+
+export const Religion = {
+    NUMBER_0: 0 as Religion,
+    NUMBER_1: 1 as Religion,
+    NUMBER_2: 2 as Religion,
+    NUMBER_3: 3 as Religion
+};
