@@ -4,7 +4,10 @@
 
 export const environment = {
   apiUrl: "https://localhost:7118",
-  production: false
+  production: false,
+  logo: "/assets/logos/cggs.png",
+  short_name: "CGGS",
+  long_name: "Chosen Generations Group of Schools",
 };
 
 /*

@@ -1,0 +1,44 @@
+<div class="group">
+    <button class="rounded-lg flex py-1 px-2 gap-4 items-center hover:bg-primary/5">
+      <div
+        class="bg-cover bg-center bg-no-repeat border-white rounded-full bg-blue-200 border-2 h-8 ring-primary ring-1 w-8"
+        style="background-image: url(https://www.gravatar.com/avatar/?d=mp)"></div>
+      <div class="font-medium text-xs hidden md:block">
+        {{ _auth?.Student?.FirstName || "Guest" }}
+      </div>
+    </button>
+  
+    <section
+      class="bg-white border rounded-md shadow-lg ring-black text-sm origin-top-right right-2 w-56 z-50 absolute hidden focus:outline-none group-hover:inline-block"
+      role="menu" aria-orientation="vertical" aria-labelledby="menu-button" tabindex="-1">
+      <a tabindex="-1" role="menuitem" id="user-profile" routerLink="{{_isApplication ? '/applicaion' : '/bio-data'}}"
+        class="border-b bg-gray-100 p-2 block hover:bg-primary/5 hover:text-primary">
+        <div class="bg-cover bg-center bg-no-repeat border rounded-full mx-auto border-1 h-20 w-20" [style]="
+            PassportData
+              ? 'background-image: url(data:image/png;base64,' +
+                PassportData +
+                ')'
+              : 'background-image: url(https://www.gravatar.com/avatar/?d=mp)'
+          "></div>
+  
+        <div class="font-medium text-center text-xs truncate">
+          <div class="pt-2">{{ _auth?.Student?.FullName }}</div>
+          <div class="pt-1">({{ _auth?.Matric }})</div>
+        </div>
+      </a>
+  
+      <a tabindex="-1" [routerLink]="link.slug" *ngFor="let link of links"
+        class="flex text-left text-sm w-full p-2 text-gray-700 gap-4 hover:bg-gray-100">
+        <div class="text-sm material-icons">{{ link.icon }}</div>
+        <div>{{ link.title }}</div>
+      </a>
+  
+      <div class="border-t">
+        <button tabindex="-1" (click)="logoutUser()"
+          class="flex text-left text-sm w-full p-2 text-gray-700 gap-4 block hover:bg-gray-100">
+          <span class="text-sm material-icons">logout</span>
+          <div>Logout</div>
+        </button>
+      </div>
+    </section>
+  </div>

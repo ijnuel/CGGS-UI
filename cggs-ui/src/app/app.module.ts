@@ -1,5 +1,7 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
+import { CommonModule } from "@angular/common";
+import { FormsModule } from "@angular/forms";
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -10,18 +12,34 @@ import { HttpClientModule } from '@angular/common/http';
 import { LocalService } from './services/local-service/local.service';
 import { CookieService } from 'ngx-cookie-service';
 import { LoginComponent } from './modules/account/login/login.component';
+import { AuthenticatedLayoutComponent } from './components/layouts/authenticated-layout/authenticated-layout.component';
+import { AuthLayoutComponent } from './components/layouts/auth-layout/auth-layout.component';
+import { LoadingIndicatorComponent } from './components/_partials/loading-indicator/loading-indicator.component';
+import { TopNavBarComponent } from './components/_partials/top-nav-bar/top-nav-bar.component';
+import { DashboardComponent } from './pages/dashboard/dashboard.component';
+import { AccountDropdownComponent } from './components/_partials/account-dropdown/account-dropdown.component';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 @NgModule({
   declarations: [
     AppComponent,
     AccountComponent,
-    LoginComponent
+    LoginComponent,
+    AuthenticatedLayoutComponent,
+    AuthLayoutComponent,
+    LoadingIndicatorComponent,
+    TopNavBarComponent,
+    DashboardComponent,
+    AccountDropdownComponent
   ],
   imports: [
     BrowserModule,
     ApiModule,
+    NgbModule,
     AppRoutingModule,
     HttpClientModule,
+    CommonModule,
+    FormsModule,
   ],
   providers: [
     {provide: BASE_PATH, useValue: environment.apiUrl },

@@ -1,7 +1,7 @@
 import { ActivatedRouteSnapshot, CanActivate, Router, RouterStateSnapshot } from '@angular/router';
 import { CookieService } from 'ngx-cookie-service';
-import { LocalService } from '../../services/local-service/local.service';
-import { AccountService, UserDto, UserResponseDto } from '../../services/api-service';
+import { LocalService } from '../local-service/local.service';
+import { AccountService, UserDto, UserResponseDto } from '../api-service';
 import { Injectable } from '@angular/core';
 
 @Injectable({ providedIn: 'root' })
