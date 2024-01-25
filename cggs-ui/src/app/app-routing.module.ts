@@ -5,11 +5,20 @@ import { AccountComponent } from './modules/account/account.component';
 import { guestGuard } from './services/auth/guest.guard';
 import { LoginComponent } from './modules/account/login/login.component';
 import { DashboardComponent } from './pages/dashboard/dashboard.component';
+import { PortalComponent } from './modules/portal/portal.component';
 
 const routes: Routes = [
   { path: '', canActivate: [guestGuard], component: AccountComponent },
   { path: 'login', canActivate: [guestGuard], component: LoginComponent },
-  { path: 'home', canActivate: [authGuard], component: DashboardComponent },
+  { path: 'portal', canActivate: [authGuard], component: PortalComponent },
+  { path: 'dashboards', canActivate: [authGuard], component: DashboardComponent, outlet: "portalOutlet" },
+  {
+    path: 'dashboardss',
+    canActivate: [authGuard],
+    loadChildren: () =>
+      import('./modules/portal/portal.module').then((m) => m.PortalModule),
+    outlet: "portalOutlet"
+  },
   // {
   //   path: 'home',
   //   canActivate: [authGuard],

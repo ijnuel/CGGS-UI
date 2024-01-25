@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { UserDto, UserResponseDto } from '../api-service';
+import { CookieService } from 'ngx-cookie-service';
 
 @Injectable({
   providedIn: 'root'
@@ -7,7 +8,8 @@ import { UserDto, UserResponseDto } from '../api-service';
 export class LocalService {
 
 
-  constructor() { }
+  constructor(
+    private cookieService: CookieService) { }
 
   public saveData(key: string, value: any) {
     localStorage.setItem(key, JSON.stringify(value));
@@ -36,4 +38,24 @@ export class LocalService {
   public clearCurrentUser() {
     localStorage.removeItem("currentUser");
   }
+
+  public errorHandler(err: any) {
+    if (err.status == 401) {
+      this.clearCurrentUser();
+      location.href = "/";
+    }
+    else if (err.status == 403) {
+      location.href = "/portal";
+    }
+
+    return {
+      error: true,
+      message:
+        err?.error?.ExceptionMessage ||
+        err?.error?.Message ||
+        err?.Message ||
+        "An error occurred.",
+    };
+  }
+
 }

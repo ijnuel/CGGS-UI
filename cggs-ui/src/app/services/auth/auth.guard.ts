@@ -1,25 +1,21 @@
 import { ActivatedRouteSnapshot, CanActivate, Router, RouterStateSnapshot } from '@angular/router';
-import { CookieService } from 'ngx-cookie-service';
 import { LocalService } from '../local-service/local.service';
 import { AccountService, UserDto, UserResponseDto } from '../api-service';
 import { Injectable } from '@angular/core';
+import { CookieService } from 'ngx-cookie-service';
 
 @Injectable({ providedIn: 'root' })
 export class authGuard implements CanActivate {
   constructor(
-    private cookieService: CookieService,
     private localService: LocalService,
     private accountService: AccountService, 
-    private router: Router
+    private router: Router,
+    private cookieService: CookieService
     ) { }
 
   async canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
-    const cookieValue = this.cookieService.get('AccessToken');
     const currentUser : UserResponseDto = this.localService.getCurrentUser();
-    console.log(cookieValue);
-    console.log(currentUser);
     if (currentUser != undefined) {
-      console.log('here')
       return true;
     }
 

@@ -1,0 +1,133 @@
+<!-- <nav class="text-sm overflow-hidden">
+    <ul class="pl-0">
+  
+      <div
+        class="bg-white w-3/5 z-100 md:z-0 absolute md:relative h-screen bg-gradient-to-tr from-primary to-primary/60 block md:hidden"
+        style="
+        z-index: 100;" *ngIf="open">
+        <li class="block" *ngFor="let link of links">
+          <a [routerLink]="link.slug"
+            routerLinkActive="bg-primary/5 border-t-2 md:border-0 md:border-r-2 border-white md:!border-primary"
+            [routerLinkActiveOptions]="{ exact: link.name == 'home' }"
+            class="flex flex-row p-3 text-white md:text-gray-600 gap-2 duration-300 items-center hover:text-black md:text-primary">
+            <div class="text-lg material-icons inline-block">{{ link.icon }}</div>
+            <div class="whitespace-nowrap block">
+              {{ link.title }}
+            </div>
+          </a>
+        </li>
+      </div>
+      <div class="p-2 bg-transparent absolute md:relative h-screen hidden md:block">
+        <li class="block" *ngFor="let link of links">
+          <a [routerLink]="link.slug"
+            routerLinkActive="bg-primary/5 border-t-2 md:border-0 md:border-r-2 border-white md:!border-primary"
+            [routerLinkActiveOptions]="{ exact: link.name == 'home' }"
+            class="flex flex-row p-3 text-gray-600 gap-2 duration-300 items-center hover:text-primary">
+            <div class="text-lg material-icons inline-block">{{ link.icon }}</div>
+            <div class="whitespace-nowrap block">
+              {{ link.title }}
+            </div>
+          </a>
+        </li>
+        <div class="border-t hidden md:block"></div>
+      </div>
+    </ul>
+  </nav> -->
+
+  <!-- <div class="d-flex flex-column flex-shrink-0 p-3 text-white bg-dark vh-100"> -->
+    <!-- <a href="/" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-white text-decoration-none">
+      <svg class="bi me-2" width="40" height="32"><use xlink:href="#bootstrap"></use></svg>
+      <span class="fs-4">Sidebar</span>
+    </a>
+    <hr> -->
+    <!-- <ul class="nav nav-pills flex-column mb-auto">
+      <li class="nav-item">
+        <a href="#" class="nav-link active" aria-current="page">
+          <svg class="bi me-2" width="16" height="16"><use xlink:href="#home"></use></svg>
+          Home
+        </a>
+      </li>
+      <li>
+        <a href="#" class="nav-link text-white">
+          <svg class="bi me-2" width="16" height="16"><use xlink:href="#speedometer2"></use></svg>
+          Dashboard
+        </a>
+      </li>
+      <li>
+        <a href="#" class="nav-link text-white">
+          <svg class="bi me-2" width="16" height="16"><use xlink:href="#table"></use></svg>
+          Orders
+        </a>
+      </li>
+      <li>
+        <a href="#" class="nav-link text-white">
+          <svg class="bi me-2" width="16" height="16"><use xlink:href="#grid"></use></svg>
+          Products
+        </a>
+      </li>
+      <li>
+        <a href="#" class="nav-link text-white">
+          <svg class="bi me-2" width="16" height="16"><use xlink:href="#people-circle"></use></svg>
+          Customers
+        </a>
+      </li>
+    </ul>
+    <hr> -->
+    <!-- <div class="dropdown">
+      <a href="#" class="d-flex align-items-center text-white text-decoration-none dropdown-toggle" id="dropdownUser1" data-bs-toggle="dropdown" aria-expanded="false">
+        <img src="https://github.com/mdo.png" alt="" width="32" height="32" class="rounded-circle me-2">
+        <strong>mdo</strong>
+      </a>
+      <ul class="dropdown-menu dropdown-menu-dark text-small shadow" aria-labelledby="dropdownUser1" style="">
+        <li><a class="dropdown-item" href="#">New project...</a></li>
+        <li><a class="dropdown-item" href="#">Settings</a></li>
+        <li><a class="dropdown-item" href="#">Profile</a></li>
+        <li><hr class="dropdown-divider"></li>
+        <li><a class="dropdown-item" href="#">Sign out</a></li>
+      </ul>
+    </div> -->
+  <!-- </div> -->
+
+  
+  <div class="collapse" id="navbarToggleExternalContent">
+    <div class="bg-dark py-1 px-3">
+      <nav class="navbar navbar-expand-lg  navbar-dark bg-dark">
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0 w-100 justify-content-evenly">
+          <li class="nav-item">
+            <a class="nav-link active" aria-current="page" href="#">Home</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#">Link</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a>
+          </li>
+        </ul>
+      </nav>
+    </div>
+  </div>
+  <nav class="navbar navbar-dark bg-dark">
+    <!-- <div class="collapse navbar-collapse" id="navbarToggleExternalContent">
+      <a class="navbar-brand" href="#">Hidden brand</a>
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        <li class="nav-item">
+          <a class="nav-link active" aria-current="page" href="#">Home</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#">Link</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a>
+        </li>
+      </ul>
+      <form class="d-flex">
+        <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+        <button class="btn btn-outline-success" type="submit">Search</button>
+      </form>
+    </div> -->
+    <div class="container-fluid">
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarToggleExternalContent" aria-controls="navbarToggleExternalContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+    </div>
+  </nav>

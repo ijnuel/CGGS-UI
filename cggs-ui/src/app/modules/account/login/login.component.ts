@@ -2,7 +2,6 @@ import { Component } from '@angular/core';
 import { AccountService, UserLoginDto } from '../../../services/api-service';
 import { LocalService } from '../../../services/local-service/local.service';
 import { Router } from '@angular/router';
-import { errorHandler } from 'src/app/helpers/errorHandler';
 
 @Component({
   selector: 'app-login',
@@ -23,11 +22,11 @@ export class LoginComponent {
     this.accountService.apiAccountLoginPost(payload).subscribe(x => {
       if (x.succeeded) {
         this.localService.setCurrentUser(x.entity);
-        this.router.navigate(['/home']);
+        this.router.navigate(['/portal']);
       }
     },
     (err) => {
-      errorHandler(err);
+      this.localService.errorHandler(err);
     });
   }
 }

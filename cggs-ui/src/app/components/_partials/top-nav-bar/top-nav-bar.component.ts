@@ -1,4 +1,7 @@
 import { Component, EventEmitter, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
+import { AccountService } from 'src/app/services/api-service';
+import { LocalService } from 'src/app/services/local-service/local.service';
 import { environment } from 'src/environments/environment';
 
 @Component({
@@ -7,7 +10,11 @@ import { environment } from 'src/environments/environment';
   styleUrls: ['./top-nav-bar.component.css']
 })
 export class TopNavBarComponent implements OnInit {
-  constructor() {}
+  constructor(
+    private accountService: AccountService,
+    private localService: LocalService, 
+    private router: Router
+    ) {}
   ngOnInit(): void {}
 
   open: boolean = false;
@@ -20,5 +27,17 @@ export class TopNavBarComponent implements OnInit {
   sendData(open:boolean) {
     open = !open;
     this.open = open;
+  }
+  logout() {
+    this.accountService.apiAccountLogoutPost().subscribe(
+      res => {
+        if (res.succeeded) {
+          this.localService.clearCurrentUser();
+          this.router.navigate(['']);
+        }
+      },
+      (err) => {
+        this.localService.errorHandler(err);
+      });
   }
 }

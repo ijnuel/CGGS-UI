@@ -1,6 +1,5 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
-import { errorHandler } from 'src/app/helpers/errorHandler';
 import { AccountService, UserLoginDto, UserResponseDto } from 'src/app/services/api-service';
 import { LocalService } from 'src/app/services/local-service/local.service';
 
@@ -28,7 +27,7 @@ export class HomeComponent {
         }
       },
       (err) => {
-        errorHandler(err);
+        this.localService.errorHandler(err);
       });
   }
 

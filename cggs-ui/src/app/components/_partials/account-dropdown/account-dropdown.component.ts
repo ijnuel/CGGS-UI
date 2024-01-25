@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { errorHandler } from 'src/app/helpers/errorHandler';
 import { AccountService } from 'src/app/services/api-service';
 import { LocalService } from 'src/app/services/local-service/local.service';
 
@@ -44,7 +43,7 @@ export class AccountDropdownComponent implements OnInit {
         }
       },
       (err) => {
-        errorHandler(err);
+        this.localService.errorHandler(err);
       });
   }
 }
