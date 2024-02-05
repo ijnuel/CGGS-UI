@@ -1,5 +1,5 @@
-<router-outlet></router-outlet>  
-<app-authenticated-layout>
-    <router-outlet  name="portalOutlet"></router-outlet> 
-
+<router-outlet (activate)="checkAuthStatus()" *ngIf="!authenticated"></router-outlet> 
+<app-authenticated-layout *ngIf="authenticated">
+    <router-outlet (activate)="checkAuthStatus()"></router-outlet> 
 </app-authenticated-layout>
+

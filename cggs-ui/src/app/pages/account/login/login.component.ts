@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, EventEmitter, Output } from '@angular/core';
 import { AccountService, UserLoginDto } from '../../../services/api-service';
 import { LocalService } from '../../../services/local-service/local.service';
 import { Router } from '@angular/router';
@@ -9,6 +9,9 @@ import { Router } from '@angular/router';
   styleUrls: ['./login.component.css']
 })
 export class LoginComponent {
+  @Output() authenticated: EventEmitter<boolean> = new EventEmitter<boolean>();
+
+
   constructor(
     private accountService: AccountService,
     private localService: LocalService, 
@@ -22,6 +25,7 @@ export class LoginComponent {
     this.accountService.apiAccountLoginPost(payload).subscribe(x => {
       if (x.succeeded) {
         this.localService.setCurrentUser(x.entity);
+        this.authenticated.emit(true);
         this.router.navigate(['/portal']);
       }
     },
