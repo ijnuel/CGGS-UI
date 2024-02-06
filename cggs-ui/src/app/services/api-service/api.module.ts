@@ -4,10 +4,12 @@ import { HttpClient } from '@angular/common/http';
 
 
 import { AccountService } from './api/account.service';
+import { AdministratorService } from './api/administrator.service';
 import { ClassService } from './api/class.service';
 import { ClassSubjectService } from './api/classSubject.service';
 import { ClassSubjectResultService } from './api/classSubjectResult.service';
 import { CountryService } from './api/country.service';
+import { EnumsService } from './api/enums.service';
 import { LocalGovernmentAreaService } from './api/localGovernmentArea.service';
 import { SchoolConfigurationService } from './api/schoolConfiguration.service';
 import { SessionService } from './api/session.service';
@@ -23,10 +25,12 @@ import { WeatherForecastService } from './api/weatherForecast.service';
   exports:      [],
   providers: [
     AccountService,
+    AdministratorService,
     ClassService,
     ClassSubjectService,
     ClassSubjectResultService,
     CountryService,
+    EnumsService,
     LocalGovernmentAreaService,
     SchoolConfigurationService,
     SessionService,

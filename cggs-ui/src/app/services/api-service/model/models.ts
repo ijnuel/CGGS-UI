@@ -1,4 +1,6 @@
 export * from './addSubjectToClassDto';
+export * from './administratorCreateDto';
+export * from './administratorUpdateDto';
 export * from './booleanResult';
 export * from './classCreateDto';
 export * from './classSubjectCreateDto';
@@ -9,6 +11,8 @@ export * from './classUpdateDto';
 export * from './countryCreateDto';
 export * from './countryUpdateDto';
 export * from './createUserDto';
+export * from './enumResponseModel';
+export * from './enumResponseModelListResult';
 export * from './gender';
 export * from './int32Result';
 export * from './localGovernmentAreaCreateDto';
