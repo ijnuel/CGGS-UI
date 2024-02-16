@@ -1,5 +1,10 @@
-<router-outlet (activate)="checkAuthStatus()" *ngIf="!authenticated"></router-outlet> 
 <app-authenticated-layout *ngIf="authenticated">
     <router-outlet (activate)="checkAuthStatus()"></router-outlet> 
 </app-authenticated-layout>
+<app-auth-layout *ngIf="!authenticated && isSchoolPortal">
+    <router-outlet (activate)="checkAuthStatus()"></router-outlet> 
+</app-auth-layout>
+<div *ngIf="!authenticated && !isSchoolPortal">
+    <router-outlet (activate)="checkAuthStatus()"></router-outlet> 
+</div>
 

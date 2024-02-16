@@ -6,12 +6,34 @@ import { guestGuard } from './services/auth/guest.guard';
 import { LoginComponent } from './pages/account/login/login.component';
 import { DashboardComponent } from './pages/dashboard/dashboard.component';
 import { PortalComponent } from './pages/portal/portal.component';
+import { HomeComponent } from './pages/home/home.component';
+import { AdminFormComponent } from './pages/admin/admin-form/admin-form.component';
 
 const routes: Routes = [
-  { path: '', canActivate: [guestGuard], component: AccountComponent },
-  { path: 'login', canActivate: [guestGuard], component: LoginComponent },
+  { path: '', canActivate: [guestGuard], component: HomeComponent },
+  // { path: 'school-portal', canActivate: [guestGuard], component: LoginComponent },
   { path: 'portal', canActivate: [authGuard], component: PortalComponent },
   { path: 'dashboards', canActivate: [authGuard], component: DashboardComponent },
+  {
+    path: "school-portal",
+    canActivate: [guestGuard],
+    children: [
+      {
+        path: "",
+        component: LoginComponent
+      },
+    ]
+  },
+  {
+    path: "admin",
+    canActivate: [authGuard],
+    children: [
+      {
+        path: "create",
+        component: AdminFormComponent
+      },
+    ]
+  }
   // {
   //   path: 'home',
   //   canActivate: [authGuard],

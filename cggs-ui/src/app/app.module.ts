@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { CommonModule } from "@angular/common";
-import { FormsModule } from "@angular/forms";
+import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -20,7 +20,12 @@ import { AccountDropdownComponent } from './components/_partials/account-dropdow
 import { CookieService } from 'ngx-cookie-service';
 import { SideNavBarComponent } from './components/_partials/side-nav-bar/side-nav-bar.component';
 import { PortalComponent } from './pages/portal/portal.component';
-// import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { HomeComponent } from './pages/home/home.component';
+import { FormComponent } from './components/reusables/form/form.component';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { ToastrModule } from 'ngx-toastr';
+import { AdminFormComponent } from './pages/admin/admin-form/admin-form.component';
 
 @NgModule({
   declarations: [
@@ -28,22 +33,31 @@ import { PortalComponent } from './pages/portal/portal.component';
     AppComponent,
     AccountComponent,
     LoginComponent,
+    HomeComponent,
     AuthLayoutComponent,
     LoadingIndicatorComponent,
+    FormComponent,
     TopNavBarComponent,
     DashboardComponent,
     PortalComponent,
     AccountDropdownComponent,
     SideNavBarComponent,
+    AdminFormComponent,
   ],
   imports: [
     BrowserModule,
     ApiModule,
-    // NgbModule,
+    NgbModule,
     AppRoutingModule,
     HttpClientModule,
     CommonModule,
-    FormsModule
+    FormsModule,
+    ReactiveFormsModule,
+    BrowserAnimationsModule,
+    ToastrModule.forRoot({
+      timeOut: 3000,
+      preventDuplicates: false,
+    }),
   ],
   providers: [
     {provide: BASE_PATH, useValue: environment.apiUrl },

@@ -1,1 +1,24 @@
-<p>auth-layout works!</p>
+<div class="h-100">
+    <div class="d-flex vh-100 justify-content-center overflow-y-auto w-100 p-md-3 p-lg-5">
+
+        <div class="card-group p-lg-5 m-lg-5">
+            <div class="card p-5 d-none d-md-flex bg-white bg-gradient border-0">
+              <div class="card-body m-auto d-flex align-items-center">
+                <img [src]="logo" alt="" width="225" height="225">
+              </div>
+            </div>
+            <div class="card p-5 bg-light border-start-0 border-white border-5">
+              <app-loading-indicator *ngIf="loading"></app-loading-indicator>
+              <div class="card-body m-auto d-sm-block d-md-flex align-items-center">
+                <div class="m-auto d-md-none d-sm-flex align-items-center py-5">
+                    <img [src]="logo" alt="" width="50" height="50">
+                    <span class="px-3">{{ short_name }}</span>
+                </div>
+                <ng-content></ng-content>
+              </div>
+            </div>
+          </div>
+
+
+    </div>
+  </div>

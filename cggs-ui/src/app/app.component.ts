@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { UserResponseDto } from './services/api-service';
 import { LocalService } from './services/local-service/local.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-root',
@@ -10,8 +11,10 @@ import { LocalService } from './services/local-service/local.service';
 export class AppComponent implements OnInit {
   title = 'cggs-ui';
   authenticated : boolean = false;
+  isSchoolPortal : boolean = false;
   constructor(
-    private localService: LocalService
+    private localService: LocalService,
+    private router: Router
     ) { }
   ngOnInit(): void {
     this.checkAuthStatus();
@@ -19,5 +22,6 @@ export class AppComponent implements OnInit {
 
   checkAuthStatus() {
     this.authenticated = this.localService.getCurrentUser() != undefined;
+    this.isSchoolPortal = this.router.url.includes('school-portal');
   }
 }

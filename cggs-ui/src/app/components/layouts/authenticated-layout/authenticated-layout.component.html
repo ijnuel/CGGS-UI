@@ -1,23 +1,10 @@
 <div class="h-100">
-    <app-loading-indicator *ngIf="loading"></app-loading-indicator>
-    <app-top-nav-bar></app-top-nav-bar>
-    <app-side-nav-bar></app-side-nav-bar>
-    <div class="d-flex vh-100 overflow-y-auto w-100 p-5">
-        <ng-content></ng-content>
+  <app-loading-indicator *ngIf="loading"></app-loading-indicator>
+  <app-top-nav-bar></app-top-nav-bar>
+  <app-side-nav-bar></app-side-nav-bar>
+  <div class="row overflow-y-auto w-100 px-5 py-3 vh-75">
+    <ng-content></ng-content>
+    <div>
     </div>
-  
-    <!-- <section class="flex-grow h-full justify-between flex">
-        <nav class="overflow-hidden md:h-full">
-        </nav> -->
-    
-        <!-- <main class="h-full max-h-full flex-1 pb-28 pt-2 pl-4 pr-4 overflow-y-auto md:pb-20"> -->
-          <!-- <app-student-info-header *ngIf="!notDashboard"></app-student-info-header> -->
-          <!-- <p *ngIf="!notDashboard || data" class="text-primary/75 block md:hidden">
-            {{data | titlecase}}</p> -->
-        <!-- </main> -->
-    
-      <!-- </section> -->
-
-
-    <!-- <ng-content></ng-content> -->
-          </div>
+  </div>
+</div>

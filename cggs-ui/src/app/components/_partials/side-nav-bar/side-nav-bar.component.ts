@@ -15,28 +15,16 @@ export class SideNavBarComponent implements OnInit {
 
   links = [
     {
-      name: "home",
-      title: "Dashboard",
-      slug: "/",
-      icon: "grid_view",
+      title: "Create Admin",
+      slug: "/admin/create"
     },
     {
-      name: "biodata",
-      title: "Student Data",
-      slug: "/bio-data",
-      icon: "contact_page",
+      title: "Create Admin",
+      slug: "/admin/create"
     },
     {
-      name: "payment",
-      title: "Payments",
-      slug: "/payments",
-      icon: "credit_card",
-    },
-    {
-      name: "result",
-      title: "Results",
-      slug: "/results",
-      icon: "fact_check",
+      title: "Create Admin",
+      slug: "/admin/create"
     },
   ];
   xLinks: Link[] = [];
