@@ -11,4 +11,10 @@
  */
 
 export interface CountryCreateDto { 
+    name?: string;
+    iso?: string;
+    iso3?: string;
+    dial?: string;
+    currency?: string;
+    currencyName?: string;
 }

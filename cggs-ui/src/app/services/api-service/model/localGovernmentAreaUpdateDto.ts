@@ -12,5 +12,6 @@
 
 export interface LocalGovernmentAreaUpdateDto { 
     stateId?: string;
+    name?: string;
     id?: string;
 }

@@ -12,4 +12,5 @@
 
 export interface StateCreateDto { 
     countryId?: string;
+    name?: string;
 }

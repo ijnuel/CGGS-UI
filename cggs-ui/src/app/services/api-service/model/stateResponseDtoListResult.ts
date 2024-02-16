@@ -9,9 +9,11 @@
  * https://github.com/swagger-api/swagger-codegen.git
  * Do not edit the class manually.
  */
+import { StateResponseDto } from './stateResponseDto';
 
-export interface StateUpdateDto { 
-    countryId?: string;
-    name?: string;
-    id?: string;
+export interface StateResponseDtoListResult { 
+    succeeded?: boolean;
+    entity?: Array<StateResponseDto>;
+    exceptionError?: string;
+    message?: string;
 }

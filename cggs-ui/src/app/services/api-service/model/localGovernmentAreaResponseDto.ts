@@ -10,8 +10,8 @@
  * Do not edit the class manually.
  */
 
-export interface StateUpdateDto { 
-    countryId?: string;
+export interface LocalGovernmentAreaResponseDto { 
+    stateId?: string;
     name?: string;
     id?: string;
 }

@@ -20,6 +20,7 @@ import { Observable }                                        from 'rxjs';
 import { BooleanResult } from '../model/booleanResult';
 import { Int32Result } from '../model/int32Result';
 import { LocalGovernmentAreaCreateDto } from '../model/localGovernmentAreaCreateDto';
+import { LocalGovernmentAreaResponseDtoListResult } from '../model/localGovernmentAreaResponseDtoListResult';
 import { LocalGovernmentAreaUpdateDto } from '../model/localGovernmentAreaUpdateDto';
 import { ObjectListResult } from '../model/objectListResult';
 import { ObjectResult } from '../model/objectResult';
@@ -372,6 +373,52 @@ export class LocalGovernmentAreaService {
         ];
 
         return this.httpClient.request<ObjectResult>('get',`${this.basePath}/api/LocalGovernmentArea/GetById`,
+            {
+                params: queryParameters,
+                withCredentials: this.configuration.withCredentials,
+                headers: headers,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * 
+     * 
+     * @param stateId 
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public apiLocalGovernmentAreaGetByStateIdGet(stateId?: string, observe?: 'body', reportProgress?: boolean): Observable<LocalGovernmentAreaResponseDtoListResult>;
+    public apiLocalGovernmentAreaGetByStateIdGet(stateId?: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<LocalGovernmentAreaResponseDtoListResult>>;
+    public apiLocalGovernmentAreaGetByStateIdGet(stateId?: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<LocalGovernmentAreaResponseDtoListResult>>;
+    public apiLocalGovernmentAreaGetByStateIdGet(stateId?: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+
+
+        let queryParameters = new HttpParams({encoder: new CustomHttpUrlEncodingCodec()});
+        if (stateId !== undefined && stateId !== null) {
+            queryParameters = queryParameters.set('stateId', <any>stateId);
+        }
+
+        let headers = this.defaultHeaders;
+
+        // to determine the Accept header
+        let httpHeaderAccepts: string[] = [
+            'text/plain',
+            'application/json',
+            'text/json'
+        ];
+        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        if (httpHeaderAcceptSelected != undefined) {
+            headers = headers.set('Accept', httpHeaderAcceptSelected);
+        }
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+        ];
+
+        return this.httpClient.request<LocalGovernmentAreaResponseDtoListResult>('get',`${this.basePath}/api/LocalGovernmentArea/GetByStateId`,
             {
                 params: queryParameters,
                 withCredentials: this.configuration.withCredentials,

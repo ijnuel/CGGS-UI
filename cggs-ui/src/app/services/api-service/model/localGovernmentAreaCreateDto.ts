@@ -12,4 +12,5 @@
 
 export interface LocalGovernmentAreaCreateDto { 
     stateId?: string;
+    name?: string;
 }

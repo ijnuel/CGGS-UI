@@ -16,7 +16,7 @@
                     }" />
                 </div>
                 <div *ngIf="field.fieldType == 2">
-                    <label [for]="field.name" class="form-label">{{field.label}}</label>
+                    <label [for]="field.name" class="form-label">{{field.label}} <span *ngIf="field.validations?.required" class="text-danger">*</span></label>
                     <select
                     [formControlName]="field.name" 
                     (change)="fetchDependentField(field)"

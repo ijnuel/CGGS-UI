@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { EnumResponseModelListResult, EnumsService, UserDto, UserResponseDto } from '../api-service';
+import { CountryService, EnumResponseModelListResult, EnumsService, LocalGovernmentAreaService, ObjectListResult, StateService, UserDto, UserResponseDto } from '../api-service';
 import { CookieService } from 'ngx-cookie-service';
 import { ToastrService } from 'ngx-toastr';
 import { FormField, FormFieldSelectOption } from 'src/app/helpers/models/formField';
@@ -12,6 +12,9 @@ export class LocalService {
 
   constructor(
     private enumsService: EnumsService,
+    private countryService: CountryService,
+    private stateService: StateService,
+    private localGovernmentAreaService: LocalGovernmentAreaService,
     private cookieService: CookieService,
     private toastr: ToastrService) { }
 
@@ -44,15 +47,27 @@ export class LocalService {
   }
 
   public setCountryFormOptions(formFields: FormField[], fieldName: string) {
-    throw new Error('Method not implemented.');
+    this.countryService.apiCountryGetAllGet().subscribe(
+      res => this.setFormFieldSelectOptions(res, formFields, fieldName),
+      err => this.errorHandler(err));
+  }
+
+  public setStateFormOptions(formFields: FormField[], fieldName: string) {
+    this.stateService.apiStateGetAllGet().subscribe(
+      res => this.setFormFieldSelectOptions(res, formFields, fieldName),
+      err => this.errorHandler(err));
+  }
+
+  public setStateByCountryIdFormOptions(formFields: FormField[], fieldName: string, selectedValue: any) {
+    this.stateService.apiStateGetByCountryIdGet(selectedValue).subscribe(
+      res => this.setFormFieldSelectOptions(res, formFields, fieldName),
+      err => this.errorHandler(err));
   }
 
   public setLGAFormOptions(formFields: FormField[], fieldName: string, selectedValue: any) {
-    throw new Error('Method not implemented.');
-  }
-
-  public setStateFormOptions(formFields: FormField[], fieldName: string, selectedValue: any) {
-    throw new Error('Method not implemented.');
+    this.localGovernmentAreaService.apiLocalGovernmentAreaGetByStateIdGet(selectedValue).subscribe(
+      res => this.setFormFieldSelectOptions(res, formFields, fieldName),
+      err => this.errorHandler(err));
   }
 
   public setGenderFormOptions(formFields:FormField[], fieldName: string) {
@@ -79,14 +94,14 @@ export class LocalService {
       err => this.errorHandler(err));
   } 
 
-  setFormFieldSelectOptions(res: EnumResponseModelListResult, formFields:FormField[], fieldName: string) {
+  setFormFieldSelectOptions(res: EnumResponseModelListResult | ObjectListResult, formFields:FormField[], fieldName: string) {
     if (res.succeeded) {
       var formField = this.getFormFieldByName(formFields, fieldName);
       if (formField) {
         formField.inputOptions = res.entity?.map(item => {
           let option: FormFieldSelectOption = {
-            value: item.value,
-            description: item.description
+            value: item.value ?? item.id,
+            description: item.description ?? item.name
           }
           return option;
         });
@@ -103,7 +118,12 @@ export class LocalService {
   }
 
   public errorHandler(err: any) {
-    let errorMessage = err?.error?.ExceptionMessage ||
+    console.log(err)
+    let validationErrors : any[][] = Object.values(err?.error?.errors);
+    let errorMessage = err?.error?.Message || 
+      validationErrors?.find(x => x)?.find(x => x) || 
+      err?.statusText || 
+      err?.error?.ExceptionMessage ||
       err?.error?.message ||
       err?.message ||
       "An error occurred!";

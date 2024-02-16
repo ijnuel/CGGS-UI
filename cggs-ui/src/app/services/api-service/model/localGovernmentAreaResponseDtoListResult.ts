@@ -9,9 +9,11 @@
  * https://github.com/swagger-api/swagger-codegen.git
  * Do not edit the class manually.
  */
+import { LocalGovernmentAreaResponseDto } from './localGovernmentAreaResponseDto';
 
-export interface StateUpdateDto { 
-    countryId?: string;
-    name?: string;
-    id?: string;
+export interface LocalGovernmentAreaResponseDtoListResult { 
+    succeeded?: boolean;
+    entity?: Array<LocalGovernmentAreaResponseDto>;
+    exceptionError?: string;
+    message?: string;
 }

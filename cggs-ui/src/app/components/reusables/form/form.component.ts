@@ -88,7 +88,7 @@ export class FormComponent implements OnInit {
     if (field.selectFieldType == FormSelectFieldType.Country) {
       let stateField = this.formFields.find(x => x.selectFieldType == FormSelectFieldType.State);
       if (stateField) {
-        this.localService.setStateFormOptions(this.formFields, stateField.name, selectedValue);
+        this.localService.setStateByCountryIdFormOptions(this.formFields, stateField.name, selectedValue);
       }
     }
     else if (field.selectFieldType == FormSelectFieldType.State) {

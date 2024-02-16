@@ -23,6 +23,7 @@ import { ObjectListResult } from '../model/objectListResult';
 import { ObjectResult } from '../model/objectResult';
 import { ProblemDetails } from '../model/problemDetails';
 import { StateCreateDto } from '../model/stateCreateDto';
+import { StateResponseDtoListResult } from '../model/stateResponseDtoListResult';
 import { StateUpdateDto } from '../model/stateUpdateDto';
 import { StringResult } from '../model/stringResult';
 
@@ -328,6 +329,52 @@ export class StateService {
 
         return this.httpClient.request<ObjectListResult>('get',`${this.basePath}/api/State/GetAll`,
             {
+                withCredentials: this.configuration.withCredentials,
+                headers: headers,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * 
+     * 
+     * @param countryId 
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public apiStateGetByCountryIdGet(countryId?: string, observe?: 'body', reportProgress?: boolean): Observable<StateResponseDtoListResult>;
+    public apiStateGetByCountryIdGet(countryId?: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<StateResponseDtoListResult>>;
+    public apiStateGetByCountryIdGet(countryId?: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<StateResponseDtoListResult>>;
+    public apiStateGetByCountryIdGet(countryId?: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+
+
+        let queryParameters = new HttpParams({encoder: new CustomHttpUrlEncodingCodec()});
+        if (countryId !== undefined && countryId !== null) {
+            queryParameters = queryParameters.set('countryId', <any>countryId);
+        }
+
+        let headers = this.defaultHeaders;
+
+        // to determine the Accept header
+        let httpHeaderAccepts: string[] = [
+            'text/plain',
+            'application/json',
+            'text/json'
+        ];
+        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        if (httpHeaderAcceptSelected != undefined) {
+            headers = headers.set('Accept', httpHeaderAcceptSelected);
+        }
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+        ];
+
+        return this.httpClient.request<StateResponseDtoListResult>('get',`${this.basePath}/api/State/GetByCountryId`,
+            {
+                params: queryParameters,
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
                 observe: observe,

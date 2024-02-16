@@ -55,7 +55,7 @@ import { AdminFormComponent } from './pages/admin/admin-form/admin-form.componen
     ReactiveFormsModule,
     BrowserAnimationsModule,
     ToastrModule.forRoot({
-      timeOut: 3000,
+      timeOut: 5000,
       preventDuplicates: false,
     }),
   ],

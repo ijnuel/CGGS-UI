@@ -11,5 +11,11 @@
  */
 
 export interface CountryUpdateDto { 
+    name?: string;
+    iso?: string;
+    iso3?: string;
+    dial?: string;
+    currency?: string;
+    currencyName?: string;
     id?: string;
 }
