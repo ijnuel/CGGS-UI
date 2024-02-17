@@ -12,7 +12,9 @@
 import { Gender } from './gender';
 import { Religion } from './religion';
 
-export interface AdministratorCreateDto { 
+export interface TeacherResponseDto { 
+    teacherNo?: string;
+    userId?: string;
     firstName?: string;
     lastName?: string;
     middleName?: string;
@@ -27,5 +29,5 @@ export interface AdministratorCreateDto {
     residentialState?: string;
     email?: string;
     phoneNumber?: string;
-    userId?: string;
+    id?: string;
 }

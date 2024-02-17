@@ -13,8 +13,6 @@ import { Gender } from './gender';
 import { Religion } from './religion';
 
 export interface TeacherCreateDto { 
-    teacherNo?: string;
-    userId?: string;
     firstName?: string;
     lastName?: string;
     middleName?: string;
@@ -29,4 +27,6 @@ export interface TeacherCreateDto {
     residentialState?: string;
     email?: string;
     phoneNumber?: string;
+    teacherNo?: string;
+    userId?: string;
 }

@@ -19,11 +19,12 @@ import { Observable }                                        from 'rxjs';
 
 import { BooleanResult } from '../model/booleanResult';
 import { Int32Result } from '../model/int32Result';
-import { ObjectListResult } from '../model/objectListResult';
-import { ObjectResult } from '../model/objectResult';
 import { ProblemDetails } from '../model/problemDetails';
 import { StringResult } from '../model/stringResult';
 import { TeacherCreateDto } from '../model/teacherCreateDto';
+import { TeacherResponseDtoListResult } from '../model/teacherResponseDtoListResult';
+import { TeacherResponseDtoPaginatedResultResult } from '../model/teacherResponseDtoPaginatedResultResult';
+import { TeacherResponseDtoResult } from '../model/teacherResponseDtoResult';
 import { TeacherUpdateDto } from '../model/teacherUpdateDto';
 
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
@@ -61,6 +62,52 @@ export class TeacherService {
         return false;
     }
 
+
+    /**
+     * 
+     * 
+     * @param id 
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public apiTeacherCountGet(id?: string, observe?: 'body', reportProgress?: boolean): Observable<Int32Result>;
+    public apiTeacherCountGet(id?: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Int32Result>>;
+    public apiTeacherCountGet(id?: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Int32Result>>;
+    public apiTeacherCountGet(id?: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+
+
+        let queryParameters = new HttpParams({encoder: new CustomHttpUrlEncodingCodec()});
+        if (id !== undefined && id !== null) {
+            queryParameters = queryParameters.set('id', <any>id);
+        }
+
+        let headers = this.defaultHeaders;
+
+        // to determine the Accept header
+        let httpHeaderAccepts: string[] = [
+            'text/plain',
+            'application/json',
+            'text/json'
+        ];
+        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        if (httpHeaderAcceptSelected != undefined) {
+            headers = headers.set('Accept', httpHeaderAcceptSelected);
+        }
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+        ];
+
+        return this.httpClient.request<Int32Result>('get',`${this.basePath}/api/Teacher/Count`,
+            {
+                params: queryParameters,
+                withCredentials: this.configuration.withCredentials,
+                headers: headers,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
 
     /**
      * 
@@ -304,9 +351,9 @@ export class TeacherService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public apiTeacherGetAllGet(observe?: 'body', reportProgress?: boolean): Observable<ObjectListResult>;
-    public apiTeacherGetAllGet(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<ObjectListResult>>;
-    public apiTeacherGetAllGet(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<ObjectListResult>>;
+    public apiTeacherGetAllGet(observe?: 'body', reportProgress?: boolean): Observable<TeacherResponseDtoListResult>;
+    public apiTeacherGetAllGet(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<TeacherResponseDtoListResult>>;
+    public apiTeacherGetAllGet(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<TeacherResponseDtoListResult>>;
     public apiTeacherGetAllGet(observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         let headers = this.defaultHeaders;
@@ -326,8 +373,59 @@ export class TeacherService {
         const consumes: string[] = [
         ];
 
-        return this.httpClient.request<ObjectListResult>('get',`${this.basePath}/api/Teacher/GetAll`,
+        return this.httpClient.request<TeacherResponseDtoListResult>('get',`${this.basePath}/api/Teacher/GetAll`,
             {
+                withCredentials: this.configuration.withCredentials,
+                headers: headers,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * 
+     * 
+     * @param page 
+     * @param recordsPerPage 
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public apiTeacherGetAllPaginatedGet(page?: number, recordsPerPage?: number, observe?: 'body', reportProgress?: boolean): Observable<TeacherResponseDtoPaginatedResultResult>;
+    public apiTeacherGetAllPaginatedGet(page?: number, recordsPerPage?: number, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<TeacherResponseDtoPaginatedResultResult>>;
+    public apiTeacherGetAllPaginatedGet(page?: number, recordsPerPage?: number, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<TeacherResponseDtoPaginatedResultResult>>;
+    public apiTeacherGetAllPaginatedGet(page?: number, recordsPerPage?: number, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+
+
+
+        let queryParameters = new HttpParams({encoder: new CustomHttpUrlEncodingCodec()});
+        if (page !== undefined && page !== null) {
+            queryParameters = queryParameters.set('page', <any>page);
+        }
+        if (recordsPerPage !== undefined && recordsPerPage !== null) {
+            queryParameters = queryParameters.set('recordsPerPage', <any>recordsPerPage);
+        }
+
+        let headers = this.defaultHeaders;
+
+        // to determine the Accept header
+        let httpHeaderAccepts: string[] = [
+            'text/plain',
+            'application/json',
+            'text/json'
+        ];
+        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        if (httpHeaderAcceptSelected != undefined) {
+            headers = headers.set('Accept', httpHeaderAcceptSelected);
+        }
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+        ];
+
+        return this.httpClient.request<TeacherResponseDtoPaginatedResultResult>('get',`${this.basePath}/api/Teacher/GetAllPaginated`,
+            {
+                params: queryParameters,
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
                 observe: observe,
@@ -343,9 +441,9 @@ export class TeacherService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public apiTeacherGetByIdGet(id?: string, observe?: 'body', reportProgress?: boolean): Observable<ObjectResult>;
-    public apiTeacherGetByIdGet(id?: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<ObjectResult>>;
-    public apiTeacherGetByIdGet(id?: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<ObjectResult>>;
+    public apiTeacherGetByIdGet(id?: string, observe?: 'body', reportProgress?: boolean): Observable<TeacherResponseDtoResult>;
+    public apiTeacherGetByIdGet(id?: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<TeacherResponseDtoResult>>;
+    public apiTeacherGetByIdGet(id?: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<TeacherResponseDtoResult>>;
     public apiTeacherGetByIdGet(id?: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
 
@@ -371,7 +469,7 @@ export class TeacherService {
         const consumes: string[] = [
         ];
 
-        return this.httpClient.request<ObjectResult>('get',`${this.basePath}/api/Teacher/GetById`,
+        return this.httpClient.request<TeacherResponseDtoResult>('get',`${this.basePath}/api/Teacher/GetById`,
             {
                 params: queryParameters,
                 withCredentials: this.configuration.withCredentials,

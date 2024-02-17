@@ -20,10 +20,11 @@ import { Observable }                                        from 'rxjs';
 import { AddSubjectToClassDto } from '../model/addSubjectToClassDto';
 import { BooleanResult } from '../model/booleanResult';
 import { ClassSubjectCreateDto } from '../model/classSubjectCreateDto';
+import { ClassSubjectResponseDtoListResult } from '../model/classSubjectResponseDtoListResult';
+import { ClassSubjectResponseDtoPaginatedResultResult } from '../model/classSubjectResponseDtoPaginatedResultResult';
+import { ClassSubjectResponseDtoResult } from '../model/classSubjectResponseDtoResult';
 import { ClassSubjectUpdateDto } from '../model/classSubjectUpdateDto';
 import { Int32Result } from '../model/int32Result';
-import { ObjectListResult } from '../model/objectListResult';
-import { ObjectResult } from '../model/objectResult';
 import { ProblemDetails } from '../model/problemDetails';
 import { StringResult } from '../model/stringResult';
 
@@ -103,6 +104,52 @@ export class ClassSubjectService {
         return this.httpClient.request<StringResult>('post',`${this.basePath}/api/ClassSubject/AddSubjectToClass`,
             {
                 body: body,
+                withCredentials: this.configuration.withCredentials,
+                headers: headers,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * 
+     * 
+     * @param id 
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public apiClassSubjectCountGet(id?: string, observe?: 'body', reportProgress?: boolean): Observable<Int32Result>;
+    public apiClassSubjectCountGet(id?: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Int32Result>>;
+    public apiClassSubjectCountGet(id?: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Int32Result>>;
+    public apiClassSubjectCountGet(id?: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+
+
+        let queryParameters = new HttpParams({encoder: new CustomHttpUrlEncodingCodec()});
+        if (id !== undefined && id !== null) {
+            queryParameters = queryParameters.set('id', <any>id);
+        }
+
+        let headers = this.defaultHeaders;
+
+        // to determine the Accept header
+        let httpHeaderAccepts: string[] = [
+            'text/plain',
+            'application/json',
+            'text/json'
+        ];
+        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        if (httpHeaderAcceptSelected != undefined) {
+            headers = headers.set('Accept', httpHeaderAcceptSelected);
+        }
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+        ];
+
+        return this.httpClient.request<Int32Result>('get',`${this.basePath}/api/ClassSubject/Count`,
+            {
+                params: queryParameters,
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
                 observe: observe,
@@ -353,9 +400,9 @@ export class ClassSubjectService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public apiClassSubjectGetAllGet(observe?: 'body', reportProgress?: boolean): Observable<ObjectListResult>;
-    public apiClassSubjectGetAllGet(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<ObjectListResult>>;
-    public apiClassSubjectGetAllGet(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<ObjectListResult>>;
+    public apiClassSubjectGetAllGet(observe?: 'body', reportProgress?: boolean): Observable<ClassSubjectResponseDtoListResult>;
+    public apiClassSubjectGetAllGet(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<ClassSubjectResponseDtoListResult>>;
+    public apiClassSubjectGetAllGet(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<ClassSubjectResponseDtoListResult>>;
     public apiClassSubjectGetAllGet(observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         let headers = this.defaultHeaders;
@@ -375,8 +422,59 @@ export class ClassSubjectService {
         const consumes: string[] = [
         ];
 
-        return this.httpClient.request<ObjectListResult>('get',`${this.basePath}/api/ClassSubject/GetAll`,
+        return this.httpClient.request<ClassSubjectResponseDtoListResult>('get',`${this.basePath}/api/ClassSubject/GetAll`,
             {
+                withCredentials: this.configuration.withCredentials,
+                headers: headers,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * 
+     * 
+     * @param page 
+     * @param recordsPerPage 
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public apiClassSubjectGetAllPaginatedGet(page?: number, recordsPerPage?: number, observe?: 'body', reportProgress?: boolean): Observable<ClassSubjectResponseDtoPaginatedResultResult>;
+    public apiClassSubjectGetAllPaginatedGet(page?: number, recordsPerPage?: number, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<ClassSubjectResponseDtoPaginatedResultResult>>;
+    public apiClassSubjectGetAllPaginatedGet(page?: number, recordsPerPage?: number, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<ClassSubjectResponseDtoPaginatedResultResult>>;
+    public apiClassSubjectGetAllPaginatedGet(page?: number, recordsPerPage?: number, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+
+
+
+        let queryParameters = new HttpParams({encoder: new CustomHttpUrlEncodingCodec()});
+        if (page !== undefined && page !== null) {
+            queryParameters = queryParameters.set('page', <any>page);
+        }
+        if (recordsPerPage !== undefined && recordsPerPage !== null) {
+            queryParameters = queryParameters.set('recordsPerPage', <any>recordsPerPage);
+        }
+
+        let headers = this.defaultHeaders;
+
+        // to determine the Accept header
+        let httpHeaderAccepts: string[] = [
+            'text/plain',
+            'application/json',
+            'text/json'
+        ];
+        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        if (httpHeaderAcceptSelected != undefined) {
+            headers = headers.set('Accept', httpHeaderAcceptSelected);
+        }
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+        ];
+
+        return this.httpClient.request<ClassSubjectResponseDtoPaginatedResultResult>('get',`${this.basePath}/api/ClassSubject/GetAllPaginated`,
+            {
+                params: queryParameters,
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
                 observe: observe,
@@ -392,9 +490,9 @@ export class ClassSubjectService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public apiClassSubjectGetByIdGet(id?: string, observe?: 'body', reportProgress?: boolean): Observable<ObjectResult>;
-    public apiClassSubjectGetByIdGet(id?: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<ObjectResult>>;
-    public apiClassSubjectGetByIdGet(id?: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<ObjectResult>>;
+    public apiClassSubjectGetByIdGet(id?: string, observe?: 'body', reportProgress?: boolean): Observable<ClassSubjectResponseDtoResult>;
+    public apiClassSubjectGetByIdGet(id?: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<ClassSubjectResponseDtoResult>>;
+    public apiClassSubjectGetByIdGet(id?: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<ClassSubjectResponseDtoResult>>;
     public apiClassSubjectGetByIdGet(id?: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
 
@@ -420,7 +518,7 @@ export class ClassSubjectService {
         const consumes: string[] = [
         ];
 
-        return this.httpClient.request<ObjectResult>('get',`${this.basePath}/api/ClassSubject/GetById`,
+        return this.httpClient.request<ClassSubjectResponseDtoResult>('get',`${this.basePath}/api/ClassSubject/GetById`,
             {
                 params: queryParameters,
                 withCredentials: this.configuration.withCredentials,

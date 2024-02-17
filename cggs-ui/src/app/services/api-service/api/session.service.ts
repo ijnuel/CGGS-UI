@@ -19,10 +19,11 @@ import { Observable }                                        from 'rxjs';
 
 import { BooleanResult } from '../model/booleanResult';
 import { Int32Result } from '../model/int32Result';
-import { ObjectListResult } from '../model/objectListResult';
-import { ObjectResult } from '../model/objectResult';
 import { ProblemDetails } from '../model/problemDetails';
 import { SessionCreateDto } from '../model/sessionCreateDto';
+import { SessionResponseDtoListResult } from '../model/sessionResponseDtoListResult';
+import { SessionResponseDtoPaginatedResultResult } from '../model/sessionResponseDtoPaginatedResultResult';
+import { SessionResponseDtoResult } from '../model/sessionResponseDtoResult';
 import { SessionUpdateDto } from '../model/sessionUpdateDto';
 import { StringResult } from '../model/stringResult';
 
@@ -61,6 +62,52 @@ export class SessionService {
         return false;
     }
 
+
+    /**
+     * 
+     * 
+     * @param id 
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public apiSessionCountGet(id?: string, observe?: 'body', reportProgress?: boolean): Observable<Int32Result>;
+    public apiSessionCountGet(id?: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Int32Result>>;
+    public apiSessionCountGet(id?: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Int32Result>>;
+    public apiSessionCountGet(id?: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+
+
+        let queryParameters = new HttpParams({encoder: new CustomHttpUrlEncodingCodec()});
+        if (id !== undefined && id !== null) {
+            queryParameters = queryParameters.set('id', <any>id);
+        }
+
+        let headers = this.defaultHeaders;
+
+        // to determine the Accept header
+        let httpHeaderAccepts: string[] = [
+            'text/plain',
+            'application/json',
+            'text/json'
+        ];
+        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        if (httpHeaderAcceptSelected != undefined) {
+            headers = headers.set('Accept', httpHeaderAcceptSelected);
+        }
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+        ];
+
+        return this.httpClient.request<Int32Result>('get',`${this.basePath}/api/Session/Count`,
+            {
+                params: queryParameters,
+                withCredentials: this.configuration.withCredentials,
+                headers: headers,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
 
     /**
      * 
@@ -304,9 +351,9 @@ export class SessionService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public apiSessionGetAllGet(observe?: 'body', reportProgress?: boolean): Observable<ObjectListResult>;
-    public apiSessionGetAllGet(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<ObjectListResult>>;
-    public apiSessionGetAllGet(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<ObjectListResult>>;
+    public apiSessionGetAllGet(observe?: 'body', reportProgress?: boolean): Observable<SessionResponseDtoListResult>;
+    public apiSessionGetAllGet(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<SessionResponseDtoListResult>>;
+    public apiSessionGetAllGet(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<SessionResponseDtoListResult>>;
     public apiSessionGetAllGet(observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         let headers = this.defaultHeaders;
@@ -326,8 +373,59 @@ export class SessionService {
         const consumes: string[] = [
         ];
 
-        return this.httpClient.request<ObjectListResult>('get',`${this.basePath}/api/Session/GetAll`,
+        return this.httpClient.request<SessionResponseDtoListResult>('get',`${this.basePath}/api/Session/GetAll`,
             {
+                withCredentials: this.configuration.withCredentials,
+                headers: headers,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * 
+     * 
+     * @param page 
+     * @param recordsPerPage 
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public apiSessionGetAllPaginatedGet(page?: number, recordsPerPage?: number, observe?: 'body', reportProgress?: boolean): Observable<SessionResponseDtoPaginatedResultResult>;
+    public apiSessionGetAllPaginatedGet(page?: number, recordsPerPage?: number, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<SessionResponseDtoPaginatedResultResult>>;
+    public apiSessionGetAllPaginatedGet(page?: number, recordsPerPage?: number, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<SessionResponseDtoPaginatedResultResult>>;
+    public apiSessionGetAllPaginatedGet(page?: number, recordsPerPage?: number, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+
+
+
+        let queryParameters = new HttpParams({encoder: new CustomHttpUrlEncodingCodec()});
+        if (page !== undefined && page !== null) {
+            queryParameters = queryParameters.set('page', <any>page);
+        }
+        if (recordsPerPage !== undefined && recordsPerPage !== null) {
+            queryParameters = queryParameters.set('recordsPerPage', <any>recordsPerPage);
+        }
+
+        let headers = this.defaultHeaders;
+
+        // to determine the Accept header
+        let httpHeaderAccepts: string[] = [
+            'text/plain',
+            'application/json',
+            'text/json'
+        ];
+        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        if (httpHeaderAcceptSelected != undefined) {
+            headers = headers.set('Accept', httpHeaderAcceptSelected);
+        }
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+        ];
+
+        return this.httpClient.request<SessionResponseDtoPaginatedResultResult>('get',`${this.basePath}/api/Session/GetAllPaginated`,
+            {
+                params: queryParameters,
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
                 observe: observe,
@@ -343,9 +441,9 @@ export class SessionService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public apiSessionGetByIdGet(id?: string, observe?: 'body', reportProgress?: boolean): Observable<ObjectResult>;
-    public apiSessionGetByIdGet(id?: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<ObjectResult>>;
-    public apiSessionGetByIdGet(id?: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<ObjectResult>>;
+    public apiSessionGetByIdGet(id?: string, observe?: 'body', reportProgress?: boolean): Observable<SessionResponseDtoResult>;
+    public apiSessionGetByIdGet(id?: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<SessionResponseDtoResult>>;
+    public apiSessionGetByIdGet(id?: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<SessionResponseDtoResult>>;
     public apiSessionGetByIdGet(id?: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
 
@@ -371,7 +469,7 @@ export class SessionService {
         const consumes: string[] = [
         ];
 
-        return this.httpClient.request<ObjectResult>('get',`${this.basePath}/api/Session/GetById`,
+        return this.httpClient.request<SessionResponseDtoResult>('get',`${this.basePath}/api/Session/GetById`,
             {
                 params: queryParameters,
                 withCredentials: this.configuration.withCredentials,

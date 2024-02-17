@@ -19,10 +19,11 @@ import { Observable }                                        from 'rxjs';
 
 import { BooleanResult } from '../model/booleanResult';
 import { Int32Result } from '../model/int32Result';
-import { ObjectListResult } from '../model/objectListResult';
-import { ObjectResult } from '../model/objectResult';
 import { ProblemDetails } from '../model/problemDetails';
 import { SchoolConfigurationCreateDto } from '../model/schoolConfigurationCreateDto';
+import { SchoolConfigurationResponseDtoListResult } from '../model/schoolConfigurationResponseDtoListResult';
+import { SchoolConfigurationResponseDtoPaginatedResultResult } from '../model/schoolConfigurationResponseDtoPaginatedResultResult';
+import { SchoolConfigurationResponseDtoResult } from '../model/schoolConfigurationResponseDtoResult';
 import { SchoolConfigurationUpdateDto } from '../model/schoolConfigurationUpdateDto';
 import { StringResult } from '../model/stringResult';
 
@@ -61,6 +62,52 @@ export class SchoolConfigurationService {
         return false;
     }
 
+
+    /**
+     * 
+     * 
+     * @param id 
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public apiSchoolConfigurationCountGet(id?: string, observe?: 'body', reportProgress?: boolean): Observable<Int32Result>;
+    public apiSchoolConfigurationCountGet(id?: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Int32Result>>;
+    public apiSchoolConfigurationCountGet(id?: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Int32Result>>;
+    public apiSchoolConfigurationCountGet(id?: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+
+
+        let queryParameters = new HttpParams({encoder: new CustomHttpUrlEncodingCodec()});
+        if (id !== undefined && id !== null) {
+            queryParameters = queryParameters.set('id', <any>id);
+        }
+
+        let headers = this.defaultHeaders;
+
+        // to determine the Accept header
+        let httpHeaderAccepts: string[] = [
+            'text/plain',
+            'application/json',
+            'text/json'
+        ];
+        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        if (httpHeaderAcceptSelected != undefined) {
+            headers = headers.set('Accept', httpHeaderAcceptSelected);
+        }
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+        ];
+
+        return this.httpClient.request<Int32Result>('get',`${this.basePath}/api/SchoolConfiguration/Count`,
+            {
+                params: queryParameters,
+                withCredentials: this.configuration.withCredentials,
+                headers: headers,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
 
     /**
      * 
@@ -304,9 +351,9 @@ export class SchoolConfigurationService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public apiSchoolConfigurationGetAllGet(observe?: 'body', reportProgress?: boolean): Observable<ObjectListResult>;
-    public apiSchoolConfigurationGetAllGet(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<ObjectListResult>>;
-    public apiSchoolConfigurationGetAllGet(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<ObjectListResult>>;
+    public apiSchoolConfigurationGetAllGet(observe?: 'body', reportProgress?: boolean): Observable<SchoolConfigurationResponseDtoListResult>;
+    public apiSchoolConfigurationGetAllGet(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<SchoolConfigurationResponseDtoListResult>>;
+    public apiSchoolConfigurationGetAllGet(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<SchoolConfigurationResponseDtoListResult>>;
     public apiSchoolConfigurationGetAllGet(observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         let headers = this.defaultHeaders;
@@ -326,8 +373,59 @@ export class SchoolConfigurationService {
         const consumes: string[] = [
         ];
 
-        return this.httpClient.request<ObjectListResult>('get',`${this.basePath}/api/SchoolConfiguration/GetAll`,
+        return this.httpClient.request<SchoolConfigurationResponseDtoListResult>('get',`${this.basePath}/api/SchoolConfiguration/GetAll`,
             {
+                withCredentials: this.configuration.withCredentials,
+                headers: headers,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * 
+     * 
+     * @param page 
+     * @param recordsPerPage 
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public apiSchoolConfigurationGetAllPaginatedGet(page?: number, recordsPerPage?: number, observe?: 'body', reportProgress?: boolean): Observable<SchoolConfigurationResponseDtoPaginatedResultResult>;
+    public apiSchoolConfigurationGetAllPaginatedGet(page?: number, recordsPerPage?: number, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<SchoolConfigurationResponseDtoPaginatedResultResult>>;
+    public apiSchoolConfigurationGetAllPaginatedGet(page?: number, recordsPerPage?: number, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<SchoolConfigurationResponseDtoPaginatedResultResult>>;
+    public apiSchoolConfigurationGetAllPaginatedGet(page?: number, recordsPerPage?: number, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+
+
+
+        let queryParameters = new HttpParams({encoder: new CustomHttpUrlEncodingCodec()});
+        if (page !== undefined && page !== null) {
+            queryParameters = queryParameters.set('page', <any>page);
+        }
+        if (recordsPerPage !== undefined && recordsPerPage !== null) {
+            queryParameters = queryParameters.set('recordsPerPage', <any>recordsPerPage);
+        }
+
+        let headers = this.defaultHeaders;
+
+        // to determine the Accept header
+        let httpHeaderAccepts: string[] = [
+            'text/plain',
+            'application/json',
+            'text/json'
+        ];
+        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        if (httpHeaderAcceptSelected != undefined) {
+            headers = headers.set('Accept', httpHeaderAcceptSelected);
+        }
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+        ];
+
+        return this.httpClient.request<SchoolConfigurationResponseDtoPaginatedResultResult>('get',`${this.basePath}/api/SchoolConfiguration/GetAllPaginated`,
+            {
+                params: queryParameters,
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
                 observe: observe,
@@ -343,9 +441,9 @@ export class SchoolConfigurationService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public apiSchoolConfigurationGetByIdGet(id?: string, observe?: 'body', reportProgress?: boolean): Observable<ObjectResult>;
-    public apiSchoolConfigurationGetByIdGet(id?: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<ObjectResult>>;
-    public apiSchoolConfigurationGetByIdGet(id?: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<ObjectResult>>;
+    public apiSchoolConfigurationGetByIdGet(id?: string, observe?: 'body', reportProgress?: boolean): Observable<SchoolConfigurationResponseDtoResult>;
+    public apiSchoolConfigurationGetByIdGet(id?: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<SchoolConfigurationResponseDtoResult>>;
+    public apiSchoolConfigurationGetByIdGet(id?: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<SchoolConfigurationResponseDtoResult>>;
     public apiSchoolConfigurationGetByIdGet(id?: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
 
@@ -371,7 +469,7 @@ export class SchoolConfigurationService {
         const consumes: string[] = [
         ];
 
-        return this.httpClient.request<ObjectResult>('get',`${this.basePath}/api/SchoolConfiguration/GetById`,
+        return this.httpClient.request<SchoolConfigurationResponseDtoResult>('get',`${this.basePath}/api/SchoolConfiguration/GetById`,
             {
                 params: queryParameters,
                 withCredentials: this.configuration.withCredentials,
