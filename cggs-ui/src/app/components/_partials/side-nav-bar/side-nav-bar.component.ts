@@ -19,8 +19,8 @@ export class SideNavBarComponent implements OnInit {
       slug: "/admin/create"
     },
     {
-      title: "Create Admin",
-      slug: "/admin/create"
+      title: "Admin List",
+      slug: "/admin/list"
     },
     {
       title: "Create Admin",

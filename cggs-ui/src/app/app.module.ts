@@ -26,6 +26,10 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ToastrModule } from 'ngx-toastr';
 import { AdminFormComponent } from './pages/admin/admin-form/admin-form.component';
+import {MatIconModule} from '@angular/material/icon';
+import { AdminListComponent } from './pages/admin/admin-list/admin-list.component';
+import { DataTablesModule } from 'angular-datatables';
+import { DatatableComponent } from './components/reusables/datatable/datatable.component';
 
 @NgModule({
   declarations: [
@@ -37,12 +41,14 @@ import { AdminFormComponent } from './pages/admin/admin-form/admin-form.componen
     AuthLayoutComponent,
     LoadingIndicatorComponent,
     FormComponent,
+    DatatableComponent,
     TopNavBarComponent,
     DashboardComponent,
     PortalComponent,
     AccountDropdownComponent,
     SideNavBarComponent,
     AdminFormComponent,
+    AdminListComponent
   ],
   imports: [
     BrowserModule,
@@ -52,6 +58,8 @@ import { AdminFormComponent } from './pages/admin/admin-form/admin-form.componen
     HttpClientModule,
     CommonModule,
     FormsModule,
+    MatIconModule,
+    DataTablesModule,
     ReactiveFormsModule,
     BrowserAnimationsModule,
     ToastrModule.forRoot({

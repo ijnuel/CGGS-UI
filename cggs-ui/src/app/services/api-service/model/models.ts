@@ -47,6 +47,8 @@ export * from './localGovernmentAreaResponseDtoPaginatedResult';
 export * from './localGovernmentAreaResponseDtoPaginatedResultResult';
 export * from './localGovernmentAreaResponseDtoResult';
 export * from './localGovernmentAreaUpdateDto';
+export * from './objectListResult';
+export * from './objectResult';
 export * from './problemDetails';
 export * from './religion';
 export * from './schoolConfigurationCreateDto';

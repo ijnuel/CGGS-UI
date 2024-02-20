@@ -1,6 +1,6 @@
 import { Component, EventEmitter, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { AccountService } from 'src/app/services/api-service';
+import { AccountService, UserProfileDto } from 'src/app/services/api-service';
 import { LocalService } from 'src/app/services/local-service/local.service';
 import { environment } from 'src/environments/environment';
 
@@ -10,24 +10,40 @@ import { environment } from 'src/environments/environment';
   styleUrls: ['./top-nav-bar.component.css']
 })
 export class TopNavBarComponent implements OnInit {
-  constructor(
-    private accountService: AccountService,
-    private localService: LocalService, 
-    private router: Router
-    ) {}
-  ngOnInit(): void {}
 
   open: boolean = false;
   dataEmitter = new EventEmitter<boolean>();
+  userProfile : UserProfileDto = {};
 
   logo = environment.logo;
   long_name = environment.long_name;
   short_name = environment.short_name;
 
-  sendData(open:boolean) {
-    open = !open;
-    this.open = open;
+  constructor(
+    private accountService: AccountService,
+    private localService: LocalService, 
+    private router: Router
+    ) {}
+  
+  
+  ngOnInit(): void {
+    this.getUserProfile();
   }
+  
+  getUserProfile() {
+    this.accountService.apiAccountGetUserProfileGet().subscribe(
+      res => {
+        if (res.succeeded) {
+          this.userProfile = res.entity!;
+        }
+        else {
+          this.localService.errorHandler(res);
+        }
+      },
+      err => this.localService.errorHandler(err)
+      );
+  }
+
   logout() {
     this.accountService.apiAccountLogoutPost().subscribe(
       res => {

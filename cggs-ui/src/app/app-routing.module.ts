@@ -8,6 +8,7 @@ import { DashboardComponent } from './pages/dashboard/dashboard.component';
 import { PortalComponent } from './pages/portal/portal.component';
 import { HomeComponent } from './pages/home/home.component';
 import { AdminFormComponent } from './pages/admin/admin-form/admin-form.component';
+import { AdminListComponent } from './pages/admin/admin-list/admin-list.component';
 
 const routes: Routes = [
   { path: '', canActivate: [guestGuard], component: HomeComponent },
@@ -31,6 +32,10 @@ const routes: Routes = [
       {
         path: "create",
         component: AdminFormComponent
+      },
+      {
+        path: "list",
+        component: AdminListComponent
       },
     ]
   }

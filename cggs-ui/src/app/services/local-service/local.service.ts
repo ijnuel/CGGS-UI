@@ -43,6 +43,7 @@ export class LocalService {
     return data ? JSON.parse(data) : null;
   }
   public clearCurrentUser() {
+    console.log("clear??")
     localStorage.removeItem("currentUser");
   }
 
@@ -118,14 +119,19 @@ export class LocalService {
   }
 
   public errorHandler(err: any) {
+    console.log("error here???")
     console.log(err)
-    let validationErrors : any[][] = Object.values(err?.error?.errors);
+    let validationErrors : any[][] | undefined;
+    if (err?.error?.errors) {
+      validationErrors = Object.values(err?.error?.errors);
+    }
     let errorMessage = err?.error?.Message || 
       validationErrors?.find(x => x)?.find(x => x) || 
+      err?.error?.entity ||
+      err?.error?.message ||  
+      err?.message ||
       err?.statusText || 
       err?.error?.ExceptionMessage ||
-      err?.error?.message ||
-      err?.message ||
       "An error occurred!";
     if (err.status == 401) {
       this.clearCurrentUser();

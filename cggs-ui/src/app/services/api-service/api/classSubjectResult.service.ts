@@ -391,16 +391,16 @@ export class ClassSubjectResultService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public apiClassSubjectResultGetAllPaginatedGet(page?: number, recordsPerPage?: number, observe?: 'body', reportProgress?: boolean): Observable<ClassSubjectResultResponseDtoPaginatedResultResult>;
-    public apiClassSubjectResultGetAllPaginatedGet(page?: number, recordsPerPage?: number, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<ClassSubjectResultResponseDtoPaginatedResultResult>>;
-    public apiClassSubjectResultGetAllPaginatedGet(page?: number, recordsPerPage?: number, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<ClassSubjectResultResponseDtoPaginatedResultResult>>;
-    public apiClassSubjectResultGetAllPaginatedGet(page?: number, recordsPerPage?: number, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public apiClassSubjectResultGetAllPaginatedGet(start?: number, recordsPerPage?: number, observe?: 'body', reportProgress?: boolean): Observable<ClassSubjectResultResponseDtoPaginatedResultResult>;
+    public apiClassSubjectResultGetAllPaginatedGet(start?: number, recordsPerPage?: number, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<ClassSubjectResultResponseDtoPaginatedResultResult>>;
+    public apiClassSubjectResultGetAllPaginatedGet(start?: number, recordsPerPage?: number, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<ClassSubjectResultResponseDtoPaginatedResultResult>>;
+    public apiClassSubjectResultGetAllPaginatedGet(start?: number, recordsPerPage?: number, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
 
 
         let queryParameters = new HttpParams({encoder: new CustomHttpUrlEncodingCodec()});
-        if (page !== undefined && page !== null) {
-            queryParameters = queryParameters.set('page', <any>page);
+        if (start !== undefined && start !== null) {
+            queryParameters = queryParameters.set('start', <any>start);
         }
         if (recordsPerPage !== undefined && recordsPerPage !== null) {
             queryParameters = queryParameters.set('recordsPerPage', <any>recordsPerPage);
