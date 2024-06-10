@@ -386,15 +386,17 @@ export class SchoolConfigurationService {
     /**
      * 
      * 
-     * @param page 
+     * @param start 
      * @param recordsPerPage 
+     * @param searchText 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public apiSchoolConfigurationGetAllPaginatedGet(start?: number, recordsPerPage?: number, observe?: 'body', reportProgress?: boolean): Observable<SchoolConfigurationResponseDtoPaginatedResultResult>;
-    public apiSchoolConfigurationGetAllPaginatedGet(start?: number, recordsPerPage?: number, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<SchoolConfigurationResponseDtoPaginatedResultResult>>;
-    public apiSchoolConfigurationGetAllPaginatedGet(start?: number, recordsPerPage?: number, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<SchoolConfigurationResponseDtoPaginatedResultResult>>;
-    public apiSchoolConfigurationGetAllPaginatedGet(start?: number, recordsPerPage?: number, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public apiSchoolConfigurationGetAllPaginatedGet(start?: number, recordsPerPage?: number, searchText?: string, observe?: 'body', reportProgress?: boolean): Observable<SchoolConfigurationResponseDtoPaginatedResultResult>;
+    public apiSchoolConfigurationGetAllPaginatedGet(start?: number, recordsPerPage?: number, searchText?: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<SchoolConfigurationResponseDtoPaginatedResultResult>>;
+    public apiSchoolConfigurationGetAllPaginatedGet(start?: number, recordsPerPage?: number, searchText?: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<SchoolConfigurationResponseDtoPaginatedResultResult>>;
+    public apiSchoolConfigurationGetAllPaginatedGet(start?: number, recordsPerPage?: number, searchText?: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+
 
 
 
@@ -404,6 +406,9 @@ export class SchoolConfigurationService {
         }
         if (recordsPerPage !== undefined && recordsPerPage !== null) {
             queryParameters = queryParameters.set('recordsPerPage', <any>recordsPerPage);
+        }
+        if (searchText !== undefined && searchText !== null) {
+            queryParameters = queryParameters.set('searchText', <any>searchText);
         }
 
         let headers = this.defaultHeaders;

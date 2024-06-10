@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { FormFieldContants } from 'src/app/helpers/const/formFieldConst';
+import { FormFieldConstants } from 'src/app/helpers/const/formFieldConst';
 import { FormFieldSize, FormFieldType, FormSelectFieldType } from 'src/app/helpers/enums/formFieldEnum';
 import { FormField } from 'src/app/helpers/models/formField';
 import { AdministratorCreateDto, AdministratorService, EnumsService } from 'src/app/services/api-service';
@@ -14,20 +14,20 @@ import { LocalService } from 'src/app/services/local-service/local.service';
 export class AdminFormComponent implements OnInit {
 
   formFields: FormField[] = [
-    FormFieldContants.firstName(undefined, FormFieldSize.Small),
-    FormFieldContants.lastName(undefined, FormFieldSize.Small),
-    FormFieldContants.middleName(undefined, FormFieldSize.Small),
-    FormFieldContants.gender(undefined, FormFieldSize.Small),
-    FormFieldContants.religion(undefined, FormFieldSize.Small),
-    FormFieldContants.textField("email", "Email", true, "email", undefined, FormFieldSize.Small),
-    FormFieldContants.textField("phoneNumber", "Phone Number", true, "text", undefined, FormFieldSize.Small),
-    FormFieldContants.textField("dateOfBirth", "Date of Birth", true, "date", undefined, FormFieldSize.Small),
-    FormFieldContants.selectField("nationality", "Nationality", true, undefined, FormFieldSize.Small, FormSelectFieldType.Country),
-    FormFieldContants.selectField("stateOfOrigin", "State of origin", true, undefined, FormFieldSize.Small, FormSelectFieldType.State),
-    FormFieldContants.selectField("originLGA", "LGA", true, undefined, FormFieldSize.Small, FormSelectFieldType.LGA),
-    FormFieldContants.textField("homeAddress", "Home Address", true, "text", undefined, FormFieldSize.Small),
-    FormFieldContants.textField("residentialCity", "City/Town", true, "text", undefined, FormFieldSize.Small),
-    FormFieldContants.selectField("residentialState", "Residential State", true, undefined, FormFieldSize.Small),
+    FormFieldConstants.firstName(undefined, FormFieldSize.Small),
+    FormFieldConstants.lastName(undefined, FormFieldSize.Small),
+    FormFieldConstants.middleName(undefined, FormFieldSize.Small),
+    FormFieldConstants.gender(undefined, FormFieldSize.Small),
+    FormFieldConstants.religion(undefined, FormFieldSize.Small),
+    FormFieldConstants.textField("email", "Email", true, "email", undefined, FormFieldSize.Small),
+    FormFieldConstants.textField("phoneNumber", "Phone Number", true, "text", undefined, FormFieldSize.Small),
+    FormFieldConstants.textField("dateOfBirth", "Date of Birth", true, "date", undefined, FormFieldSize.Small),
+    FormFieldConstants.selectField("nationality", "Nationality", true, undefined, FormFieldSize.Small, FormSelectFieldType.Country),
+    FormFieldConstants.selectField("stateOfOrigin", "State of origin", true, undefined, FormFieldSize.Small, FormSelectFieldType.State),
+    FormFieldConstants.selectField("originLGA", "LGA", true, undefined, FormFieldSize.Small, FormSelectFieldType.LGA),
+    FormFieldConstants.textField("homeAddress", "Home Address", true, "text", undefined, FormFieldSize.Small),
+    FormFieldConstants.textField("residentialCity", "City/Town", true, "text", undefined, FormFieldSize.Small),
+    FormFieldConstants.selectField("residentialState", "Residential State", true, undefined, FormFieldSize.Small),
   ]
 
   

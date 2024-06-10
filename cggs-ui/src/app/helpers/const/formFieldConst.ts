@@ -1,7 +1,7 @@
 import { FormFieldSize, FormFieldType, FormSelectFieldType } from "../enums/formFieldEnum";
 import { FormField } from "../models/formField";
 
-export const FormFieldContants = {
+export const FormFieldConstants = {
 
     textField(name: string, label: string, required: boolean, textType: string = "text", currentValue: any | undefined = undefined, columnWidth: FormFieldSize = FormFieldSize.Medium): FormField {
         let formField : FormField = {

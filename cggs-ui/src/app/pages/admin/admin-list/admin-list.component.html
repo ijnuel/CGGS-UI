@@ -1,5 +1,6 @@
 <div class="vh-75">
     <h4 class="d-flex justify-content-center text-centre mb-3">Administrators</h4>
-    <app-datatable [tableColumns]="tableColumns" [listResponse]="listResponse"></app-datatable>
+    <mat-icon aria-hidden="false" aria-label="Example home icon" fontIcon="plus"></mat-icon>
+    <app-datatable [page]="page" [tableColumns]="tableColumns" [entityService]="administratorService"></app-datatable>
 
 </div>
