@@ -1,8 +1,9 @@
-<div class="row vh-75">
+<div class="row">
     <app-form 
         (submitEvent)="submit($event)" 
         [formFields]="formFields" 
-        [formTitle]="'Create Admin'" 
+        [formTitle]="(isNew ? 'Create' : 'Update')+' Admin'"
+        [isModal]="isModal" 
         [buttonLabel]="'Submit'">
     </app-form>
 </div>

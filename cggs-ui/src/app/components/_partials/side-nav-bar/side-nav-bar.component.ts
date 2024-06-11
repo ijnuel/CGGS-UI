@@ -15,16 +15,8 @@ export class SideNavBarComponent implements OnInit {
 
   links = [
     {
-      title: "Create Admin",
-      slug: "/admin/create"
-    },
-    {
-      title: "Admin List",
+      title: "Administrators",
       slug: "/admin/list"
-    },
-    {
-      title: "Create Admin",
-      slug: "/admin/create"
     },
   ];
   xLinks: Link[] = [];

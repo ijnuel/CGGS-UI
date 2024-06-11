@@ -1,6 +1,13 @@
 <div class="vh-75">
     <h4 class="d-flex justify-content-center text-centre mb-3">Administrators</h4>
-    <mat-icon aria-hidden="false" aria-label="Example home icon" fontIcon="plus"></mat-icon>
-    <app-datatable [page]="page" [tableColumns]="tableColumns" [entityService]="administratorService"></app-datatable>
+    
+    <app-datatable 
+    [page]="page" 
+    [tableColumns]="tableColumns" 
+    [getAll]="administratorService.apiAdministratorGetAllPaginatedGet" 
+    [getById]="administratorService.apiAdministratorGetByIdGet" 
+    [delete]="administratorService.apiAdministratorDeleteDelete"
+    [entityFormComponent]="entityFormComponent"
+    ></app-datatable>
 
 </div>

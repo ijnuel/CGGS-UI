@@ -16,7 +16,7 @@ export class LoginComponent implements OnInit {
   formFields: FormField[] = [
     {
       name: "email",
-      label: "Email",
+      label: "Username/Email",
       textType: "email",
       fieldType: FormFieldType.Input,
       columnWidth: FormFieldSize.Large,
@@ -55,21 +55,13 @@ export class LoginComponent implements OnInit {
     private toastr: ToastrService
   ) { }
   ngOnInit(): void {
-    this.showErrorToast();
-    // this.getGenders();
-  }
-
-  showErrorToast() {
-    const message: string = location.hash.slice(1);
-    if (message) {
-      this.toastr.error(message.replace(/\+/g, " "), 'Error Occured!');
-    }
   }
 
   login(formData: any) {
     let payload: UserLoginDto = {
       ...formData
     };
+    payload.userName = payload.email;
     this.accountService.apiAccountLoginPost(payload).subscribe(x => {
       if (x.succeeded) {
         this.localService.setCurrentUser(x.entity);

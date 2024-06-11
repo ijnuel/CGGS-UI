@@ -1,7 +1,11 @@
-import { Component, Input, OnInit, Renderer2, ViewChild } from '@angular/core';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { Component, Inject, Input, OnInit, Optional, Renderer2, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { DataTableDirective } from 'angular-datatables';
 import { Observable, Subject, of } from 'rxjs';
+import { BASE_PATH, Configuration } from 'src/app/services/api-service';
+import { LocalService } from 'src/app/services/local-service/local.service';
 
 @Component({
   selector: 'app-datatable',
@@ -9,7 +13,11 @@ import { Observable, Subject, of } from 'rxjs';
   styleUrl: './datatable.component.css'
 })
 export class DatatableComponent implements OnInit {
-  @Input() public entityService!: any;
+  @Input() public includeCreate: boolean = true;
+  @Input() public getAll!: Function;
+  @Input() public getById!: Function;
+  @Input() public delete!: Function;
+  @Input() public entityFormComponent!: any;
   @Input() public tableColumns!: any[];
   @Input() public page!: string;
   @ViewChild(DataTableDirective, {static: false})
@@ -18,11 +26,27 @@ export class DatatableComponent implements OnInit {
   dtTrigger: any = new Subject();
 
   dtOptions: DataTables.Settings = {};
+  
+  protected basePath = '/';
+  public configuration = new Configuration();
+  public defaultHeaders = new HttpHeaders();
 
   constructor(
+    public localService: LocalService,
     private renderer: Renderer2,
     private router: Router,
+    private modalDialog: NgbModal, 
+    protected httpClient: HttpClient, 
+    @Optional()@Inject(BASE_PATH) basePath: string,
+    @Optional() configuration: Configuration
   ) {
+      if (basePath) {
+        this.basePath = basePath;
+      }
+      if (configuration) {
+          this.configuration = configuration;
+          this.basePath = basePath || configuration.basePath || this.basePath;
+      }
   }
   
   ngOnInit(): void {
@@ -35,8 +59,7 @@ export class DatatableComponent implements OnInit {
       ordering: false,
       serverSide: true,
       ajax: (dataTablesParameters: any, callback: any) => {
-        console.log(dataTablesParameters)
-        this.entityService.apiAdministratorGetAllPaginatedGet(dataTablesParameters.start, dataTablesParameters.length, dataTablesParameters.search.value).subscribe(
+        this.getAll(dataTablesParameters.start, dataTablesParameters.length, dataTablesParameters.search.value).subscribe(
           (res: any) => {
             if (res.succeeded) {
               callback({
@@ -45,6 +68,9 @@ export class DatatableComponent implements OnInit {
                 data: res.entity?.data
               });
             }
+          },
+          (err: any) => {
+            this.localService.errorHandler(err);
           }
         )
       },
@@ -60,7 +86,7 @@ export class DatatableComponent implements OnInit {
         this.router.navigate([`/${this.page}/view/${event.target.getAttribute("view-item")}`]);
       }
       if (event.target.hasAttribute("edit-item")) {
-        this.router.navigate([`/${this.page}/edit/${event.target.getAttribute("edit-item")}`]);
+        this.openForm(event.target.getAttribute("edit-item"));
       }
       if (event.target.hasAttribute("delete-item")) {
         this.router.navigate([`/${this.page}/delete/${event.target.getAttribute("delete-item")}`]);
@@ -77,5 +103,49 @@ export class DatatableComponent implements OnInit {
 
   ngOnDestroy(): void {
     this.dtTrigger.unsubscribe();
+  }
+
+  openForm(id: string = "") {
+    let entityDto = {};
+
+    if (id != "") {
+      this.getById(id).subscribe(
+        (res: any) => {
+          if (res.succeeded) {
+            this.showFormModal(res.entity, false);
+          }
+        },
+        (err: any) => {
+          this.localService.errorHandler(err);
+        }
+      )
+    }
+    else {
+      this.showFormModal()
+    }
+  }
+
+  showFormModal(entityDto: any = {}, isNew: boolean = true) {
+
+    const dialogRef = this.modalDialog.open(this.entityFormComponent, {
+      windowClass: 'myCustomModalClass',
+      size: 'xl',
+      backdrop: 'static',
+      keyboard: false,
+      scrollable: true,
+      centered: true
+    });
+    dialogRef.componentInstance.entityDto = entityDto;
+    dialogRef.componentInstance.isModal = true;
+
+    dialogRef.result.then(async (result) => {
+      console.log(result)
+      if (result) {
+        this.rerender();
+      }
+      }, (reason) => {
+    });
+
+
   }
 }

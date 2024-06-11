@@ -30,10 +30,6 @@ const routes: Routes = [
     canActivate: [authGuard],
     children: [
       {
-        path: "create",
-        component: AdminFormComponent
-      },
-      {
         path: "list",
         component: AdminListComponent
       },

@@ -1,5 +1,6 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Optional, Output } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { FormFieldSize, FormSelectFieldType } from 'src/app/helpers/enums/formFieldEnum';
 import { FormField } from 'src/app/helpers/models/formField';
 import { LocalService } from 'src/app/services/local-service/local.service';
@@ -13,16 +14,22 @@ export class FormComponent implements OnInit {
   @Input() public formFields!: FormField[];
   @Input() public buttonLabel: string = "Submit";
   @Input() public formTitle!: string;
+  @Input() public isModal!: boolean;
   @Output() submitEvent = new EventEmitter<any>();
   
   form!: FormGroup;
   constructor(
     private fb: FormBuilder,
     private localService: LocalService,
+    @Optional() public activeModal: NgbActiveModal
     ) { }
   
   ngOnInit(): void {
     this.initForm();
+  }
+
+  closeModal(saved: boolean = false) {
+    this.activeModal.close(saved);
   }
 
 
@@ -33,11 +40,11 @@ export class FormComponent implements OnInit {
   }
 
   initForm() {
-    console.log(this.formFields);
     this.form = this.fb.group({});
     this.formFields.forEach(field => {
       let fieldValidators = this.setValidators(field.validations);
       this.form.addControl(field.name, this.fb.control(field.value, fieldValidators));
+      this.fetchDependentField(field);
     });
   }
 
@@ -83,8 +90,7 @@ export class FormComponent implements OnInit {
   }
 
   fetchDependentField(field: FormField) {
-    let selectedValue = this.f[field.name]; 
-    console.log(selectedValue);
+    let selectedValue = this.f[field.name];
     if (field.selectFieldType == FormSelectFieldType.Country) {
       let stateField = this.formFields.find(x => x.selectFieldType == FormSelectFieldType.State);
       if (stateField) {

@@ -3,7 +3,7 @@ import { FormField } from "../models/formField";
 
 export const FormFieldConstants = {
 
-    textField(name: string, label: string, required: boolean, textType: string = "text", currentValue: any | undefined = undefined, columnWidth: FormFieldSize = FormFieldSize.Medium): FormField {
+    textField(currentValue: any | undefined = undefined, label: string, name: string, required: boolean, textType: string = "text", columnWidth: FormFieldSize = FormFieldSize.Medium): FormField {
         let formField : FormField = {
             name: name,
             label: label,
@@ -17,6 +17,7 @@ export const FormFieldConstants = {
             }
         };
         if (formField.validations) formField.validations.email = formField.textType == "email";
+        if (textType == "date" && currentValue) formField.value = currentValue.split('T')[0];
 
         return formField;
     },
@@ -63,7 +64,7 @@ export const FormFieldConstants = {
         }
     },
 
-    selectField(name: string, label: string, required: boolean, currentValue: any | undefined = undefined, columnWidth: FormFieldSize = FormFieldSize.Medium, selectFieldType: FormSelectFieldType  = FormSelectFieldType.None): FormField {
+    selectField(currentValue: any | undefined = undefined, label: string, name: string, required: boolean, columnWidth: FormFieldSize = FormFieldSize.Medium, selectFieldType: FormSelectFieldType  = FormSelectFieldType.None): FormField {
         return {
             name: name,
             label: label,

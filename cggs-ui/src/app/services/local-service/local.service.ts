@@ -129,16 +129,18 @@ export class LocalService {
       validationErrors?.find(x => x)?.find(x => x) || 
       err?.error?.entity ||
       err?.error?.message ||  
-      err?.message ||
       err?.statusText || 
+      err?.message ||
       err?.error?.ExceptionMessage ||
       "An error occurred!";
     if (err.status == 401) {
       this.clearCurrentUser();
-      location.href = "/school-portal#"+errorMessage.replace(" ", /\+/g);
+      errorMessage = "Session Expired!";
+      location.href = "/school-portal#errorMessage="+errorMessage.replace(" ", "/\+/g");
     }
     else if (err.status == 403) {
-      location.href = "/portal#"+errorMessage.replace(" ", /\+/g);
+      errorMessage = "Unauthorized Access!";
+      location.href = "/portal#errorMessage="+errorMessage.replace(" ", "/\+/g");
     }
     this.toastr.error(errorMessage, 'Error Occured!');
   }

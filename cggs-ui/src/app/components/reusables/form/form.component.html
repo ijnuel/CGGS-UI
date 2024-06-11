@@ -1,8 +1,13 @@
 
+<div *ngIf="isModal" class="d-flex justify-content-end mb-3">
+    <span role="button" (click)="closeModal()">
+        <mat-icon>close</mat-icon>
+    </span>
+</div>
 <h4 *ngIf="formTitle" class="d-flex justify-content-center text-centre mb-3">{{formTitle}}</h4>
 <form class="form w-100" [formGroup]="form" (ngSubmit)="submit()">
-    <div class="row">
-        <div  [class]="'mb-3 row col-sm-12 '+getFieldColumn(field.columnWidth)" *ngFor="let field of formFields">
+    <div class="row m-0 gap-3">
+        <div  [class]="'p-0 mb-1 row col-sm-12 '+getFieldColumn(field.columnWidth)" *ngFor="let field of formFields">
                 <div *ngIf="field.fieldType == 1">
                     <label [for]="field.name" class="form-label">{{field.label}} <span *ngIf="field.validations?.required" class="text-danger">*</span></label>
                     <input 
@@ -11,7 +16,7 @@
                     [formControlName]="field.name" 
                     class="form-control" 
                     [ngClass]="{
-                        'is-invalid': form.controls[field.name].invalid,
+                        'is-invalid': form.get(field.name)?.touched && form.controls[field.name].invalid,
                         'is-valid': form.controls[field.name].valid
                     }" />
                 </div>
@@ -22,7 +27,7 @@
                     (change)="fetchDependentField(field)"
                     class="form-control" 
                     [ngClass]="{
-                        'is-invalid': form.controls[field.name].invalid,
+                        'is-invalid': form.get(field.name)?.touched && form.controls[field.name].invalid,
                         'is-valid': form.controls[field.name].valid
                     }">
                         <option disabled value="">-- Please Select --</option>
@@ -33,27 +38,27 @@
                         </option>
                     </select>
                 </div>
-                <small class="text-danger" *ngIf="form.get(field.name)?.hasError('required')">
+                <small class="text-danger" *ngIf="form.get(field.name)?.touched && form.get(field.name)?.hasError('required')">
                     This field is required
                 </small>
-                <small class="text-danger" *ngIf="form.get(field.name)?.hasError('email')">
+                <small class="text-danger" *ngIf="form.get(field.name)?.touched && form.get(field.name)?.hasError('email')">
                     An email is expected
                 </small>
-                <small class="text-danger" *ngIf="form.get(field.name)?.hasError('min')">
+                <small class="text-danger" *ngIf="form.get(field.name)?.touched && form.get(field.name)?.hasError('min')">
                     Cannot be lower than {{field?.validations?.min}}
                 </small>
-                <small class="text-danger" *ngIf="form.get(field.name)?.hasError('max')">
+                <small class="text-danger" *ngIf="form.get(field.name)?.touched && form.get(field.name)?.hasError('max')">
                     Cannot be greater than + {{field?.validations?.max}}
                 </small>
-                <small class="text-danger" *ngIf="form.get(field.name)?.hasError('minlength')">
+                <small class="text-danger" *ngIf="form.get(field.name)?.touched && form.get(field.name)?.hasError('minlength')">
                     Cannot be shorter than {{field?.validations?.minLength}}
                 </small>
-                <small class="text-danger" *ngIf="form.get(field.name)?.hasError('maxlength')">
+                <small class="text-danger" *ngIf="form.get(field.name)?.touched && form.get(field.name)?.hasError('maxlength')">
                     Cannot be longer than {{field?.validations?.maxLength}}
                 </small>
         </div>
 
-        <div class="d-grid mt-5 gap-2">
+        <div class="row col-12 d-grid mt-2 gap-2">
             <button class="btn btn-info" [disabled]="form.invalid">{{buttonLabel}}</button>
         </div>
     </div>

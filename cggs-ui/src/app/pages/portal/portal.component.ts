@@ -14,10 +14,6 @@ export class PortalComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    const message: string = location.hash.slice(1);
-    if (message) {
-      this.toastr.error(message.replace(/\+/g, " "), 'Error Occured!');
-    }
   }
 
 }
