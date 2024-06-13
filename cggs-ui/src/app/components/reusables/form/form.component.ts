@@ -44,6 +44,9 @@ export class FormComponent implements OnInit {
     this.formFields.forEach(field => {
       let fieldValidators = this.setValidators(field.validations);
       this.form.addControl(field.name, this.fb.control(field.value, fieldValidators));
+      if (field.disabled) {
+        this.form.get(field.name)?.disable();
+      }
       this.fetchDependentField(field);
     });
   }
@@ -87,6 +90,13 @@ export class FormComponent implements OnInit {
       return "col-md-6 col-lg-6"
     }
     return "col-md-12 col-lg-12"
+  }
+
+  inputChange(field: FormField) {
+  }
+
+  selectChange(field: FormField) {
+    this.fetchDependentField(field)
   }
 
   fetchDependentField(field: FormField) {

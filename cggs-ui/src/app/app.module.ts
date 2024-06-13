@@ -30,6 +30,9 @@ import {MatIconModule} from '@angular/material/icon';
 import { AdminListComponent } from './pages/admin/admin-list/admin-list.component';
 import { DataTablesModule } from 'angular-datatables';
 import { DatatableComponent } from './components/reusables/datatable/datatable.component';
+import { FormInputComponent } from './components/reusables/form-input/form-input.component';
+import { FormErrorsComponent } from './components/reusables/form-errors/form-errors.component';
+import { FormSelectComponent } from './components/reusables/form-select/form-select.component';
 
 @NgModule({
   declarations: [
@@ -41,6 +44,9 @@ import { DatatableComponent } from './components/reusables/datatable/datatable.c
     AuthLayoutComponent,
     LoadingIndicatorComponent,
     FormComponent,
+    FormInputComponent,
+    FormSelectComponent,
+    FormErrorsComponent,
     DatatableComponent,
     TopNavBarComponent,
     DashboardComponent,
