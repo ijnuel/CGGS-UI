@@ -89,7 +89,7 @@ export class DatatableComponent implements OnInit {
         this.openForm(event.target.getAttribute("edit-item"));
       }
       if (event.target.hasAttribute("delete-item")) {
-        this.router.navigate([`/${this.page}/delete/${event.target.getAttribute("delete-item")}`]);
+        this.showDeleteModal(event.target.getAttribute("delete-item"));
       }
     });
   }
@@ -122,6 +122,12 @@ export class DatatableComponent implements OnInit {
     }
     else {
       this.showFormModal()
+    }
+  }
+
+  async showDeleteModal(id: string) {
+    if (await this.localService.confirmDelete()) {
+      console.log(id)
     }
   }
 

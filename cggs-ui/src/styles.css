@@ -22,4 +22,5 @@ a {
 .modal-content {
     padding: 2rem;
     max-height: max-content !important;
+    margin-right: 1rem !important;
 }

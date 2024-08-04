@@ -33,6 +33,7 @@ import { DatatableComponent } from './components/reusables/datatable/datatable.c
 import { FormInputComponent } from './components/reusables/form-input/form-input.component';
 import { FormErrorsComponent } from './components/reusables/form-errors/form-errors.component';
 import { FormSelectComponent } from './components/reusables/form-select/form-select.component';
+import { DeleteComponent } from './components/reusables/delete/delete.component';
 
 @NgModule({
   declarations: [
@@ -43,6 +44,7 @@ import { FormSelectComponent } from './components/reusables/form-select/form-sel
     HomeComponent,
     AuthLayoutComponent,
     LoadingIndicatorComponent,
+    DeleteComponent,
     FormComponent,
     FormInputComponent,
     FormSelectComponent,

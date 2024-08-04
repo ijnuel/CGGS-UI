@@ -3,6 +3,8 @@ import { CountryService, EnumResponseModelListResult, EnumsService, LocalGovernm
 import { CookieService } from 'ngx-cookie-service';
 import { ToastrService } from 'ngx-toastr';
 import { FormField, FormFieldSelectOption } from 'src/app/helpers/models/formField';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { DeleteComponent } from 'src/app/components/reusables/delete/delete.component';
 
 @Injectable({
   providedIn: 'root'
@@ -16,6 +18,7 @@ export class LocalService {
     private stateService: StateService,
     private localGovernmentAreaService: LocalGovernmentAreaService,
     private cookieService: CookieService,
+    private modalDialog: NgbModal, 
     private toastr: ToastrService) { }
 
   public saveData(key: string, value: any) {
@@ -116,6 +119,19 @@ export class LocalService {
 
   public successToast(message: string) {
     this.toastr.success(message, 'Success!');
+  }
+
+  public async confirmDelete(): Promise<boolean> {
+    const dialogRef = this.modalDialog.open(DeleteComponent, {
+      windowClass: 'myCustomModalClass',
+      size: 'l',
+      backdrop: 'static',
+      keyboard: false,
+      scrollable: true,
+      centered: true
+    });
+
+    return dialogRef.result;
   }
 
   public errorHandler(err: any) {
