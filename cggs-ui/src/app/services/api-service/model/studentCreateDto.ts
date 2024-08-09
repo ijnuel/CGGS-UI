@@ -26,8 +26,8 @@ export interface StudentCreateDto {
     homeAddress?: string;
     residentialCity?: string;
     residentialState?: string;
-    email?: string;
     phoneNumber?: string;
     studentNo?: string;
     userId?: string;
+    email?: string;
 }

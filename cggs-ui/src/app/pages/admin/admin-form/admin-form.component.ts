@@ -42,7 +42,7 @@ export class AdminFormComponent implements OnInit {
       FormFieldConstants.middleName(this.entityDto?.middleName, FormFieldSize.Small),
       FormFieldConstants.gender(this.entityDto?.gender, FormFieldSize.Small),
       FormFieldConstants.religion(this.entityDto?.religion, FormFieldSize.Small),
-      FormFieldConstants.textField(this.entityDto?.email, "Email", "email",true, "email", FormFieldSize.Small),
+      FormFieldConstants.textField(this.entityDto?.email, "Email", "email",true, "email", FormFieldSize.Small, !this.isNew),
       FormFieldConstants.textField(this.entityDto?.phoneNumber, "Phone Number", "phoneNumber", true, "text", FormFieldSize.Small),
       FormFieldConstants.textField(this.entityDto?.dateOfBirth, "Date of Birth", "dateOfBirth", true, "date", FormFieldSize.Small),
       FormFieldConstants.selectField(this.entityDto?.nationality, "Nationality", "nationality", true, FormFieldSize.Small, FormSelectFieldType.Country),

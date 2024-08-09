@@ -3,7 +3,7 @@ import { FormField } from "../models/formField";
 
 export const FormFieldConstants = {
 
-    textField(currentValue: any | undefined = undefined, label: string, name: string, required: boolean, textType: string = "text", columnWidth: FormFieldSize = FormFieldSize.Medium): FormField {
+    textField(currentValue: any | undefined = undefined, label: string, name: string, required: boolean, textType: string = "text", columnWidth: FormFieldSize = FormFieldSize.Medium, disabled: boolean = false): FormField {
         let formField : FormField = {
             name: name,
             label: label,
@@ -11,6 +11,7 @@ export const FormFieldConstants = {
             value: currentValue,
             fieldType: FormFieldType.Input,
             columnWidth: columnWidth,
+            disabled: disabled,
             validations: {
               required: required,
               
