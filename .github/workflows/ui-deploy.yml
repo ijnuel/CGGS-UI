@@ -27,12 +27,14 @@ on:
 
 env:
   WEBAPP_NAME: cggs-ui    # set this to your application's name
-  WEBAPP_PACKAGE_PATH: 'cggs-ui\dist\cggs-ui'      # set this to the path to your web app project, defaults to the repository root
+  WEBAPP_PACKAGE_PATH: 'dist\cggs-ui'      # set this to the path to your web app project, defaults to the repository root
   NODE_VERSION: '18.17.0'                # set this to the node version to use
 
 permissions:
   contents: read
-
+script:
+  - cd ${{ env.WEBAPP_NAME }}
+ 
 jobs:
   build:
     runs-on: ubuntu-latest
