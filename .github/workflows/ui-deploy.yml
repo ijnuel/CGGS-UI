@@ -32,14 +32,16 @@ env:
 
 permissions:
   contents: read
-script:
-  - cd ${{ env.WEBAPP_NAME }}
  
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v4
+    
+    - name: Change wdir
+      script:
+        - cd ${{ env.WEBAPP_NAME }}
 
     - name: Set up Node.js
       uses: actions/setup-node@v4
