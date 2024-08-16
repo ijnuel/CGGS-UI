@@ -38,14 +38,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v4
+      with:
+        path: ${{ env.WEBAPP_NAME }}
 
     - name: Check env
-      run: |
-        cd ${{ env.WEBAPP_NAME }}
-        pwd
-        ls -al
-        
-    - name: Check env2
       run: |
         pwd
         ls -al
@@ -55,11 +51,9 @@ jobs:
       with:
         node-version: ${{ env.NODE_VERSION }}
         cache: 'npm'
-        path: ${{ env.WEBAPP_NAME }}
 
     - name: npm install, build, and test
       run: |
-        cd ${{ env.WEBAPP_NAME }}
         npm ci
         npm run build-prod --if-present
 #         npm run test --if-present
