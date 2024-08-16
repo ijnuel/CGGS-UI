@@ -57,10 +57,10 @@ jobs:
 #         npm run test --if-present
 
     - name: Upload artifact for deployment job
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: node-app
-        path: .
+        path: {{ env.WEBAPP_PACKAGE_PATH }}
         
         
   
@@ -70,7 +70,7 @@ jobs:
     needs: build
     steps:
     - name: Download artifact from build job
-      uses: actions/download-artifact@v3
+      uses: actions/download-artifact@v4
       with:
         name: node-app
 
@@ -91,4 +91,4 @@ jobs:
         server-computer-name: ${{ secrets.SERVER_COMPUTER_NAME }}
         server-username: ${{ secrets.SERVER_USERNAME }}
         server-password: ${{ secrets.SERVER_PASSWORD }}
-        source-path: ${{ env.WEBAPP_PACKAGE_PATH }}
+    #    source-path: ${{ env.WEBAPP_PACKAGE_PATH }}
