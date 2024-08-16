@@ -62,9 +62,9 @@ export class LoginComponent implements OnInit {
       ...formData
     };
     payload.userName = payload.email;
-    this.accountService.apiAccountLoginPost(payload, 'response').subscribe(x => {
-      if (x.body?.succeeded) {
-        this.localService.setCurrentUser(x.body?.entity);
+    this.accountService.apiAccountLoginPost(payload).subscribe(x => {
+      if (x.succeeded) {
+        this.localService.setCurrentUser(x.entity);
         this.router.navigate(['/portal']);
       }
     },
