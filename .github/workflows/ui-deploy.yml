@@ -35,7 +35,7 @@ permissions:
  
 jobs:
   build:
-    runs-on: windows-latest
+    runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v4
 
@@ -45,11 +45,11 @@ jobs:
         node-version: ${{ env.NODE_VERSION }}
         cache: 'npm'
 
-    - name: npm install, build, and test
-      run: |
-        npm ci --force
-        npm run build-prod --if-present
-#         npm run test --if-present
+    - name: npm install
+      run: npm ci --force
+      
+    - name: npm build
+      run: npm run build-prod --if-present
 
     - name: Upload artifact for deployment job
       uses: actions/upload-artifact@v4
@@ -57,18 +57,18 @@ jobs:
         name: cggs-app
         path: 'dist\cggs-ui'
     
-    # Add  MSBuild to the PATH: https://github.com/microsoft/setup-msbuild
-    - name: Setup MSBuild.exe
-      uses: microsoft/setup-msbuild@v2
-
-    - name: Deploy to Simply        
-      uses: talunzhang/auto-web-deploy@v1.0.1
-      with:
-        website-name: ${{ secrets.WEBSITE_NAME }}
-        server-computer-name: ${{ secrets.SERVER_COMPUTER_NAME }}
-        server-username: ${{ secrets.SERVER_USERNAME }}
-        server-password: ${{ secrets.SERVER_PASSWORD }}
-        source-path: ${{ env.WEBAPP_PACKAGE_PATH }}
+    ## Add  MSBuild to the PATH: https://github.com/microsoft/setup-msbuild
+    #- name: Setup MSBuild.exe
+    #  uses: microsoft/setup-msbuild@v2
+    #
+    #- name: Deploy to Simply        
+    #  uses: talunzhang/auto-web-deploy@v1.0.1
+    #  with:
+    #    website-name: ${{ secrets.WEBSITE_NAME }}
+    #    server-computer-name: ${{ secrets.SERVER_COMPUTER_NAME }}
+    #    server-username: ${{ secrets.SERVER_USERNAME }}
+    #    server-password: ${{ secrets.SERVER_PASSWORD }}
+    #    source-path: ${{ env.WEBAPP_PACKAGE_PATH }}
         
         
   
