@@ -25,8 +25,8 @@ on:
     branches: [ "main" ]
   workflow_dispatch:
 env:
-  WEBAPP_NAME: ./cggs-ui    # set this to your application's name
-  WEBAPP_PACKAGE_PATH: 'cggs-ui\dist\cggs-ui'      # set this to the path to your web app project, defaults to the repository root
+  WEBAPP_NAME: cggs-ui    # set this to your application's name
+  WEBAPP_PACKAGE_PATH: 'dist\cggs-ui'      # set this to the path to your web app project, defaults to the repository root
   NODE_VERSION: '18.17.0'                # set this to the node version to use
 
 
@@ -38,8 +38,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v4
-      with:
-        path: ${{ env.WEBAPP_NAME }}
 
     - name: Check env
       run: |
