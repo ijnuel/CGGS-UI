@@ -35,7 +35,7 @@ permissions:
  
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: windows-latest
     steps:
     - uses: actions/checkout@v4
 
@@ -53,53 +53,22 @@ jobs:
       
     - name: Check build
       run: |
-        ls -al
+        dir
         cd dist
-        ls -al
+        dir
         cd cggs-ui
-        ls -al
+        dir
 
-    - name: Upload artifact for deployment job
-      uses: actions/upload-artifact@v4
-      with:
-        name: cggs-app
-        path: '.\dist\cggs-ui'
+    #- name: Upload artifact for deployment job
+    #  uses: actions/upload-artifact@v4
+    #  with:
+    #    name: cggs-app
+    #    path: '.\dist\cggs-ui'
     
-    ## Add  MSBuild to the PATH: https://github.com/microsoft/setup-msbuild
-    #- name: Setup MSBuild.exe
-    #  uses: microsoft/setup-msbuild@v2
-    #
-    #- name: Deploy to Simply        
-    #  uses: talunzhang/auto-web-deploy@v1.0.1
-    #  with:
-    #    website-name: ${{ secrets.WEBSITE_NAME }}
-    #    server-computer-name: ${{ secrets.SERVER_COMPUTER_NAME }}
-    #    server-username: ${{ secrets.SERVER_USERNAME }}
-    #    server-password: ${{ secrets.SERVER_PASSWORD }}
-    #    source-path: ${{ env.WEBAPP_PACKAGE_PATH }}
-        
-        
-  
-
-  deploy:
-    runs-on: windows-latest  
-    needs: build
-    steps:
-    - name: Download artifact from build job
-      uses: actions/download-artifact@v4
-      with:
-        name: cggs-app
-
-    # Install the .NET Core workload
-    #- name: Install .NET Core
-    #  uses: actions/setup-dotnet@v4
-    #  with:
-    #    dotnet-version: 8.0.x
-
     # Add  MSBuild to the PATH: https://github.com/microsoft/setup-msbuild
     - name: Setup MSBuild.exe
       uses: microsoft/setup-msbuild@v2
-
+    
     - name: Deploy to Simply        
       uses: talunzhang/auto-web-deploy@v1.0.1
       with:
@@ -107,4 +76,35 @@ jobs:
         server-computer-name: ${{ secrets.SERVER_COMPUTER_NAME }}
         server-username: ${{ secrets.SERVER_USERNAME }}
         server-password: ${{ secrets.SERVER_PASSWORD }}
-    #    source-path: ${{ env.WEBAPP_PACKAGE_PATH }}
+        source-path: ${{ env.WEBAPP_PACKAGE_PATH }}
+        
+        
+  
+
+  #deploy:
+  #  runs-on: windows-latest  
+  #  needs: build
+  #  steps:
+  #  - name: Download artifact from build job
+  #    uses: actions/download-artifact@v4
+  #    with:
+  #      name: cggs-app
+  #
+  #  # Install the .NET Core workload
+  #  #- name: Install .NET Core
+  #  #  uses: actions/setup-dotnet@v4
+  #  #  with:
+  #  #    dotnet-version: 8.0.x
+  #
+  #  # Add  MSBuild to the PATH: https://github.com/microsoft/setup-msbuild
+  #  - name: Setup MSBuild.exe
+  #    uses: microsoft/setup-msbuild@v2
+  #
+  #  - name: Deploy to Simply        
+  #    uses: talunzhang/auto-web-deploy@v1.0.1
+  #    with:
+  #      website-name: ${{ secrets.WEBSITE_NAME }}
+  #      server-computer-name: ${{ secrets.SERVER_COMPUTER_NAME }}
+  #      server-username: ${{ secrets.SERVER_USERNAME }}
+  #      server-password: ${{ secrets.SERVER_PASSWORD }}
+  #  #    source-path: ${{ env.WEBAPP_PACKAGE_PATH }}
