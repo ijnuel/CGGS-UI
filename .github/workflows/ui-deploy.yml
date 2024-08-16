@@ -48,10 +48,10 @@ jobs:
 
     - name: npm install, build, and test
       run: |
+        cd ${{ env.WEBAPP_NAME }}
         npm ci
         npm run build-prod --if-present
 #         npm run test --if-present
-        working-directory: ${{ env.WEBAPP_NAME }}
 
     - name: Deploy to Simply        
       uses: talunzhang/auto-web-deploy@v1.0.1
