@@ -31,10 +31,10 @@ export class TopNavBarComponent implements OnInit {
   }
   
   getUserProfile() {
-    this.accountService.apiAccountGetUserProfileGet().subscribe(
+    this.accountService.apiAccountGetUserProfileGet('response').subscribe(
       res => {
-        if (res.succeeded) {
-          this.userProfile = res.entity!;
+        if (res.body?.succeeded) {
+          this.userProfile = res.body?.entity!;
         }
         else {
           this.localService.errorHandler(res);
