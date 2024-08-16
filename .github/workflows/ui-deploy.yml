@@ -25,7 +25,7 @@ on:
     branches: [ "main" ]
   workflow_dispatch:
 env:
-  WEBAPP_NAME: cggs-ui    # set this to your application's name
+  WEBAPP_NAME: ./cggs-ui    # set this to your application's name
   WEBAPP_PACKAGE_PATH: 'cggs-ui\dist\cggs-ui'      # set this to the path to your web app project, defaults to the repository root
   NODE_VERSION: '18.17.0'                # set this to the node version to use
 
@@ -38,20 +38,25 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v4
+      with:
+        path: ${{ env.WEBAPP_NAME }}
+
+    - name: Check env
+      run: |
+        pwd
+        ls -al
 
     - name: Set up Node.js
       uses: actions/setup-node@v4
       with:
         node-version: ${{ env.NODE_VERSION }}
         cache: 'npm'
-        working-directory: ${{ env.WEBAPP_NAME }}
 
     - name: npm install, build, and test
       run: |
         npm ci
         npm run build-prod --if-present
 #         npm run test --if-present
-        working-directory: ${{ env.WEBAPP_NAME }}
 
     - name: Deploy to Simply        
       uses: talunzhang/auto-web-deploy@v1.0.1
