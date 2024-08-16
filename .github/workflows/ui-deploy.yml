@@ -29,7 +29,6 @@ env:
   WEBAPP_PACKAGE_PATH: 'dist\cggs-ui'      # set this to the path to your web app project, defaults to the repository root
   NODE_VERSION: '18.17.0'                # set this to the node version to use
 
-workingDirectory: ${{ env.WEBAPP_NAME }}
 
 permissions:
   contents: read
@@ -37,6 +36,7 @@ permissions:
 jobs:
   build:
     runs-on: ubuntu-latest
+    dir: ${{ env.WEBAPP_NAME }}
     steps:
     - uses: actions/checkout@v4
 
