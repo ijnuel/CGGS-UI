@@ -1,5 +1,5 @@
 export const environment = {
-  apiUrl: "http://localhost:5128",
+  apiUrl: "http://ijesudunsin-002-site1.ftempurl.com",
   production: true,
   logo: "/assets/logos/cggs.png",
   short_name: "CGGS",
