@@ -51,7 +51,13 @@ jobs:
     - name: npm build
       run: npm run build-prod
       
-    - run: ls -al
+    - name: Check build
+      run: |
+        ls -al
+        cd dist
+        ls -al
+        cd cggs-ui
+        ls -al
 
     - name: Upload artifact for deployment job
       uses: actions/upload-artifact@v4
