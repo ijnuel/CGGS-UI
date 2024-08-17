@@ -26,6 +26,4 @@ export * from './subject.service';
 import { SubjectService } from './subject.service';
 export * from './teacher.service';
 import { TeacherService } from './teacher.service';
-export * from './weatherForecast.service';
-import { WeatherForecastService } from './weatherForecast.service';
-export const APIS = [AccountService, AdministratorService, ClassService, ClassSubjectService, ClassSubjectResultService, CountryService, EnumsService, LocalGovernmentAreaService, SchoolConfigurationService, SessionService, StateService, StudentService, SubjectService, TeacherService, WeatherForecastService];
+export const APIS = [AccountService, AdministratorService, ClassService, ClassSubjectService, ClassSubjectResultService, CountryService, EnumsService, LocalGovernmentAreaService, SchoolConfigurationService, SessionService, StateService, StudentService, SubjectService, TeacherService];

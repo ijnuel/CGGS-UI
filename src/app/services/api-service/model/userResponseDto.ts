@@ -12,7 +12,7 @@
 import { UserDto } from './userDto';
 
 export interface UserResponseDto { 
-    message?: Array<string>;
+    message?: string;
     token?: string;
     currentUser?: UserDto;
 }

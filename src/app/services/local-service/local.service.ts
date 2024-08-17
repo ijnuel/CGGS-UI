@@ -1,10 +1,11 @@
 import { Injectable } from '@angular/core';
-import { CountryService, EnumResponseModelListResult, EnumsService, LocalGovernmentAreaService, ObjectListResult, StateService, UserDto, UserResponseDto } from '../api-service';
+import { CountryService, EnumResponseModelListResult, EnumsService, LocalGovernmentAreaService, StateService, UserDto, UserResponseDto } from '../api-service';
 import { CookieService } from 'ngx-cookie-service';
 import { ToastrService } from 'ngx-toastr';
 import { FormField, FormFieldSelectOption } from 'src/app/helpers/models/formField';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { DeleteComponent } from 'src/app/components/reusables/delete/delete.component';
+import { ObjectListResult } from '../api-service/model/objectListResult';
 
 @Injectable({
   providedIn: 'root'
