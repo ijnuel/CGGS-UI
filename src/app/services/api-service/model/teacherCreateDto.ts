@@ -27,6 +27,5 @@ export interface TeacherCreateDto {
     residentialState?: string;
     phoneNumber?: string;
     teacherNo?: string;
-    userId?: string;
     email?: string;
 }

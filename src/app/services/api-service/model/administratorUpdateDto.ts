@@ -13,7 +13,6 @@ import { Gender } from './gender';
 import { Religion } from './religion';
 
 export interface AdministratorUpdateDto { 
-    userId?: string;
     firstName?: string;
     lastName?: string;
     middleName?: string;

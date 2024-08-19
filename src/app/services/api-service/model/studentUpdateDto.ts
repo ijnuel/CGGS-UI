@@ -15,7 +15,6 @@ import { Religion } from './religion';
 export interface StudentUpdateDto { 
     studentNo?: string;
     classId?: string;
-    userId?: string;
     firstName?: string;
     lastName?: string;
     middleName?: string;

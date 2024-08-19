@@ -26,6 +26,5 @@ export interface AdministratorCreateDto {
     residentialCity?: string;
     residentialState?: string;
     phoneNumber?: string;
-    userId?: string;
     email?: string;
 }
