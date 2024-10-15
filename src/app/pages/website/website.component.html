@@ -1,0 +1,99 @@
+<div>
+  <div
+    id="topbar"
+    class="fixed top-0 left-0 w-[100%] h-[5rem] bg-[var(--app-primary)] flex justify-between items-center px-5"
+  >
+    <img src="assets/images/logo-white.png" class="w-[3.5rem]" alt="logo" />
+
+    <div class="hidden md:block">
+      <ul
+        class="list-none flex items-center font-semibold text-sm gap-8 text-[var(--app-secondary)]"
+      >
+        <li
+          class="border-b-[0.0625rem] border-transparent hover:border-[var(--app-secondary)] py-1 cursor-pointer duration-75 mt-1"
+          (click)="smoothScroll('#home')"
+        >
+          <span>Home</span>
+        </li>
+        <li
+          class="border-b-[0.0625rem] border-transparent hover:border-[var(--app-secondary)] py-1 cursor-pointer duration-75 mt-1"
+          (click)="smoothScroll('#about-us')"
+        >
+          <span>About us</span>
+        </li>
+        <li
+          class="border-b-[0.0625rem] border-transparent hover:border-[var(--app-secondary)] py-1 cursor-pointer duration-75 mt-1"
+          (click)="smoothScroll('#news')"
+        >
+          <span>News & Events</span>
+        </li>
+
+        <li
+          class="border-b-[0.0625rem] border-transparent hover:border-[var(--app-secondary)] py-1 cursor-pointer duration-75 mt-1"
+          (click)="smoothScroll('#contact-us')"
+        >
+          <span>Contact us</span>
+        </li>
+        <li>
+          <a>
+            <button routerLink="/auth" class="btn">Login</button>
+          </a>
+        </li>
+      </ul>
+    </div>
+  </div>
+
+  <div id="home">
+    <div
+      class="h-[100%] md:h-[100vh] flex justify-between items-center w-[100%] pt-[6rem] md:pt-[2rem] px-5"
+    >
+      <div class="text-[var(--app-secondary)] w-[100%] md:w-[50%]">
+        <h1 class="leading-[4.5rem]">Chosen Generation Schools</h1>
+        <p class="leading-[2rem] pt-5">
+          Here we have Professional teachers who are second to none. we provide
+          a well-rounded education that enables our students to develop vital
+          life skills and excel academically. Here is a summary of our admission
+          procedure.
+        </p>
+        <button (click)="goToLoginPage()" class="btn my-6">
+          Enroll For Admission
+        </button>
+      </div>
+
+      <div class="hidden md:flex md:w-[50%] justify-end">
+        <img
+          src="assets/images/student-picture.jpg"
+          class="w-[600px] h-[400px] rounded"
+          alt="image"
+        />
+      </div>
+    </div>
+  </div>
+
+  <div id="about-us" class="pt-[5rem]">
+    <div class="h-[100vh] flex justify-center text-center w-[100%] px-5">
+      <div>
+        <h2>About Us</h2>
+        <span> Lorem ipsum dolor sit amet, consectetur adipisicing elit. </span>
+      </div>
+    </div>
+  </div>
+
+  <div id="news" class="pt-[5rem]">
+    <div class="h-[100vh] flex justify-center text-center w-[100%] px-5">
+      <div>
+        <h2>News & Events</h2>
+        <span> Lorem ipsum dolor sit amet, consectetur adipisicing elit. </span>
+      </div>
+    </div>
+  </div>
+
+  <div id="contact-us" class="pt-[5rem]">
+    <div class="h-[100vh] flex justify-center text-center w-[100%] px-5">
+      <div>
+        <h2>Contact Us</h2>
+        <span> Lorem ipsum dolor sit amet, consectetur adipisicing elit. </span>
+      </div>
+    </div>
+  </div>
+</div>

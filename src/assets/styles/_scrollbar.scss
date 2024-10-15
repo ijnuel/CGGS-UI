@@ -1,0 +1,20 @@
+::-webkit-scrollbar {
+  width: 5px;
+  height: 5px;
+  cursor: pointer;
+}
+
+::-webkit-scrollbar-track {
+  background-color: var(--app-scrollbar-track);
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: var(--app-scrollbar-thumb);
+  cursor: pointer;
+  border-radius: 1.25rem;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background-color: var(--app-scrollbar-thumb);
+  cursor: pointer;
+}

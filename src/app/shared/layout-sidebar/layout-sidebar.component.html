@@ -1,0 +1,53 @@
+<div class="">
+  <div class="pr-4">
+    <img
+      class="w-[6rem] mt-[1.25rem] mx-auto"
+      src="assets/images/logo-white.png"
+      alt="logo"
+    />
+  </div>
+
+  <div class="mt-8 overflow-y-auto">
+    <div class="mb-6">
+      @for(item of sidebarMenuItems; track item; let itemIndex = $index) {
+      @if(item.url) {
+      <div
+        class="flex items-center gap-2 py-2 mb-2 hover:bg-[var(--app-sidebar-menu-hover)]"
+        role="button"
+        [routerLink]="item.url"
+        routerLinkActive="menu-item-active"
+        [routerLinkActiveOptions]="{ exact: false }"
+        matRipple
+        (click)="menuItemClick()"
+      >
+        <img class="w-[1rem] h-[1rem] ml-4 mb-1" [src]="item.icon" />
+        <span class="text-sm">
+          {{ item.name }}
+        </span>
+      </div>
+      } @else {
+      <div
+        class="flex items-center gap-2 py-2 mb-2 text-gray-500 cursor-not-allowed"
+        role="button"
+        (click)="menuItemClick()"
+      >
+        <img class="w-[1rem] h-[1rem] ml-4 mb-1 opacity-35" [src]="item.icon" />
+        <span class="text-sm">
+          {{ item.name }}
+        </span>
+      </div>
+      } }
+    </div>
+
+    <div
+      class="flex items-center gap-2 absolute bottom-[3rem] py-1 hover:bg-[var(--app-sidebar-menu-hover)] w-full"
+      role="button"
+      (click)="menuItemClick()"
+    >
+      <img class="w-[1rem] h-[1rem] ml-4" src="assets/icons/logout-icon.svg" />
+      <div>
+        <span class="text-sm"> Logout </span>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,43 @@
+:root {
+  --app-black: #000;
+  --app-white: #fff;
+
+  --app-primary: #0f0e17;
+  --app-primary-2: #dce0e9;
+  --app-secondary: #c3c9d8;
+
+  --app-success: #008042;
+  --app-danger: #e62e2e;
+
+  --app-bg: #eff4ff;
+  --app-sidebar-bg: #444a92;
+  --app-sidebar-color: var(--app-white);
+
+  --app-text-color: #0f0e17;
+
+  --app-button-bg: #006efe;
+  --app-button-sec-bg: #0f0e17;
+  --app-button-color: var(--app-white);
+  --app-button-radius: 0.25rem;
+
+  --app-disabled-bg: #adadad;
+  --app-disabled-color: #535353;
+
+  --app-scrollbar-track: #fff;
+  --app-scrollbar-thumb: #888;
+
+  --app-sidebar-bg: #0f0e17;
+  --app-sidebar-color: #eff4ff;
+  --app-sidebar-menu-hover: #646177;
+  --app-sidebar-menu-active: #646177;
+
+  --app-menu-mask: rgba(0, 0, 0, 0.4);
+
+  --app-table-header-bg: #0f0e17;
+  --app-table-header-color: #eff4ff;
+}
+
+.dark-theme {
+  --app-white: #fff;
+  --app-black: #000;
+}
