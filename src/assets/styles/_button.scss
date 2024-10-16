@@ -1,0 +1,49 @@
+.btn {
+  padding: 0.2188rem 0.75rem;
+  border-radius: var(--app-button-radius);
+  transition: all 0.25s ease-in-out;
+  background-color: var(--app-button-bg);
+  color: var(--app-button-color);
+  border: 1px solid transparent;
+
+  &:focus {
+    box-shadow: none;
+  }
+
+  &:hover {
+    opacity: 0.8;
+  }
+
+  &.disabled,
+  &:disabled {
+    background: var(--app-disabled-bg);
+    color: var(--app-disabled-color);
+    opacity: 1;
+    cursor: not-allowed;
+  }
+}
+
+.sec-btn {
+  padding: 0.2188rem 0.75rem;
+  border-radius: var(--app-button-radius);
+  transition: all 0.25s ease-in-out;
+  color: var(--app-white);
+  background-color: var(--app-button-sec-bg);
+  border: 1px solid transparent;
+
+  &:focus {
+    box-shadow: none;
+  }
+
+  &:hover {
+    opacity: 0.8;
+  }
+
+  &.disabled,
+  &:disabled {
+    background: var(--app-disabled-bg);
+    color: var(--app-disabled-color);
+    opacity: 1;
+    cursor: not-allowed;
+  }
+}

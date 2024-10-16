@@ -1,0 +1,42 @@
+<div class="min-w-[18rem] md:min-w-[21rem]">
+  <div class="flex justify-end mb-10">
+    <button routerLink="/home" class="sec-btn">Back</button>
+  </div>
+  <form
+    [formGroup]="formGroup"
+    (keyup.enter)="onSubmit()"
+    (submit)="onSubmit()"
+    class="flex flex-col gap-6"
+  >
+    <mat-form-field hideRequiredMarker class="mt-3">
+      <mat-label>Email</mat-label>
+      <input data-cy="email" matInput [formControl]="formControl.email" />
+    </mat-form-field>
+
+    <mat-form-field hideRequiredMarker>
+      <mat-label>Password</mat-label>
+      <input
+        data-cy="password"
+        matInput
+        [formControl]="formControl.password"
+        [type]="showPassword ? 'text' : 'password'"
+      />
+      <span
+        class="material-icons cursor-pointer"
+        matSuffix
+        (click)="showPassword = !showPassword"
+      >
+        {{ showPassword ? "visibility_off" : "visibility" }}
+      </span>
+    </mat-form-field>
+
+    <button
+      type="submit"
+      [disabled]="formGroup.invalid"
+      data-cy="login"
+      class="sec-btn"
+    >
+      Login
+    </button>
+  </form>
+</div>

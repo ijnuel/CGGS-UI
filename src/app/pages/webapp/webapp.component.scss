@@ -1,0 +1,14 @@
+.layout-mask {
+  background-color: var(--app-menu-mask);
+  height: 100%;
+  width: calc(100% - 13rem);
+
+  &.layout-mask-enter-from,
+  &.layout-mask-leave-to {
+    background-color: transparent;
+  }
+}
+
+.sidebar-transition {
+  transition: transform 0.3s ease;
+}

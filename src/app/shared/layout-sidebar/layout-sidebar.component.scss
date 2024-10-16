@@ -1,0 +1,18 @@
+.menu-item-active {
+  background: var(--app-sidebar-menu-active);
+
+  .link-icon-container {
+    svg {
+      -webkit-transform: unset;
+      -ms-transform: unset;
+      transform: unset;
+    }
+  }
+
+  .link-text-container {
+    .link-text {
+      font-weight: 500;
+      color: var(--afxm-primary-color);
+    }
+  }
+}

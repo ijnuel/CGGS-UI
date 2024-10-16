@@ -1,0 +1,48 @@
+<div
+  class="fixed top-0 h-16 w-full flex item-center justify-between px-4 md:px-8 sm:px-8 bg-white shadow-sm z-40 border-b border-[var(--app-secondary)]"
+>
+  <div class="pl-0 md:pl-[13rem] flex items-center gap-1 sm:gap-4">
+    <div
+      class="w-[2rem] h-[2rem] rounded-full hover:bg-[#c5c5c6] flex-center cursor-pointer flex md:hidden"
+      role="button"
+      (click)="toggleSidebar()"
+    >
+      <img
+        class="w-[1.15rem] h-[1.15rem] margin-auto"
+        src="assets/icons/hamburger-icon.svg"
+      />
+    </div>
+    <div class="flex items-center">
+      <span class="text-base font-medium text-gray-700 font-[PPRightGothic]">
+        Hi, USER
+      </span>
+    </div>
+  </div>
+
+  <div class="flex items-center gap-1 sm:gap-4 relative">
+    <div class="text-sm capitalize px-3 py-1 bg-[#e9eef9] rounded-xl fw-600 cursor-default">
+      Student
+    </div>
+
+    <div
+      class="w-8 h-8 rounded-full bg-[#e9eef9] hover:bg-[#d5ddef] flex-center cursor-pointer relative"
+      role="button"
+    >
+      <img
+        class="w-[1.5rem] h-[1.5rem] cursor-pointer"
+        src="assets/icons/bell-icon.svg"
+      />
+      <div
+        class="w-6 h-4 rounded-xl bg-[#E62E2E] absolute top-0 left-[60%] flex-center text-white text-xs"
+      >
+        9+
+      </div>
+    </div>
+
+    <div
+      class="w-8 h-8 rounded-full bg-[#e9eef9] hover:bg-[#d5ddef] flex-center cursor-pointer font-[PPRightGothic]"
+    >
+      <span class="text-base font-medium leading-5 text-[--app-primary]"> A </span>
+    </div>
+  </div>
+</div>

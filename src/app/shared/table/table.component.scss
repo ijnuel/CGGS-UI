@@ -1,0 +1,12 @@
+table {
+  width: 100%;
+  border-collapse: collapse !important;
+  border-radius: 0.25rem;
+}
+
+tr.mat-mdc-header-row {
+  height: 2.5rem;
+  background-color: var(--app-table-header-bg) !important;
+  color: var(--app-table-header-color) !important;
+  border-radius: 0.25rem;
+}

@@ -1,7 +1,8 @@
+// This file can be replaced during build by using the `fileReplacements` array.
+// `ng build` replaces `environment.ts` with `environment.prod.ts`.
+// The list of file replacements can be found in `angular.json`.
+
 export const environment = {
-  apiUrl: "http://ijesudunsin-002-site1.ftempurl.com",
   production: true,
-  logo: "/assets/logos/cggs.png",
-  short_name: "CGGS",
-  long_name: "Chosen Generations Group of Schools",
+  baseUrl: 'http://ijesudunsin-002-site1.ftempurl.com/api',
 };
