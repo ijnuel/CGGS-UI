@@ -26,7 +26,7 @@ on:
   workflow_dispatch:
 env:
   WEBAPP_NAME: project-ui    # set this to your application's name
-  WEBAPP_PACKAGE_PATH: 'dist\project-ui'      # set this to the path to your web app project, defaults to the repository root
+  WEBAPP_PACKAGE_PATH: 'dist\project-ui\browser'      # set this to the path to your web app project, defaults to the repository root
   NODE_VERSION: '18.17.0'                # set this to the node version to use
 
 
@@ -54,11 +54,6 @@ jobs:
     - name: Check build
       run: |
         cmd /c 'copy web.config ${{ env.WEBAPP_PACKAGE_PATH }} /y'
-        dir
-        cd dist
-        dir
-        cd project-ui
-        dir
     
     # Add  MSBuild to the PATH: https://github.com/microsoft/setup-msbuild
     - name: Setup MSBuild.exe
