@@ -25,7 +25,7 @@ on:
     branches: [ "main" ]
   workflow_dispatch:
 env:
-  WEBAPP_NAME: cggs-ui    # set this to your application's name
+  WEBAPP_NAME: project-ui    # set this to your application's name
   WEBAPP_PACKAGE_PATH: 'dist\project-ui'      # set this to the path to your web app project, defaults to the repository root
   NODE_VERSION: '18.17.0'                # set this to the node version to use
 
@@ -57,7 +57,7 @@ jobs:
         dir
         cd dist
         dir
-        cd cggs-ui
+        cd project-ui
         dir
     
     # Add  MSBuild to the PATH: https://github.com/microsoft/setup-msbuild
