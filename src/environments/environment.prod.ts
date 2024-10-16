@@ -3,6 +3,6 @@
 // The list of file replacements can be found in `angular.json`.
 
 export const environment = {
-  production: false,
-  baseUrl: 'https://localhost:7118/api',
+  production: true,
+  baseUrl: 'http://ijesudunsin-002-site1.ftempurl.com/api',
 };
