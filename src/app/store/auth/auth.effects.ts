@@ -40,7 +40,21 @@ export class AuthEffect {
     () =>
       this.actions$.pipe(
         ofType(AuthAction.logout),
-        tap(() => (location.href = '/'))
+        switchMap(() =>
+          this.http
+            .post(
+              `${environment.baseUrl}/Account/Logout`, 
+              null, { withCredentials: true }
+            )
+            .pipe(
+              map(() => {
+                location.href = '/'
+              }),
+              catchError((error) => {
+                return of(AuthAction.loginFail({ error }));
+              })
+            )
+        )
       ),
     { dispatch: false }
   );
@@ -48,7 +62,7 @@ export class AuthEffect {
   $authLoading = createEffect(
     () =>
       this.actions$.pipe(
-        ofType(AuthAction.login),
+        ofType(AuthAction.login, AuthAction.logout),
         tap((action) => {
           this.errorLoadingFacade.globalLoadingShow(action.type);
         })

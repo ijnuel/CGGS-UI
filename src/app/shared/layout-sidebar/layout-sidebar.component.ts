@@ -1,6 +1,7 @@
 import { Component, EventEmitter, Output } from '@angular/core';
 import SidebarMenuItems from './sidebar-items';
 import { SidebarItemsInterface } from '../../types/sidebar';
+import { AuthFacade } from '../../store/auth/auth.facade';
 
 @Component({
   selector: 'app-layout-sidebar',
@@ -12,7 +13,16 @@ export class LayoutSidebarComponent {
 
   sidebarMenuItems: SidebarItemsInterface[] = SidebarMenuItems;
 
+  constructor(
+    private authFacade: AuthFacade
+  ) {
+
+  }
+
   menuItemClick() {
     this.menuItemClickEvent.emit();
+  }
+  logoutUser() {
+    this.authFacade.logout();
   }
 }

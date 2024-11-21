@@ -29,6 +29,7 @@ export class AppInterceptorService implements HttpInterceptor {
         'Authorization',
         `Bearer ${authData.bearer_token}`
       ),
+      withCredentials: true
     });
 
     return next.handle(modifiedRequest);
