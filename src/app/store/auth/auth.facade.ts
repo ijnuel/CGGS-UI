@@ -13,6 +13,16 @@ import {
 
 @Injectable()
 export class AuthFacade {
+  selectedCurrentUserId$ = this.store.pipe(
+    select(AuthSelector.selectCurrentUserId)
+  );
+
+  selectedCurrentUser$ = this.store.pipe(
+    select(AuthSelector.selectCurrentUser)
+  );
+
+  selectedLoading$ = this.store.pipe(select(AuthSelector.selectLoading));
+
   selectedError$ = this.store.pipe(select(AuthSelector.selectError));
 
   constructor(
@@ -34,5 +44,9 @@ export class AuthFacade {
     return this.actionsListener$
       .pipe(ofType(AuthActions.loginSuccess))
       .pipe(map(({ payload }) => payload));
+  }
+
+  getCurrentUser() {
+    this.store.dispatch(AuthActions.getCurrentUser());
   }
 }

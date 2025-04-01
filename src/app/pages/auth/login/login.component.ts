@@ -36,6 +36,9 @@ export class LoginComponent {
       email: ['', [Validators.required, Validators.email]],
       password: ['', [Validators.required]],
     });
+    this.authFacade.selectedCurrentUserId$.subscribe((id) => {
+      console.log(id);
+    });
   }
 
   ngOnInit() {

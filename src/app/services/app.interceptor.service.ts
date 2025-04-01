@@ -4,34 +4,58 @@ import {
   HttpRequest,
   HttpHandler,
   HttpEvent,
+  HttpErrorResponse,
 } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { catchError, Observable, throwError } from 'rxjs';
 import { environment } from '../../environments/environment';
+import { GlobalLoadingFacade } from '../store/global-loading/global-loading.facade';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AppInterceptorService implements HttpInterceptor {
-  constructor() {}
+  constructor(private globalLoadingFacade: GlobalLoadingFacade) {}
 
   intercept(
     request: HttpRequest<any>,
     next: HttpHandler
   ): Observable<HttpEvent<any>> {
-    if (!localStorage.getItem('Optiva_auth')) return next.handle(request);
+    // IF WE WERE USING LOCAL STORAGE
+    // const modifiedRequest = request.clone({
+    //   headers: request.headers.set(
+    //     'Authorization',
+    //     `Bearer ${authData.bearer_token}`
+    //   ),
+    //   withCredentials: true,
+    // });
 
-    const authData: {
-      bearer_token: string;
-    } = JSON.parse(localStorage.getItem('app_auth')!);
+    const modifiedRequest = request;
 
-    const modifiedRequest = request.clone({
-      headers: request.headers.set(
-        'Authorization',
-        `Bearer ${authData.bearer_token}`
-      ),
-      withCredentials: true
-    });
+    return next.handle(modifiedRequest).pipe(
+      catchError((error: HttpErrorResponse) => {
+        let errorMsg = '';
+        if (error.error instanceof ErrorEvent) {
+          console.log('This is client side error');
+          errorMsg = `Error: ${error.error.message}`;
+        } else {
+          console.log('This is server side error');
+          errorMsg = `${error?.error?.Message ?? 'Error happened'}`;
 
-    return next.handle(modifiedRequest);
+          if (error?.error?.validationFailures) {
+            errorMsg = error?.error?.validationFailures.join(' ');
+          }
+        }
+
+        this.globalLoadingFacade.globalErrorShow(
+          errorMsg ?? 'Error happened',
+          3500
+        );
+
+        // authentication failed reload page to remove all data stored
+        if (error.status === 401) location.href = '/auth/login'; // call a logout functionality
+
+        return throwError(() => error);
+      })
+    );
   }
 }

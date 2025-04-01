@@ -1,4 +1,9 @@
 import { Component } from '@angular/core';
+import { GlobalLoadingFacade } from '../../store/global-loading/global-loading.facade';
+import {
+  NotificationTypeEnums,
+  ToastNotificationService,
+} from '../../services/toast-notification.service';
 
 @Component({
   selector: 'app-webapp',
@@ -6,7 +11,23 @@ import { Component } from '@angular/core';
   styleUrl: './webapp.component.scss',
 })
 export class WebappComponent {
+  globalLoading$ = this.globalLoadingFacade.selectGlobalLoading$;
+  globalError$ = this.globalLoadingFacade.selectGlobalError$;
   toggleSidebarState: 'close' | 'open' = 'close';
+
+  constructor(
+    private globalLoadingFacade: GlobalLoadingFacade,
+    private toastNotification: ToastNotificationService
+  ) {
+    this.globalError$.subscribe((errorMessage) => {
+      if (!errorMessage) return;
+
+      this.toastNotification.openToast(
+        errorMessage,
+        NotificationTypeEnums.ERROR
+      );
+    });
+  }
 
   topbarToggleSidebar(state: { toggle: boolean }) {
     this.toggleSideBar(state.toggle);

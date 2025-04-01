@@ -6,6 +6,10 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatIconModule } from '@angular/material/icon';
+import { CommonModule } from '@angular/common';
+import { SharedModule } from '../../shared/shared.module';
+import { ToastNotificationService } from '../../services/toast-notification.service';
+import { LoginGuard } from '../../services/login.guard';
 
 const routes: Routes = [
   {
@@ -20,6 +24,7 @@ const routes: Routes = [
       {
         path: 'login',
         component: LoginComponent,
+        canActivate: [LoginGuard],
       },
     ],
   },
@@ -29,11 +34,14 @@ const routes: Routes = [
   declarations: [AuthComponent, LoginComponent],
   imports: [
     RouterModule.forChild(routes),
+    CommonModule,
     FormsModule,
     ReactiveFormsModule,
     MatFormFieldModule,
     MatIconModule,
     MatInputModule,
+    SharedModule,
   ],
+  providers: [ToastNotificationService],
 })
 export class AuthModule {}

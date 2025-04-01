@@ -8,3 +8,8 @@ export const globalLoadingShow = createAction(
 export const globalLoadingHide = createAction(
   '[GlobalLoading] Global Loading Hide'
 );
+
+export const globalErrorShow = createAction(
+  '[GlobalError] Global Error',
+  props<{ message: string; messageDuration: number }>()
+);

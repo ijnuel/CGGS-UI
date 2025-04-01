@@ -1,4 +1,8 @@
-import { ApplicationConfig, importProvidersFrom } from '@angular/core';
+import {
+  APP_INITIALIZER,
+  ApplicationConfig,
+  importProvidersFrom,
+} from '@angular/core';
 import {
   PreloadAllModules,
   provideRouter,
@@ -10,21 +14,26 @@ import { provideAnimations } from '@angular/platform-browser/animations';
 import { provideHttpClient } from '@angular/common/http';
 import { EffectsModule } from '@ngrx/effects';
 import { StoreModule } from '@ngrx/store';
-import * as fromApp from './store/app.reducer';
+import { reducers } from './store/app.reducer';
 import { AuthEffect } from './store/auth/auth.effects';
 import { AuthFacade } from './store/auth/auth.facade';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { AppInterceptorService } from './services/app.interceptor.service';
 import { GlobalLoadingFacade } from './store/global-loading/global-loading.facade';
+import { provideHotToastConfig } from '@ngneat/hot-toast';
+import { StudentsFacade } from './store/students/students.facade';
+import { StudentsEffect } from './store/students/students.effects';
+// import { provideStoreDevtools } from '@ngrx/store-devtools';
 
 export const appConfig: ApplicationConfig = {
   providers: [
     importProvidersFrom(
-      StoreModule.forRoot(fromApp.reducers),
-      EffectsModule.forRoot([AuthEffect]),
+      StoreModule.forRoot(reducers),
+      EffectsModule.forRoot([AuthEffect, StudentsEffect]),
       HttpClientModule
     ),
     provideAnimations(),
+    provideHotToastConfig(),
     provideHttpClient(),
     provideRouter(
       routes,
@@ -36,8 +45,20 @@ export const appConfig: ApplicationConfig = {
       useClass: AppInterceptorService,
       multi: true,
     },
+    {
+      provide: APP_INITIALIZER,
+      useFactory: (authFacade: AuthFacade) => {
+        return () => {
+          //get user data on load
+          authFacade.getCurrentUser();
+        };
+      },
+      multi: true,
+      deps: [AuthFacade],
+    },
     // STORE FACADES
     AuthFacade,
-    GlobalLoadingFacade
+    GlobalLoadingFacade,
+    StudentsFacade,
   ],
 };
