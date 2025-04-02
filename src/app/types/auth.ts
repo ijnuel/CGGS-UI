@@ -18,6 +18,7 @@ export interface LoggedUserInterface {
 }
 
 export enum UserRolesEnum {
+  SuperAdmin = 'superadmin',
   Admin = 'admin',
   Teacher = 'teacher',
   Student = 'student',
