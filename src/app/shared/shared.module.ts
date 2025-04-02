@@ -8,6 +8,7 @@ import { GlobalLoadingComponent } from './global-loading/global-loading.componen
 import { MaterialModule } from './material/material.module';
 import { CommonModule } from '@angular/common';
 import { TableLoaderComponent } from './table-loader/table-loader.component';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 @NgModule({
   declarations: [
@@ -18,7 +19,12 @@ import { TableLoaderComponent } from './table-loader/table-loader.component';
     GlobalLoadingComponent,
     TableLoaderComponent,
   ],
-  imports: [RouterModule, MaterialModule, CommonModule],
+  imports: [
+    RouterModule,
+    MaterialModule,
+    CommonModule,
+    MatProgressSpinnerModule,
+  ],
   exports: [
     LayoutSidebarComponent,
     LayoutTopbarComponent,

@@ -17,6 +17,21 @@ export const selectLoginResponseData = createSelector(
   fromAuth.getLoginResponse
 );
 
+export const selectCurrentUserId = createSelector(
+  fromAuth.selectAuthState,
+  fromAuth.getCurrentUserId
+);
+
+export const selectCurrentUser = createSelector(
+  fromAuth.selectAuthState,
+  fromAuth.getCurrentUser
+);
+
+export const selectLoading = createSelector(
+  fromAuth.selectAuthState,
+  fromAuth.getLoading
+);
+
 export const selectError = createSelector(
   fromAuth.selectAuthState,
   fromAuth.getError

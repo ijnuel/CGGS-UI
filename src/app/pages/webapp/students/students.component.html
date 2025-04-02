@@ -1,11 +1,19 @@
+@if ( { studentsList: studentsList$ | async, loading: loading$ | async }; as obs
+) {
 <div class="pl-8 pr-9 pt-6">
   <div class="flex item-center justify-between">
-    <div class="text-lg font-semibold">Students</div>
+    <div class="text-xl font-bold">Students</div>
 
-    <button class="btn">Create Student</button>
+    <button class="sec-btn" routerLink="create">Create Student</button>
   </div>
 
   <div class="mt-8">
-    <app-students-table-list></app-students-table-list>
+    <app-table
+      [isLoading]="obs.loading ?? false"
+      [showActionColumn]="true"
+      [tableData]="obs.studentsList?.data ?? null"
+      [tableHeaderData]="header"
+    ></app-table>
   </div>
 </div>
+}

@@ -3,7 +3,7 @@ import {
   LoginResponseInterface,
   LoginPayloadInterface,
 } from '../../types/auth';
-import { GenericResponseInterface } from '../../types';
+import { GenericResponseInterface, CurrentUserInterface } from '../../types';
 
 export const login = createAction(
   '[Auth] Login',
@@ -21,6 +21,20 @@ export const loginSuccess = createAction(
 
 export const loginFail = createAction(
   '[Auth/API] Login Fail',
+  props<{ error: string }>()
+);
+
+export const getCurrentUser = createAction('[Auth] Get Current Logged In User');
+
+export const getCurrentUserSuccess = createAction(
+  '[Auth/API] get Current User Success',
+  props<{
+    payload: GenericResponseInterface<CurrentUserInterface>;
+  }>()
+);
+
+export const getCurrentUserFail = createAction(
+  '[Auth/API] get Current User Fail',
   props<{ error: string }>()
 );
 

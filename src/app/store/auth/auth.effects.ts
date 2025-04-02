@@ -5,7 +5,7 @@ import { catchError, map, switchMap, tap } from 'rxjs/operators';
 import * as AuthAction from './auth.actions';
 import { environment } from '../../../environments/environment';
 import { LoginResponseInterface } from '../../types/auth';
-import { GenericResponseInterface } from '../../types/';
+import { CurrentUserInterface, GenericResponseInterface } from '../../types/';
 import { HttpClient } from '@angular/common/http';
 import { GlobalLoadingFacade } from '../global-loading/global-loading.facade';
 
@@ -20,7 +20,8 @@ export class AuthEffect {
             `${environment.baseUrl}/Account/Login`,
             {
               ...payload,
-            }, { withCredentials: true }
+            },
+            { withCredentials: true }
           )
           .pipe(
             map((loginResponse) => {
@@ -36,19 +37,37 @@ export class AuthEffect {
     )
   );
 
+  $getCurrentUser = createEffect(() =>
+    this.actions$.pipe(
+      ofType(AuthAction.getCurrentUser),
+      switchMap(() =>
+        this.http
+          .get<GenericResponseInterface<CurrentUserInterface>>(
+            `${environment.baseUrl}/Account/GetUserProfile`,
+            { withCredentials: true }
+          )
+          .pipe(
+            map((payload) => AuthAction.getCurrentUserSuccess({ payload })),
+            catchError((error) => {
+              return of(AuthAction.getCurrentUserFail({ error }));
+            })
+          )
+      )
+    )
+  );
+
   $logout = createEffect(
     () =>
       this.actions$.pipe(
         ofType(AuthAction.logout),
         switchMap(() =>
           this.http
-            .post(
-              `${environment.baseUrl}/Account/Logout`, 
-              null, { withCredentials: true }
-            )
+            .post(`${environment.baseUrl}/Account/Logout`, null, {
+              withCredentials: true,
+            })
             .pipe(
               map(() => {
-                location.href = '/'
+                location.href = '/';
               }),
               catchError((error) => {
                 return of(AuthAction.loginFail({ error }));
@@ -62,7 +81,7 @@ export class AuthEffect {
   $authLoading = createEffect(
     () =>
       this.actions$.pipe(
-        ofType(AuthAction.login, AuthAction.logout),
+        ofType(AuthAction.login, AuthAction.logout, AuthAction.getCurrentUser),
         tap((action) => {
           this.errorLoadingFacade.globalLoadingShow(action.type);
         })
@@ -73,7 +92,12 @@ export class AuthEffect {
   $authLoadingHide = createEffect(
     () =>
       this.actions$.pipe(
-        ofType(AuthAction.loginSuccess, AuthAction.loginFail),
+        ofType(
+          AuthAction.loginSuccess,
+          AuthAction.loginFail,
+          AuthAction.getCurrentUserSuccess,
+          AuthAction.getCurrentUserFail
+        ),
         tap(() => {
           this.errorLoadingFacade.globalLoadingHide();
         })
@@ -84,7 +108,6 @@ export class AuthEffect {
   constructor(
     private actions$: Actions,
     private http: HttpClient,
-
     private errorLoadingFacade: GlobalLoadingFacade
   ) {}
 }

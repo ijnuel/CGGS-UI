@@ -9,6 +9,10 @@ export class GlobalLoadingFacade {
     select(GlobalLoadingSelectors.selectGlobalLoading)
   );
 
+  selectGlobalError$ = this.store.pipe(
+    select(GlobalLoadingSelectors.selectGlobalError)
+  );
+
   constructor(private readonly store: Store) {}
 
   globalLoadingShow(actionType: string, message?: string) {
@@ -19,5 +23,11 @@ export class GlobalLoadingFacade {
 
   globalLoadingHide() {
     this.store.dispatch(GlobalLoadingActions.globalLoadingHide());
+  }
+
+  globalErrorShow(message: string, messageDuration: number) {
+    this.store.dispatch(
+      GlobalLoadingActions.globalErrorShow({ message, messageDuration })
+    );
   }
 }
