@@ -4,5 +4,5 @@
 
 export const environment = {
   production: true,
-  baseUrl: 'http://ijesudunsin-002-site1.ftempurl.com/api',
+  baseUrl: 'https://ijesudunsin-002-site1.ftempurl.com/api',
 };
