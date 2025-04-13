@@ -4,6 +4,7 @@ import {
   LoginResponseInterface,
 } from './auth';
 import { StudentFormInterface, StudentsListInterface } from './students';
+import { AdministratorFormInterface, AdministratorListInterface } from './administrator';
 import {
   CurrentUserInterface,
   UserListInterface,
@@ -49,4 +50,6 @@ export {
   ReligionEnum,
   StudentsListInterface,
   StudentFormInterface,
+  AdministratorListInterface,
+  AdministratorFormInterface,
 };
