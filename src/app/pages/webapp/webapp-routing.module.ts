@@ -27,6 +27,7 @@ const routes: Routes = [
         loadChildren: () =>
           import('./administrator/administrator.module').then((m) => m.AdministratorModule),
       },
+      { path: 'test-entity-template', loadChildren: () => import('./test-entity-template/test-entity-template.module').then((m) => m.TestEntityTemplateModule), },
       {
         path: 'staff',
         loadChildren: () =>

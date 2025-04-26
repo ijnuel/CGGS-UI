@@ -5,6 +5,7 @@ import {
 } from './auth';
 import { StudentFormInterface, StudentsListInterface } from './students';
 import { AdministratorFormInterface, AdministratorListInterface } from './administrator';
+import { TestEntityTemplateFormInterface, TestEntityTemplateListInterface } from './test-entity-template';
 import {
   CurrentUserInterface,
   UserListInterface,
@@ -52,4 +53,6 @@ export {
   StudentFormInterface,
   AdministratorListInterface,
   AdministratorFormInterface,
+  TestEntityTemplateListInterface,
+  TestEntityTemplateFormInterface,
 };
