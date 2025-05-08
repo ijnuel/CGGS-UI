@@ -1,7 +1,9 @@
 export interface TestEntityTemplateListInterface {
-  id: string;
+    id: string;
+    name: string;
 }
 
 export interface TestEntityTemplateFormInterface {
-  id?: string;
+    id?: string;
+    name?: string;
 }
