@@ -2,70 +2,137 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { BehaviorSubject, Observable, Subject, takeUntil } from 'rxjs';
 import { AdministratorFacade } from '../../../../store/administrator/administrator.facade';
 import {
-    FormBuilder,
-    FormControl,
-    FormGroup,
-    Validators,
+  FormBuilder,
+  FormControl,
+  FormGroup,
+  Validators,
 } from '@angular/forms';
 import { getErrorMessageHelper } from '../../../../services/helper.service';
 import { DropdownListInterface, AdministratorFormInterface } from '../../../../types';
 import { SharedFacade } from '../../../../store/shared/shared.facade';
 
 @Component({
-    selector: 'app-create-update-administrator',
-    templateUrl: './create-update-administrator.component.html',
-    styleUrl: './create-update-administrator.component.scss',
+  selector: 'app-create-update-administrator',
+  templateUrl: './create-update-administrator.component.html',
+  styleUrl: './create-update-administrator.component.scss',
 })
 export class CreateUpdateAdministratorComponent implements OnInit, OnDestroy {
-    loading$: Observable<boolean>;
-    dropdownLoading$: Observable<boolean>;
+  loading$: Observable<boolean>;
+  dropdownLoading$: Observable<boolean>;
 
-    formGroup: FormGroup<{
-        id: FormControl;
-        name: FormControl;
-    }>;
+  formGroup: FormGroup<{
+    firstName: FormControl;
+    lastName: FormControl;
+    middleName: FormControl;
+    dateOfBirth: FormControl;
+    religion: FormControl;
+    gender: FormControl;
+    originLGA: FormControl;
+    stateOfOrigin: FormControl;
+    nationality: FormControl;
+    homeAddress: FormControl;
+    residentialCity: FormControl;
+    residentialState: FormControl;
+    phoneNumber: FormControl;
+    administratorNo: FormControl;
+    email: FormControl;
+  }>;
 
-    get formControl() {
-        return this.formGroup.controls;
-    }
-    today = new Date();
+  get formControl() {
+    return this.formGroup.controls;
+  }
+  today = new Date();
 
-    unsubscribe$ = new Subject<void>();
+  genderList$: Observable<DropdownListInterface[] | null>;
+  religionList$: Observable<DropdownListInterface[] | null>;
+  countryList$: Observable<DropdownListInterface[] | null>;
 
-    constructor(
-        private administratorFacade: AdministratorFacade,
-        private fb: FormBuilder,
-        private sharedFacade: SharedFacade
-    ) {
-        this.loading$ = this.administratorFacade.selectedLoading$;
-        this.dropdownLoading$ = this.sharedFacade.selectedLoading$;
+  selectedCountryStateList$ = new BehaviorSubject<
+    DropdownListInterface[] | null
+  >(null);
+  selectedStateLgaList$ = new BehaviorSubject<DropdownListInterface[] | null>(
+    null
+  );
 
-        this.formGroup = this.fb.group({
-            id: ['', [Validators.required, Validators.maxLength(255)]],
-            name: ['', [Validators.required, Validators.maxLength(255)]],
-        });
-    }
+  unsubscribe$ = new Subject<void>();
 
-    ngOnInit() {
-    }
+  constructor(
+    private administratorFacade: AdministratorFacade,
+    private fb: FormBuilder,
+    private sharedFacade: SharedFacade
+  ) {
+    this.loading$ = this.administratorFacade.selectedLoading$;
+    this.dropdownLoading$ = this.sharedFacade.selectedLoading$;
+    this.genderList$ = this.sharedFacade.selectGenderList$;
+    this.religionList$ = this.sharedFacade.selectReligionList$;
+    this.countryList$ = this.sharedFacade.selectCountryList$;
 
-    getErrorMessage(controlName: string): string | null {
-        const control = this.formGroup.get(controlName) as FormControl;
-        return getErrorMessageHelper(control);
-    }
+    this.formGroup = this.fb.group({
+      firstName: ['', [Validators.required, Validators.maxLength(255)]],
+      lastName: ['', [Validators.required, Validators.maxLength(255)]],
+      middleName: ['', [Validators.maxLength(255)]],
+      dateOfBirth: null,
+      phoneNumber: null,
+      email: null,
+      religion: ['', [Validators.required]],
+      gender: ['', [Validators.required]],
+      nationality: null,
+      stateOfOrigin: null,
+      originLGA: null,
+      homeAddress: null,
+      residentialState: null,
+      residentialCity: null,
+      administratorNo: null,
+    });
+  }
 
-    submit() {
-        this.formGroup.markAllAsTouched();
+  ngOnInit() {
+    this.sharedFacade.getGenderList();
+    this.sharedFacade.getReligionList();
+    this.sharedFacade.getCountryList();
 
-        if (!this.formGroup.valid) return;
+    this.formControl.nationality.valueChanges.subscribe((countryId: string) => {
+      if (countryId) {
+        this.sharedFacade.getStateList(countryId);
+      }
+    });
 
-        this.administratorFacade.createAdministrator({
-            ...(this.formGroup.value as AdministratorFacade),
-        });
-    }
+    this.sharedFacade.selectStateList$
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe((states) => {
+        this.selectedCountryStateList$.next(states ? [...states] : null);
+      });
 
-    ngOnDestroy(): void {
-        this.unsubscribe$.next();
-        this.unsubscribe$.complete();
-    }
+    this.formControl.stateOfOrigin.valueChanges.subscribe((stateId: string) => {
+      if (stateId) {
+        this.sharedFacade.getLgaList(stateId);
+      }
+    });
+
+    this.sharedFacade.selectLgaList$
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe((lgas) => {
+        this.selectedStateLgaList$.next(lgas ? [...lgas] : null);
+      });
+  }
+
+  getErrorMessage(controlName: string): string | null {
+    const control = this.formGroup.get(controlName) as FormControl;
+    return getErrorMessageHelper(control);
+  }
+
+  submit() {
+    this.formGroup.markAllAsTouched();
+
+    if (!this.formGroup.valid) return;
+
+    this.administratorFacade.createAdministrator({
+      ...(this.formGroup.value as AdministratorFormInterface),
+    });
+  }
+
+  ngOnDestroy(): void {
+    this.unsubscribe$.next();
+    this.unsubscribe$.complete();
+  }
 }
