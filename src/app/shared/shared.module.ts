@@ -9,6 +9,7 @@ import { MaterialModule } from './material/material.module';
 import { CommonModule } from '@angular/common';
 import { TableLoaderComponent } from './table-loader/table-loader.component';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { LoadingSpinnerDirective } from './loading-spinner/loading-spinner.directive';
 
 @NgModule({
   declarations: [
@@ -18,6 +19,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
     TablePaginatorComponent,
     GlobalLoadingComponent,
     TableLoaderComponent,
+    LoadingSpinnerDirective,
   ],
   imports: [
     RouterModule,
@@ -31,6 +33,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
     TableComponent,
     TablePaginatorComponent,
     GlobalLoadingComponent,
+    LoadingSpinnerDirective,
   ],
 })
 export class SharedModule {}

@@ -1,5 +1,5 @@
 .btn {
-  padding: 0.2188rem 0.75rem;
+  padding: 0.4375rem 1.25rem;
   border-radius: var(--app-button-radius);
   transition: all 0.25s ease-in-out;
   background-color: var(--app-button-bg);
@@ -24,11 +24,36 @@
 }
 
 .sec-btn {
-  padding: 0.2188rem 0.75rem;
+  padding: 0.4375rem 1.25rem;
   border-radius: var(--app-button-radius);
   transition: all 0.25s ease-in-out;
   color: var(--app-white);
   background-color: var(--app-button-sec-bg);
+  border: 1px solid transparent;
+
+  &:focus {
+    box-shadow: none;
+  }
+
+  &:hover {
+    opacity: 0.8;
+  }
+
+  &.disabled,
+  &:disabled {
+    background: var(--app-disabled-bg);
+    color: var(--app-disabled-color);
+    opacity: 1;
+    cursor: not-allowed;
+  }
+}
+
+.cancel-btn {
+  padding: 0.4375rem 1.25rem;
+  border-radius: var(--app-button-radius);
+  transition: all 0.25s ease-in-out;
+  color: var(--app-white);
+  background-color: var(--app-danger);
   border: 1px solid transparent;
 
   &:focus {

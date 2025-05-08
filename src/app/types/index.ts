@@ -4,8 +4,14 @@ import {
   LoginResponseInterface,
 } from './auth';
 import { StudentFormInterface, StudentsListInterface } from './students';
-import { AdministratorFormInterface, AdministratorListInterface } from './administrator';
-import { TestEntityTemplateFormInterface, TestEntityTemplateListInterface } from './test-entity-template';
+import {
+  AdministratorFormInterface,
+  AdministratorListInterface,
+} from './administrator';
+import {
+  TestEntityTemplateFormInterface,
+  TestEntityTemplateListInterface,
+} from './test-entity-template';
 import {
   CurrentUserInterface,
   UserListInterface,
@@ -37,6 +43,13 @@ interface PageQueryInterface {
   searchText?: string;
 }
 
+interface DropdownListInterface {
+  name: string;
+  description: string;
+  value: string | number;
+  id: string | number;
+}
+
 export {
   GenericResponseInterface,
   PaginatedResponseInterface,
@@ -51,6 +64,7 @@ export {
   ReligionEnum,
   StudentsListInterface,
   StudentFormInterface,
+  DropdownListInterface,
   AdministratorListInterface,
   AdministratorFormInterface,
   TestEntityTemplateListInterface,

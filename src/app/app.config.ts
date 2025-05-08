@@ -23,6 +23,8 @@ import { GlobalLoadingFacade } from './store/global-loading/global-loading.facad
 import { provideHotToastConfig } from '@ngneat/hot-toast';
 import { StudentsFacade } from './store/students/students.facade';
 import { StudentsEffect } from './store/students/students.effects';
+import { SharedEffect } from './store/shared/shared.effects';
+import { SharedFacade } from './store/shared/shared.facade';
 import { AdministratorFacade } from './store/administrator/administrator.facade';
 import { TestEntityTemplateFacade } from './store/test-entity-template/test-entity-template.facade';
 import { AdministratorEffect } from './store/administrator/administrator.effects';
@@ -36,6 +38,7 @@ export const appConfig: ApplicationConfig = {
       EffectsModule.forRoot([
         AuthEffect,
         StudentsEffect,
+        SharedEffect,
         AdministratorEffect,
         TestEntityTemplateEffect,
       ]),
@@ -69,6 +72,7 @@ export const appConfig: ApplicationConfig = {
     AuthFacade,
     GlobalLoadingFacade,
     StudentsFacade,
+    SharedFacade,
     AdministratorFacade,
     TestEntityTemplateFacade,
   ],
