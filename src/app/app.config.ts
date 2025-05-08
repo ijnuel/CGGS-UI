@@ -25,13 +25,23 @@ import { StudentsFacade } from './store/students/students.facade';
 import { StudentsEffect } from './store/students/students.effects';
 import { SharedEffect } from './store/shared/shared.effects';
 import { SharedFacade } from './store/shared/shared.facade';
+import { AdministratorFacade } from './store/administrator/administrator.facade';
+import { TestEntityTemplateFacade } from './store/test-entity-template/test-entity-template.facade';
+import { AdministratorEffect } from './store/administrator/administrator.effects';
+import { TestEntityTemplateEffect } from './store/test-entity-template/test-entity-template.effects';
 // import { provideStoreDevtools } from '@ngrx/store-devtools';
 
 export const appConfig: ApplicationConfig = {
   providers: [
     importProvidersFrom(
       StoreModule.forRoot(reducers),
-      EffectsModule.forRoot([AuthEffect, StudentsEffect, SharedEffect]),
+      EffectsModule.forRoot([
+        AuthEffect,
+        StudentsEffect,
+        SharedEffect,
+        AdministratorEffect,
+        TestEntityTemplateEffect,
+      ]),
       HttpClientModule
     ),
     provideAnimations(),
@@ -63,5 +73,7 @@ export const appConfig: ApplicationConfig = {
     GlobalLoadingFacade,
     StudentsFacade,
     SharedFacade,
+    AdministratorFacade,
+    TestEntityTemplateFacade,
   ],
 };

@@ -5,4 +5,5 @@
 export const environment = {
   production: false,
   baseUrl: 'https://localhost:7118/api',
+  // baseUrl: 'https://ijesudunsin-002-site1.ftempurl.com/api',
 };

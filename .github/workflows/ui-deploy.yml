@@ -20,10 +20,8 @@
 name: Angular UI
 on:
   push:
-    branches: [ "main" ]
-  pull_request:
-    branches: [ "main" ]
-  workflow_dispatch:
+    branches:
+      - main
 env:
   WEBAPP_NAME: project-ui    # set this to your application's name
   WEBAPP_PACKAGE_PATH: 'dist\project-ui\browser'      # set this to the path to your web app project, defaults to the repository root

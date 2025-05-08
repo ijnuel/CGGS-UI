@@ -23,6 +23,12 @@ const routes: Routes = [
           import('./students/students.module').then((m) => m.StudentsModule),
       },
       {
+        path: 'administrator',
+        loadChildren: () =>
+          import('./administrator/administrator.module').then((m) => m.AdministratorModule),
+      },
+      { path: 'test-entity-template', loadChildren: () => import('./test-entity-template/test-entity-template.module').then((m) => m.TestEntityTemplateModule), },
+      {
         path: 'staff',
         loadChildren: () =>
           import('./staff/staff.module').then((m) => m.StaffModule),
