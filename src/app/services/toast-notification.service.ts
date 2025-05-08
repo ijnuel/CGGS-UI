@@ -20,8 +20,6 @@ export class ToastNotificationService {
     notificationType: NotificationTypeEnums,
     doNotDismiss: boolean = false
   ) {
-    console.log('here toast');
-
     (this.toast as any)[notificationType.toString()](message);
   }
 }

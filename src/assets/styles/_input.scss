@@ -21,8 +21,20 @@
   top: 35px;
 }
 
-.examroom-input-wrapper {
+.form-input-wrapper {
   margin-bottom: 8px !important;
+}
+
+.form-input {
+  width: 100%;
+
+  .mdc-text-field--filled:not(.mdc-text-field--disabled) {
+    background-color: var(--app-white) !important;
+  }
+
+  .mat-mdc-form-field-icon-suffix .mat-datepicker-toggle button {
+    margin-top: 5px !important;
+  }
 }
 
 .mat-mdc-form-field {
@@ -132,4 +144,21 @@
 input:-webkit-autofill,
 input:-webkit-autofill:focus {
   transition: background-color 0s 600000s, color 0s 600000s !important;
+}
+
+.dropdown-loading {
+  position: absolute;
+  right: 2.5px;
+  top: 1.25rem;
+  z-index: 1000;
+  width: 1.8rem;
+  background-color: transparent;
+}
+
+.query-search-dropdown-loading {
+  position: absolute;
+  right: 40px;
+  top: 3px;
+  z-index: 1000;
+  background-color: transparent;
 }

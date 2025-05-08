@@ -74,8 +74,9 @@ export class StudentsEffect {
             `${environment.baseUrl}/Student/Create`,
             {
               ...payload,
-            }
-            // { withCredentials: true }
+              withCredentials: true,
+            },
+            { withCredentials: true }
           )
           .pipe(
             map((payload) =>

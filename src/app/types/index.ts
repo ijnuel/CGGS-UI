@@ -35,6 +35,13 @@ interface PageQueryInterface {
   searchText?: string;
 }
 
+interface DropdownListInterface {
+  name: string;
+  description: string;
+  value: string | number;
+  id: string | number;
+}
+
 export {
   GenericResponseInterface,
   PaginatedResponseInterface,
@@ -49,4 +56,5 @@ export {
   ReligionEnum,
   StudentsListInterface,
   StudentFormInterface,
+  DropdownListInterface,
 };

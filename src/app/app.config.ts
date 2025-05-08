@@ -23,13 +23,15 @@ import { GlobalLoadingFacade } from './store/global-loading/global-loading.facad
 import { provideHotToastConfig } from '@ngneat/hot-toast';
 import { StudentsFacade } from './store/students/students.facade';
 import { StudentsEffect } from './store/students/students.effects';
+import { SharedEffect } from './store/shared/shared.effects';
+import { SharedFacade } from './store/shared/shared.facade';
 // import { provideStoreDevtools } from '@ngrx/store-devtools';
 
 export const appConfig: ApplicationConfig = {
   providers: [
     importProvidersFrom(
       StoreModule.forRoot(reducers),
-      EffectsModule.forRoot([AuthEffect, StudentsEffect]),
+      EffectsModule.forRoot([AuthEffect, StudentsEffect, SharedEffect]),
       HttpClientModule
     ),
     provideAnimations(),
@@ -60,5 +62,6 @@ export const appConfig: ApplicationConfig = {
     AuthFacade,
     GlobalLoadingFacade,
     StudentsFacade,
+    SharedFacade,
   ],
 };
