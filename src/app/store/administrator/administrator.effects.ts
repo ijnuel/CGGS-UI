@@ -74,8 +74,9 @@ export class AdministratorEffect {
             `${environment.baseUrl}/Administrator/Create`,
             {
               ...payload,
-            }
-            // { withCredentials: true }
+              withCredentials: true,
+            },
+            { withCredentials: true }
           )
           .pipe(
             map((payload) =>
