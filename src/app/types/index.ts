@@ -4,11 +4,8 @@ import {
   LoginResponseInterface,
 } from './auth';
 import { StudentFormInterface, StudentsListInterface } from './students';
-import {
-  AdministratorFormInterface,
-  AdministratorListInterface,
-} from './administrator';
 import { TestEntityTemplateFormInterface, TestEntityTemplateListInterface } from './test-entity-template';
+import { AdministratorFormInterface, AdministratorListInterface } from './administrator';
 import {
   CurrentUserInterface,
   UserListInterface,
