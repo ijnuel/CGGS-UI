@@ -23,8 +23,7 @@ export const reducers = {
   [fromStudent.studentsFeatureKey]: fromStudent.reducer,
   [fromShared.sharedFeatureKey]: fromShared.reducer,
   [fromAdministrator.administratorFeatureKey]: fromAdministrator.reducer,
-  [fromTestEntityTemplate.testEntityTemplateFeatureKey]:
-    fromTestEntityTemplate.reducer,
+  [fromTestEntityTemplate.testEntityTemplateFeatureKey]: fromTestEntityTemplate.reducer,
   [fromGlobalLoading.globalLoadingFeatureKey]: fromGlobalLoading.reducer,
 };
 

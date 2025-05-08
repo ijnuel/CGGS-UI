@@ -8,10 +8,7 @@ import {
   AdministratorFormInterface,
   AdministratorListInterface,
 } from './administrator';
-import {
-  TestEntityTemplateFormInterface,
-  TestEntityTemplateListInterface,
-} from './test-entity-template';
+import { TestEntityTemplateFormInterface, TestEntityTemplateListInterface } from './test-entity-template';
 import {
   CurrentUserInterface,
   UserListInterface,
