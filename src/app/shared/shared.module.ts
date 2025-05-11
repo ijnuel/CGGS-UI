@@ -10,12 +10,14 @@ import { CommonModule } from '@angular/common';
 import { TableLoaderComponent } from './table-loader/table-loader.component';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { LoadingSpinnerDirective } from './loading-spinner/loading-spinner.directive';
+import { CardComponent } from './card/card.component';
 
 @NgModule({
   declarations: [
     LayoutSidebarComponent,
     LayoutTopbarComponent,
     TableComponent,
+    CardComponent,
     TablePaginatorComponent,
     GlobalLoadingComponent,
     TableLoaderComponent,
@@ -31,6 +33,7 @@ import { LoadingSpinnerDirective } from './loading-spinner/loading-spinner.direc
     LayoutSidebarComponent,
     LayoutTopbarComponent,
     TableComponent,
+    CardComponent,
     TablePaginatorComponent,
     GlobalLoadingComponent,
     LoadingSpinnerDirective,

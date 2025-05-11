@@ -5,6 +5,16 @@ import {
 } from './auth';
 import { StudentFormInterface, StudentsListInterface } from './students';
 import { TestEntityTemplateFormInterface, TestEntityTemplateListInterface } from './test-entity-template';
+import { StateFormInterface, StateListInterface } from './state';
+import { SessionFormInterface, SessionListInterface } from './session';
+import { LocalGovernmentAreaFormInterface, LocalGovernmentAreaListInterface } from './local-government-area';
+import { CountryFormInterface, CountryListInterface } from './country';
+import { CompanyFormInterface, CompanyListInterface } from './company';
+import { StudentClassFormInterface, StudentClassListInterface } from './student-class';
+import { SchoolConfigurationFormInterface, SchoolConfigurationListInterface } from './school-configuration';
+import { ProgramTypeFormInterface, ProgramTypeListInterface } from './program-type';
+import { ClassLevelFormInterface, ClassLevelListInterface } from './class-level';
+import { ClassFormInterface, ClassListInterface } from './class';
 import { TeacherFormInterface, TeacherListInterface } from './teacher';
 import { AdministratorFormInterface, AdministratorListInterface } from './administrator';
 import {
@@ -63,7 +73,27 @@ export {
   AdministratorListInterface,
   AdministratorFormInterface,
   TestEntityTemplateListInterface,
+  StateListInterface,
+  SessionListInterface,
+  LocalGovernmentAreaListInterface,
+  CountryListInterface,
+  CompanyListInterface,
+  StudentClassListInterface,
+  SchoolConfigurationListInterface,
+  ProgramTypeListInterface,
+  ClassLevelListInterface,
+  ClassListInterface,
   TeacherListInterface,
   TestEntityTemplateFormInterface,
+  StateFormInterface,
+  SessionFormInterface,
+  LocalGovernmentAreaFormInterface,
+  CountryFormInterface,
+  CompanyFormInterface,
+  StudentClassFormInterface,
+  SchoolConfigurationFormInterface,
+  ProgramTypeFormInterface,
+  ClassLevelFormInterface,
+  ClassFormInterface,
   TeacherFormInterface,
 };

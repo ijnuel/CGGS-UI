@@ -5,6 +5,16 @@ import * as fromStudent from './students/students.reducer';
 import * as fromShared from './shared/shared.reducer';
 import * as fromAdministrator from './administrator/administrator.reducer';
 import * as fromTestEntityTemplate from './test-entity-template/test-entity-template.reducer';
+import * as fromState from './state/state.reducer';
+import * as fromSession from './session/session.reducer';
+import * as fromLocalGovernmentArea from './local-government-area/local-government-area.reducer';
+import * as fromCountry from './country/country.reducer';
+import * as fromCompany from './company/company.reducer';
+import * as fromStudentClass from './student-class/student-class.reducer';
+import * as fromSchoolConfiguration from './school-configuration/school-configuration.reducer';
+import * as fromProgramType from './program-type/program-type.reducer';
+import * as fromClassLevel from './class-level/class-level.reducer';
+import * as fromClass from './class/class.reducer';
 import * as fromTeacher from './teacher/teacher.reducer';
 import * as fromGlobalLoading from './global-loading/global-loading.reducer';
 
@@ -16,6 +26,16 @@ export interface AppState {
   [fromShared.sharedFeatureKey]: fromShared.SharedState;
   [fromAdministrator.administratorFeatureKey]: fromAdministrator.AdministratorState;
   [fromTestEntityTemplate.testEntityTemplateFeatureKey]: fromTestEntityTemplate.TestEntityTemplateState;
+  [fromState.stateFeatureKey]: fromState.StateState;
+  [fromSession.sessionFeatureKey]: fromSession.SessionState;
+  [fromLocalGovernmentArea.localGovernmentAreaFeatureKey]: fromLocalGovernmentArea.LocalGovernmentAreaState;
+  [fromCountry.countryFeatureKey]: fromCountry.CountryState;
+  [fromCompany.companyFeatureKey]: fromCompany.CompanyState;
+  [fromStudentClass.studentClassFeatureKey]: fromStudentClass.StudentClassState;
+  [fromSchoolConfiguration.schoolConfigurationFeatureKey]: fromSchoolConfiguration.SchoolConfigurationState;
+  [fromProgramType.programTypeFeatureKey]: fromProgramType.ProgramTypeState;
+  [fromClassLevel.classLevelFeatureKey]: fromClassLevel.ClassLevelState;
+  [fromClass.classFeatureKey]: fromClass.ClassState;
   [fromTeacher.teacherFeatureKey]: fromTeacher.TeacherState;
   [fromGlobalLoading.globalLoadingFeatureKey]: fromGlobalLoading.GlobalLoadingState;
 }
@@ -26,6 +46,16 @@ export const reducers = {
   [fromShared.sharedFeatureKey]: fromShared.reducer,
   [fromAdministrator.administratorFeatureKey]: fromAdministrator.reducer,
   [fromTestEntityTemplate.testEntityTemplateFeatureKey]: fromTestEntityTemplate.reducer,
+  [fromState.stateFeatureKey]: fromState.reducer,
+  [fromSession.sessionFeatureKey]: fromSession.reducer,
+  [fromLocalGovernmentArea.localGovernmentAreaFeatureKey]: fromLocalGovernmentArea.reducer,
+  [fromCountry.countryFeatureKey]: fromCountry.reducer,
+  [fromCompany.companyFeatureKey]: fromCompany.reducer,
+  [fromStudentClass.studentClassFeatureKey]: fromStudentClass.reducer,
+  [fromSchoolConfiguration.schoolConfigurationFeatureKey]: fromSchoolConfiguration.reducer,
+  [fromProgramType.programTypeFeatureKey]: fromProgramType.reducer,
+  [fromClassLevel.classLevelFeatureKey]: fromClassLevel.reducer,
+  [fromClass.classFeatureKey]: fromClass.reducer,
   [fromTeacher.teacherFeatureKey]: fromTeacher.reducer,
   [fromGlobalLoading.globalLoadingFeatureKey]: fromGlobalLoading.reducer,
 };

@@ -27,9 +27,29 @@ import { SharedEffect } from './store/shared/shared.effects';
 import { SharedFacade } from './store/shared/shared.facade';
 import { AdministratorFacade } from './store/administrator/administrator.facade';
 import { TestEntityTemplateFacade } from './store/test-entity-template/test-entity-template.facade';
+import { StateFacade } from './store/state/state.facade';
+import { SessionFacade } from './store/session/session.facade';
+import { LocalGovernmentAreaFacade } from './store/local-government-area/local-government-area.facade';
+import { CountryFacade } from './store/country/country.facade';
+import { CompanyFacade } from './store/company/company.facade';
+import { StudentClassFacade } from './store/student-class/student-class.facade';
+import { SchoolConfigurationFacade } from './store/school-configuration/school-configuration.facade';
+import { ProgramTypeFacade } from './store/program-type/program-type.facade';
+import { ClassLevelFacade } from './store/class-level/class-level.facade';
+import { ClassFacade } from './store/class/class.facade';
 import { TeacherFacade } from './store/teacher/teacher.facade';
 import { AdministratorEffect } from './store/administrator/administrator.effects';
 import { TestEntityTemplateEffect } from './store/test-entity-template/test-entity-template.effects';
+import { StateEffect } from './store/state/state.effects';
+import { SessionEffect } from './store/session/session.effects';
+import { LocalGovernmentAreaEffect } from './store/local-government-area/local-government-area.effects';
+import { CountryEffect } from './store/country/country.effects';
+import { CompanyEffect } from './store/company/company.effects';
+import { StudentClassEffect } from './store/student-class/student-class.effects';
+import { SchoolConfigurationEffect } from './store/school-configuration/school-configuration.effects';
+import { ProgramTypeEffect } from './store/program-type/program-type.effects';
+import { ClassLevelEffect } from './store/class-level/class-level.effects';
+import { ClassEffect } from './store/class/class.effects';
 import { TeacherEffect } from './store/teacher/teacher.effects';
 // import { provideStoreDevtools } from '@ngrx/store-devtools';
 
@@ -43,6 +63,16 @@ export const appConfig: ApplicationConfig = {
         SharedEffect,
         AdministratorEffect,
         TestEntityTemplateEffect,
+        StateEffect,
+        SessionEffect,
+        LocalGovernmentAreaEffect,
+        CountryEffect,
+        CompanyEffect,
+        StudentClassEffect,
+        SchoolConfigurationEffect,
+        ProgramTypeEffect,
+        ClassLevelEffect,
+        ClassEffect,
         TeacherEffect,
       ]),
       HttpClientModule
@@ -78,6 +108,16 @@ export const appConfig: ApplicationConfig = {
     SharedFacade,
     AdministratorFacade,
     TestEntityTemplateFacade,
+    StateFacade,
+    SessionFacade,
+    LocalGovernmentAreaFacade,
+    CountryFacade,
+    CompanyFacade,
+    StudentClassFacade,
+    SchoolConfigurationFacade,
+    ProgramTypeFacade,
+    ClassLevelFacade,
+    ClassFacade,
     TeacherFacade,
   ],
 };

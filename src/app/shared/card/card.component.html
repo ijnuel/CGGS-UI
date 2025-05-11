@@ -1,0 +1,37 @@
+<div class="p-6">
+  <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
+    @for(item of cards; track item; let itemIndex = $index) {
+      @if(item.url) {
+        <div
+          [routerLink]="item.url"
+          routerLinkActive="menu-item-active"
+          [routerLinkActiveOptions]="{ exact: false }"
+          matRipple
+          class="bg-gray-100 rounded-xl p-4 h-36 flex items-center justify-center cursor-pointer shadow hover:shadow-lg hover:-translate-y-1 transition duration-200"
+        >
+          <div class="flex items-center space-x-3">
+            <img
+              [src]="item.icon"
+              alt="{{ item.name }} icon"
+              class="w-6 h-6"
+            />
+            <h3 class="text-sm text-gray-600 font-normal">{{ item.name }}</h3>
+          </div>
+        </div>
+      } @else {
+        <div
+          class="bg-gray-200 rounded-xl p-4 h-36 flex items-center justify-center text-gray-400 cursor-not-allowed"
+        >
+          <div class="flex items-center space-x-3">
+            <img
+              [src]="item.icon"
+              alt="{{ item.name }} icon"
+              class="w-6 h-6 opacity-50"
+            />
+            <h3 class="text-sm font-normal">{{ item.name }}</h3>
+          </div>
+        </div>
+      }
+    }
+  </div>
+</div>

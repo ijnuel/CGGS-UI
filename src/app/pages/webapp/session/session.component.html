@@ -1,0 +1,19 @@
+@if ( { sessionList: sessionList$ | async, loading: loading$ | async }; as obs
+) {
+<div class="pl-8 pr-9 pt-6">
+  <div class="flex item-center justify-between">
+    <div class="text-xl font-bold">Session</div>
+
+    <button class="sec-btn" routerLink="create">Create Session</button>
+  </div>
+
+  <div class="mt-8">
+    <app-table
+      [isLoading]="obs.loading ?? false"
+      [showActionColumn]="true"
+      [tableData]="obs.sessionList?.data ?? null"
+      [tableHeaderData]="header"
+    ></app-table>
+  </div>
+</div>
+}
