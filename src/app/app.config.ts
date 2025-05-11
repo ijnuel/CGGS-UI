@@ -62,7 +62,7 @@ export const appConfig: ApplicationConfig = {
       useFactory: (authFacade: AuthFacade) => {
         return () => {
           //get user data on load
-          authFacade.getCurrentUser();
+          // authFacade.getCurrentUser();
         };
       },
       multi: true,
