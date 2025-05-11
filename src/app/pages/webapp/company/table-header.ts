@@ -4,7 +4,7 @@ export const tableHeader: TableHeaderInterface[] = [
     {
       key: 'name',
       type: 'normal',
-      name: 'Company Name',
+      name: 'Name',
       textPosition: 'left',
     },
 ];

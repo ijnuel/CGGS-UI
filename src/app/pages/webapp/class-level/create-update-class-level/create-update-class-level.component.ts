@@ -21,7 +21,6 @@ export class CreateUpdateClassLevelComponent implements OnInit, OnDestroy {
     dropdownLoading$: Observable<boolean>;
 
     formGroup: FormGroup<{
-        id: FormControl;
         name: FormControl;
     }>;
 
@@ -41,7 +40,6 @@ export class CreateUpdateClassLevelComponent implements OnInit, OnDestroy {
         this.dropdownLoading$ = this.sharedFacade.selectedLoading$;
 
         this.formGroup = this.fb.group({
-            id: ['', [Validators.required, Validators.maxLength(255)]],
             name: ['', [Validators.required, Validators.maxLength(255)]],
         });
     }
