@@ -27,8 +27,10 @@ import { SharedEffect } from './store/shared/shared.effects';
 import { SharedFacade } from './store/shared/shared.facade';
 import { AdministratorFacade } from './store/administrator/administrator.facade';
 import { TestEntityTemplateFacade } from './store/test-entity-template/test-entity-template.facade';
+import { TeacherFacade } from './store/teacher/teacher.facade';
 import { AdministratorEffect } from './store/administrator/administrator.effects';
 import { TestEntityTemplateEffect } from './store/test-entity-template/test-entity-template.effects';
+import { TeacherEffect } from './store/teacher/teacher.effects';
 // import { provideStoreDevtools } from '@ngrx/store-devtools';
 
 export const appConfig: ApplicationConfig = {
@@ -41,6 +43,7 @@ export const appConfig: ApplicationConfig = {
         SharedEffect,
         AdministratorEffect,
         TestEntityTemplateEffect,
+        TeacherEffect,
       ]),
       HttpClientModule
     ),
@@ -75,5 +78,6 @@ export const appConfig: ApplicationConfig = {
     SharedFacade,
     AdministratorFacade,
     TestEntityTemplateFacade,
+    TeacherFacade,
   ],
 };

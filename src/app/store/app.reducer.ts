@@ -5,6 +5,7 @@ import * as fromStudent from './students/students.reducer';
 import * as fromShared from './shared/shared.reducer';
 import * as fromAdministrator from './administrator/administrator.reducer';
 import * as fromTestEntityTemplate from './test-entity-template/test-entity-template.reducer';
+import * as fromTeacher from './teacher/teacher.reducer';
 import * as fromGlobalLoading from './global-loading/global-loading.reducer';
 
 export const appFeatureKey = 'appFeatureKey';
@@ -15,6 +16,7 @@ export interface AppState {
   [fromShared.sharedFeatureKey]: fromShared.SharedState;
   [fromAdministrator.administratorFeatureKey]: fromAdministrator.AdministratorState;
   [fromTestEntityTemplate.testEntityTemplateFeatureKey]: fromTestEntityTemplate.TestEntityTemplateState;
+  [fromTeacher.teacherFeatureKey]: fromTeacher.TeacherState;
   [fromGlobalLoading.globalLoadingFeatureKey]: fromGlobalLoading.GlobalLoadingState;
 }
 
@@ -24,6 +26,7 @@ export const reducers = {
   [fromShared.sharedFeatureKey]: fromShared.reducer,
   [fromAdministrator.administratorFeatureKey]: fromAdministrator.reducer,
   [fromTestEntityTemplate.testEntityTemplateFeatureKey]: fromTestEntityTemplate.reducer,
+  [fromTeacher.teacherFeatureKey]: fromTeacher.reducer,
   [fromGlobalLoading.globalLoadingFeatureKey]: fromGlobalLoading.reducer,
 };
 

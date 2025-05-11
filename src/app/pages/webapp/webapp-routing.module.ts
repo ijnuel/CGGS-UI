@@ -23,6 +23,8 @@ const routes: Routes = [
           import('./students/students.module').then((m) => m.StudentsModule),
       },
       { path: 'test-entity-template', loadChildren: () => import('./test-entity-template/test-entity-template.module').then((m) => m.TestEntityTemplateModule), },
+      { path: 'teacher', loadChildren: () => import('./teacher/teacher.module').then((m) => m.TeacherModule), },
+      { path: 'settings', loadChildren: () => import('./settings/settings.module').then((m) => m.SettingsModule), },
       { path: 'administrator', loadChildren: () => import('./administrator/administrator.module').then((m) => m.AdministratorModule), },
       {
         path: 'staff',

@@ -24,12 +24,13 @@ export default [
     name: 'Staff',
     icon: 'assets/icons/users-icon.svg',
     roles: [],
-    url: '/app/staff'
+    url: '/app/teacher'
   },
 
   {
     name: 'Settings',
     icon: 'assets/icons/settings-icon.svg',
     roles: [],
+    url: '/app/settings'
   },
 ];
