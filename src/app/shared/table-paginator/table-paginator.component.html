@@ -1,1 +1,9 @@
-<p>table-paginator works!</p>
+<mat-paginator
+  [length]="length"
+  [pageSize]="pageSize"
+  [pageSizeOptions]="pageSizeOptions"
+  [pageIndex]="pageIndex"
+  (page)="onPageChange($event)"
+  class="shadow bg-white rounded-lg mb-1 mt-1"
+>
+</mat-paginator>

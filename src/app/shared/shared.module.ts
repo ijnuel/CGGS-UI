@@ -11,6 +11,7 @@ import { TableLoaderComponent } from './table-loader/table-loader.component';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { LoadingSpinnerDirective } from './loading-spinner/loading-spinner.directive';
 import { CardComponent } from './card/card.component';
+import { MatPaginator } from '@angular/material/paginator';
 
 @NgModule({
   declarations: [
@@ -28,6 +29,7 @@ import { CardComponent } from './card/card.component';
     MaterialModule,
     CommonModule,
     MatProgressSpinnerModule,
+    MatPaginator,
   ],
   exports: [
     LayoutSidebarComponent,

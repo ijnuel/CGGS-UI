@@ -7,6 +7,7 @@ import {
   PaginatedResponseInterface,
   CountryListInterface,
 } from '../../../types';
+import { PageEvent } from '@angular/material/paginator';
 
 @Component({
     selector: 'app-country',
@@ -17,7 +18,8 @@ export class CountryComponent implements OnInit {
   header = tableHeader;
   pageQuery: PageQueryInterface = {
     start: 0,
-    recordsPerPage: 15,
+    recordsPerPage: 10,
+    pageIndex: 0
   };
   countryList$: Observable<PaginatedResponseInterface<
     CountryListInterface[]
@@ -30,6 +32,15 @@ export class CountryComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.countryFacade.getCountryList(this.pageQuery);
+  }
+  
+  onPageChange(event: PageEvent) {
+    this.pageQuery = {
+      start: event.pageSize * event.pageIndex,
+      recordsPerPage: event.pageSize,
+      pageIndex: event.pageIndex
+    }
     this.countryFacade.getCountryList(this.pageQuery);
   }
 }

@@ -45,6 +45,7 @@ interface PaginatedResponseInterface<T> {
 interface PageQueryInterface {
   start: number;
   recordsPerPage: number;
+  pageIndex?: number
   searchText?: string;
 }
 

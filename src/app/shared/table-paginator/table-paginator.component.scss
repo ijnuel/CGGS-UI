@@ -1,0 +1,10 @@
+::ng-deep .mat-paginator-container {
+  @apply flex justify-between items-center;
+}
+
+::ng-deep .mat-paginator-range-label,
+::ng-deep .mat-paginator-page-size,
+::ng-deep .mat-paginator-navigation-previous,
+::ng-deep .mat-paginator-navigation-next {
+  @apply text-gray-700;
+}
