@@ -35,12 +35,8 @@ export class ProgramTypeComponent implements OnInit {
     this.programTypeFacade.getProgramTypeList(this.pageQuery);
   }
   
-  onPageChange(event: PageEvent) {
-    this.pageQuery = {
-      start: event.pageSize * event.pageIndex,
-      recordsPerPage: event.pageSize,
-      pageIndex: event.pageIndex
-    }
+  onPageChange(pageQuery: PageQueryInterface) {
+    this.pageQuery = pageQuery;
     this.programTypeFacade.getProgramTypeList(this.pageQuery);
   }
 }

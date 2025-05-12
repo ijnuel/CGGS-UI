@@ -2,6 +2,7 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
 import { TableHeaderInterface } from '../../types/table';
 import { PageEvent } from '@angular/material/paginator';
+import { PageQueryInterface } from '../../types';
 
 @Component({
   selector: 'app-table',
@@ -9,7 +10,7 @@ import { PageEvent } from '@angular/material/paginator';
   styleUrl: './table.component.scss',
 })
 export class TableComponent {
-  @Output() pageChange = new EventEmitter<PageEvent>();
+  @Output() pageChange = new EventEmitter<PageQueryInterface>();
   @Input() totalLength = 0;
   @Input() pageSize = 10;
   @Input() pageIndex = 10;
@@ -40,6 +41,10 @@ export class TableComponent {
   maxColChar = 25;
 
   onPageChange(event: PageEvent) {
-    this.pageChange.emit(event);
+    this.pageChange.emit({
+      start: event.pageSize * event.pageIndex,
+      recordsPerPage: event.pageSize,
+      pageIndex: event.pageIndex
+    });
   }
 }

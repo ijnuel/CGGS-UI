@@ -35,12 +35,8 @@ export class SessionComponent implements OnInit {
     this.sessionFacade.getSessionList(this.pageQuery);
   }
   
-  onPageChange(event: PageEvent) {
-    this.pageQuery = {
-      start: event.pageSize * event.pageIndex,
-      recordsPerPage: event.pageSize,
-      pageIndex: event.pageIndex
-    }
+  onPageChange(pageQuery: PageQueryInterface) {
+    this.pageQuery = pageQuery;
     this.sessionFacade.getSessionList(this.pageQuery);
   }
 }

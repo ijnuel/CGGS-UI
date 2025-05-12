@@ -35,12 +35,8 @@ export class ClassLevelComponent implements OnInit {
     this.classLevelFacade.getClassLevelList(this.pageQuery);
   }
   
-  onPageChange(event: PageEvent) {
-    this.pageQuery = {
-      start: event.pageSize * event.pageIndex,
-      recordsPerPage: event.pageSize,
-      pageIndex: event.pageIndex
-    }
+  onPageChange(pageQuery: PageQueryInterface) {
+    this.pageQuery = pageQuery;
     this.classLevelFacade.getClassLevelList(this.pageQuery);
   }
 }

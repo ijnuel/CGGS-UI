@@ -35,12 +35,8 @@ export class StateComponent implements OnInit {
     this.stateFacade.getStateList(this.pageQuery);
   }
   
-  onPageChange(event: PageEvent) {
-    this.pageQuery = {
-      start: event.pageSize * event.pageIndex,
-      recordsPerPage: event.pageSize,
-      pageIndex: event.pageIndex
-    }
+  onPageChange(pageQuery: PageQueryInterface) {
+    this.pageQuery = pageQuery;
     this.stateFacade.getStateList(this.pageQuery);
   }
 }

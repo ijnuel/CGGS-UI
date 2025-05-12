@@ -35,12 +35,8 @@ export class TeacherComponent implements OnInit {
     this.teacherFacade.getTeacherList(this.pageQuery);
   }
   
-  onPageChange(event: PageEvent) {
-    this.pageQuery = {
-      start: event.pageSize * event.pageIndex,
-      recordsPerPage: event.pageSize,
-      pageIndex: event.pageIndex
-    }
+  onPageChange(pageQuery: PageQueryInterface) {
+    this.pageQuery = pageQuery;
     this.teacherFacade.getTeacherList(this.pageQuery);
   }
 }
