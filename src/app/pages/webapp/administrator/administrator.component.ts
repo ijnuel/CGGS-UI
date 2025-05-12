@@ -7,6 +7,7 @@ import {
   PaginatedResponseInterface,
   AdministratorListInterface,
 } from '../../../types';
+import { PageEvent } from '@angular/material/paginator';
 
 @Component({
     selector: 'app-administrator',
@@ -17,7 +18,8 @@ export class AdministratorComponent implements OnInit {
   header = tableHeader;
   pageQuery: PageQueryInterface = {
     start: 0,
-    recordsPerPage: 15,
+    recordsPerPage: 10,
+    pageIndex: 0
   };
   administratorList$: Observable<PaginatedResponseInterface<
     AdministratorListInterface[]
@@ -30,6 +32,15 @@ export class AdministratorComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.administratorFacade.getAdministratorList(this.pageQuery);
+  }
+  
+  onPageChange(event: PageEvent) {
+    this.pageQuery = {
+      start: event.pageSize * event.pageIndex,
+      recordsPerPage: event.pageSize,
+      pageIndex: event.pageIndex
+    }
     this.administratorFacade.getAdministratorList(this.pageQuery);
   }
 }

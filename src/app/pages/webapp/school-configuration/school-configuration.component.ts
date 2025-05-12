@@ -7,6 +7,7 @@ import {
   PaginatedResponseInterface,
   SchoolConfigurationListInterface,
 } from '../../../types';
+import { PageEvent } from '@angular/material/paginator';
 
 @Component({
     selector: 'app-school-configuration',
@@ -17,7 +18,8 @@ export class SchoolConfigurationComponent implements OnInit {
   header = tableHeader;
   pageQuery: PageQueryInterface = {
     start: 0,
-    recordsPerPage: 15,
+    recordsPerPage: 10,
+    pageIndex: 0
   };
   schoolConfigurationList$: Observable<PaginatedResponseInterface<
     SchoolConfigurationListInterface[]
@@ -30,6 +32,15 @@ export class SchoolConfigurationComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.schoolConfigurationFacade.getSchoolConfigurationList(this.pageQuery);
+  }
+  
+  onPageChange(event: PageEvent) {
+    this.pageQuery = {
+      start: event.pageSize * event.pageIndex,
+      recordsPerPage: event.pageSize,
+      pageIndex: event.pageIndex
+    }
     this.schoolConfigurationFacade.getSchoolConfigurationList(this.pageQuery);
   }
 }

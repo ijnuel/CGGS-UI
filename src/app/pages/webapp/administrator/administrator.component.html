@@ -2,7 +2,7 @@
 ) {
 <div class="pl-8 pr-9 pt-6">
   <div class="flex item-center justify-between">
-    <div class="text-xl font-bold">Administrator</div>
+    <div class="text-xl font-bold">Administrators</div>
 
     <button class="sec-btn" routerLink="create">Create Administrator</button>
   </div>
@@ -13,6 +13,10 @@
       [showActionColumn]="true"
       [tableData]="obs.administratorList?.data ?? null"
       [tableHeaderData]="header"
+      [pageSize]="obs.administratorList?.recordPerPage!"
+      [totalLength]="obs.administratorList?.totalCount!"
+      [pageIndex]="pageQuery.pageIndex!"
+      (pageChange)="onPageChange($event)"
     ></app-table>
   </div>
 </div>

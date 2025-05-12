@@ -7,6 +7,7 @@ import {
   PaginatedResponseInterface,
   TeacherListInterface,
 } from '../../../types';
+import { PageEvent } from '@angular/material/paginator';
 
 @Component({
     selector: 'app-teacher',
@@ -17,7 +18,8 @@ export class TeacherComponent implements OnInit {
   header = tableHeader;
   pageQuery: PageQueryInterface = {
     start: 0,
-    recordsPerPage: 15,
+    recordsPerPage: 10,
+    pageIndex: 0
   };
   teacherList$: Observable<PaginatedResponseInterface<
     TeacherListInterface[]
@@ -30,6 +32,15 @@ export class TeacherComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.teacherFacade.getTeacherList(this.pageQuery);
+  }
+  
+  onPageChange(event: PageEvent) {
+    this.pageQuery = {
+      start: event.pageSize * event.pageIndex,
+      recordsPerPage: event.pageSize,
+      pageIndex: event.pageIndex
+    }
     this.teacherFacade.getTeacherList(this.pageQuery);
   }
 }

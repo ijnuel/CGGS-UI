@@ -7,6 +7,7 @@ import {
   PaginatedResponseInterface,
   CompanyListInterface,
 } from '../../../types';
+import { PageEvent } from '@angular/material/paginator';
 
 @Component({
     selector: 'app-company',
@@ -17,7 +18,8 @@ export class CompanyComponent implements OnInit {
   header = tableHeader;
   pageQuery: PageQueryInterface = {
     start: 0,
-    recordsPerPage: 15,
+    recordsPerPage: 10,
+    pageIndex: 0
   };
   companyList$: Observable<PaginatedResponseInterface<
     CompanyListInterface[]
@@ -30,6 +32,15 @@ export class CompanyComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.companyFacade.getCompanyList(this.pageQuery);
+  }
+  
+  onPageChange(event: PageEvent) {
+    this.pageQuery = {
+      start: event.pageSize * event.pageIndex,
+      recordsPerPage: event.pageSize,
+      pageIndex: event.pageIndex
+    }
     this.companyFacade.getCompanyList(this.pageQuery);
   }
 }

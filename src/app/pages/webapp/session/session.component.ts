@@ -7,6 +7,7 @@ import {
   PaginatedResponseInterface,
   SessionListInterface,
 } from '../../../types';
+import { PageEvent } from '@angular/material/paginator';
 
 @Component({
     selector: 'app-session',
@@ -17,7 +18,8 @@ export class SessionComponent implements OnInit {
   header = tableHeader;
   pageQuery: PageQueryInterface = {
     start: 0,
-    recordsPerPage: 15,
+    recordsPerPage: 10,
+    pageIndex: 0
   };
   sessionList$: Observable<PaginatedResponseInterface<
     SessionListInterface[]
@@ -30,6 +32,15 @@ export class SessionComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.sessionFacade.getSessionList(this.pageQuery);
+  }
+  
+  onPageChange(event: PageEvent) {
+    this.pageQuery = {
+      start: event.pageSize * event.pageIndex,
+      recordsPerPage: event.pageSize,
+      pageIndex: event.pageIndex
+    }
     this.sessionFacade.getSessionList(this.pageQuery);
   }
 }

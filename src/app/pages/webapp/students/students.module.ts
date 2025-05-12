@@ -14,37 +14,37 @@ import { CreateUpdateStudentsComponent } from './create-update-students/create-u
 import { provideNativeDateAdapter } from '@angular/material/core';
 
 const routes: Routes = [
-  {
-    path: '',
-    component: StudentsComponent,
-  },
+    {
+        path: '',
+        component: StudentsComponent,
+    },
 
-  {
-    path: 'create',
-    component: CreateUpdateStudentsComponent,
-  },
+    {
+        path: 'create',
+        component: CreateUpdateStudentsComponent,
+    },
 
-  {
-    path: 'edit/:studentId',
-    component: CreateUpdateStudentsComponent,
-  },
+    {
+        path: 'edit/:studentId',
+        component: CreateUpdateStudentsComponent,
+    },
 ];
 
 @NgModule({
-  declarations: [StudentsComponent, CreateUpdateStudentsComponent],
-  imports: [
-    CommonModule,
-    SharedModule,
-    RouterModule.forChild(routes),
-    FormsModule,
-    MatFormFieldModule,
-    MatInputModule,
-    MatIconModule,
-    ReactiveFormsModule,
-    MatDatepickerModule,
-    MatSelectModule,
-    MatRadioModule,
-  ],
-  providers: [provideNativeDateAdapter()],
+    declarations: [StudentsComponent, CreateUpdateStudentsComponent],
+    imports: [
+        CommonModule,
+        SharedModule,
+        RouterModule.forChild(routes),
+        FormsModule,
+        MatFormFieldModule,
+        MatInputModule,
+        MatIconModule,
+        ReactiveFormsModule,
+        MatDatepickerModule,
+        MatSelectModule,
+        MatRadioModule,
+    ],
+    providers: [provideNativeDateAdapter()],
 })
-export class StudentsModule {}
+export class StudentsModule { }

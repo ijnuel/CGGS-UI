@@ -7,6 +7,7 @@ import {
   PaginatedResponseInterface,
   ClassLevelListInterface,
 } from '../../../types';
+import { PageEvent } from '@angular/material/paginator';
 
 @Component({
     selector: 'app-class-level',
@@ -17,7 +18,8 @@ export class ClassLevelComponent implements OnInit {
   header = tableHeader;
   pageQuery: PageQueryInterface = {
     start: 0,
-    recordsPerPage: 15,
+    recordsPerPage: 10,
+    pageIndex: 0
   };
   classLevelList$: Observable<PaginatedResponseInterface<
     ClassLevelListInterface[]
@@ -30,6 +32,15 @@ export class ClassLevelComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.classLevelFacade.getClassLevelList(this.pageQuery);
+  }
+  
+  onPageChange(event: PageEvent) {
+    this.pageQuery = {
+      start: event.pageSize * event.pageIndex,
+      recordsPerPage: event.pageSize,
+      pageIndex: event.pageIndex
+    }
     this.classLevelFacade.getClassLevelList(this.pageQuery);
   }
 }

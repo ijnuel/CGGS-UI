@@ -13,6 +13,10 @@
       [showActionColumn]="true"
       [tableData]="obs.localGovernmentAreaList?.data ?? null"
       [tableHeaderData]="header"
+      [pageSize]="obs.localGovernmentAreaList?.recordPerPage!"
+      [totalLength]="obs.localGovernmentAreaList?.totalCount!"
+      [pageIndex]="pageQuery.pageIndex!"
+      (pageChange)="onPageChange($event)"
     ></app-table>
   </div>
 </div>

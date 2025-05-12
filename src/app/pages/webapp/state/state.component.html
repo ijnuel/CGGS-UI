@@ -13,6 +13,10 @@
       [showActionColumn]="true"
       [tableData]="obs.stateList?.data ?? null"
       [tableHeaderData]="header"
+      [pageSize]="obs.stateList?.recordPerPage!"
+      [totalLength]="obs.stateList?.totalCount!"
+      [pageIndex]="pageQuery.pageIndex!"
+      (pageChange)="onPageChange($event)"
     ></app-table>
   </div>
 </div>

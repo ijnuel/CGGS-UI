@@ -13,6 +13,10 @@
       [showActionColumn]="true"
       [tableData]="obs.schoolConfigurationList?.data ?? null"
       [tableHeaderData]="header"
+      [pageSize]="obs.schoolConfigurationList?.recordPerPage!"
+      [totalLength]="obs.schoolConfigurationList?.totalCount!"
+      [pageIndex]="pageQuery.pageIndex!"
+      (pageChange)="onPageChange($event)"
     ></app-table>
   </div>
 </div>

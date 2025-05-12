@@ -7,6 +7,7 @@ import {
   PaginatedResponseInterface,
   ProgramTypeListInterface,
 } from '../../../types';
+import { PageEvent } from '@angular/material/paginator';
 
 @Component({
     selector: 'app-program-type',
@@ -17,7 +18,8 @@ export class ProgramTypeComponent implements OnInit {
   header = tableHeader;
   pageQuery: PageQueryInterface = {
     start: 0,
-    recordsPerPage: 15,
+    recordsPerPage: 10,
+    pageIndex: 0
   };
   programTypeList$: Observable<PaginatedResponseInterface<
     ProgramTypeListInterface[]
@@ -30,6 +32,15 @@ export class ProgramTypeComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.programTypeFacade.getProgramTypeList(this.pageQuery);
+  }
+  
+  onPageChange(event: PageEvent) {
+    this.pageQuery = {
+      start: event.pageSize * event.pageIndex,
+      recordsPerPage: event.pageSize,
+      pageIndex: event.pageIndex
+    }
     this.programTypeFacade.getProgramTypeList(this.pageQuery);
   }
 }

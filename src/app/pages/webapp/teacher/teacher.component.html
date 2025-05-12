@@ -2,7 +2,7 @@
 ) {
 <div class="pl-8 pr-9 pt-6">
   <div class="flex item-center justify-between">
-    <div class="text-xl font-bold">Teacher</div>
+    <div class="text-xl font-bold">Teachers</div>
 
     <button class="sec-btn" routerLink="create">Create Teacher</button>
   </div>
@@ -13,6 +13,10 @@
       [showActionColumn]="true"
       [tableData]="obs.teacherList?.data ?? null"
       [tableHeaderData]="header"
+      [pageSize]="obs.teacherList?.recordPerPage!"
+      [totalLength]="obs.teacherList?.totalCount!"
+      [pageIndex]="pageQuery.pageIndex!"
+      (pageChange)="onPageChange($event)"
     ></app-table>
   </div>
 </div>

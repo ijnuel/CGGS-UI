@@ -7,6 +7,7 @@ import {
   PaginatedResponseInterface,
   StateListInterface,
 } from '../../../types';
+import { PageEvent } from '@angular/material/paginator';
 
 @Component({
     selector: 'app-state',
@@ -17,7 +18,8 @@ export class StateComponent implements OnInit {
   header = tableHeader;
   pageQuery: PageQueryInterface = {
     start: 0,
-    recordsPerPage: 15,
+    recordsPerPage: 10,
+    pageIndex: 0
   };
   stateList$: Observable<PaginatedResponseInterface<
     StateListInterface[]
@@ -30,6 +32,15 @@ export class StateComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.stateFacade.getStateList(this.pageQuery);
+  }
+  
+  onPageChange(event: PageEvent) {
+    this.pageQuery = {
+      start: event.pageSize * event.pageIndex,
+      recordsPerPage: event.pageSize,
+      pageIndex: event.pageIndex
+    }
     this.stateFacade.getStateList(this.pageQuery);
   }
 }

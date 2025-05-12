@@ -7,6 +7,7 @@ import {
   PaginatedResponseInterface,
   StudentClassListInterface,
 } from '../../../types';
+import { PageEvent } from '@angular/material/paginator';
 
 @Component({
     selector: 'app-student-class',
@@ -17,7 +18,8 @@ export class StudentClassComponent implements OnInit {
   header = tableHeader;
   pageQuery: PageQueryInterface = {
     start: 0,
-    recordsPerPage: 15,
+    recordsPerPage: 10,
+    pageIndex: 0
   };
   studentClassList$: Observable<PaginatedResponseInterface<
     StudentClassListInterface[]
@@ -30,6 +32,15 @@ export class StudentClassComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.studentClassFacade.getStudentClassList(this.pageQuery);
+  }
+  
+  onPageChange(event: PageEvent) {
+    this.pageQuery = {
+      start: event.pageSize * event.pageIndex,
+      recordsPerPage: event.pageSize,
+      pageIndex: event.pageIndex
+    }
     this.studentClassFacade.getStudentClassList(this.pageQuery);
   }
 }
