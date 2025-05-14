@@ -1,23 +1,27 @@
-import { Component } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { GlobalLoadingFacade } from '../../store/global-loading/global-loading.facade';
 import {
   NotificationTypeEnums,
   ToastNotificationService,
 } from '../../services/toast-notification.service';
+import { Subject } from 'rxjs';
+import { AuthFacade } from '../../store/auth/auth.facade';
 
 @Component({
   selector: 'app-webapp',
   templateUrl: './webapp.component.html',
   styleUrl: './webapp.component.scss',
 })
-export class WebappComponent {
+export class WebappComponent implements OnInit, OnDestroy {
   globalLoading$ = this.globalLoadingFacade.selectGlobalLoading$;
   globalError$ = this.globalLoadingFacade.selectGlobalError$;
   toggleSidebarState: 'close' | 'open' = 'close';
+  destroyed$ = new Subject<void>();
 
   constructor(
     private globalLoadingFacade: GlobalLoadingFacade,
-    private toastNotification: ToastNotificationService
+    private toastNotification: ToastNotificationService, 
+    private authFacade: AuthFacade
   ) {
     this.globalError$.subscribe((errorMessage) => {
       if (!errorMessage) return;
@@ -27,6 +31,15 @@ export class WebappComponent {
         NotificationTypeEnums.ERROR
       );
     });
+  }
+  
+  ngOnInit(): void {
+    this.authFacade.getCurrentUser();
+  }
+
+  ngOnDestroy(): void {
+    this.destroyed$.next();
+    this.destroyed$.complete();
   }
 
   topbarToggleSidebar(state: { toggle: boolean }) {

@@ -1,6 +1,5 @@
 import { createReducer, on } from '@ngrx/store';
 import * as AuthActions from './auth.actions';
-import { LoggedUserInterface } from '../../types/auth'; // Import AuthState
 import { CurrentUserInterface } from '../../types';
 
 export const authFeatureKey = 'auth';
