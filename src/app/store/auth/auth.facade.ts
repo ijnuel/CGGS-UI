@@ -6,47 +6,81 @@ import * as AuthActions from './auth.actions';
 import * as AuthSelector from './auth.selector';
 import { Observable, map } from 'rxjs';
 import {
-  GenericResponseInterface,
-  LoginPayloadInterface,
-  LoginResponseInterface,
+    GenericResponseInterface,
+    LoginPayloadInterface,
+    LoginResponseInterface,
+    CurrentUserInterface,
+    CompanyListInterface,
 } from '../../types';
 
 @Injectable()
 export class AuthFacade {
-  selectedCurrentUserId$ = this.store.pipe(
-    select(AuthSelector.selectCurrentUserId)
-  );
+    selectedCurrentUserId$ = this.store.pipe(
+        select(AuthSelector.selectCurrentUserId)
+    );
 
-  selectedCurrentUser$ = this.store.pipe(
-    select(AuthSelector.selectCurrentUser)
-  );
+    selectedCurrentUser$ = this.store.pipe(
+        select(AuthSelector.selectCurrentUser)
+    );
 
-  selectedLoading$ = this.store.pipe(select(AuthSelector.selectLoading));
+    selectedLoading$ = this.store.pipe(select(AuthSelector.selectLoading));
 
-  selectedError$ = this.store.pipe(select(AuthSelector.selectError));
+    selectedError$ = this.store.pipe(select(AuthSelector.selectError));
 
-  constructor(
-    private readonly store: Store,
-    private readonly actionsListener$: ActionsSubject
-  ) {}
+    constructor(
+        private readonly store: Store,
+        private readonly actionsListener$: ActionsSubject
+    ) {}
 
-  login(payload: LoginPayloadInterface) {
-    this.store.dispatch(AuthActions.login({ payload }));
-  }
+    login(payload: LoginPayloadInterface) {
+        this.store.dispatch(AuthActions.login({ payload }));
+    }
 
-  logout() {
-    this.store.dispatch(AuthActions.logout());
-  }
+    logout() {
+        this.store.dispatch(AuthActions.logout());
+    }
 
-  loginSuccessAction(): Observable<
-    GenericResponseInterface<LoginResponseInterface>
-  > {
-    return this.actionsListener$
-      .pipe(ofType(AuthActions.loginSuccess))
-      .pipe(map(({ payload }) => payload));
-  }
+    loginSuccessAction(): Observable<
+        GenericResponseInterface<LoginResponseInterface>
+    > {
+        return this.actionsListener$
+            .pipe(ofType(AuthActions.loginSuccess))
+            .pipe(map(({ payload }) => payload));
+    }
 
-  getCurrentUser() {
-    this.store.dispatch(AuthActions.getCurrentUser());
-  }
+    getCurrentUser() {
+        this.store.dispatch(AuthActions.getCurrentUser());
+    }
+
+    getCurrentUserSuccessAction(): Observable<
+        GenericResponseInterface<CurrentUserInterface> // Updated type
+    > {
+        return this.actionsListener$
+            .pipe(ofType(AuthActions.getCurrentUserSuccess))
+            .pipe(map(({ payload }) => payload));
+    }
+
+    switchCompany(companyId: string) {
+        this.store.dispatch(AuthActions.switchCompany({ companyId }));
+    }
+
+    switchCompanySuccessAction(): Observable<
+        GenericResponseInterface<string>
+    > {
+        return this.actionsListener$
+            .pipe(ofType(AuthActions.switchCompanySuccess))
+            .pipe(map(({ payload }) => payload));
+    }
+
+    getAdminCompanies() {
+        this.store.dispatch(AuthActions.getAdminCompanies());
+    }
+
+    getAdminCompaniesSuccessAction(): Observable<
+        GenericResponseInterface<CompanyListInterface[]>
+    > {
+        return this.actionsListener$
+            .pipe(ofType(AuthActions.getAdminCompaniesSuccess))
+            .pipe(map(({ payload }) => payload));
+    }
 }

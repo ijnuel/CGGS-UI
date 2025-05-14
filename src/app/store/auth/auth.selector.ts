@@ -1,38 +1,24 @@
-import { createSelector } from '@ngrx/store';
-import * as fromAuth from './auth.reducer';
-import * as fromApp from '../app.reducer';
+import { createFeatureSelector, createSelector } from '@ngrx/store';
+import { AuthState } from './auth.reducer';
 
-export const selectAuthState = createSelector(
-  fromApp.selectAppState,
-  (state) => state[fromAuth.authFeatureKey]
-);
-
-export const selectUsername = createSelector(
-  fromAuth.selectAuthState,
-  fromAuth.getUsername
-);
-
-export const selectLoginResponseData = createSelector(
-  fromAuth.selectAuthState,
-  fromAuth.getLoginResponse
-);
+export const selectAuthState = createFeatureSelector<AuthState>('auth'); // Assuming 'auth' is your feature key
 
 export const selectCurrentUserId = createSelector(
-  fromAuth.selectAuthState,
-  fromAuth.getCurrentUserId
+    selectAuthState,
+    (state: AuthState) => state.currentUserId
 );
 
 export const selectCurrentUser = createSelector(
-  fromAuth.selectAuthState,
-  fromAuth.getCurrentUser
+    selectAuthState,
+    (state: AuthState) => state.currentUser
 );
 
 export const selectLoading = createSelector(
-  fromAuth.selectAuthState,
-  fromAuth.getLoading
+    selectAuthState,
+    (state: AuthState) => state.loading
 );
 
 export const selectError = createSelector(
-  fromAuth.selectAuthState,
-  fromAuth.getError
+    selectAuthState,
+    (state: AuthState) => state.error
 );

@@ -1,79 +1,72 @@
-import { createFeatureSelector, createReducer, on } from '@ngrx/store';
-import * as AuthAction from './auth.actions';
-import { LoggedUserInterface } from '../../types/auth';
+import { createReducer, on } from '@ngrx/store';
+import * as AuthActions from './auth.actions';
+import { LoggedUserInterface } from '../../types/auth'; // Import AuthState
 import { CurrentUserInterface } from '../../types';
 
 export const authFeatureKey = 'auth';
 
 export interface AuthState {
-  isLoading: boolean;
-  currentUserId: string | null;
-  currentUser: CurrentUserInterface | null;
-  loginResponse: LoggedUserInterface | null;
-  error: string | null;
+    currentUserId: string | null;
+    currentUser: CurrentUserInterface | null;
+    loading: boolean;
+    error: string | null;
 }
 
 export const initialState: AuthState = {
-  isLoading: false,
-  currentUserId: null,
-  currentUser: null,
-  loginResponse: null,
-  error: null,
+    currentUserId: null,
+    currentUser: null,
+    loading: false,
+    error: null,
 };
 
-export const reducer = createReducer(
-  initialState,
-  on(AuthAction.loginSuccess, (state, { payload }) => {
-    return {
-      ...state,
-      currentUserId: payload.entity?.currentUser?.id,
-      loginResponse: payload.entity?.currentUser,
-      error: null,
-    };
-  }),
-  on(AuthAction.loginFail, (state, action) => {
-    return {
-      ...initialState,
-      error: action.error,
-    };
-  }),
-
-  on(AuthAction.getCurrentUser, (state) => {
-    return {
-      ...state,
-      isLoading: true,
-    };
-  }),
-  on(AuthAction.getCurrentUserSuccess, (state, { payload }) => {
-    return {
-      ...state,
-      currentUserId: payload.entity?.userId,
-      currentUser: payload.entity,
-      isLoading: false,
-      error: null,
-    };
-  }),
-  on(AuthAction.getCurrentUserFail, (state, action) => {
-    return {
-      ...initialState,
-      isLoading: false,
-      error: action.error,
-    };
-  })
+export const authReducer = createReducer(
+    initialState,
+    on(AuthActions.login, (state) => ({ ...state, loading: true, error: null })),
+    on(AuthActions.loginSuccess, (state, { payload }) => ({
+        ...state,
+        loading: false,
+        currentUserId: payload.entity.currentUser.id,
+    })),
+    on(AuthActions.loginFail, (state, { error }) => ({
+        ...state,
+        loading: false,
+        error,
+    })),
+    on(AuthActions.getCurrentUser, (state) => ({ ...state, loading: true, error: null })),
+    on(AuthActions.getCurrentUserSuccess, (state, { payload }) => ({
+        ...state,
+        loading: false,
+        currentUser: payload.entity,
+    })),
+    on(AuthActions.getCurrentUserFail, (state, { error }) => ({
+        ...state,
+        loading: false,
+        error,
+    })),
+    on(AuthActions.logout, (state) => ({
+        ...state,
+        currentUserId: null,
+        currentUser: null,
+        error: null,
+    })),
+    on(AuthActions.switchCompany, (state) => ({ ...state, loading: true, error: null })),
+    on(AuthActions.switchCompanySuccess, (state) => ({
+        ...state,
+        loading: false,
+    })), // No state change needed on success
+    on(AuthActions.switchCompanyFail, (state, { error }) => ({
+        ...state,
+        loading: false,
+        error,
+    })),
+    on(AuthActions.getAdminCompanies, (state) => ({ ...state, loading: true, error: null })),
+    on(AuthActions.getAdminCompaniesSuccess, (state) => ({
+        ...state,
+        loading: false,
+    })), // No state change needed on success
+    on(AuthActions.getAdminCompaniesFail, (state, { error }) => ({
+        ...state,
+        loading: false,
+        error,
+    }))
 );
-
-export const getLoginResponse = (state: AuthState) => state.loginResponse;
-
-export const getUsername = (state: AuthState) => state.loginResponse?.userName;
-
-export const getCurrentUserId = (state: AuthState) => state.currentUserId;
-
-export const getCurrentUser = (state: AuthState) => state.currentUser;
-
-export const getLoading = (state: AuthState) => state.isLoading;
-
-export const getUserType = (state: AuthState) => state.loginResponse?.userType;
-
-export const getError = (state: AuthState) => state.error;
-
-export const selectAuthState = createFeatureSelector<AuthState>(authFeatureKey);

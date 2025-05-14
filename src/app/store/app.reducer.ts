@@ -45,7 +45,7 @@ export interface AppState {
 }
 
 export const reducers = {
-  [fromAuth.authFeatureKey]: fromAuth.reducer,
+  [fromAuth.authFeatureKey]: fromAuth.authReducer, // Updated to use authReducer
   [fromStudent.studentsFeatureKey]: fromStudent.reducer,
   [fromShared.sharedFeatureKey]: fromShared.reducer,
   [fromAdministrator.administratorFeatureKey]: fromAdministrator.reducer,

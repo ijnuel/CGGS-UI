@@ -22,4 +22,5 @@ export enum UserRolesEnum {
   Admin = 'admin',
   Teacher = 'teacher',
   Student = 'student',
+  Parent = 'parent'
 }
