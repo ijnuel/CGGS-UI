@@ -12,6 +12,7 @@
         src="assets/icons/hamburger-icon.svg"
       />
     </div>
+
     <div class="flex items-center">
       <span class="text-base font-medium text-gray-700 font-[PPRightGothic]">
         Hi, USER
@@ -29,20 +30,32 @@
       role="button"
     >
       <img
-        class="w-[1.5rem] h-[1.5rem] cursor-pointer"
+        class="w-[1.5rem] h-[1.5rem]"
         src="assets/icons/bell-icon.svg"
       />
-      <div
-        class="w-6 h-4 rounded-xl bg-[#E62E2E] absolute top-0 left-[60%] flex-center text-white text-xs"
-      >
-        9+
-      </div>
+    </div>
+    <div
+      class="w-8 h-8 rounded-full bg-[#e9eef9] hover:bg-[#d5ddef] flex-center cursor-pointer relative"
+      role="button"
+    >
+      <img
+        class="w-[1.5rem] h-[1.5rem]"
+        src="assets/icons/user-icon.svg"
+      />
     </div>
 
-    <div
-      class="w-8 h-8 rounded-full bg-[#e9eef9] hover:bg-[#d5ddef] flex-center cursor-pointer font-[PPRightGothic]"
-    >
-      <span class="text-base font-medium leading-5 text-[--app-primary]"> A </span>
+    <div class="w-48 text-sm capitalize px-3 py-1 bg-[#e9eef9] rounded-xl fw-600"> 
+      <mat-select
+        [(value)]="currentCompanyId"
+        (selectionChange)="onCompanyChange($event)"
+      >
+        <mat-option
+          *ngFor="let company of companies"
+          [value]="company.id"
+          class="w-full" >
+          <span class="block w-full">{{ company.name }}</span>
+        </mat-option>
+      </mat-select>
     </div>
   </div>
 </div>
