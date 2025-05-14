@@ -5,6 +5,8 @@ import {
 } from './auth';
 import { StudentFormInterface, StudentsListInterface } from './students';
 import { TestEntityTemplateFormInterface, TestEntityTemplateListInterface } from './test-entity-template';
+import { ApplicationFormInterface, ApplicationListInterface } from './application';
+import { ParentFormInterface, ParentListInterface } from './parent';
 import { StateFormInterface, StateListInterface } from './state';
 import { SessionFormInterface, SessionListInterface } from './session';
 import { LocalGovernmentAreaFormInterface, LocalGovernmentAreaListInterface } from './local-government-area';
@@ -74,6 +76,8 @@ export {
   AdministratorListInterface,
   AdministratorFormInterface,
   TestEntityTemplateListInterface,
+  ApplicationListInterface,
+  ParentListInterface,
   StateListInterface,
   SessionListInterface,
   LocalGovernmentAreaListInterface,
@@ -86,6 +90,8 @@ export {
   ClassListInterface,
   TeacherListInterface,
   TestEntityTemplateFormInterface,
+  ApplicationFormInterface,
+  ParentFormInterface,
   StateFormInterface,
   SessionFormInterface,
   LocalGovernmentAreaFormInterface,

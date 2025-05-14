@@ -1,0 +1,23 @@
+@if ( { parentList: parentList$ | async, loading: loading$ | async }; as obs
+) {
+<div class="pl-8 pr-9 pt-6">
+  <div class="flex item-center justify-between">
+    <div class="text-xl font-bold">Parents</div>
+
+    <button class="sec-btn" routerLink="create">Create Parent</button>
+  </div>
+
+  <div class="mt-8">
+    <app-table
+      [isLoading]="obs.loading ?? false"
+      [showActionColumn]="true"
+      [tableData]="obs.parentList?.data ?? null"
+      [tableHeaderData]="header"
+      [pageSize]="obs.parentList?.recordPerPage!"
+      [totalLength]="obs.parentList?.totalCount!"
+      [pageIndex]="pageQuery.pageIndex!"
+      (pageChange)="onPageChange($event)"
+    ></app-table>
+  </div>
+</div>
+}

@@ -1,0 +1,23 @@
+@if ( { applicationList: applicationList$ | async, loading: loading$ | async }; as obs
+) {
+<div class="pl-8 pr-9 pt-6">
+  <div class="flex item-center justify-between">
+    <div class="text-xl font-bold">Applications</div>
+
+    <button class="sec-btn" routerLink="create">Create Application</button>
+  </div>
+
+  <div class="mt-8">
+    <app-table
+      [isLoading]="obs.loading ?? false"
+      [showActionColumn]="true"
+      [tableData]="obs.applicationList?.data ?? null"
+      [tableHeaderData]="header"
+      [pageSize]="obs.applicationList?.recordPerPage!"
+      [totalLength]="obs.applicationList?.totalCount!"
+      [pageIndex]="pageQuery.pageIndex!"
+      (pageChange)="onPageChange($event)"
+    ></app-table>
+  </div>
+</div>
+}

@@ -27,6 +27,8 @@ import { SharedEffect } from './store/shared/shared.effects';
 import { SharedFacade } from './store/shared/shared.facade';
 import { AdministratorFacade } from './store/administrator/administrator.facade';
 import { TestEntityTemplateFacade } from './store/test-entity-template/test-entity-template.facade';
+import { ApplicationFacade } from './store/application/application.facade';
+import { ParentFacade } from './store/parent/parent.facade';
 import { StateFacade } from './store/state/state.facade';
 import { SessionFacade } from './store/session/session.facade';
 import { LocalGovernmentAreaFacade } from './store/local-government-area/local-government-area.facade';
@@ -40,6 +42,8 @@ import { ClassFacade } from './store/class/class.facade';
 import { TeacherFacade } from './store/teacher/teacher.facade';
 import { AdministratorEffect } from './store/administrator/administrator.effects';
 import { TestEntityTemplateEffect } from './store/test-entity-template/test-entity-template.effects';
+import { ApplicationEffect } from './store/application/application.effects';
+import { ParentEffect } from './store/parent/parent.effects';
 import { StateEffect } from './store/state/state.effects';
 import { SessionEffect } from './store/session/session.effects';
 import { LocalGovernmentAreaEffect } from './store/local-government-area/local-government-area.effects';
@@ -63,6 +67,8 @@ export const appConfig: ApplicationConfig = {
         SharedEffect,
         AdministratorEffect,
         TestEntityTemplateEffect,
+        ApplicationEffect,
+        ParentEffect,
         StateEffect,
         SessionEffect,
         LocalGovernmentAreaEffect,
@@ -108,6 +114,8 @@ export const appConfig: ApplicationConfig = {
     SharedFacade,
     AdministratorFacade,
     TestEntityTemplateFacade,
+    ApplicationFacade,
+    ParentFacade,
     StateFacade,
     SessionFacade,
     LocalGovernmentAreaFacade,

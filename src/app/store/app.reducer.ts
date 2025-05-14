@@ -5,6 +5,8 @@ import * as fromStudent from './students/students.reducer';
 import * as fromShared from './shared/shared.reducer';
 import * as fromAdministrator from './administrator/administrator.reducer';
 import * as fromTestEntityTemplate from './test-entity-template/test-entity-template.reducer';
+import * as fromApplication from './application/application.reducer';
+import * as fromParent from './parent/parent.reducer';
 import * as fromState from './state/state.reducer';
 import * as fromSession from './session/session.reducer';
 import * as fromLocalGovernmentArea from './local-government-area/local-government-area.reducer';
@@ -26,6 +28,8 @@ export interface AppState {
   [fromShared.sharedFeatureKey]: fromShared.SharedState;
   [fromAdministrator.administratorFeatureKey]: fromAdministrator.AdministratorState;
   [fromTestEntityTemplate.testEntityTemplateFeatureKey]: fromTestEntityTemplate.TestEntityTemplateState;
+  [fromApplication.applicationFeatureKey]: fromApplication.ApplicationState;
+  [fromParent.parentFeatureKey]: fromParent.ParentState;
   [fromState.stateFeatureKey]: fromState.StateState;
   [fromSession.sessionFeatureKey]: fromSession.SessionState;
   [fromLocalGovernmentArea.localGovernmentAreaFeatureKey]: fromLocalGovernmentArea.LocalGovernmentAreaState;
@@ -46,6 +50,8 @@ export const reducers = {
   [fromShared.sharedFeatureKey]: fromShared.reducer,
   [fromAdministrator.administratorFeatureKey]: fromAdministrator.reducer,
   [fromTestEntityTemplate.testEntityTemplateFeatureKey]: fromTestEntityTemplate.reducer,
+  [fromApplication.applicationFeatureKey]: fromApplication.reducer,
+  [fromParent.parentFeatureKey]: fromParent.reducer,
   [fromState.stateFeatureKey]: fromState.reducer,
   [fromSession.sessionFeatureKey]: fromSession.reducer,
   [fromLocalGovernmentArea.localGovernmentAreaFeatureKey]: fromLocalGovernmentArea.reducer,
