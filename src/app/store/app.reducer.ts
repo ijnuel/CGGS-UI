@@ -17,7 +17,7 @@ import * as fromSchoolConfiguration from './school-configuration/school-configur
 import * as fromProgramType from './program-type/program-type.reducer';
 import * as fromClassLevel from './class-level/class-level.reducer';
 import * as fromClass from './class/class.reducer';
-import * as fromTeacher from './teacher/teacher.reducer';
+import * as fromStaff from './staff/staff.reducer';
 import * as fromGlobalLoading from './global-loading/global-loading.reducer';
 
 export const appFeatureKey = 'appFeatureKey';
@@ -40,7 +40,7 @@ export interface AppState {
   [fromProgramType.programTypeFeatureKey]: fromProgramType.ProgramTypeState;
   [fromClassLevel.classLevelFeatureKey]: fromClassLevel.ClassLevelState;
   [fromClass.classFeatureKey]: fromClass.ClassState;
-  [fromTeacher.teacherFeatureKey]: fromTeacher.TeacherState;
+  [fromStaff.staffFeatureKey]: fromStaff.StaffState;
   [fromGlobalLoading.globalLoadingFeatureKey]: fromGlobalLoading.GlobalLoadingState;
 }
 
@@ -62,7 +62,7 @@ export const reducers = {
   [fromProgramType.programTypeFeatureKey]: fromProgramType.reducer,
   [fromClassLevel.classLevelFeatureKey]: fromClassLevel.reducer,
   [fromClass.classFeatureKey]: fromClass.reducer,
-  [fromTeacher.teacherFeatureKey]: fromTeacher.reducer,
+  [fromStaff.staffFeatureKey]: fromStaff.reducer,
   [fromGlobalLoading.globalLoadingFeatureKey]: fromGlobalLoading.reducer,
 };
 

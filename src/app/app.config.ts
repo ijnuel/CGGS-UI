@@ -39,7 +39,7 @@ import { SchoolConfigurationFacade } from './store/school-configuration/school-c
 import { ProgramTypeFacade } from './store/program-type/program-type.facade';
 import { ClassLevelFacade } from './store/class-level/class-level.facade';
 import { ClassFacade } from './store/class/class.facade';
-import { TeacherFacade } from './store/teacher/teacher.facade';
+import { StaffFacade } from './store/staff/staff.facade';
 import { AdministratorEffect } from './store/administrator/administrator.effects';
 import { TestEntityTemplateEffect } from './store/test-entity-template/test-entity-template.effects';
 import { ApplicationEffect } from './store/application/application.effects';
@@ -54,7 +54,7 @@ import { SchoolConfigurationEffect } from './store/school-configuration/school-c
 import { ProgramTypeEffect } from './store/program-type/program-type.effects';
 import { ClassLevelEffect } from './store/class-level/class-level.effects';
 import { ClassEffect } from './store/class/class.effects';
-import { TeacherEffect } from './store/teacher/teacher.effects';
+import { StaffEffect } from './store/staff/staff.effects';
 // import { provideStoreDevtools } from '@ngrx/store-devtools';
 
 export const appConfig: ApplicationConfig = {
@@ -79,7 +79,7 @@ export const appConfig: ApplicationConfig = {
         ProgramTypeEffect,
         ClassLevelEffect,
         ClassEffect,
-        TeacherEffect,
+        StaffEffect,
       ]),
       HttpClientModule
     ),
@@ -126,6 +126,6 @@ export const appConfig: ApplicationConfig = {
     ProgramTypeFacade,
     ClassLevelFacade,
     ClassFacade,
-    TeacherFacade,
+    StaffFacade,
   ],
 };

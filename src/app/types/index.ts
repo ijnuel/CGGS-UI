@@ -17,7 +17,7 @@ import { SchoolConfigurationFormInterface, SchoolConfigurationListInterface } fr
 import { ProgramTypeFormInterface, ProgramTypeListInterface } from './program-type';
 import { ClassLevelFormInterface, ClassLevelListInterface } from './class-level';
 import { ClassFormInterface, ClassListInterface } from './class';
-import { TeacherFormInterface, TeacherListInterface } from './teacher';
+import { StaffFormInterface, StaffListInterface } from './staff';
 import { AdministratorFormInterface, AdministratorListInterface } from './administrator';
 import {
   CurrentUserInterface,
@@ -88,7 +88,7 @@ export {
   ProgramTypeListInterface,
   ClassLevelListInterface,
   ClassListInterface,
-  TeacherListInterface,
+  StaffListInterface,
   TestEntityTemplateFormInterface,
   ApplicationFormInterface,
   ParentFormInterface,
@@ -102,5 +102,5 @@ export {
   ProgramTypeFormInterface,
   ClassLevelFormInterface,
   ClassFormInterface,
-  TeacherFormInterface,
+  StaffFormInterface,
 };

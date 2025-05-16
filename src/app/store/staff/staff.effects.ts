@@ -2,10 +2,10 @@ import { Injectable } from '@angular/core';
 import { createEffect, ofType, Actions } from '@ngrx/effects';
 import { of } from 'rxjs';
 import { catchError, map, switchMap, tap } from 'rxjs/operators';
-import * as TeacherAction from './teacher.actions';
+import * as StaffAction from './staff.actions';
 import { environment } from '../../../environments/environment';
 import {
-  TeacherListInterface,
+  StaffListInterface,
   PaginatedResponseInterface,
   GenericResponseInterface,
 } from '../../types';
@@ -13,65 +13,65 @@ import { HttpClient } from '@angular/common/http';
 import { GlobalLoadingFacade } from '../global-loading/global-loading.facade';
 
 @Injectable()
-export class TeacherEffect {
-  $teacherList = createEffect(() =>
+export class StaffEffect {
+  $staffList = createEffect(() =>
     this.actions$.pipe(
-      ofType(TeacherAction.getTeacherList),
+      ofType(StaffAction.getStaffList),
       switchMap(({ pageQuery }) =>
         this.http
           .get<
             GenericResponseInterface<
-              PaginatedResponseInterface<TeacherListInterface[]>
+              PaginatedResponseInterface<StaffListInterface[]>
             >
-          >(`${environment.baseUrl}/Teacher/GetAllPaginated`, {
+          >(`${environment.baseUrl}/Staff/GetAllPaginated`, {
             params: { ...pageQuery },
             withCredentials: true,
           })
           .pipe(
             map((payload) =>
-              TeacherAction.getTeacherListSuccess({ payload })
+              StaffAction.getStaffListSuccess({ payload })
             ),
             catchError((error) => {
-              return of(TeacherAction.getTeacherListFail({ error }));
+              return of(StaffAction.getStaffListFail({ error }));
             })
           )
       )
     )
   );
 
-  $teacherById = createEffect(() =>
+  $staffById = createEffect(() =>
     this.actions$.pipe(
-      ofType(TeacherAction.getTeacherById),
-      switchMap(({ teacherId }) =>
+      ofType(StaffAction.getStaffById),
+      switchMap(({ staffId }) =>
         this.http
-          .get<GenericResponseInterface<TeacherListInterface>>(
-            `${environment.baseUrl}/Teacher/GetById`,
+          .get<GenericResponseInterface<StaffListInterface>>(
+            `${environment.baseUrl}/Staff/GetById`,
             {
-              params: { teacherId },
+              params: { staffId },
               // withCredentials: true,
             }
           )
           .pipe(
             map((payload) =>
-              TeacherAction.getTeacherByIdSuccess({
+              StaffAction.getStaffByIdSuccess({
                 payload,
               })
             ),
             catchError((error) => {
-              return of(TeacherAction.getTeacherByIdFail({ error }));
+              return of(StaffAction.getStaffByIdFail({ error }));
             })
           )
       )
     )
   );
 
-  $createTeacher = createEffect(() =>
+  $createStaff = createEffect(() =>
     this.actions$.pipe(
-      ofType(TeacherAction.createTeacher),
+      ofType(StaffAction.createStaff),
       switchMap(({ payload }) =>
         this.http
-          .post<GenericResponseInterface<TeacherListInterface>>(
-            `${environment.baseUrl}/Teacher/Create`,
+          .post<GenericResponseInterface<StaffListInterface>>(
+            `${environment.baseUrl}/Staff/Create`,
             {
               ...payload,
               withCredentials: true,
@@ -80,26 +80,26 @@ export class TeacherEffect {
           )
           .pipe(
             map((payload) =>
-              TeacherAction.createTeacherSuccess({
-                message: 'Teacher created successfully',
-                teacher: payload.entity,
+              StaffAction.createStaffSuccess({
+                message: 'Staff created successfully',
+                staff: payload.entity,
               })
             ),
             catchError((error) => {
-              return of(TeacherAction.createTeacherFail({ error }));
+              return of(StaffAction.createStaffFail({ error }));
             })
           )
       )
     )
   );
 
-  $updateTeacher = createEffect(() =>
+  $updateStaff = createEffect(() =>
     this.actions$.pipe(
-      ofType(TeacherAction.editTeacher),
+      ofType(StaffAction.editStaff),
       switchMap(({ payload }) =>
         this.http
-          .post<GenericResponseInterface<TeacherListInterface>>(
-            `${environment.baseUrl}/Teacher/Update`,
+          .post<GenericResponseInterface<StaffListInterface>>(
+            `${environment.baseUrl}/Staff/Update`,
             {
               ...payload,
             }
@@ -107,23 +107,23 @@ export class TeacherEffect {
           )
           .pipe(
             map((payload) =>
-              TeacherAction.editTeacherSuccess({
-                message: 'Teacher updated successfully',
-                teacher: payload.entity,
+              StaffAction.editStaffSuccess({
+                message: 'Staff updated successfully',
+                staff: payload.entity,
               })
             ),
             catchError((error) => {
-              return of(TeacherAction.editTeacherFail({ error }));
+              return of(StaffAction.editStaffFail({ error }));
             })
           )
       )
     )
   );
 
-  $teacherLoading = createEffect(
+  $staffLoading = createEffect(
     () =>
       this.actions$.pipe(
-        ofType(TeacherAction.createTeacher, TeacherAction.editTeacher),
+        ofType(StaffAction.createStaff, StaffAction.editStaff),
         tap((action) => {
           this.errorLoadingFacade.globalLoadingShow(action.type);
         })
@@ -131,14 +131,14 @@ export class TeacherEffect {
     { dispatch: false }
   );
 
-  $teacherLoadingHide = createEffect(
+  $staffLoadingHide = createEffect(
     () =>
       this.actions$.pipe(
         ofType(
-          TeacherAction.createTeacherSuccess,
-          TeacherAction.createTeacherFail,
-          TeacherAction.editTeacherSuccess,
-          TeacherAction.editTeacherFail
+          StaffAction.createStaffSuccess,
+          StaffAction.createStaffFail,
+          StaffAction.editStaffSuccess,
+          StaffAction.editStaffFail
         ),
         tap(() => {
           this.errorLoadingFacade.globalLoadingHide();

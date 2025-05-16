@@ -4,7 +4,7 @@ export default [
   {
     name: 'Home',
     icon: 'assets/icons/home-icon.svg',
-    roles: [UserRolesEnum.SuperAdmin,UserRolesEnum.Admin, UserRolesEnum.Student, UserRolesEnum.Teacher],
+    roles: [UserRolesEnum.SuperAdmin,UserRolesEnum.Admin, UserRolesEnum.Student, UserRolesEnum.Staff],
     url: '/app/home'
   },
   {
@@ -24,7 +24,7 @@ export default [
     name: 'Staff',
     icon: 'assets/icons/users-icon.svg',
     roles: [],
-    url: '/app/teacher'
+    url: '/app/staff'
   },
 
   {

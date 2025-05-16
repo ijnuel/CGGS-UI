@@ -1,6 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { BehaviorSubject, Observable, Subject, takeUntil } from 'rxjs';
-import { TeacherFacade } from '../../../../store/teacher/teacher.facade';
+import { StaffFacade } from '../../../../store/staff/staff.facade';
 import {
     FormBuilder,
     FormControl,
@@ -8,15 +8,15 @@ import {
     Validators,
 } from '@angular/forms';
 import { getErrorMessageHelper } from '../../../../services/helper.service';
-import { DropdownListInterface, TeacherFormInterface } from '../../../../types';
+import { DropdownListInterface, StaffFormInterface } from '../../../../types';
 import { SharedFacade } from '../../../../store/shared/shared.facade';
 
 @Component({
-    selector: 'app-create-update-teacher',
-    templateUrl: './create-update-teacher.component.html',
-    styleUrl: './create-update-teacher.component.scss',
+    selector: 'app-create-update-staff',
+    templateUrl: './create-update-staff.component.html',
+    styleUrl: './create-update-staff.component.scss',
 })
-export class CreateUpdateTeacherComponent implements OnInit, OnDestroy {
+export class CreateUpdateStaffComponent implements OnInit, OnDestroy {
     loading$: Observable<boolean>;
     dropdownLoading$: Observable<boolean>;
 
@@ -33,11 +33,11 @@ export class CreateUpdateTeacherComponent implements OnInit, OnDestroy {
     unsubscribe$ = new Subject<void>();
 
     constructor(
-        private teacherFacade: TeacherFacade,
+        private staffFacade: StaffFacade,
         private fb: FormBuilder,
         private sharedFacade: SharedFacade
     ) {
-        this.loading$ = this.teacherFacade.selectedLoading$;
+        this.loading$ = this.staffFacade.selectedLoading$;
         this.dropdownLoading$ = this.sharedFacade.selectedLoading$;
 
         this.formGroup = this.fb.group({
@@ -59,8 +59,8 @@ export class CreateUpdateTeacherComponent implements OnInit, OnDestroy {
 
         if (!this.formGroup.valid) return;
 
-        this.teacherFacade.createTeacher({
-            ...(this.formGroup.value as TeacherFormInterface),
+        this.staffFacade.createStaff({
+            ...(this.formGroup.value as StaffFormInterface),
         });
     }
 

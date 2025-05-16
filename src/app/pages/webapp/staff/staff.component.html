@@ -1,7 +1,23 @@
+@if ( { staffList: staffList$ | async, loading: loading$ | async }; as obs
+) {
 <div class="pl-8 pr-9 pt-6">
   <div class="flex item-center justify-between">
-    <div class="text-lg font-semibold">Staff</div>
+    <div class="text-xl font-bold">Staffs</div>
 
-    <button class="sec-btn">Create Staff</button>
+    <button class="sec-btn" routerLink="create">Create Staff</button>
+  </div>
+
+  <div class="mt-8">
+    <app-table
+      [isLoading]="obs.loading ?? false"
+      [showActionColumn]="true"
+      [tableData]="obs.staffList?.data ?? null"
+      [tableHeaderData]="header"
+      [pageSize]="obs.staffList?.recordPerPage!"
+      [totalLength]="obs.staffList?.totalCount!"
+      [pageIndex]="pageQuery.pageIndex!"
+      (pageChange)="onPageChange($event)"
+    ></app-table>
   </div>
 </div>
+}

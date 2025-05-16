@@ -35,15 +35,10 @@ const routes: Routes = [
       { path: 'program-type', loadChildren: () => import('./program-type/program-type.module').then((m) => m.ProgramTypeModule), },
       { path: 'class-level', loadChildren: () => import('./class-level/class-level.module').then((m) => m.ClassLevelModule), },
       { path: 'class', loadChildren: () => import('./class/class.module').then((m) => m.ClassModule), },
-      { path: 'teacher', loadChildren: () => import('./teacher/teacher.module').then((m) => m.TeacherModule), },
+      { path: 'staff', loadChildren: () => import('./staff/staff.module').then((m) => m.StaffModule), },
       { path: 'settings', loadChildren: () => import('./settings/settings.module').then((m) => m.SettingsModule), },
       { path: 'admin-setup', loadChildren: () => import('./admin-setup/admin-setup.module').then((m) => m.AdminSetupModule), },
       { path: 'administrator', loadChildren: () => import('./administrator/administrator.module').then((m) => m.AdministratorModule), },
-      {
-        path: 'staff',
-        loadChildren: () =>
-          import('./staff/staff.module').then((m) => m.StaffModule),
-      },
     ],
   },
 ];
