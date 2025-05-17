@@ -24,7 +24,7 @@ const routes: Routes = [
       },
       { path: 'test-entity-template', loadChildren: () => import('./test-entity-template/test-entity-template.module').then((m) => m.TestEntityTemplateModule), },
       { path: 'application', loadChildren: () => import('./application/application.module').then((m) => m.ApplicationModule), },
-      { path: 'parent', loadChildren: () => import('./parent/parent.module').then((m) => m.ParentModule), },
+      { path: 'family', loadChildren: () => import('./family/family.module').then((m) => m.FamilyModule), },
       { path: 'state', loadChildren: () => import('./state/state.module').then((m) => m.StateModule), },
       { path: 'session', loadChildren: () => import('./session/session.module').then((m) => m.SessionModule), },
       { path: 'local-government-area', loadChildren: () => import('./local-government-area/local-government-area.module').then((m) => m.LocalGovernmentAreaModule), },

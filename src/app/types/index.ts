@@ -6,7 +6,7 @@ import {
 import { StudentFormInterface, StudentsListInterface } from './students';
 import { TestEntityTemplateFormInterface, TestEntityTemplateListInterface } from './test-entity-template';
 import { ApplicationFormInterface, ApplicationListInterface } from './application';
-import { ParentFormInterface, ParentListInterface } from './parent';
+import { FamilyFormInterface, FamilyListInterface } from './family';
 import { StateFormInterface, StateListInterface } from './state';
 import { SessionFormInterface, SessionListInterface } from './session';
 import { LocalGovernmentAreaFormInterface, LocalGovernmentAreaListInterface } from './local-government-area';
@@ -77,7 +77,7 @@ export {
   AdministratorFormInterface,
   TestEntityTemplateListInterface,
   ApplicationListInterface,
-  ParentListInterface,
+  FamilyListInterface,
   StateListInterface,
   SessionListInterface,
   LocalGovernmentAreaListInterface,
@@ -91,7 +91,7 @@ export {
   StaffListInterface,
   TestEntityTemplateFormInterface,
   ApplicationFormInterface,
-  ParentFormInterface,
+  FamilyFormInterface,
   StateFormInterface,
   SessionFormInterface,
   LocalGovernmentAreaFormInterface,

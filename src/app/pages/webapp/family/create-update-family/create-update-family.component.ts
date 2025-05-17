@@ -1,6 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { BehaviorSubject, Observable, Subject, takeUntil } from 'rxjs';
-import { ParentFacade } from '../../../../store/parent/parent.facade';
+import { FamilyFacade } from '../../../../store/family/family.facade';
 import {
     FormBuilder,
     FormControl,
@@ -8,15 +8,15 @@ import {
     Validators,
 } from '@angular/forms';
 import { getErrorMessageHelper } from '../../../../services/helper.service';
-import { DropdownListInterface, ParentFormInterface } from '../../../../types';
+import { DropdownListInterface, FamilyFormInterface } from '../../../../types';
 import { SharedFacade } from '../../../../store/shared/shared.facade';
 
 @Component({
-    selector: 'app-create-update-parent',
-    templateUrl: './create-update-parent.component.html',
-    styleUrl: './create-update-parent.component.scss',
+    selector: 'app-create-update-family',
+    templateUrl: './create-update-family.component.html',
+    styleUrl: './create-update-family.component.scss',
 })
-export class CreateUpdateParentComponent implements OnInit, OnDestroy {
+export class CreateUpdateFamilyComponent implements OnInit, OnDestroy {
     loading$: Observable<boolean>;
     dropdownLoading$: Observable<boolean>;
 
@@ -32,11 +32,11 @@ export class CreateUpdateParentComponent implements OnInit, OnDestroy {
     unsubscribe$ = new Subject<void>();
 
     constructor(
-        private parentFacade: ParentFacade,
+        private familyFacade: FamilyFacade,
         private fb: FormBuilder,
         private sharedFacade: SharedFacade
     ) {
-        this.loading$ = this.parentFacade.selectedLoading$;
+        this.loading$ = this.familyFacade.selectedLoading$;
         this.dropdownLoading$ = this.sharedFacade.selectedLoading$;
 
         this.formGroup = this.fb.group({
@@ -57,8 +57,8 @@ export class CreateUpdateParentComponent implements OnInit, OnDestroy {
 
         if (!this.formGroup.valid) return;
 
-        this.parentFacade.createParent({
-            ...(this.formGroup.value as ParentFormInterface),
+        this.familyFacade.createFamily({
+            ...(this.formGroup.value as FamilyFormInterface),
         });
     }
 

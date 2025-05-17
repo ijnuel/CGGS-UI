@@ -2,10 +2,10 @@ import { Injectable } from '@angular/core';
 import { createEffect, ofType, Actions } from '@ngrx/effects';
 import { of } from 'rxjs';
 import { catchError, map, switchMap, tap } from 'rxjs/operators';
-import * as ParentAction from './parent.actions';
+import * as FamilyAction from './family.actions';
 import { environment } from '../../../environments/environment';
 import {
-  ParentListInterface,
+  FamilyListInterface,
   PaginatedResponseInterface,
   GenericResponseInterface,
 } from '../../types';
@@ -13,65 +13,65 @@ import { HttpClient } from '@angular/common/http';
 import { GlobalLoadingFacade } from '../global-loading/global-loading.facade';
 
 @Injectable()
-export class ParentEffect {
-  $parentList = createEffect(() =>
+export class FamilyEffect {
+  $familyList = createEffect(() =>
     this.actions$.pipe(
-      ofType(ParentAction.getParentList),
+      ofType(FamilyAction.getFamilyList),
       switchMap(({ pageQuery }) =>
         this.http
           .get<
             GenericResponseInterface<
-              PaginatedResponseInterface<ParentListInterface[]>
+              PaginatedResponseInterface<FamilyListInterface[]>
             >
-          >(`${environment.baseUrl}/Parent/GetAllPaginated`, {
+          >(`${environment.baseUrl}/Family/GetAllPaginated`, {
             params: { ...pageQuery },
             withCredentials: true,
           })
           .pipe(
             map((payload) =>
-              ParentAction.getParentListSuccess({ payload })
+              FamilyAction.getFamilyListSuccess({ payload })
             ),
             catchError((error) => {
-              return of(ParentAction.getParentListFail({ error }));
+              return of(FamilyAction.getFamilyListFail({ error }));
             })
           )
       )
     )
   );
 
-  $parentById = createEffect(() =>
+  $familyById = createEffect(() =>
     this.actions$.pipe(
-      ofType(ParentAction.getParentById),
-      switchMap(({ parentId }) =>
+      ofType(FamilyAction.getFamilyById),
+      switchMap(({ familyId }) =>
         this.http
-          .get<GenericResponseInterface<ParentListInterface>>(
-            `${environment.baseUrl}/Parent/GetById`,
+          .get<GenericResponseInterface<FamilyListInterface>>(
+            `${environment.baseUrl}/Family/GetById`,
             {
-              params: { parentId },
+              params: { familyId },
               // withCredentials: true,
             }
           )
           .pipe(
             map((payload) =>
-              ParentAction.getParentByIdSuccess({
+              FamilyAction.getFamilyByIdSuccess({
                 payload,
               })
             ),
             catchError((error) => {
-              return of(ParentAction.getParentByIdFail({ error }));
+              return of(FamilyAction.getFamilyByIdFail({ error }));
             })
           )
       )
     )
   );
 
-  $createParent = createEffect(() =>
+  $createFamily = createEffect(() =>
     this.actions$.pipe(
-      ofType(ParentAction.createParent),
+      ofType(FamilyAction.createFamily),
       switchMap(({ payload }) =>
         this.http
-          .post<GenericResponseInterface<ParentListInterface>>(
-            `${environment.baseUrl}/Parent/Create`,
+          .post<GenericResponseInterface<FamilyListInterface>>(
+            `${environment.baseUrl}/Family/Create`,
             {
               ...payload,
               withCredentials: true,
@@ -80,26 +80,26 @@ export class ParentEffect {
           )
           .pipe(
             map((payload) =>
-              ParentAction.createParentSuccess({
-                message: 'Parent created successfully',
-                parent: payload.entity,
+              FamilyAction.createFamilySuccess({
+                message: 'Family created successfully',
+                family: payload.entity,
               })
             ),
             catchError((error) => {
-              return of(ParentAction.createParentFail({ error }));
+              return of(FamilyAction.createFamilyFail({ error }));
             })
           )
       )
     )
   );
 
-  $updateParent = createEffect(() =>
+  $updateFamily = createEffect(() =>
     this.actions$.pipe(
-      ofType(ParentAction.editParent),
+      ofType(FamilyAction.editFamily),
       switchMap(({ payload }) =>
         this.http
-          .post<GenericResponseInterface<ParentListInterface>>(
-            `${environment.baseUrl}/Parent/Update`,
+          .post<GenericResponseInterface<FamilyListInterface>>(
+            `${environment.baseUrl}/Family/Update`,
             {
               ...payload,
             }
@@ -107,23 +107,23 @@ export class ParentEffect {
           )
           .pipe(
             map((payload) =>
-              ParentAction.editParentSuccess({
-                message: 'Parent updated successfully',
-                parent: payload.entity,
+              FamilyAction.editFamilySuccess({
+                message: 'Family updated successfully',
+                family: payload.entity,
               })
             ),
             catchError((error) => {
-              return of(ParentAction.editParentFail({ error }));
+              return of(FamilyAction.editFamilyFail({ error }));
             })
           )
       )
     )
   );
 
-  $parentLoading = createEffect(
+  $familyLoading = createEffect(
     () =>
       this.actions$.pipe(
-        ofType(ParentAction.createParent, ParentAction.editParent),
+        ofType(FamilyAction.createFamily, FamilyAction.editFamily),
         tap((action) => {
           this.errorLoadingFacade.globalLoadingShow(action.type);
         })
@@ -131,14 +131,14 @@ export class ParentEffect {
     { dispatch: false }
   );
 
-  $parentLoadingHide = createEffect(
+  $familyLoadingHide = createEffect(
     () =>
       this.actions$.pipe(
         ofType(
-          ParentAction.createParentSuccess,
-          ParentAction.createParentFail,
-          ParentAction.editParentSuccess,
-          ParentAction.editParentFail
+          FamilyAction.createFamilySuccess,
+          FamilyAction.createFamilyFail,
+          FamilyAction.editFamilySuccess,
+          FamilyAction.editFamilyFail
         ),
         tap(() => {
           this.errorLoadingFacade.globalLoadingHide();

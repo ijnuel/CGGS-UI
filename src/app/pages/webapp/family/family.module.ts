@@ -8,30 +8,30 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatIconModule } from '@angular/material/icon';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatRadioModule } from '@angular/material/radio';
-import { ParentComponent } from './parent.component';
+import { FamilyComponent } from './family.component';
 import { SharedModule } from '../../../shared/shared.module';
-import { CreateUpdateParentComponent } from './create-update-parent/create-update-parent.component';
+import { CreateUpdateFamilyComponent } from './create-update-family/create-update-family.component';
 import { provideNativeDateAdapter } from '@angular/material/core';
 
 const routes: Routes = [
     {
         path: '',
-        component: ParentComponent,
+        component: FamilyComponent,
     },
 
     {
         path: 'create',
-        component: CreateUpdateParentComponent,
+        component: CreateUpdateFamilyComponent,
     },
 
     {
-        path: 'edit/:parentId',
-        component: CreateUpdateParentComponent,
+        path: 'edit/:familyId',
+        component: CreateUpdateFamilyComponent,
     },
 ];
 
 @NgModule({
-    declarations: [ParentComponent, CreateUpdateParentComponent],
+    declarations: [FamilyComponent, CreateUpdateFamilyComponent],
     imports: [
         CommonModule,
         SharedModule,
@@ -47,4 +47,4 @@ const routes: Routes = [
     ],
     providers: [provideNativeDateAdapter()],
 })
-export class ParentModule { }
+export class FamilyModule { }
