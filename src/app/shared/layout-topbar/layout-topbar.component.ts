@@ -23,10 +23,10 @@ export class LayoutTopbarComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
-    this.authFacade.getAdminCompanies(); // Dispatch action to get companies
+    this.authFacade.getUserCompanies(); // Dispatch action to get companies
 
     this.authFacade
-      .getAdminCompaniesSuccessAction()
+      .getUserCompaniesSuccessAction()
       .pipe(takeUntil(this.destroyed$))
       .subscribe((response) => {
         this.companies = response.entity || [];

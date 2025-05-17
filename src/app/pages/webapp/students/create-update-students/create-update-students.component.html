@@ -157,7 +157,7 @@ async }; as obs ) {
             [appLoadingSpinner]="obs.dropdownLoading && !obs.countryList"
           >
             <mat-label>Nationality</mat-label>
-            <mat-select [formControl]="formControl.nationality">
+            <mat-select [formControl]="formControl.nationalityId">
               @for (country of obs.countryList; track $index) {
               <mat-option [value]="country.value">
                 {{ country.name }}</mat-option
@@ -165,7 +165,7 @@ async }; as obs ) {
               }
             </mat-select>
             <mat-error>
-              {{ getErrorMessage("nationality") }}
+              {{ getErrorMessage("nationalityId") }}
             </mat-error>
           </mat-form-field>
         </div>
@@ -178,13 +178,13 @@ async }; as obs ) {
             "
           >
             <mat-label>State of Origin</mat-label>
-            <mat-select [formControl]="formControl.stateOfOrigin">
+            <mat-select [formControl]="formControl.stateOfOriginId">
               @for (state of obs.selectedCountryStateList; track $index) {
               <mat-option [value]="state.value"> {{ state.name }}</mat-option>
               }
             </mat-select>
             <mat-error>
-              {{ getErrorMessage("stateOfOrigin") }}
+              {{ getErrorMessage("stateOfOriginId") }}
             </mat-error>
           </mat-form-field>
         </div>
@@ -199,13 +199,13 @@ async }; as obs ) {
             "
           >
             <mat-label>Local Government</mat-label>
-            <mat-select [formControl]="formControl.originLGA">
+            <mat-select [formControl]="formControl.originLgaId">
               @for (lga of obs.selectedStateLgaList; track $index) {
               <mat-option [value]="lga.value"> {{ lga.name }}</mat-option>
               }
             </mat-select>
             <mat-error>
-              {{ getErrorMessage("originLGA") }}
+              {{ getErrorMessage("originLgaId") }}
             </mat-error>
           </mat-form-field>
         </div>
@@ -235,13 +235,13 @@ async }; as obs ) {
             "
           >
             <mat-label>Residential State</mat-label>
-            <mat-select [formControl]="formControl.residentialState">
+            <mat-select [formControl]="formControl.residentialStateId">
               @for (state of obs.selectedCountryStateList; track $index) {
               <mat-option [value]="state.value"> {{ state.name }}</mat-option>
               }
             </mat-select>
             <mat-error>
-              {{ getErrorMessage("residentialState") }}
+              {{ getErrorMessage("residentialStateId") }}
             </mat-error>
           </mat-form-field>
         </div>

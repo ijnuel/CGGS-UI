@@ -7,7 +7,7 @@ import {
   FormGroup,
   Validators,
 } from '@angular/forms';
-import { getErrorMessageHelper } from '../../../../services/helper.service';
+import { getErrorMessageHelper, initUserProfileForm } from '../../../../services/helper.service';
 import { DropdownListInterface, StudentFormInterface } from '../../../../types';
 import { SharedFacade } from '../../../../store/shared/shared.facade';
 
@@ -27,12 +27,12 @@ export class CreateUpdateStudentsComponent implements OnInit, OnDestroy {
     dateOfBirth: FormControl;
     religion: FormControl;
     gender: FormControl;
-    originLGA: FormControl;
-    stateOfOrigin: FormControl;
-    nationality: FormControl;
+    originLgaId: FormControl;
+    stateOfOriginId: FormControl;
+    nationalityId: FormControl;
     homeAddress: FormControl;
     residentialCity: FormControl;
-    residentialState: FormControl;
+    residentialStateId: FormControl;
     phoneNumber: FormControl;
     studentNo: FormControl;
     email: FormControl;
@@ -76,44 +76,18 @@ export class CreateUpdateStudentsComponent implements OnInit, OnDestroy {
       email: null,
       religion: ['', [Validators.required]],
       gender: ['', [Validators.required]],
-      nationality: null,
-      stateOfOrigin: null,
-      originLGA: null,
+      nationalityId: null,
+      stateOfOriginId: null,
+      originLgaId: null,
       homeAddress: null,
-      residentialState: null,
+      residentialStateId: null,
       residentialCity: null,
       studentNo: null,
     });
   }
 
   ngOnInit() {
-    this.sharedFacade.getGenderList();
-    this.sharedFacade.getReligionList();
-    this.sharedFacade.getCountryList();
-
-    this.formControl.nationality.valueChanges.subscribe((countryId: string) => {
-      if (countryId) {
-        this.sharedFacade.getStateList(countryId);
-      }
-    });
-
-    this.sharedFacade.selectStateList$
-      .pipe(takeUntil(this.unsubscribe$))
-      .subscribe((states) => {
-        this.selectedCountryStateList$.next(states ? [...states] : null);
-      });
-
-    this.formControl.stateOfOrigin.valueChanges.subscribe((stateId: string) => {
-      if (stateId) {
-        this.sharedFacade.getLgaList(stateId);
-      }
-    });
-
-    this.sharedFacade.selectLgaList$
-      .pipe(takeUntil(this.unsubscribe$))
-      .subscribe((lgas) => {
-        this.selectedStateLgaList$.next(lgas ? [...lgas] : null);
-      });
+    initUserProfileForm(this.sharedFacade, this.formControl, this.unsubscribe$, this.selectedCountryStateList$, this.selectedStateLgaList$);    
   }
 
   getErrorMessage(controlName: string): string | null {

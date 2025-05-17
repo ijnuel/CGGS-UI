@@ -55,14 +55,14 @@ export const switchCompanyFail = createAction(
     props<{ error: string }>()
 );
 
-export const getAdminCompanies = createAction('[Auth] Get Admin Companies');
+export const getUserCompanies = createAction('[Auth] Get Admin Companies');
 
-export const getAdminCompaniesSuccess = createAction(
+export const getUserCompaniesSuccess = createAction(
     '[Auth/API] Get Admin Companies Success',
     props<{ payload: GenericResponseInterface<CompanyListInterface[]> }>() // Payload is list of companies
 );
 
-export const getAdminCompaniesFail = createAction(
+export const getUserCompaniesFail = createAction(
     '[Auth/API] Get Admin Companies Fail',
     props<{ error: string }>()
 );

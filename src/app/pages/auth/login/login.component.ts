@@ -33,7 +33,7 @@ export class LoginComponent {
     private authFacade: AuthFacade
   ) {
     this.formGroup = this.fb.group({
-      email: ['', [Validators.required, Validators.email]],
+      email: ['', [Validators.required]],
       password: ['', [Validators.required]],
     });
     this.authFacade.selectedCurrentUserId$.subscribe((id) => {

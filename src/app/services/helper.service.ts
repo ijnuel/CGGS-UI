@@ -1,4 +1,7 @@
 import { FormControl } from '@angular/forms';
+import { SharedFacade } from '../store/shared/shared.facade';
+import { BehaviorSubject, Subject, takeUntil } from 'rxjs';
+import { DropdownListInterface } from '../types';
 
 export function getErrorMessageHelper(control: FormControl): string | null {
   if (control.errors && control.touched) {
@@ -16,4 +19,40 @@ export function getErrorMessageHelper(control: FormControl): string | null {
   }
 
   return null;
+}
+
+export function initUserProfileForm(
+  sharedFacade: SharedFacade, 
+  formControl: any, 
+  unsubscribe$: Subject<void>, 
+  selectedCountryStateList$: BehaviorSubject<DropdownListInterface[] | null>,
+  selectedStateLgaList$: BehaviorSubject<DropdownListInterface[] | null>) {
+    sharedFacade.getGenderList();
+    sharedFacade.getReligionList();
+    sharedFacade.getCountryList();
+
+    formControl.nationalityId.valueChanges.subscribe((countryId: string) => {
+      if (countryId) {
+        sharedFacade.getStateList(countryId);
+      }
+    });
+
+    sharedFacade.selectStateList$
+      .pipe(takeUntil(unsubscribe$))
+      .subscribe((states) => {
+        selectedCountryStateList$.next(states ? [...states] : null);
+      });
+
+    formControl.stateOfOriginId.valueChanges.subscribe((stateId: string) => {
+      if (stateId) {
+        sharedFacade.getLgaList(stateId);
+      }
+    });
+
+    sharedFacade.selectLgaList$
+      .pipe(takeUntil(unsubscribe$))
+      .subscribe((lgas) => {
+        selectedStateLgaList$.next(lgas ? [...lgas] : null);
+      });
+
 }

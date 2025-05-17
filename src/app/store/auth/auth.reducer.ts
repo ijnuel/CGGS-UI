@@ -58,12 +58,12 @@ export const authReducer = createReducer(
         loading: false,
         error,
     })),
-    on(AuthActions.getAdminCompanies, (state) => ({ ...state, loading: true, error: null })),
-    on(AuthActions.getAdminCompaniesSuccess, (state) => ({
+    on(AuthActions.getUserCompanies, (state) => ({ ...state, loading: true, error: null })),
+    on(AuthActions.getUserCompaniesSuccess, (state) => ({
         ...state,
         loading: false,
     })), // No state change needed on success
-    on(AuthActions.getAdminCompaniesFail, (state, { error }) => ({
+    on(AuthActions.getUserCompaniesFail, (state, { error }) => ({
         ...state,
         loading: false,
         error,

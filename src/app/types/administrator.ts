@@ -1,5 +1,3 @@
-import { GenderEnum, ReligionEnum } from "./user";
-
 export interface AdministratorListInterface {
   id: string;
   userId: string;
@@ -7,15 +5,15 @@ export interface AdministratorListInterface {
   firstName: string;
   lastName: string;
   middleName: string;
-  gender: GenderEnum;
-  religion: ReligionEnum;
-  dateOfBirth: string;
-  originLGA: string;
-  stateOfOrigin: string;
-  nationality: string;
+  gender: number;
+  religion: number;
+  dateOfBirth: Date;
+  originLgaId: string;
+  stateOfOriginId: string;
+  nationalityId: string;
   homeAddress: string;
   residentialCity: string;
-  residentialState: string;
+  residentialStateId: string;
   phoneNumber: string;
 }
 
@@ -26,14 +24,14 @@ export interface AdministratorFormInterface {
   firstName: string;
   lastName: string;
   middleName: string;
-  gender: GenderEnum;
-  religion: ReligionEnum;
-  dateOfBirth: string;
-  originLGA: string;
-  stateOfOrigin: string;
-  nationality: string;
+  gender: number;
+  religion: number;
+  dateOfBirth: Date;
+  originLgaId: string;
+  stateOfOriginId: string;
+  nationalityId: string;
   homeAddress: string;
   residentialCity: string;
-  residentialState: string;
+  residentialStateId: string;
   phoneNumber: string;
 }

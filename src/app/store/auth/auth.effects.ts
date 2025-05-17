@@ -109,21 +109,21 @@ export class AuthEffect {
         )
     );
 
-    $getAdminCompanies = createEffect(() =>
+    $getUserCompanies = createEffect(() =>
         this.actions$.pipe(
-            ofType(AuthAction.getAdminCompanies),
+            ofType(AuthAction.getUserCompanies),
             switchMap(() =>
                 this.http
                     .get<GenericResponseInterface<CompanyListInterface[]>>(
-                        `${environment.baseUrl}/Account/AdminCompanies`,
+                        `${environment.baseUrl}/Account/UserCompanies`,
                         { withCredentials: true }
                     )
                     .pipe(
                         map((payload) =>
-                            AuthAction.getAdminCompaniesSuccess({ payload })
+                            AuthAction.getUserCompaniesSuccess({ payload })
                         ),
                         catchError((error) =>
-                            of(AuthAction.getAdminCompaniesFail({ error }))
+                            of(AuthAction.getUserCompaniesFail({ error }))
                         )
                     )
             )
@@ -138,7 +138,7 @@ export class AuthEffect {
                     AuthAction.logout,
                     AuthAction.getCurrentUser,
                     AuthAction.switchCompany,
-                    AuthAction.getAdminCompanies
+                    AuthAction.getUserCompanies
                 ),
                 tap((action) => {
                     this.errorLoadingFacade.globalLoadingShow(action.type);
@@ -157,8 +157,8 @@ export class AuthEffect {
                     AuthAction.getCurrentUserFail,
                     AuthAction.switchCompanySuccess,
                     AuthAction.switchCompanyFail,
-                    AuthAction.getAdminCompaniesSuccess,
-                    AuthAction.getAdminCompaniesFail
+                    AuthAction.getUserCompaniesSuccess,
+                    AuthAction.getUserCompaniesFail
                 ),
                 tap(() => {
                     this.errorLoadingFacade.globalLoadingHide();

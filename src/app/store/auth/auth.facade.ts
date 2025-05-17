@@ -72,15 +72,15 @@ export class AuthFacade {
             .pipe(map(({ payload }) => payload));
     }
 
-    getAdminCompanies() {
-        this.store.dispatch(AuthActions.getAdminCompanies());
+    getUserCompanies() {
+        this.store.dispatch(AuthActions.getUserCompanies());
     }
 
-    getAdminCompaniesSuccessAction(): Observable<
+    getUserCompaniesSuccessAction(): Observable<
         GenericResponseInterface<CompanyListInterface[]>
     > {
         return this.actionsListener$
-            .pipe(ofType(AuthActions.getAdminCompaniesSuccess))
+            .pipe(ofType(AuthActions.getUserCompaniesSuccess))
             .pipe(map(({ payload }) => payload));
     }
 }

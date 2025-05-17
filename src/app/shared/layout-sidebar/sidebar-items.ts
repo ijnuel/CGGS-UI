@@ -28,6 +28,13 @@ export default [
   },
 
   {
+    name: 'Families',
+    icon: 'assets/icons/users-icon.svg',
+    roles: [],
+    url: '/app/family'
+  },
+
+  {
     name: 'Admin Setup',
     icon: 'assets/icons/settings-icon.svg',
     roles: [UserRolesEnum.SuperAdmin, UserRolesEnum.Admin],

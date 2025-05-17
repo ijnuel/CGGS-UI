@@ -10,6 +10,9 @@ import { CommonModule } from '@angular/common';
 import { SharedModule } from '../../shared/shared.module';
 import { ToastNotificationService } from '../../services/toast-notification.service';
 import { LoginGuard } from '../../services/login.guard';
+import { CreateProfileComponent } from './create-profile/create-profile.component';
+import { MatOptionModule } from '@angular/material/core';
+import { MatSelectModule } from '@angular/material/select';
 
 const routes: Routes = [
   {
@@ -26,12 +29,17 @@ const routes: Routes = [
         component: LoginComponent,
         canActivate: [LoginGuard],
       },
+      {
+        path: 'enroll',
+        component: CreateProfileComponent,
+        canActivate: [LoginGuard],
+      },
     ],
   },
 ];
 
 @NgModule({
-  declarations: [AuthComponent, LoginComponent],
+  declarations: [AuthComponent, LoginComponent, CreateProfileComponent],
   imports: [
     RouterModule.forChild(routes),
     CommonModule,
@@ -40,6 +48,8 @@ const routes: Routes = [
     MatFormFieldModule,
     MatIconModule,
     MatInputModule,
+    MatSelectModule,
+    MatOptionModule,
     SharedModule,
   ],
   providers: [ToastNotificationService],

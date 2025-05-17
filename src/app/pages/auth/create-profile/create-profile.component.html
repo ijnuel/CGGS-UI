@@ -1,0 +1,124 @@
+@if ( { loading: loading$ | async, dropdownLoading: dropdownLoading$ | async,
+genderList: genderList$ | async, religionList: religionList$ | async,
+countryList: countryList$ | async, selectedCountryStateList:
+selectedCountryStateList$ | async, selectedStateLgaList: selectedStateLgaList$ |
+async }; as obs ) {
+
+<div class="min-w-[18rem] md:min-w-[21rem]">
+  <div class="flex justify-start mb-6 ml-2">
+    <span class="text-black font-bold text-lg">Create Profile</span>
+  </div>
+  <form [formGroup]="formGroup" (submit)="onSubmit()" class="flex flex-col gap-6">
+    <div class="grid gap-x-4 mt-2">
+      <div class="form-input-wrapper">
+
+        <mat-form-field class="mx-5">
+          <mat-label>Family Name</mat-label>
+          <input type="text" matInput [formControl]="formControl.lastName" />
+          <mat-error>
+            {{ getErrorMessage("lastName") }}
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field [appLoadingSpinner]="obs.dropdownLoading && !obs.religionList" class="mx-5">
+          <mat-label>Religion</mat-label>
+          <mat-select [formControl]="formControl.religion">
+            @for (religion of obs.religionList; track $index) {
+            <mat-option [value]="religion.value">
+              {{ religion.name }}</mat-option>
+            }
+          </mat-select>
+          <mat-error>
+            {{ getErrorMessage("religion") }}
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field class="mx-5">
+          <mat-label>Email</mat-label>
+          <input type="email" matInput [formControl]="formControl.email" />
+          <mat-error>
+            {{ getErrorMessage("email") }}
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field class="mx-5">
+          <mat-label>Phone Number</mat-label>
+          <input type="text" matInput [formControl]="formControl.phoneNumber" />
+          <mat-error>
+            {{ getErrorMessage("phoneNumber") }}
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field class="mx-5">
+          <mat-label>Nationality</mat-label>
+          <mat-select [formControl]="formControl.nationalityId">
+            @for (country of obs.countryList; track $index) {
+            <mat-option [value]="country.value">
+              {{ country.name }}</mat-option>
+            }
+          </mat-select>
+          <mat-error>
+            {{ getErrorMessage("nationalityId") }}
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field class="mx-5">
+          <mat-label>State of Origin</mat-label>
+          <mat-select [formControl]="formControl.stateOfOriginId">
+            @for (state of obs.selectedCountryStateList; track $index) {
+            <mat-option [value]="state.value"> {{ state.name }}</mat-option>
+            }
+          </mat-select>
+          <mat-error>
+            {{ getErrorMessage("stateOfOriginId") }}
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field class="mx-5">
+          <mat-label>Local Government</mat-label>
+          <mat-select [formControl]="formControl.originLgaId">
+            @for (lga of obs.selectedStateLgaList; track $index) {
+            <mat-option [value]="lga.value"> {{ lga.name }}</mat-option>
+            }
+          </mat-select>
+          <mat-error>
+            {{ getErrorMessage("originLgaId") }}
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field class="mx-5">
+          <mat-label>Home Address</mat-label>
+          <input type="text" matInput [formControl]="formControl.homeAddress" />
+          <mat-error>
+            {{ getErrorMessage("homeAddress") }}
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field class="mx-5">
+          <mat-label>City/Town</mat-label>
+          <input type="text" matInput [formControl]="formControl.residentialCity" />
+          <mat-error>
+            {{ getErrorMessage("residentialCity") }}
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field class="mx-5">
+          <mat-label>Residential State</mat-label>
+          <mat-select [formControl]="formControl.residentialStateId">
+            @for (state of obs.selectedCountryStateList; track $index) {
+            <mat-option [value]="state.value"> {{ state.name }}</mat-option>
+            }
+          </mat-select>
+          <mat-error>
+            {{ getErrorMessage("residentialStateId") }}
+          </mat-error>
+        </mat-form-field>
+
+      </div>
+    </div>
+    <button type="submit" [disabled]="formGroup.invalid" class="sec-btn mx-5">
+      Create Profile
+    </button>
+  </form>
+</div>
+}

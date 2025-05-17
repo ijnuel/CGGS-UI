@@ -21,10 +21,6 @@ import { StaffFormInterface, StaffListInterface } from './staff';
 import { AdministratorFormInterface, AdministratorListInterface } from './administrator';
 import {
   CurrentUserInterface,
-  UserListInterface,
-  GenderEnum,
-  ReligionEnum,
-  UserFormInterface,
 } from './user';
 
 interface GenericResponseInterface<T> {
@@ -66,10 +62,6 @@ export {
   UserRolesEnum,
   CurrentUserInterface,
   PageQueryInterface,
-  UserListInterface,
-  UserFormInterface,
-  GenderEnum,
-  ReligionEnum,
   StudentsListInterface,
   StudentFormInterface,
   DropdownListInterface,
