@@ -48,7 +48,7 @@ export class CompanyEffect {
             `${environment.baseUrl}/Company/GetById`,
             {
               params: { companyId },
-              // withCredentials: true,
+              withCredentials: true,
             }
           )
           .pipe(

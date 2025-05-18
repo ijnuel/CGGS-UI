@@ -48,7 +48,7 @@ export class ProgramTypeEffect {
             `${environment.baseUrl}/ProgramType/GetById`,
             {
               params: { programTypeId },
-              // withCredentials: true,
+              withCredentials: true,
             }
           )
           .pipe(

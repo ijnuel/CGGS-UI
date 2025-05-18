@@ -48,7 +48,7 @@ export class TestEntityTemplateEffect {
             `${environment.baseUrl}/TestEntityTemplate/GetById`,
             {
               params: { testEntityTemplateId },
-              // withCredentials: true,
+              withCredentials: true,
             }
           )
           .pipe(

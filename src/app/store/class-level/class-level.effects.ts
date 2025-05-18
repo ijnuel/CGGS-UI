@@ -48,7 +48,7 @@ export class ClassLevelEffect {
             `${environment.baseUrl}/ClassLevel/GetById`,
             {
               params: { classLevelId },
-              // withCredentials: true,
+              withCredentials: true,
             }
           )
           .pipe(

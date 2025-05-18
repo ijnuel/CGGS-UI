@@ -48,7 +48,7 @@ export class ApplicationEffect {
             `${environment.baseUrl}/Application/GetById`,
             {
               params: { applicationId },
-              // withCredentials: true,
+              withCredentials: true,
             }
           )
           .pipe(

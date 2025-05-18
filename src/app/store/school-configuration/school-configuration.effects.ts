@@ -48,7 +48,7 @@ export class SchoolConfigurationEffect {
             `${environment.baseUrl}/SchoolConfiguration/GetById`,
             {
               params: { schoolConfigurationId },
-              // withCredentials: true,
+              withCredentials: true,
             }
           )
           .pipe(

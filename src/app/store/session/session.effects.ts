@@ -48,7 +48,7 @@ export class SessionEffect {
             `${environment.baseUrl}/Session/GetById`,
             {
               params: { sessionId },
-              // withCredentials: true,
+              withCredentials: true,
             }
           )
           .pipe(

@@ -48,7 +48,7 @@ export class AdministratorEffect {
             `${environment.baseUrl}/Administrator/GetById`,
             {
               params: { administratorId },
-              // withCredentials: true,
+              withCredentials: true,
             }
           )
           .pipe(
