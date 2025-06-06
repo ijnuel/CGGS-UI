@@ -30,4 +30,10 @@ export class GlobalLoadingFacade {
       GlobalLoadingActions.globalErrorShow({ message, messageDuration })
     );
   }
+
+  globalSuccessShow(message: string, messageDuration: number) {
+    this.store.dispatch(
+      GlobalLoadingActions.globalSuccessShow({ message, messageDuration })
+    );
+  }
 }

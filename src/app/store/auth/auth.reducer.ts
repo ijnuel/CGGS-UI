@@ -36,6 +36,7 @@ export const authReducer = createReducer(
         ...state,
         loading: false,
         currentUser: payload.entity,
+        currentUserId: payload?.entity?.userId
     })),
     on(AuthActions.getCurrentUserFail, (state, { error }) => ({
         ...state,

@@ -20,6 +20,7 @@ export class AuthGuard implements CanActivate, CanActivateChild {
       skipWhile((isInit) => isInit),
       withLatestFrom(this.authFacade.selectedCurrentUserId$),
       map(([, currentUserId]) => {
+        console.log(currentUserId);
         if (currentUserId) return true;
 
         this.router.navigateByUrl('auth/login');

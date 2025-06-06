@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { select, Store } from '@ngrx/store';
+import { Observable } from 'rxjs';
 
 import * as ClassLevelActions from './class-level.actions';
 import * as ClassLevelSelector from './class-level.selector';
@@ -29,8 +30,12 @@ export class ClassLevelFacade {
     this.store.dispatch(ClassLevelActions.getClassLevelById({ classLevelId }));
   }
 
-  createClassLevel(payload: ClassLevelFormInterface) {
+  createClassLevel(payload: ClassLevelFormInterface): Observable<void> {
     this.store.dispatch(ClassLevelActions.createClassLevel({ payload }));
+    return new Observable<void>(observer => {
+        observer.next();
+        observer.complete();
+    });
   }
 
   updateClassLevel(payload: ClassLevelFormInterface) {

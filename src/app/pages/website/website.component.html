@@ -41,6 +41,11 @@
         </li>
       </ul>
     </div>
+
+    <!-- Add hamburger button for mobile -->
+    <button (click)="toggleMobileMenu()" class="md:hidden text-[var(--app-secondary)]">
+      <span class="material-icons">menu</span>
+    </button>
   </div>
 
   <div id="home">
@@ -95,5 +100,28 @@
         <span>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Aspernatur enim excepturi eos earum pariatur voluptate harum. Quisquam possimus quo cum, tempore veniam necessitatibus expedita nisi eum ex esse provident saepe.</span>
       </div>
     </div>
+  </div>
+
+  <!-- Mobile menu -->
+  <div [ngClass]="{'hidden': !isMobileMenuOpen}" class="md:hidden absolute top-[5rem] left-0 w-full bg-[var(--app-primary)] p-4">
+    <ul class="list-none flex flex-col items-center font-semibold text-sm gap-4 text-[var(--app-secondary)]">
+      <li class="border-b-[0.0625rem] border-transparent hover:border-[var(--app-secondary)] py-1 cursor-pointer duration-75 mt-1" (click)="smoothScroll('#home')">
+        <span>Home</span>
+      </li>
+      <li class="border-b-[0.0625rem] border-transparent hover:border-[var(--app-secondary)] py-1 cursor-pointer duration-75 mt-1" (click)="smoothScroll('#about-us')">
+        <span>About us</span>
+      </li>
+      <li class="border-b-[0.0625rem] border-transparent hover:border-[var(--app-secondary)] py-1 cursor-pointer duration-75 mt-1" (click)="smoothScroll('#news')">
+        <span>News & Events</span>
+      </li>
+      <li class="border-b-[0.0625rem] border-transparent hover:border-[var(--app-secondary)] py-1 cursor-pointer duration-75 mt-1" (click)="smoothScroll('#contact-us')">
+        <span>Contact us</span>
+      </li>
+      <li>
+        <a>
+          <button routerLink="/auth" class="btn">Login</button>
+        </a>
+      </li>
+    </ul>
   </div>
 </div>

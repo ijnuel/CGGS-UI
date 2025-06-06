@@ -13,3 +13,8 @@ export const globalErrorShow = createAction(
   '[GlobalError] Global Error',
   props<{ message: string; messageDuration: number }>()
 );
+
+export const globalSuccessShow = createAction(
+  '[GlobalSuccess] Global Success',
+  props<{ message: string; messageDuration: number }>()
+);

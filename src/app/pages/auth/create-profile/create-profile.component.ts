@@ -12,6 +12,9 @@ import { DropdownListInterface, FamilyFormInterface } from '../../../types';
 import { FamilyFacade } from '../../../store/family/family.facade';
 import { SharedFacade } from '../../../store/shared/shared.facade';
 import { getErrorMessageHelper, initUserProfileForm } from '../../../services/helper.service';
+import { ToastNotificationService, NotificationTypeEnums } from '../../../services/toast-notification.service';
+import { Actions, ofType } from '@ngrx/effects';
+import * as FamilyActions from '../../../store/family/family.actions';
 
 @Component({
   selector: 'app-create-profile',
@@ -58,7 +61,9 @@ export class CreateProfileComponent {
     private router: Router,
     private authFacade: AuthFacade,
     private familyFacade: FamilyFacade,
-        private sharedFacade: SharedFacade
+    private sharedFacade: SharedFacade,
+    private toast: ToastNotificationService,
+    private actions$: Actions
   ) {
     this.loading$ = this.familyFacade.selectedLoading$;
     this.dropdownLoading$ = this.sharedFacade.selectedLoading$;
@@ -97,6 +102,14 @@ export class CreateProfileComponent {
     if (!this.formGroup.valid) return;
 
     this.familyFacade.createFamily(this.formGroup.value as FamilyFormInterface);
+
+    this.actions$.pipe(
+      ofType(FamilyActions.createFamilySuccess),
+      takeUntil(this.unsubscribe$)
+    ).subscribe(() => {
+      this.toast.openToast('Profile created successfully!', NotificationTypeEnums.SUCCESS);
+      this.router.navigate(['/auth/login']);
+    });
   }
 
   ngOnDestroy(): void {

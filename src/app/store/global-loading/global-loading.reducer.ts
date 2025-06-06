@@ -14,6 +14,8 @@ export interface GlobalLoadingState {
   message: string | null | undefined;
   errorMessage: string | null | undefined;
   errorDuration: number;
+  successMessage: string | null | undefined;
+  successDuration: number;
 }
 
 export const initialState: GlobalLoadingState = {
@@ -21,6 +23,8 @@ export const initialState: GlobalLoadingState = {
   message: null,
   errorMessage: null,
   errorDuration: 3000,
+  successMessage: null,
+  successDuration: 3000,
 };
 
 export const reducer = createReducer(
@@ -44,6 +48,13 @@ export const reducer = createReducer(
       ...state,
       errorMessage: action.message,
       errorDuration: action.messageDuration,
+    };
+  }),
+  on(LoadingActions.globalSuccessShow, (state, action) => {
+    return {
+      ...state,
+      successMessage: action.message,
+      successDuration: action.messageDuration,
     };
   })
 );

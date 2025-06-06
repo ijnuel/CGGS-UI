@@ -6,6 +6,13 @@ import { Component } from '@angular/core';
   styleUrl: './website.component.scss',
 })
 export class WebsiteComponent {
+  isMobileMenuOpen = false;
+
+  toggleMobileMenu() {
+    this.isMobileMenuOpen = !this.isMobileMenuOpen;
+    console.log(this.isMobileMenuOpen);
+  }
+
   smoothScroll(id: any) {
     document.querySelector(id).scrollIntoView({
       behavior: 'smooth',

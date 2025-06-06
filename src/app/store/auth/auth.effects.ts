@@ -12,6 +12,9 @@ import {
 } from '../../types/';
 import { HttpClient } from '@angular/common/http';
 import { GlobalLoadingFacade } from '../global-loading/global-loading.facade';
+import { Store } from '@ngrx/store';
+import { Router } from '@angular/router';
+import { ToastNotificationService, NotificationTypeEnums } from '../../services/toast-notification.service';
 
 @Injectable()
 export class AuthEffect {
@@ -29,11 +32,13 @@ export class AuthEffect {
                     )
                     .pipe(
                         map((loginResponse) => {
+                            this.toast.openToast('Login successful!', NotificationTypeEnums.SUCCESS);
                             return AuthAction.loginSuccess({
                                 payload: loginResponse,
                             });
                         }),
                         catchError((error) => {
+                            this.toast.openToast('Login failed. Please try again later.', NotificationTypeEnums.ERROR);
                             return of(AuthAction.loginFail({ error }));
                         })
                     )
@@ -46,15 +51,21 @@ export class AuthEffect {
             ofType(AuthAction.getCurrentUser),
             switchMap(() =>
                 this.http
-                    .get<GenericResponseInterface<CurrentUserInterface>>( // Updated type
+                    .get<GenericResponseInterface<CurrentUserInterface>>(
                         `${environment.baseUrl}/Account/GetUserProfile`,
                         { withCredentials: true }
                     )
                     .pipe(
-                        map((payload) =>
-                            AuthAction.getCurrentUserSuccess({ payload })
-                        ),
+                        map((payload) => {
+                            this.store.dispatch(AuthAction.getCurrentUserSuccess({ payload }));
+                            if (payload.entity.userId) {
+                                this.router.navigate(['app/home']);
+                            }
+                            this.toast.openToast('User profile retrieved successfully!', NotificationTypeEnums.SUCCESS);
+                            return AuthAction.getCurrentUserSuccess({ payload });
+                        }),
                         catchError((error) => {
+                            this.toast.openToast('Failed to retrieve user profile. Please try again later.', NotificationTypeEnums.ERROR);
                             return of(AuthAction.getCurrentUserFail({ error }));
                         })
                     )
@@ -76,6 +87,7 @@ export class AuthEffect {
                                 location.href = '/';
                             }),
                             catchError((error) => {
+                                this.toast.openToast('Logout failed. Please try again later.', NotificationTypeEnums.ERROR);
                                 return of(AuthAction.loginFail({ error }));
                             })
                         )
@@ -170,6 +182,9 @@ export class AuthEffect {
     constructor(
         private actions$: Actions,
         private http: HttpClient,
-        private errorLoadingFacade: GlobalLoadingFacade
+        private errorLoadingFacade: GlobalLoadingFacade,
+        private store: Store,
+        private router: Router,
+        private toast: ToastNotificationService
     ) {}
 }

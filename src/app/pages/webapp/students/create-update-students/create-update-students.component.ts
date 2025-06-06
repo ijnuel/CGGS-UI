@@ -10,6 +10,8 @@ import {
 import { getErrorMessageHelper, initUserProfileForm } from '../../../../services/helper.service';
 import { DropdownListInterface, StudentFormInterface } from '../../../../types';
 import { SharedFacade } from '../../../../store/shared/shared.facade';
+import { ToastNotificationService, NotificationTypeEnums } from '../../../../services/toast-notification.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-create-update-students',
@@ -59,7 +61,9 @@ export class CreateUpdateStudentsComponent implements OnInit, OnDestroy {
   constructor(
     private studentsFacade: StudentsFacade,
     private fb: FormBuilder,
-    private sharedFacade: SharedFacade
+    private sharedFacade: SharedFacade,
+    private toast: ToastNotificationService,
+    private router: Router
   ) {
     this.loading$ = this.studentsFacade.selectedLoading$;
     this.dropdownLoading$ = this.sharedFacade.selectedLoading$;
@@ -103,6 +107,22 @@ export class CreateUpdateStudentsComponent implements OnInit, OnDestroy {
     this.studentsFacade.createStudent({
       ...(this.formGroup.value as StudentFormInterface),
     });
+
+    // Listen for loading to become false and no error, then show toast and navigate
+    this.studentsFacade.selectedLoading$
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe((loading) => {
+        if (!loading) {
+          this.studentsFacade.selectedError$
+            .pipe(takeUntil(this.unsubscribe$))
+            .subscribe((error) => {
+              if (!error) {
+                this.toast.openToast('Student created successfully!', NotificationTypeEnums.SUCCESS);
+                this.router.navigate(['/app/students']);
+              }
+            });
+        }
+      });
   }
 
   ngOnDestroy(): void {

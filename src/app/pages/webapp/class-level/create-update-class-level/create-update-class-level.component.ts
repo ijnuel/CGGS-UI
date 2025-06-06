@@ -10,6 +10,7 @@ import {
 import { getErrorMessageHelper } from '../../../../services/helper.service';
 import { DropdownListInterface, ClassLevelFormInterface } from '../../../../types';
 import { SharedFacade } from '../../../../store/shared/shared.facade';
+import { GlobalLoadingFacade } from '../../../../store/global-loading/global-loading.facade';
 
 @Component({
     selector: 'app-create-update-class-level',
@@ -34,7 +35,8 @@ export class CreateUpdateClassLevelComponent implements OnInit, OnDestroy {
     constructor(
         private classLevelFacade: ClassLevelFacade,
         private fb: FormBuilder,
-        private sharedFacade: SharedFacade
+        private sharedFacade: SharedFacade,
+        private globalLoadingFacade: GlobalLoadingFacade
     ) {
         this.loading$ = this.classLevelFacade.selectedLoading$;
         this.dropdownLoading$ = this.sharedFacade.selectedLoading$;
@@ -59,6 +61,8 @@ export class CreateUpdateClassLevelComponent implements OnInit, OnDestroy {
 
         this.classLevelFacade.createClassLevel({
             ...(this.formGroup.value as ClassLevelFormInterface),
+        }).subscribe(() => {
+            this.globalLoadingFacade.globalSuccessShow('Class level created successfully', 3000);
         });
     }
 

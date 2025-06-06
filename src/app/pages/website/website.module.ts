@@ -1,4 +1,5 @@
 import { NgModule } from '@angular/core';
+import { CommonModule } from '@angular/common';
 import { RouterModule, Routes } from '@angular/router';
 import { WebsiteComponent } from './website.component';
 
@@ -11,6 +12,10 @@ const routes: Routes = [
 
 @NgModule({
   declarations: [WebsiteComponent],
-  imports: [RouterModule.forChild(routes)],
+  imports: [
+    CommonModule,
+    RouterModule.forChild(routes)
+  ],
+  exports: [WebsiteComponent]
 })
 export class WebsiteModule {}
