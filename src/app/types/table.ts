@@ -1,6 +1,10 @@
 export interface TableHeaderInterface {
-  key: string;
-  type: string; // 'normal' | 'status';
   name: string;
-  textPosition: string; //'left' | 'center' | 'right';
+  key: string;
+  sortable?: boolean;
+  filterable?: boolean;
+  type?: 'text' | 'number' | 'date' | 'boolean';
+  width?: string;
+  align?: 'left' | 'center' | 'right';
+  format?: (value: any) => string;
 }

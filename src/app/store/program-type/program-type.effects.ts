@@ -17,16 +17,29 @@ export class ProgramTypeEffect {
   $programTypeList = createEffect(() =>
     this.actions$.pipe(
       ofType(ProgramTypeAction.getProgramTypeList),
-      switchMap(({ pageQuery }) =>
-        this.http
-          .get<
-            GenericResponseInterface<
-              PaginatedResponseInterface<ProgramTypeListInterface[]>
-            >
-          >(`${environment.baseUrl}/ProgramType/GetAllPaginated`, {
-            params: { ...pageQuery },
-            withCredentials: true,
-          })
+      switchMap(({ pageQuery }) => {
+        const params: { [key: string]: string | number } = {
+          start: pageQuery.start,
+          recordsPerPage: pageQuery.recordsPerPage,
+          pageIndex: pageQuery.pageIndex || 0
+        };
+
+        if (pageQuery.searchText) {
+          params['searchText'] = pageQuery.searchText;
+        }
+
+        if (pageQuery.queryProperties && pageQuery.queryProperties.length > 0) {
+          params['queryProperties'] = JSON.stringify(pageQuery.queryProperties);
+        }
+
+        return this.http
+          .get<GenericResponseInterface<PaginatedResponseInterface<ProgramTypeListInterface[]>>>(
+            `${environment.baseUrl}/ProgramType/GetAllPaginated`,
+            {
+              params,
+              withCredentials: true,
+            }
+          )
           .pipe(
             map((payload) =>
               ProgramTypeAction.getProgramTypeListSuccess({ payload })
@@ -34,8 +47,8 @@ export class ProgramTypeEffect {
             catchError((error) => {
               return of(ProgramTypeAction.getProgramTypeListFail({ error }));
             })
-          )
-      )
+          );
+      })
     )
   );
 
@@ -72,10 +85,7 @@ export class ProgramTypeEffect {
         this.http
           .post<GenericResponseInterface<ProgramTypeListInterface>>(
             `${environment.baseUrl}/ProgramType/Create`,
-            {
-              ...payload,
-              withCredentials: true,
-            },
+            payload,
             { withCredentials: true }
           )
           .pipe(
@@ -100,10 +110,8 @@ export class ProgramTypeEffect {
         this.http
           .post<GenericResponseInterface<ProgramTypeListInterface>>(
             `${environment.baseUrl}/ProgramType/Update`,
-            {
-              ...payload,
-            }
-            // { withCredentials: true }
+            payload,
+            { withCredentials: true }
           )
           .pipe(
             map((payload) =>

@@ -1,28 +1,55 @@
 import { createSelector } from '@ngrx/store';
-import * as fromTestEntityTemplate from './test-entity-template.reducer';
-import * as fromApp from '../app.reducer';
+import {
+  getTestEntityTemplateList,
+  getTestEntityTemplateAll,
+  getTestEntityTemplateByProperties,
+  getTestEntityTemplateById,
+  getExists,
+  getCount,
+  getLoading,
+  getError,
+  TestEntityTemplateState,
+} from './test-entity-template.reducer';
 
-export const selectTestEntityTemplateState = createSelector(
-  fromApp.selectAppState,
-  (state) => state[fromTestEntityTemplate.testEntityTemplateFeatureKey]
-);
+export const selectTestEntityTemplateState = (state: { testEntityTemplate: TestEntityTemplateState }) =>
+  state.testEntityTemplate;
 
 export const selectTestEntityTemplateList = createSelector(
-  fromTestEntityTemplate.selectTestEntityTemplateState,
-  fromTestEntityTemplate.getTestEntityTemplateList
+  selectTestEntityTemplateState,
+  getTestEntityTemplateList
+);
+
+export const selectTestEntityTemplateAll = createSelector(
+  selectTestEntityTemplateState,
+  getTestEntityTemplateAll
+);
+
+export const selectTestEntityTemplateByProperties = createSelector(
+  selectTestEntityTemplateState,
+  getTestEntityTemplateByProperties
 );
 
 export const selectTestEntityTemplateById = createSelector(
-  fromTestEntityTemplate.selectTestEntityTemplateState,
-  fromTestEntityTemplate.getTestEntityTemplateById
+  selectTestEntityTemplateState,
+  getTestEntityTemplateById
 );
 
-export const selectLoading = createSelector(
-  fromTestEntityTemplate.selectTestEntityTemplateState,
-  fromTestEntityTemplate.getLoading
+export const selectExists = createSelector(
+  selectTestEntityTemplateState,
+  getExists
 );
 
-export const selectError = createSelector(
-  fromTestEntityTemplate.selectTestEntityTemplateState,
-  fromTestEntityTemplate.getError
+export const selectCount = createSelector(
+  selectTestEntityTemplateState,
+  getCount
+);
+
+export const selectTestEntityTemplateLoading = createSelector(
+  selectTestEntityTemplateState,
+  getLoading
+);
+
+export const selectTestEntityTemplateError = createSelector(
+  selectTestEntityTemplateState,
+  getError
 );

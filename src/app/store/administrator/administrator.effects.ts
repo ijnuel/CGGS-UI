@@ -17,16 +17,29 @@ export class AdministratorEffect {
   $administratorList = createEffect(() =>
     this.actions$.pipe(
       ofType(AdministratorAction.getAdministratorList),
-      switchMap(({ pageQuery }) =>
-        this.http
-          .get<
-            GenericResponseInterface<
-              PaginatedResponseInterface<AdministratorListInterface[]>
-            >
-          >(`${environment.baseUrl}/Administrator/GetAllPaginated`, {
-            params: { ...pageQuery },
-            withCredentials: true,
-          })
+      switchMap(({ pageQuery }) => {
+        const params: { [key: string]: string | number } = {
+          start: pageQuery.start,
+          recordsPerPage: pageQuery.recordsPerPage,
+          pageIndex: pageQuery.pageIndex || 0
+        };
+
+        if (pageQuery.searchText) {
+          params['searchText'] = pageQuery.searchText;
+        }
+
+        if (pageQuery.queryProperties && pageQuery.queryProperties.length > 0) {
+          params['queryProperties'] = JSON.stringify(pageQuery.queryProperties);
+        }
+
+        return this.http
+          .get<GenericResponseInterface<PaginatedResponseInterface<AdministratorListInterface[]>>>(
+            `${environment.baseUrl}/Administrator/GetAllPaginated`,
+            {
+              params,
+              withCredentials: true,
+            }
+          )
           .pipe(
             map((payload) =>
               AdministratorAction.getAdministratorListSuccess({ payload })
@@ -34,8 +47,8 @@ export class AdministratorEffect {
             catchError((error) => {
               return of(AdministratorAction.getAdministratorListFail({ error }));
             })
-          )
-      )
+          );
+      })
     )
   );
 
@@ -72,10 +85,7 @@ export class AdministratorEffect {
         this.http
           .post<GenericResponseInterface<AdministratorListInterface>>(
             `${environment.baseUrl}/Administrator/Create`,
-            {
-              ...payload,
-              withCredentials: true,
-            },
+            payload,
             { withCredentials: true }
           )
           .pipe(
@@ -100,10 +110,8 @@ export class AdministratorEffect {
         this.http
           .post<GenericResponseInterface<AdministratorListInterface>>(
             `${environment.baseUrl}/Administrator/Update`,
-            {
-              ...payload,
-            }
-            // { withCredentials: true }
+            payload,
+            { withCredentials: true }
           )
           .pipe(
             map((payload) =>

@@ -17,16 +17,29 @@ export class ApplicationEffect {
   $applicationList = createEffect(() =>
     this.actions$.pipe(
       ofType(ApplicationAction.getApplicationList),
-      switchMap(({ pageQuery }) =>
-        this.http
-          .get<
-            GenericResponseInterface<
-              PaginatedResponseInterface<ApplicationListInterface[]>
-            >
-          >(`${environment.baseUrl}/Application/GetAllPaginated`, {
-            params: { ...pageQuery },
-            withCredentials: true,
-          })
+      switchMap(({ pageQuery }) => {
+        const params: { [key: string]: string | number } = {
+          start: pageQuery.start,
+          recordsPerPage: pageQuery.recordsPerPage,
+          pageIndex: pageQuery.pageIndex || 0
+        };
+
+        if (pageQuery.searchText) {
+          params['searchText'] = pageQuery.searchText;
+        }
+
+        if (pageQuery.queryProperties && pageQuery.queryProperties.length > 0) {
+          params['queryProperties'] = JSON.stringify(pageQuery.queryProperties);
+        }
+
+        return this.http
+          .get<GenericResponseInterface<PaginatedResponseInterface<ApplicationListInterface[]>>>(
+            `${environment.baseUrl}/Application/GetAllPaginated`,
+            {
+              params,
+              withCredentials: true,
+            }
+          )
           .pipe(
             map((payload) =>
               ApplicationAction.getApplicationListSuccess({ payload })
@@ -34,8 +47,8 @@ export class ApplicationEffect {
             catchError((error) => {
               return of(ApplicationAction.getApplicationListFail({ error }));
             })
-          )
-      )
+          );
+      })
     )
   );
 
@@ -72,10 +85,7 @@ export class ApplicationEffect {
         this.http
           .post<GenericResponseInterface<ApplicationListInterface>>(
             `${environment.baseUrl}/Application/Create`,
-            {
-              ...payload,
-              withCredentials: true,
-            },
+            payload,
             { withCredentials: true }
           )
           .pipe(
@@ -100,10 +110,8 @@ export class ApplicationEffect {
         this.http
           .post<GenericResponseInterface<ApplicationListInterface>>(
             `${environment.baseUrl}/Application/Update`,
-            {
-              ...payload,
-            }
-            // { withCredentials: true }
+            payload,
+            { withCredentials: true }
           )
           .pipe(
             map((payload) =>

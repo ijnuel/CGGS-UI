@@ -17,16 +17,29 @@ export class CountryEffect {
   $countryList = createEffect(() =>
     this.actions$.pipe(
       ofType(CountryAction.getCountryList),
-      switchMap(({ pageQuery }) =>
-        this.http
-          .get<
-            GenericResponseInterface<
-              PaginatedResponseInterface<CountryListInterface[]>
-            >
-          >(`${environment.baseUrl}/Country/GetAllPaginated`, {
-            params: { ...pageQuery },
-            withCredentials: true,
-          })
+      switchMap(({ pageQuery }) => {
+        const params: { [key: string]: string | number } = {
+          start: pageQuery.start,
+          recordsPerPage: pageQuery.recordsPerPage,
+          pageIndex: pageQuery.pageIndex || 0
+        };
+
+        if (pageQuery.searchText) {
+          params['searchText'] = pageQuery.searchText;
+        }
+
+        if (pageQuery.queryProperties && pageQuery.queryProperties.length > 0) {
+          params['queryProperties'] = JSON.stringify(pageQuery.queryProperties);
+        }
+
+        return this.http
+          .get<GenericResponseInterface<PaginatedResponseInterface<CountryListInterface[]>>>(
+            `${environment.baseUrl}/Country/GetAllPaginated`,
+            {
+              params,
+              withCredentials: true,
+            }
+          )
           .pipe(
             map((payload) =>
               CountryAction.getCountryListSuccess({ payload })
@@ -34,8 +47,8 @@ export class CountryEffect {
             catchError((error) => {
               return of(CountryAction.getCountryListFail({ error }));
             })
-          )
-      )
+          );
+      })
     )
   );
 
@@ -72,10 +85,7 @@ export class CountryEffect {
         this.http
           .post<GenericResponseInterface<CountryListInterface>>(
             `${environment.baseUrl}/Country/Create`,
-            {
-              ...payload,
-              withCredentials: true,
-            },
+            payload,
             { withCredentials: true }
           )
           .pipe(
@@ -100,10 +110,8 @@ export class CountryEffect {
         this.http
           .post<GenericResponseInterface<CountryListInterface>>(
             `${environment.baseUrl}/Country/Update`,
-            {
-              ...payload,
-            }
-            // { withCredentials: true }
+            payload,
+            { withCredentials: true }
           )
           .pipe(
             map((payload) =>

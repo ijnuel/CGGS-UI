@@ -3,32 +3,32 @@ import { TableHeaderInterface } from '../../../types/table';
 export const tableHeader: TableHeaderInterface[] = [
   {
     key: 'fullName',
-    type: 'normal',
+    type: 'text',
     name: 'Full name',
-    textPosition: 'left',
+    align: 'left',
   },
   {
     key: 'email',
-    type: 'normal',
+    type: 'text',
     name: 'Email',
-    textPosition: 'left',
+    align: 'left',
   },
   {
     key: 'phone',
-    type: 'normal',
+    type: 'text',
     name: 'Phone Number',
-    textPosition: 'left',
+    align: 'left',
   },
   {
     key: 'class',
-    type: 'normal',
+    type: 'text',
     name: 'Class',
-    textPosition: 'left',
+    align: 'left',
   },
   {
     key: 'actions',
-    type: 'normal',
+    type: 'text',
     name: 'Actions',
-    textPosition: 'left',
+    align: 'left',
   },
 ];

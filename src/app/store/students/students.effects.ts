@@ -17,16 +17,29 @@ export class StudentsEffect {
   $studentsList = createEffect(() =>
     this.actions$.pipe(
       ofType(StudentsAction.getStudentsList),
-      switchMap(({ pageQuery }) =>
-        this.http
-          .get<
-            GenericResponseInterface<
-              PaginatedResponseInterface<StudentsListInterface[]>
-            >
-          >(`${environment.baseUrl}/Student/GetAllPaginated`, {
-            params: { ...pageQuery },
-            withCredentials: true,
-          })
+      switchMap(({ pageQuery }) => {
+        const params: { [key: string]: string | number } = {
+          start: pageQuery.start,
+          recordsPerPage: pageQuery.recordsPerPage,
+          pageIndex: pageQuery.pageIndex || 0
+        };
+
+        if (pageQuery.searchText) {
+          params['searchText'] = pageQuery.searchText;
+        }
+
+        if (pageQuery.queryProperties && pageQuery.queryProperties.length > 0) {
+          params['queryProperties'] = JSON.stringify(pageQuery.queryProperties);
+        }
+
+        return this.http
+          .get<GenericResponseInterface<PaginatedResponseInterface<StudentsListInterface[]>>>(
+            `${environment.baseUrl}/Students/GetAllPaginated`,
+            {
+              params,
+              withCredentials: true,
+            }
+          )
           .pipe(
             map((payload) =>
               StudentsAction.getStudentsListSuccess({ payload })
@@ -34,8 +47,8 @@ export class StudentsEffect {
             catchError((error) => {
               return of(StudentsAction.getStudentsListFail({ error }));
             })
-          )
-      )
+          );
+      })
     )
   );
 
@@ -45,7 +58,7 @@ export class StudentsEffect {
       switchMap(({ studentId }) =>
         this.http
           .get<GenericResponseInterface<StudentsListInterface>>(
-            `${environment.baseUrl}/Student/GetById`,
+            `${environment.baseUrl}/Students/GetById`,
             {
               params: { studentId },
               withCredentials: true,
@@ -71,11 +84,8 @@ export class StudentsEffect {
       switchMap(({ payload }) =>
         this.http
           .post<GenericResponseInterface<StudentsListInterface>>(
-            `${environment.baseUrl}/Student/Create`,
-            {
-              ...payload,
-              withCredentials: true,
-            },
+            `${environment.baseUrl}/Students/Create`,
+            payload,
             { withCredentials: true }
           )
           .pipe(
@@ -99,11 +109,9 @@ export class StudentsEffect {
       switchMap(({ payload }) =>
         this.http
           .post<GenericResponseInterface<StudentsListInterface>>(
-            `${environment.baseUrl}/Student/Update`,
-            {
-              ...payload,
-            }
-            // { withCredentials: true }
+            `${environment.baseUrl}/Students/Update`,
+            payload,
+            { withCredentials: true }
           )
           .pipe(
             map((payload) =>

@@ -7,70 +7,214 @@ import {
   TestEntityTemplateFormInterface,
 } from '../../types';
 
+// Get All (non-paginated)
+export const getTestEntityTemplateAll = createAction('[TestEntityTemplate] Get All');
+
+export const getTestEntityTemplateAllSuccess = createAction(
+  '[TestEntityTemplate/API] Get All Success',
+  props<{
+    payload: GenericResponseInterface<TestEntityTemplateListInterface[]>;
+  }>()
+);
+
+export const getTestEntityTemplateAllFail = createAction(
+  '[TestEntityTemplate/API] Get All Fail',
+  props<{ error: string }>()
+);
+
+// Get All Paginated
 export const getTestEntityTemplateList = createAction(
-  '[TestEntityTemplate] Get TestEntityTemplate List',
+  '[TestEntityTemplate] Get List',
   props<{
     pageQuery: PageQueryInterface;
   }>()
 );
 
 export const getTestEntityTemplateListSuccess = createAction(
-  '[TestEntityTemplate/API] Get TestEntityTemplate List Success',
+  '[TestEntityTemplate/API] Get List Success',
   props<{
-    payload: GenericResponseInterface<
-      PaginatedResponseInterface<TestEntityTemplateListInterface[]>
-    >;
+    payload: GenericResponseInterface<PaginatedResponseInterface<TestEntityTemplateListInterface[]>>;
   }>()
 );
 
 export const getTestEntityTemplateListFail = createAction(
-  '[TestEntityTemplate/API] Get TestEntityTemplate List Fail',
+  '[TestEntityTemplate/API] Get List Fail',
   props<{ error: string }>()
 );
 
+// Get By Id
 export const getTestEntityTemplateById = createAction(
-  '[TestEntityTemplate] Get TestEntityTemplate By Id',
+  '[TestEntityTemplate] Get By Id',
   props<{ testEntityTemplateId: string }>()
 );
 
 export const getTestEntityTemplateByIdSuccess = createAction(
-  '[TestEntityTemplate/API] Get TestEntityTemplate By Id Success',
+  '[TestEntityTemplate/API] Get By Id Success',
   props<{
     payload: GenericResponseInterface<TestEntityTemplateListInterface>;
   }>()
 );
 
 export const getTestEntityTemplateByIdFail = createAction(
-  '[TestEntityTemplate/API] Get TestEntityTemplate By Id Fail',
+  '[TestEntityTemplate/API] Get By Id Fail',
   props<{ error: string }>()
 );
 
+// Get By Properties
+export const getTestEntityTemplateByProperties = createAction(
+  '[TestEntityTemplate] Get By Properties',
+  props<{ properties: Partial<TestEntityTemplateFormInterface> }>()
+);
+
+export const getTestEntityTemplateByPropertiesSuccess = createAction(
+  '[TestEntityTemplate/API] Get By Properties Success',
+  props<{
+    payload: GenericResponseInterface<TestEntityTemplateListInterface[]>;
+  }>()
+);
+
+export const getTestEntityTemplateByPropertiesFail = createAction(
+  '[TestEntityTemplate/API] Get By Properties Fail',
+  props<{ error: string }>()
+);
+
+// Exists
+export const testEntityTemplateExists = createAction(
+  '[TestEntityTemplate] Exists',
+  props<{ properties: Partial<TestEntityTemplateFormInterface> }>()
+);
+
+export const testEntityTemplateExistsSuccess = createAction(
+  '[TestEntityTemplate/API] Exists Success',
+  props<{
+    payload: GenericResponseInterface<boolean>;
+  }>()
+);
+
+export const testEntityTemplateExistsFail = createAction(
+  '[TestEntityTemplate/API] Exists Fail',
+  props<{ error: string }>()
+);
+
+// Count
+export const testEntityTemplateCount = createAction('[TestEntityTemplate] Count');
+
+export const testEntityTemplateCountSuccess = createAction(
+  '[TestEntityTemplate/API] Count Success',
+  props<{
+    payload: GenericResponseInterface<number>;
+  }>()
+);
+
+export const testEntityTemplateCountFail = createAction(
+  '[TestEntityTemplate/API] Count Fail',
+  props<{ error: string }>()
+);
+
+// Create
 export const createTestEntityTemplate = createAction(
-  '[TestEntityTemplate] Create TestEntityTemplate',
+  '[TestEntityTemplate] Create',
   props<{ payload: TestEntityTemplateFormInterface }>()
 );
 
 export const createTestEntityTemplateSuccess = createAction(
-  '[TestEntityTemplate/API] Create TestEntityTemplate Success',
-  props<{ message: string; testEntityTemplate: TestEntityTemplateListInterface }>()
+  '[TestEntityTemplate/API] Create Success',
+  props<{
+    payload: GenericResponseInterface<TestEntityTemplateListInterface>;
+  }>()
 );
 
 export const createTestEntityTemplateFail = createAction(
-  '[TestEntityTemplate/API] Create TestEntityTemplate Fail',
+  '[TestEntityTemplate/API] Create Fail',
   props<{ error: string }>()
 );
 
-export const editTestEntityTemplate = createAction(
-  '[TestEntityTemplate] Edit TestEntityTemplate',
+// Update
+export const updateTestEntityTemplate = createAction(
+  '[TestEntityTemplate] Update',
   props<{ payload: TestEntityTemplateFormInterface }>()
 );
 
-export const editTestEntityTemplateSuccess = createAction(
-  '[TestEntityTemplate/API] Edit TestEntityTemplate Success',
-  props<{ message: string; testEntityTemplate: TestEntityTemplateListInterface }>()
+export const updateTestEntityTemplateSuccess = createAction(
+  '[TestEntityTemplate/API] Update Success',
+  props<{
+    payload: GenericResponseInterface<TestEntityTemplateListInterface>;
+  }>()
 );
 
-export const editTestEntityTemplateFail = createAction(
-  '[TestEntityTemplate/API] Edit TestEntityTemplate Fail',
+export const updateTestEntityTemplateFail = createAction(
+  '[TestEntityTemplate/API] Update Fail',
+  props<{ error: string }>()
+);
+
+// Delete
+export const deleteTestEntityTemplate = createAction(
+  '[TestEntityTemplate] Delete',
+  props<{ testEntityTemplateId: string }>()
+);
+
+export const deleteTestEntityTemplateSuccess = createAction(
+  '[TestEntityTemplate/API] Delete Success',
+  props<{
+    payload: GenericResponseInterface<boolean>;
+  }>()
+);
+
+export const deleteTestEntityTemplateFail = createAction(
+  '[TestEntityTemplate/API] Delete Fail',
+  props<{ error: string }>()
+);
+
+// Create Many
+export const createManyTestEntityTemplates = createAction(
+  '[TestEntityTemplate] Create Many',
+  props<{ payload: TestEntityTemplateFormInterface[] }>()
+);
+
+export const createManyTestEntityTemplatesSuccess = createAction(
+  '[TestEntityTemplate/API] Create Many Success',
+  props<{
+    payload: GenericResponseInterface<TestEntityTemplateListInterface[]>;
+  }>()
+);
+
+export const createManyTestEntityTemplatesFail = createAction(
+  '[TestEntityTemplate/API] Create Many Fail',
+  props<{ error: string }>()
+);
+
+// Update Many
+export const updateManyTestEntityTemplates = createAction(
+  '[TestEntityTemplate] Update Many',
+  props<{ payload: TestEntityTemplateFormInterface[] }>()
+);
+
+export const updateManyTestEntityTemplatesSuccess = createAction(
+  '[TestEntityTemplate/API] Update Many Success',
+  props<{
+    payload: GenericResponseInterface<TestEntityTemplateListInterface[]>;
+  }>()
+);
+
+export const updateManyTestEntityTemplatesFail = createAction(
+  '[TestEntityTemplate/API] Update Many Fail',
+  props<{ error: string }>()
+);
+
+// Delete Many
+export const deleteManyTestEntityTemplates = createAction(
+  '[TestEntityTemplate] Delete Many',
+  props<{ testEntityTemplateIds: string[] }>()
+);
+
+export const deleteManyTestEntityTemplatesSuccess = createAction(
+  '[TestEntityTemplate/API] Delete Many Success',
+  props<{
+    payload: GenericResponseInterface<boolean>;
+  }>()
+);
+
+export const deleteManyTestEntityTemplatesFail = createAction(
+  '[TestEntityTemplate/API] Delete Many Fail',
   props<{ error: string }>()
 );

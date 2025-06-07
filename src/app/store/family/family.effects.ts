@@ -17,16 +17,29 @@ export class FamilyEffect {
   $familyList = createEffect(() =>
     this.actions$.pipe(
       ofType(FamilyAction.getFamilyList),
-      switchMap(({ pageQuery }) =>
-        this.http
-          .get<
-            GenericResponseInterface<
-              PaginatedResponseInterface<FamilyListInterface[]>
-            >
-          >(`${environment.baseUrl}/Family/GetAllPaginated`, {
-            params: { ...pageQuery },
-            withCredentials: true,
-          })
+      switchMap(({ pageQuery }) => {
+        const params: { [key: string]: string | number } = {
+          start: pageQuery.start,
+          recordsPerPage: pageQuery.recordsPerPage,
+          pageIndex: pageQuery.pageIndex || 0
+        };
+
+        if (pageQuery.searchText) {
+          params['searchText'] = pageQuery.searchText;
+        }
+
+        if (pageQuery.queryProperties && pageQuery.queryProperties.length > 0) {
+          params['queryProperties'] = JSON.stringify(pageQuery.queryProperties);
+        }
+
+        return this.http
+          .get<GenericResponseInterface<PaginatedResponseInterface<FamilyListInterface[]>>>(
+            `${environment.baseUrl}/Family/GetAllPaginated`,
+            {
+              params,
+              withCredentials: true,
+            }
+          )
           .pipe(
             map((payload) =>
               FamilyAction.getFamilyListSuccess({ payload })
@@ -34,8 +47,8 @@ export class FamilyEffect {
             catchError((error) => {
               return of(FamilyAction.getFamilyListFail({ error }));
             })
-          )
-      )
+          );
+      })
     )
   );
 
@@ -72,10 +85,7 @@ export class FamilyEffect {
         this.http
           .post<GenericResponseInterface<FamilyListInterface>>(
             `${environment.baseUrl}/Family/Create`,
-            {
-              ...payload,
-              withCredentials: true,
-            },
+            payload,
             { withCredentials: true }
           )
           .pipe(
@@ -100,10 +110,8 @@ export class FamilyEffect {
         this.http
           .post<GenericResponseInterface<FamilyListInterface>>(
             `${environment.baseUrl}/Family/Update`,
-            {
-              ...payload,
-            }
-            // { withCredentials: true }
+            payload,
+            { withCredentials: true }
           )
           .pipe(
             map((payload) =>

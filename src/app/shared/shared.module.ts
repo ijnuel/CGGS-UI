@@ -12,6 +12,8 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { LoadingSpinnerDirective } from './loading-spinner/loading-spinner.directive';
 import { CardComponent } from './card/card.component';
 import { MatPaginator } from '@angular/material/paginator';
+import { ConfirmDialogComponent } from './confirm-dialog/confirm-dialog.component';
+import { ReactiveFormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [
@@ -23,6 +25,7 @@ import { MatPaginator } from '@angular/material/paginator';
     GlobalLoadingComponent,
     TableLoaderComponent,
     LoadingSpinnerDirective,
+    ConfirmDialogComponent,
   ],
   imports: [
     RouterModule,
@@ -30,6 +33,7 @@ import { MatPaginator } from '@angular/material/paginator';
     CommonModule,
     MatProgressSpinnerModule,
     MatPaginator,
+    ReactiveFormsModule,
   ],
   exports: [
     LayoutSidebarComponent,
@@ -39,6 +43,8 @@ import { MatPaginator } from '@angular/material/paginator';
     TablePaginatorComponent,
     GlobalLoadingComponent,
     LoadingSpinnerDirective,
+    ConfirmDialogComponent,
+    TableLoaderComponent,
   ],
 })
 export class SharedModule {}

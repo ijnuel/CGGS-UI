@@ -17,16 +17,29 @@ export class StaffEffect {
   $staffList = createEffect(() =>
     this.actions$.pipe(
       ofType(StaffAction.getStaffList),
-      switchMap(({ pageQuery }) =>
-        this.http
-          .get<
-            GenericResponseInterface<
-              PaginatedResponseInterface<StaffListInterface[]>
-            >
-          >(`${environment.baseUrl}/Staff/GetAllPaginated`, {
-            params: { ...pageQuery },
-            withCredentials: true,
-          })
+      switchMap(({ pageQuery }) => {
+        const params: { [key: string]: string | number } = {
+          start: pageQuery.start,
+          recordsPerPage: pageQuery.recordsPerPage,
+          pageIndex: pageQuery.pageIndex || 0
+        };
+
+        if (pageQuery.searchText) {
+          params['searchText'] = pageQuery.searchText;
+        }
+
+        if (pageQuery.queryProperties && pageQuery.queryProperties.length > 0) {
+          params['queryProperties'] = JSON.stringify(pageQuery.queryProperties);
+        }
+
+        return this.http
+          .get<GenericResponseInterface<PaginatedResponseInterface<StaffListInterface[]>>>(
+            `${environment.baseUrl}/Staff/GetAllPaginated`,
+            {
+              params,
+              withCredentials: true,
+            }
+          )
           .pipe(
             map((payload) =>
               StaffAction.getStaffListSuccess({ payload })
@@ -34,8 +47,8 @@ export class StaffEffect {
             catchError((error) => {
               return of(StaffAction.getStaffListFail({ error }));
             })
-          )
-      )
+          );
+      })
     )
   );
 
@@ -72,10 +85,7 @@ export class StaffEffect {
         this.http
           .post<GenericResponseInterface<StaffListInterface>>(
             `${environment.baseUrl}/Staff/Create`,
-            {
-              ...payload,
-              withCredentials: true,
-            },
+            payload,
             { withCredentials: true }
           )
           .pipe(
@@ -100,10 +110,8 @@ export class StaffEffect {
         this.http
           .post<GenericResponseInterface<StaffListInterface>>(
             `${environment.baseUrl}/Staff/Update`,
-            {
-              ...payload,
-            }
-            // { withCredentials: true }
+            payload,
+            { withCredentials: true }
           )
           .pipe(
             map((payload) =>

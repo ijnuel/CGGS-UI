@@ -10,6 +10,8 @@ import {
 import { getErrorMessageHelper } from '../../../../services/helper.service';
 import { DropdownListInterface, TestEntityTemplateFormInterface } from '../../../../types';
 import { SharedFacade } from '../../../../store/shared/shared.facade';
+import { ActivatedRoute, Router } from '@angular/router';
+import { GlobalLoadingFacade } from '../../../../store/global-loading/global-loading.facade';
 
 @Component({
     selector: 'app-create-update-test-entity-template',
@@ -18,10 +20,11 @@ import { SharedFacade } from '../../../../store/shared/shared.facade';
 })
 export class CreateUpdateTestEntityTemplateComponent implements OnInit, OnDestroy {
     loading$: Observable<boolean>;
+    error$: Observable<string | null>;
+    testEntityTemplateById$: Observable<TestEntityTemplateFormInterface | null>;
     dropdownLoading$: Observable<boolean>;
 
     formGroup: FormGroup<{
-        id: FormControl;
         name: FormControl;
     }>;
 
@@ -29,24 +32,46 @@ export class CreateUpdateTestEntityTemplateComponent implements OnInit, OnDestro
         return this.formGroup.controls;
     }
     today = new Date();
-
+    isEditMode = false;
     unsubscribe$ = new Subject<void>();
 
     constructor(
         private testEntityTemplateFacade: TestEntityTemplateFacade,
         private fb: FormBuilder,
-        private sharedFacade: SharedFacade
+        private sharedFacade: SharedFacade,
+        private route: ActivatedRoute,
+        private router: Router,
+        private globalLoadingFacade: GlobalLoadingFacade
     ) {
-        this.loading$ = this.testEntityTemplateFacade.selectedLoading$;
+        this.loading$ = this.testEntityTemplateFacade.loading$;
+        this.error$ = this.testEntityTemplateFacade.error$;
+        this.testEntityTemplateById$ = this.testEntityTemplateFacade.testEntityTemplateById$;
         this.dropdownLoading$ = this.sharedFacade.selectedLoading$;
 
         this.formGroup = this.fb.group({
-            id: ['', [Validators.required, Validators.maxLength(255)]],
             name: ['', [Validators.required, Validators.maxLength(255)]],
         });
     }
 
     ngOnInit() {
+        const testEntityTemplateId = this.route.snapshot.params['id'];
+        if (testEntityTemplateId) {
+            this.isEditMode = true;
+            this.testEntityTemplateFacade.getTestEntityTemplateById(testEntityTemplateId);
+            this.testEntityTemplateById$.pipe(takeUntil(this.unsubscribe$)).subscribe((data) => {
+                if (data) {
+                    this.formGroup.patchValue({
+                        name: data.name
+                    });
+                }
+            });
+        }
+
+        this.error$.pipe(takeUntil(this.unsubscribe$)).subscribe((error) => {
+            if (error) {
+                this.globalLoadingFacade.globalErrorShow(error, 3000);
+            }
+        });
     }
 
     getErrorMessage(controlName: string): string | null {
@@ -59,9 +84,21 @@ export class CreateUpdateTestEntityTemplateComponent implements OnInit, OnDestro
 
         if (!this.formGroup.valid) return;
 
-        this.testEntityTemplateFacade.createTestEntityTemplate({
-            ...(this.formGroup.value as TestEntityTemplateFormInterface),
-        });
+        const formData = this.formGroup.value as TestEntityTemplateFormInterface;
+
+        if (this.isEditMode) {
+            this.testEntityTemplateFacade.updateTestEntityTemplate({
+                ...formData,
+                id: this.route.snapshot.params['id']
+            });
+            this.globalLoadingFacade.globalSuccessShow('Test Entity Template updated successfully', 3000);
+        } else {
+            this.testEntityTemplateFacade.createTestEntityTemplate(formData);
+            this.globalLoadingFacade.globalSuccessShow('Test Entity Template created successfully', 3000);
+        }
+
+        // Navigate to the list page
+        this.router.navigate(['/app/test-entity-template']);
     }
 
     ngOnDestroy(): void {

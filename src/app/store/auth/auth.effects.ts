@@ -57,7 +57,6 @@ export class AuthEffect {
                     )
                     .pipe(
                         map((payload) => {
-                            this.store.dispatch(AuthAction.getCurrentUserSuccess({ payload }));
                             if (payload.entity.userId) {
                                 this.router.navigate(['app/home']);
                             }
@@ -88,7 +87,7 @@ export class AuthEffect {
                             }),
                             catchError((error) => {
                                 this.toast.openToast('Logout failed. Please try again later.', NotificationTypeEnums.ERROR);
-                                return of(AuthAction.loginFail({ error }));
+                                return of(AuthAction.getCurrentUserFail({ error }));
                             })
                         )
                 )
@@ -105,17 +104,19 @@ export class AuthEffect {
                         `${environment.baseUrl}/Account/SwitchCompany`,
                         null,
                         {
-                            params: { companyId }, // Send companyId as a query parameter
+                            params: { companyId },
                             withCredentials: true,
                         }
                     )
                     .pipe(
-                        map((payload) =>
-                            AuthAction.switchCompanySuccess({ payload })
-                        ),
-                        catchError((error) =>
-                            of(AuthAction.switchCompanyFail({ error }))
-                        )
+                        map((payload) => {
+                            this.toast.openToast('Company switched successfully!', NotificationTypeEnums.SUCCESS);
+                            return AuthAction.switchCompanySuccess({ payload });
+                        }),
+                        catchError((error) => {
+                            this.toast.openToast('Failed to switch company. Please try again later.', NotificationTypeEnums.ERROR);
+                            return of(AuthAction.switchCompanyFail({ error }));
+                        })
                     )
             )
         )
@@ -131,12 +132,14 @@ export class AuthEffect {
                         { withCredentials: true }
                     )
                     .pipe(
-                        map((payload) =>
-                            AuthAction.getUserCompaniesSuccess({ payload })
-                        ),
-                        catchError((error) =>
-                            of(AuthAction.getUserCompaniesFail({ error }))
-                        )
+                        map((payload) => {
+                            this.toast.openToast('Companies retrieved successfully!', NotificationTypeEnums.SUCCESS);
+                            return AuthAction.getUserCompaniesSuccess({ payload });
+                        }),
+                        catchError((error) => {
+                            this.toast.openToast('Failed to retrieve companies. Please try again later.', NotificationTypeEnums.ERROR);
+                            return of(AuthAction.getUserCompaniesFail({ error }));
+                        })
                     )
             )
         )

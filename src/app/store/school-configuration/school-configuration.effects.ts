@@ -17,16 +17,29 @@ export class SchoolConfigurationEffect {
   $schoolConfigurationList = createEffect(() =>
     this.actions$.pipe(
       ofType(SchoolConfigurationAction.getSchoolConfigurationList),
-      switchMap(({ pageQuery }) =>
-        this.http
-          .get<
-            GenericResponseInterface<
-              PaginatedResponseInterface<SchoolConfigurationListInterface[]>
-            >
-          >(`${environment.baseUrl}/SchoolConfiguration/GetAllPaginated`, {
-            params: { ...pageQuery },
-            withCredentials: true,
-          })
+      switchMap(({ pageQuery }) => {
+        const params: { [key: string]: string | number } = {
+          start: pageQuery.start,
+          recordsPerPage: pageQuery.recordsPerPage,
+          pageIndex: pageQuery.pageIndex || 0
+        };
+
+        if (pageQuery.searchText) {
+          params['searchText'] = pageQuery.searchText;
+        }
+
+        if (pageQuery.queryProperties && pageQuery.queryProperties.length > 0) {
+          params['queryProperties'] = JSON.stringify(pageQuery.queryProperties);
+        }
+
+        return this.http
+          .get<GenericResponseInterface<PaginatedResponseInterface<SchoolConfigurationListInterface[]>>>(
+            `${environment.baseUrl}/SchoolConfiguration/GetAllPaginated`,
+            {
+              params,
+              withCredentials: true,
+            }
+          )
           .pipe(
             map((payload) =>
               SchoolConfigurationAction.getSchoolConfigurationListSuccess({ payload })
@@ -34,8 +47,8 @@ export class SchoolConfigurationEffect {
             catchError((error) => {
               return of(SchoolConfigurationAction.getSchoolConfigurationListFail({ error }));
             })
-          )
-      )
+          );
+      })
     )
   );
 
@@ -72,10 +85,7 @@ export class SchoolConfigurationEffect {
         this.http
           .post<GenericResponseInterface<SchoolConfigurationListInterface>>(
             `${environment.baseUrl}/SchoolConfiguration/Create`,
-            {
-              ...payload,
-              withCredentials: true,
-            },
+            payload,
             { withCredentials: true }
           )
           .pipe(
@@ -100,10 +110,8 @@ export class SchoolConfigurationEffect {
         this.http
           .post<GenericResponseInterface<SchoolConfigurationListInterface>>(
             `${environment.baseUrl}/SchoolConfiguration/Update`,
-            {
-              ...payload,
-            }
-            // { withCredentials: true }
+            payload,
+            { withCredentials: true }
           )
           .pipe(
             map((payload) =>

@@ -17,16 +17,29 @@ export class LocalGovernmentAreaEffect {
   $localGovernmentAreaList = createEffect(() =>
     this.actions$.pipe(
       ofType(LocalGovernmentAreaAction.getLocalGovernmentAreaList),
-      switchMap(({ pageQuery }) =>
-        this.http
-          .get<
-            GenericResponseInterface<
-              PaginatedResponseInterface<LocalGovernmentAreaListInterface[]>
-            >
-          >(`${environment.baseUrl}/LocalGovernmentArea/GetAllPaginated`, {
-            params: { ...pageQuery },
-            withCredentials: true,
-          })
+      switchMap(({ pageQuery }) => {
+        const params: { [key: string]: string | number } = {
+          start: pageQuery.start,
+          recordsPerPage: pageQuery.recordsPerPage,
+          pageIndex: pageQuery.pageIndex || 0
+        };
+
+        if (pageQuery.searchText) {
+          params['searchText'] = pageQuery.searchText;
+        }
+
+        if (pageQuery.queryProperties && pageQuery.queryProperties.length > 0) {
+          params['queryProperties'] = JSON.stringify(pageQuery.queryProperties);
+        }
+
+        return this.http
+          .get<GenericResponseInterface<PaginatedResponseInterface<LocalGovernmentAreaListInterface[]>>>(
+            `${environment.baseUrl}/LocalGovernmentArea/GetAllPaginated`,
+            {
+              params,
+              withCredentials: true,
+            }
+          )
           .pipe(
             map((payload) =>
               LocalGovernmentAreaAction.getLocalGovernmentAreaListSuccess({ payload })
@@ -34,8 +47,8 @@ export class LocalGovernmentAreaEffect {
             catchError((error) => {
               return of(LocalGovernmentAreaAction.getLocalGovernmentAreaListFail({ error }));
             })
-          )
-      )
+          );
+      })
     )
   );
 
@@ -72,10 +85,7 @@ export class LocalGovernmentAreaEffect {
         this.http
           .post<GenericResponseInterface<LocalGovernmentAreaListInterface>>(
             `${environment.baseUrl}/LocalGovernmentArea/Create`,
-            {
-              ...payload,
-              withCredentials: true,
-            },
+            payload,
             { withCredentials: true }
           )
           .pipe(
@@ -100,10 +110,8 @@ export class LocalGovernmentAreaEffect {
         this.http
           .post<GenericResponseInterface<LocalGovernmentAreaListInterface>>(
             `${environment.baseUrl}/LocalGovernmentArea/Update`,
-            {
-              ...payload,
-            }
-            // { withCredentials: true }
+            payload,
+            { withCredentials: true }
           )
           .pipe(
             map((payload) =>

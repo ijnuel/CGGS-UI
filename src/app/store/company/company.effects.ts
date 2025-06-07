@@ -17,16 +17,29 @@ export class CompanyEffect {
   $companyList = createEffect(() =>
     this.actions$.pipe(
       ofType(CompanyAction.getCompanyList),
-      switchMap(({ pageQuery }) =>
-        this.http
-          .get<
-            GenericResponseInterface<
-              PaginatedResponseInterface<CompanyListInterface[]>
-            >
-          >(`${environment.baseUrl}/Company/GetAllPaginated`, {
-            params: { ...pageQuery },
-            withCredentials: true,
-          })
+      switchMap(({ pageQuery }) => {
+        const params: { [key: string]: string | number } = {
+          start: pageQuery.start,
+          recordsPerPage: pageQuery.recordsPerPage,
+          pageIndex: pageQuery.pageIndex || 0
+        };
+
+        if (pageQuery.searchText) {
+          params['searchText'] = pageQuery.searchText;
+        }
+
+        if (pageQuery.queryProperties && pageQuery.queryProperties.length > 0) {
+          params['queryProperties'] = JSON.stringify(pageQuery.queryProperties);
+        }
+
+        return this.http
+          .get<GenericResponseInterface<PaginatedResponseInterface<CompanyListInterface[]>>>(
+            `${environment.baseUrl}/Company/GetAllPaginated`,
+            {
+              params,
+              withCredentials: true,
+            }
+          )
           .pipe(
             map((payload) =>
               CompanyAction.getCompanyListSuccess({ payload })
@@ -34,8 +47,8 @@ export class CompanyEffect {
             catchError((error) => {
               return of(CompanyAction.getCompanyListFail({ error }));
             })
-          )
-      )
+          );
+      })
     )
   );
 
@@ -72,10 +85,7 @@ export class CompanyEffect {
         this.http
           .post<GenericResponseInterface<CompanyListInterface>>(
             `${environment.baseUrl}/Company/Create`,
-            {
-              ...payload,
-              withCredentials: true,
-            },
+            payload,
             { withCredentials: true }
           )
           .pipe(
@@ -100,10 +110,8 @@ export class CompanyEffect {
         this.http
           .post<GenericResponseInterface<CompanyListInterface>>(
             `${environment.baseUrl}/Company/Update`,
-            {
-              ...payload,
-            }
-            // { withCredentials: true }
+            payload,
+            { withCredentials: true }
           )
           .pipe(
             map((payload) =>

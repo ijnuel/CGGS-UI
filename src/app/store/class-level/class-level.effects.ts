@@ -17,16 +17,29 @@ export class ClassLevelEffect {
   $classLevelList = createEffect(() =>
     this.actions$.pipe(
       ofType(ClassLevelAction.getClassLevelList),
-      switchMap(({ pageQuery }) =>
-        this.http
-          .get<
-            GenericResponseInterface<
-              PaginatedResponseInterface<ClassLevelListInterface[]>
-            >
-          >(`${environment.baseUrl}/ClassLevel/GetAllPaginated`, {
-            params: { ...pageQuery },
-            withCredentials: true,
-          })
+      switchMap(({ pageQuery }) => {
+        const params: { [key: string]: string | number } = {
+          start: pageQuery.start,
+          recordsPerPage: pageQuery.recordsPerPage,
+          pageIndex: pageQuery.pageIndex || 0
+        };
+
+        if (pageQuery.searchText) {
+          params['searchText'] = pageQuery.searchText;
+        }
+
+        if (pageQuery.queryProperties && pageQuery.queryProperties.length > 0) {
+          params['queryProperties'] = JSON.stringify(pageQuery.queryProperties);
+        }
+
+        return this.http
+          .get<GenericResponseInterface<PaginatedResponseInterface<ClassLevelListInterface[]>>>(
+            `${environment.baseUrl}/ClassLevel/GetAllPaginated`,
+            {
+              params,
+              withCredentials: true,
+            }
+          )
           .pipe(
             map((payload) =>
               ClassLevelAction.getClassLevelListSuccess({ payload })
@@ -34,8 +47,8 @@ export class ClassLevelEffect {
             catchError((error) => {
               return of(ClassLevelAction.getClassLevelListFail({ error }));
             })
-          )
-      )
+          );
+      })
     )
   );
 
@@ -72,10 +85,7 @@ export class ClassLevelEffect {
         this.http
           .post<GenericResponseInterface<ClassLevelListInterface>>(
             `${environment.baseUrl}/ClassLevel/Create`,
-            {
-              ...payload,
-              withCredentials: true,
-            },
+            payload,
             { withCredentials: true }
           )
           .pipe(
@@ -100,10 +110,8 @@ export class ClassLevelEffect {
         this.http
           .post<GenericResponseInterface<ClassLevelListInterface>>(
             `${environment.baseUrl}/ClassLevel/Update`,
-            {
-              ...payload,
-            }
-            // { withCredentials: true }
+            payload,
+            { withCredentials: true }
           )
           .pipe(
             map((payload) =>

@@ -2,60 +2,99 @@
 <app-table-loader></app-table-loader>
 }
 @else {
-  <div class="table-responsive">
-    <table mat-table [dataSource]="dataSource ?? []" matSort>
-      <ng-container *ngFor="let header of headerData" [matColumnDef]="header.key">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header>
-          {{ header?.name }}
-        </th>
+  <div class="table-container">
+    <!-- Search and Filter Controls -->
+    <div class="flex justify-between items-center">
+      <div class="flex gap-4">
+        <!-- Filter Controls -->
+        <div *ngIf="showFilters" [formGroup]="filterForm" class="flex gap-4">
+          <ng-container *ngFor="let header of tableHeaderData">
+            <mat-form-field *ngIf="header.filterable" appearance="outline">
+              <mat-label>{{ header.name }}</mat-label>
+              <input matInput [formControlName]="header.key" 
+                     (keyup.enter)="onFilter()"
+                     [placeholder]="'Filter by ' + header.name">
+            </mat-form-field>
+          </ng-container>
+          
+          <button mat-button color="primary" (click)="onFilter()">
+            <mat-icon>filter_list</mat-icon>
+            Apply Filters
+          </button>
+          <button mat-button (click)="clearFilters()">
+            <mat-icon>clear</mat-icon>
+            Clear
+          </button>
+        </div>
+      </div>
+      <div class="flex justify-end items-center">
+        <mat-form-field *ngIf="showSearch" appearance="outline" class="w-64">
+          <mat-label>Search</mat-label>
+          <input matInput (keyup)="onSearch($event)" placeholder="Search...">
+          <mat-icon matSuffix>search</mat-icon>
+        </mat-form-field>
+      </div>
+    </div>
 
-        <td mat-cell *matCellDef="let row; let index = index">
-          @if (header.type === 'normal') { @if (row[header.key]) {
-          <span
-            [matTooltip]="
-              row[header.key]?.length > maxColChar ? row[header.key] : ''
-            "
-            matTooltipPosition="below"
-            matTooltipClass="custom-tooltip"
-          >
-            {{
-              row[header.key]?.toString().substring(0, maxColChar) +
-                (row[header.key]?.toString().length > maxColChar ? "..." : "")
-            }}
-          </span>
-          } @else {
-          <span>-</span>
-          } } @else if (header.type === 'number') {
-          <span *ngIf="row[header.key]">
-            {{ row[header.key] | number }}
-          </span>
-          <span *ngIf="!row[header.key]">-</span>
-          } @else if (header.type === 'date') {
-          <span *ngIf="row[header.key]">
-            {{ row[header.key] | date : "dd/M/YYYY" }}
-          </span>
-          }
-        </td>
-      </ng-container>
+    <!-- Table -->
+    <div class="mat-elevation-z8">
+      <table mat-table [dataSource]="dataSource" class="w-full">
+        <!-- Dynamic Columns -->
+        <ng-container *ngFor="let header of tableHeaderData" [matColumnDef]="header.key">
+          <th mat-header-cell *matHeaderCellDef [ngClass]="header.align || 'left'">
+            {{ header.name }}
+          </th>
+          <td mat-cell *matCellDef="let row" [ngClass]="header.align || 'left'">
+            <ng-container *ngIf="header.format">
+              {{ header.format(row[header.key]) }}
+            </ng-container>
+            <ng-container *ngIf="!header.format">
+              {{ row[header.key] }}
+            </ng-container>
+          </td>
+        </ng-container>
 
-      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-      <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+        <!-- Action Column -->
+        <ng-container matColumnDef="actions">
+          <th mat-header-cell *matHeaderCellDef class="w-32">Actions</th>
+          <td mat-cell *matCellDef="let row" class="w-32">
+            <div class="flex gap-2">
+              <button mat-icon-button color="primary" (click)="onView(row)" matTooltip="View">
+                <mat-icon>visibility</mat-icon>
+              </button>
+              <button mat-icon-button color="accent" (click)="onEdit(row)" matTooltip="Edit">
+                <mat-icon>edit</mat-icon>
+              </button>
+              <button mat-icon-button color="warn" (click)="onDelete(row)" matTooltip="Delete">
+                <mat-icon>delete</mat-icon>
+              </button>
+            </div>
+          </td>
+        </ng-container>
 
-      <tr class="mat-row" *matNoDataRow>
-        @if(!isLoading) {
-        <td class="mat-cell" [attr.colspan]="headerData?.length ?? 0">
-          <div class="text-center py-4">No matching data</div>
-        </td>
-        }
-      </tr>
-    </table>
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+      </table>
+
+      <!-- Loading Spinner -->
+      <div *ngIf="isLoading" class="loading-shade">
+        <mat-spinner></mat-spinner>
+      </div>
+
+      <!-- No Data Message -->
+      <div *ngIf="!isLoading && (!tableData || tableData.length === 0)" class="no-data-message">
+        No data available
+      </div>
+
+      <!-- Pagination -->
+      <mat-paginator
+        [length]="totalLength"
+        [pageSize]="pageSize"
+        [pageIndex]="pageIndex"
+        [pageSizeOptions]="[5, 10, 25, 100]"
+        (page)="onPageChange($event)"
+        aria-label="Select page">
+      </mat-paginator>
+    </div>
   </div>
-  <app-table-paginator
-    [length]="totalLength"
-    [pageSize]="pageSize"
-    [pageIndex]="pageIndex"
-    [pageSizeOptions]="[5, 10, 25, 50]"
-    (pageChange)="onPageChange($event)"
-  ></app-table-paginator>
-
 }

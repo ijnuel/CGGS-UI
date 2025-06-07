@@ -43,8 +43,9 @@ interface PaginatedResponseInterface<T> {
 interface PageQueryInterface {
   start: number;
   recordsPerPage: number;
-  pageIndex?: number
+  pageIndex?: number;
   searchText?: string;
+  queryProperties?: { name: string; value: string }[];
 }
 
 interface DropdownListInterface {

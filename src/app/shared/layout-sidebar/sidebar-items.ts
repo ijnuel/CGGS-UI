@@ -1,4 +1,5 @@
 import { UserRolesEnum } from '../../types/auth';
+import { environment } from '../../../environments/environment';
 
 export default [
   {
@@ -40,6 +41,13 @@ export default [
     roles: [UserRolesEnum.SuperAdmin, UserRolesEnum.Admin],
     url: '/app/admin-setup'
   },
+
+  ...(environment.production ? [] : [{
+    name: 'Test Entity Templates',
+    icon: 'assets/icons/settings-icon.svg',
+    roles: [UserRolesEnum.SuperAdmin, UserRolesEnum.Admin],
+    url: '/app/test-entity-template'
+  }]),
 
   {
     name: 'Settings',
