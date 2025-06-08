@@ -101,7 +101,7 @@ export class TestEntityTemplateEffect {
           .get<GenericResponseInterface<TestEntityTemplateListInterface>>(
             `${environment.baseUrl}/TestEntityTemplate/GetById`,
             {
-              params: { testEntityTemplateId },
+              params: { id: testEntityTemplateId },
               withCredentials: true,
             }
           )
@@ -214,7 +214,7 @@ export class TestEntityTemplateEffect {
       ofType(TestEntityTemplateAction.updateTestEntityTemplate),
       switchMap(({ payload }) =>
         this.http
-          .post<GenericResponseInterface<TestEntityTemplateListInterface>>(
+          .put<GenericResponseInterface<TestEntityTemplateListInterface>>(
             `${environment.baseUrl}/TestEntityTemplate/Update`,
             payload,
             { withCredentials: true }

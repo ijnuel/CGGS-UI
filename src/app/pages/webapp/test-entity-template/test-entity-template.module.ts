@@ -12,6 +12,7 @@ import { TestEntityTemplateComponent } from './test-entity-template.component';
 import { SharedModule } from '../../../shared/shared.module';
 import { CreateUpdateTestEntityTemplateComponent } from './create-update-test-entity-template/create-update-test-entity-template.component';
 import { provideNativeDateAdapter } from '@angular/material/core';
+import { ViewTestEntityTemplateComponent } from './view-test-entity-template/view-test-entity-template.component';
 
 const routes: Routes = [
     {
@@ -25,13 +26,18 @@ const routes: Routes = [
     },
 
     {
-        path: 'edit/:testEntityTemplateId',
+        path: 'edit/:id',
         component: CreateUpdateTestEntityTemplateComponent,
+    },
+
+    {
+        path: 'view/:id',
+        component: ViewTestEntityTemplateComponent,
     },
 ];
 
 @NgModule({
-    declarations: [TestEntityTemplateComponent, CreateUpdateTestEntityTemplateComponent],
+    declarations: [TestEntityTemplateComponent, CreateUpdateTestEntityTemplateComponent, ViewTestEntityTemplateComponent],
     imports: [
         CommonModule,
         SharedModule,

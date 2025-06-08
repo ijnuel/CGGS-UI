@@ -97,4 +97,8 @@ export class TestEntityTemplateComponent implements OnInit {
       }
     });
   }
+
+  onCancel() {
+    this.router.navigate(['../'], { relativeTo: this.route });
+  }
 }
