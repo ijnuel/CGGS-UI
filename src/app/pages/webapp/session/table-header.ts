@@ -24,11 +24,5 @@ export const tableHeader: TableHeaderInterface[] = [
     type: 'boolean',
     name: 'Is Active',
     align: 'left',
-  },
-  {
-    key: 'actions',
-    type: 'text',
-    name: 'Actions',
-    align: 'left',
-  },
+  }
 ];

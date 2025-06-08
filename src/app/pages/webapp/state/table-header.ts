@@ -18,11 +18,5 @@ export const tableHeader: TableHeaderInterface[] = [
     type: 'text',
     name: 'Country',
     align: 'left',
-  },
-  {
-    key: 'actions',
-    type: 'text',
-    name: 'Actions',
-    align: 'left',
-  },
+  }
 ];

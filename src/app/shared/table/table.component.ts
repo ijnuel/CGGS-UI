@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, Output, OnInit, OnChanges } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
 import { TableHeaderInterface } from '../../types/table';
 import { PageEvent } from '@angular/material/paginator';
@@ -11,7 +11,7 @@ import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
   templateUrl: './table.component.html',
   styleUrls: ['./table.component.scss'],
 })
-export class TableComponent implements OnInit {
+export class TableComponent implements OnInit, OnChanges {
   @Output() pageChange = new EventEmitter<PageQueryInterface>();
   @Output() view = new EventEmitter<any>();
   @Output() edit = new EventEmitter<any>();
@@ -47,8 +47,15 @@ export class TableComponent implements OnInit {
     this.initializeFilters();
   }
 
+  ngOnChanges() {
+    this.initializeTable();
+  }
+
   private initializeTable() {
     this.displayedColumns = this.tableHeaderData.map(header => header.key);
+    if (this.showActionColumn) {
+      this.displayedColumns.push('actions');
+    }
     this.dataSource.data = this.tableData || [];
   }
 

@@ -16,6 +16,7 @@ export class LoginGuard implements CanActivate {
       withLatestFrom(this.authFacade.selectedCurrentUserId$),
       map(([, currentUserId]) => {
         if (!currentUserId) return true;
+        this.router.navigate(['app/home']);
         return false;
       }),
       take(1)

@@ -7,7 +7,7 @@
     <div class="flex justify-between items-center">
       <div class="flex gap-4">
         <!-- Filter Controls -->
-        <div *ngIf="showFilters" [formGroup]="filterForm" class="flex gap-4">
+        <div *ngIf="false" [formGroup]="filterForm" class="flex gap-4">
           <ng-container *ngFor="let header of tableHeaderData">
             <mat-form-field *ngIf="header.filterable" appearance="outline">
               <mat-label>{{ header.name }}</mat-label>

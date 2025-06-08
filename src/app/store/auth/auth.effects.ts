@@ -57,14 +57,14 @@ export class AuthEffect {
                     )
                     .pipe(
                         map((payload) => {
-                            if (payload.entity.userId) {
-                                this.router.navigate(['app/home']);
-                            }
-                            this.toast.openToast('User profile retrieved successfully!', NotificationTypeEnums.SUCCESS);
+                            // if (payload.entity.userId) {
+                            //     this.router.navigate(['app/home']);
+                            // }
+                            // this.toast.openToast('User profile retrieved successfully!', NotificationTypeEnums.SUCCESS);
                             return AuthAction.getCurrentUserSuccess({ payload });
                         }),
                         catchError((error) => {
-                            this.toast.openToast('Failed to retrieve user profile. Please try again later.', NotificationTypeEnums.ERROR);
+                            // this.toast.openToast('Failed to retrieve user profile. Please try again later.', NotificationTypeEnums.ERROR);
                             return of(AuthAction.getCurrentUserFail({ error }));
                         })
                     )
@@ -133,11 +133,11 @@ export class AuthEffect {
                     )
                     .pipe(
                         map((payload) => {
-                            this.toast.openToast('Companies retrieved successfully!', NotificationTypeEnums.SUCCESS);
+                            // this.toast.openToast('Companies retrieved successfully!', NotificationTypeEnums.SUCCESS);
                             return AuthAction.getUserCompaniesSuccess({ payload });
                         }),
                         catchError((error) => {
-                            this.toast.openToast('Failed to retrieve companies. Please try again later.', NotificationTypeEnums.ERROR);
+                            // this.toast.openToast('Failed to retrieve companies. Please try again later.', NotificationTypeEnums.ERROR);
                             return of(AuthAction.getUserCompaniesFail({ error }));
                         })
                     )

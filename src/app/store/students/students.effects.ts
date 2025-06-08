@@ -34,7 +34,7 @@ export class StudentsEffect {
 
         return this.http
           .get<GenericResponseInterface<PaginatedResponseInterface<StudentsListInterface[]>>>(
-            `${environment.baseUrl}/Students/GetAllPaginated`,
+            `${environment.baseUrl}/Student/GetAllPaginated`,
             {
               params,
               withCredentials: true,
@@ -58,7 +58,7 @@ export class StudentsEffect {
       switchMap(({ studentId }) =>
         this.http
           .get<GenericResponseInterface<StudentsListInterface>>(
-            `${environment.baseUrl}/Students/GetById`,
+            `${environment.baseUrl}/Student/GetById`,
             {
               params: { studentId },
               withCredentials: true,
@@ -84,7 +84,7 @@ export class StudentsEffect {
       switchMap(({ payload }) =>
         this.http
           .post<GenericResponseInterface<StudentsListInterface>>(
-            `${environment.baseUrl}/Students/Create`,
+            `${environment.baseUrl}/Student/Create`,
             payload,
             { withCredentials: true }
           )
@@ -109,7 +109,7 @@ export class StudentsEffect {
       switchMap(({ payload }) =>
         this.http
           .post<GenericResponseInterface<StudentsListInterface>>(
-            `${environment.baseUrl}/Students/Update`,
+            `${environment.baseUrl}/Student/Update`,
             payload,
             { withCredentials: true }
           )

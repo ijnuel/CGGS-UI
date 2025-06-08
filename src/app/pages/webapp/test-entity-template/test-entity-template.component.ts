@@ -9,6 +9,7 @@ import { TableHeaderInterface } from '../../../types/table';
 import { MatDialog } from '@angular/material/dialog';
 import { ConfirmDialogComponent } from '../../../shared/confirm-dialog/confirm-dialog.component';
 import { ToastNotificationService, NotificationTypeEnums } from '../../../services/toast-notification.service';
+import { tableHeader } from './table-header';
 
 @Component({
   selector: 'app-test-entity-template',
@@ -18,15 +19,7 @@ import { ToastNotificationService, NotificationTypeEnums } from '../../../servic
 export class TestEntityTemplateComponent implements OnInit {
   testEntityTemplateList$: Observable<PaginatedResponseInterface<TestEntityTemplateListInterface[]> | null>;
   loading$: Observable<boolean>;
-  tableHeaderData: TableHeaderInterface[] = [
-    {
-      name: 'Id',
-      key: 'id',
-      filterable: true,
-      type: 'text',
-      align: 'left'
-    }
-  ];
+  tableHeaderData: TableHeaderInterface[] = tableHeader;
 
   constructor(
     private router: Router,
