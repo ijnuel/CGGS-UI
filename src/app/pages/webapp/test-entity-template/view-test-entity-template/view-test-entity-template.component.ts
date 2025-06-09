@@ -26,8 +26,4 @@ export class ViewTestEntityTemplateComponent implements OnInit {
       this.testEntityTemplateFacade.getTestEntityTemplateById(testEntityTemplateId);
     }
   }
-
-  goBack() {
-    this.router.navigate(['../'], { relativeTo: this.route });
-  }
 } 
