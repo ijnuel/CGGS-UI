@@ -10,6 +10,7 @@ import {
 import { getErrorMessageHelper, initUserProfileForm } from '../../../../services/helper.service';
 import { DropdownListInterface, AdministratorFormInterface } from '../../../../types';
 import { SharedFacade } from '../../../../store/shared/shared.facade';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-create-update-administrator',
@@ -27,12 +28,12 @@ export class CreateUpdateAdministratorComponent implements OnInit, OnDestroy {
     dateOfBirth: FormControl;
     religion: FormControl;
     gender: FormControl;
-    originLGA: FormControl;
-    stateOfOrigin: FormControl;
-    nationality: FormControl;
+    originLGAId: FormControl;
+    stateOfOriginId: FormControl;
+    nationalityId: FormControl;
     homeAddress: FormControl;
     residentialCity: FormControl;
-    residentialState: FormControl;
+    residentialStateId: FormControl;
     phoneNumber: FormControl;
     administratorNo: FormControl;
     email: FormControl;
@@ -56,10 +57,14 @@ export class CreateUpdateAdministratorComponent implements OnInit, OnDestroy {
 
   unsubscribe$ = new Subject<void>();
 
+  isEditMode: boolean = false;
+
   constructor(
     private administratorFacade: AdministratorFacade,
     private fb: FormBuilder,
-    private sharedFacade: SharedFacade
+    private sharedFacade: SharedFacade,
+    private route: ActivatedRoute,
+    private router: Router
   ) {
     this.loading$ = this.administratorFacade.selectedLoading$;
     this.dropdownLoading$ = this.sharedFacade.selectedLoading$;
@@ -76,11 +81,11 @@ export class CreateUpdateAdministratorComponent implements OnInit, OnDestroy {
       email: null,
       religion: ['', [Validators.required]],
       gender: ['', [Validators.required]],
-      nationality: null,
-      stateOfOrigin: null,
-      originLGA: null,
+      nationalityId: null,
+      stateOfOriginId: null,
+      originLGAId: null,
       homeAddress: null,
-      residentialState: null,
+      residentialStateId: null,
       residentialCity: null,
       administratorNo: null,
     });
@@ -88,6 +93,16 @@ export class CreateUpdateAdministratorComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     initUserProfileForm(this.sharedFacade, this.formControl, this.unsubscribe$, this.selectedCountryStateList$, this.selectedStateLgaList$);
+    const id = this.route.snapshot.paramMap.get('id');
+    if (id) {
+      this.isEditMode = true;
+      this.administratorFacade.getAdministratorById(id);
+      this.administratorFacade.selectedAdministrator$.pipe(takeUntil(this.unsubscribe$)).subscribe(administrator => {
+        if (administrator) {
+          this.formGroup.patchValue(administrator);
+        }
+      });
+    }
   }
 
   getErrorMessage(controlName: string): string | null {
@@ -100,9 +115,19 @@ export class CreateUpdateAdministratorComponent implements OnInit, OnDestroy {
 
     if (!this.formGroup.valid) return;
 
-    this.administratorFacade.createAdministrator({
-      ...(this.formGroup.value as AdministratorFormInterface),
-    });
+    if (this.isEditMode) {
+      const id = this.route.snapshot.paramMap.get('id');
+      if (id) {
+        this.administratorFacade.updateAdministrator({
+          ...(this.formGroup.value as AdministratorFormInterface),
+          id: id
+        });
+      }
+    } else {
+      this.administratorFacade.createAdministrator({
+        ...(this.formGroup.value as AdministratorFormInterface),
+      });
+    }
   }
 
   ngOnDestroy(): void {

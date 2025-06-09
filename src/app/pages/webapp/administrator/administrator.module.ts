@@ -12,6 +12,7 @@ import { AdministratorComponent } from './administrator.component';
 import { SharedModule } from '../../../shared/shared.module';
 import { CreateUpdateAdministratorComponent } from './create-update-administrator/create-update-administrator.component';
 import { provideNativeDateAdapter } from '@angular/material/core';
+import { ViewAdministratorComponent } from './view-administrator/view-administrator.component';
 
 const routes: Routes = [
     {
@@ -25,13 +26,18 @@ const routes: Routes = [
     },
 
     {
-        path: 'edit/:administratorId',
+        path: 'edit/:id',
         component: CreateUpdateAdministratorComponent,
+    },
+
+    {
+        path: 'view/:id',
+        component: ViewAdministratorComponent,
     },
 ];
 
 @NgModule({
-    declarations: [AdministratorComponent, CreateUpdateAdministratorComponent],
+    declarations: [AdministratorComponent, CreateUpdateAdministratorComponent, ViewAdministratorComponent],
     imports: [
         CommonModule,
         SharedModule,

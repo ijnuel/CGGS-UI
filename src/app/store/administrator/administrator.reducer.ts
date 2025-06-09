@@ -46,7 +46,23 @@ export const reducer = createReducer(
       loading: false,
       error: action.error,
     };
-  })
+  }),
+  on(AdministratorAction.getAdministratorById, (state) => ({
+    ...state,
+    loading: true,
+    error: null,
+  })),
+  on(AdministratorAction.getAdministratorByIdSuccess, (state, { payload }) => ({
+    ...state,
+    administratorById: payload?.entity,
+    loading: false,
+    error: null,
+  })),
+  on(AdministratorAction.getAdministratorByIdFail, (state, { error }) => ({
+    ...state,
+    loading: false,
+    error,
+  })),
 );
 
 export const getAdministratorList = (state: AdministratorState) => state.administratorList;

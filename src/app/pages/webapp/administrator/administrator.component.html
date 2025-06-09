@@ -1,23 +1,33 @@
-@if ( { administratorList: administratorList$ | async, loading: loading$ | async }; as obs
-) {
-<div class="pl-8 pr-9 pt-6">
-  <div class="flex item-center justify-between">
-    <div class="text-xl font-bold">Administrators</div>
-
-    <button class="sec-btn" routerLink="create">Create Administrator</button>
+<div class="p-6">
+  <div class="flex justify-between items-center mb-4">
+    <h3 class="text-xl font-semibold">Administrators</h3>
+    <div class="flex gap-2">
+      <button mat-icon-button (click)="onRefresh()" class="flex items-center gap-1">
+        <mat-icon>refresh</mat-icon>
+        <span>Refresh</span>
+      </button>
+      <button mat-icon-button routerLink="create" class="flex items-center gap-1">
+        <mat-icon>add</mat-icon>
+        <span>Create</span>
+      </button>
+    </div>
   </div>
-
-  <div class="mt-8">
+  <div *ngIf="administratorList$ | async as administratorList">
     <app-table
-      [isLoading]="obs.loading ?? false"
+      [isLoading]="(loading$ | async) ?? false"
       [showActionColumn]="true"
-      [tableData]="obs.administratorList?.data ?? null"
-      [tableHeaderData]="header"
-      [pageSize]="obs.administratorList?.recordPerPage!"
-      [totalLength]="obs.administratorList?.totalCount!"
-      [pageIndex]="pageQuery.pageIndex!"
+      [tableData]="administratorList.data"
+      [tableHeaderData]="tableHeaderData"
+      [pageSize]="administratorList.recordPerPage"
+      [totalLength]="administratorList.totalCount"
+      [pageIndex]="pageQuery.pageIndex ?? 0"
       (pageChange)="onPageChange($event)"
+      (search)="onSearch($event)"
+      (filter)="onFilter($event)"
+      (refresh)="onRefresh()"
+      (view)="onView($event)"
+      (edit)="onEdit($event)"
+      (delete)="onDelete($event)"
     ></app-table>
   </div>
 </div>
-}
