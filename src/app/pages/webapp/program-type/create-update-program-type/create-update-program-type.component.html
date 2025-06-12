@@ -19,11 +19,23 @@
                         </mat-error>
                     </mat-form-field>
                 </div>
+                <div>
+                    <mat-form-field class="form-input">
+                        <mat-label>Level</mat-label>
+                        <input type="number"
+                               autocomplete="off"
+                               matInput
+                               [formControl]="formControl.level" />
+                        <mat-error>
+                            {{ getErrorMessage("level") }}
+                        </mat-error>
+                    </mat-form-field>
+                </div>
             </div>
         </form>
 
         <div class="actions-btn flex justify-end mt-10 gap-5 form-container mx-auto px-3">
-            <button class="cancel-btn" routerLink="create">Cancel</button>
+            <button class="cancel-btn" routerLink="/app/program-type">Cancel</button>
             <button class="sec-btn" (click)="submit()">Submit</button>
         </div>
     </div>

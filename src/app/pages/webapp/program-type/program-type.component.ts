@@ -39,4 +39,8 @@ export class ProgramTypeComponent implements OnInit {
     this.pageQuery = pageQuery;
     this.programTypeFacade.getProgramTypeList(this.pageQuery);
   }
+
+  onRefresh() {
+    this.programTypeFacade.getProgramTypeList(this.pageQuery);
+  }
 }

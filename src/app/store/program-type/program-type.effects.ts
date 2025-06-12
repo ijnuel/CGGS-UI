@@ -11,6 +11,7 @@ import {
 } from '../../types';
 import { HttpClient } from '@angular/common/http';
 import { GlobalLoadingFacade } from '../global-loading/global-loading.facade';
+import { Router } from '@angular/router';
 
 @Injectable()
 export class ProgramTypeEffect {
@@ -155,9 +156,32 @@ export class ProgramTypeEffect {
     { dispatch: false }
   );
 
+  $createProgramTypeSuccess = createEffect(
+    () =>
+      this.actions$.pipe(
+        ofType(ProgramTypeAction.createProgramTypeSuccess),
+        tap(() => {
+          this.router.navigate(['/app/program-type']);
+        })
+      ),
+    { dispatch: false }
+  );
+
+  $editProgramTypeSuccess = createEffect(
+    () =>
+      this.actions$.pipe(
+        ofType(ProgramTypeAction.editProgramTypeSuccess),
+        tap(() => {
+          this.router.navigate(['/app/program-type']);
+        })
+      ),
+    { dispatch: false }
+  );
+
   constructor(
     private actions$: Actions,
     private http: HttpClient,
-    private errorLoadingFacade: GlobalLoadingFacade
+    private errorLoadingFacade: GlobalLoadingFacade,
+    private router: Router
   ) {}
 }

@@ -1,0 +1,28 @@
+:host {
+  display: block;
+  min-height: 100vh;
+  background-color: #f8fafc;
+}
+
+::ng-deep {
+  .card {
+    @apply bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow duration-200;
+    
+    .card-content {
+      @apply p-6;
+    }
+
+    .card-icon {
+      @apply w-12 h-12 mb-4;
+    }
+
+    .card-title {
+      @apply text-lg font-semibold text-gray-800 mb-2;
+    }
+
+    &:hover {
+      transform: translateY(-2px);
+      transition: transform 0.2s ease-in-out;
+    }
+  }
+}

@@ -22,6 +22,7 @@ export class CreateUpdateProgramTypeComponent implements OnInit, OnDestroy {
 
     formGroup: FormGroup<{
         name: FormControl;
+        level: FormControl;
     }>;
 
     get formControl() {
@@ -41,6 +42,7 @@ export class CreateUpdateProgramTypeComponent implements OnInit, OnDestroy {
 
         this.formGroup = this.fb.group({
             name: ['', [Validators.required, Validators.maxLength(255)]],
+            level: [null, [Validators.required, Validators.min(1)]],
         });
     }
 
