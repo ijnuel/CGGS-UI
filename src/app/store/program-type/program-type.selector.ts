@@ -1,28 +1,55 @@
 import { createSelector } from '@ngrx/store';
-import * as fromProgramType from './program-type.reducer';
-import * as fromApp from '../app.reducer';
+import {
+  getProgramTypeList,
+  getProgramTypeAll,
+  getProgramTypeByProperties,
+  getProgramTypeById,
+  getExists,
+  getCount,
+  getLoading,
+  getError,
+  ProgramTypeState,
+} from './program-type.reducer';
 
-export const selectProgramTypeState = createSelector(
-  fromApp.selectAppState,
-  (state) => state[fromProgramType.programTypeFeatureKey]
-);
+export const selectProgramTypeState = (state: { programType: ProgramTypeState }) =>
+  state.programType;
 
 export const selectProgramTypeList = createSelector(
-  fromProgramType.selectProgramTypeState,
-  fromProgramType.getProgramTypeList
+  selectProgramTypeState,
+  getProgramTypeList
+);
+
+export const selectProgramTypeAll = createSelector(
+  selectProgramTypeState,
+  getProgramTypeAll
+);
+
+export const selectProgramTypeByProperties = createSelector(
+  selectProgramTypeState,
+  getProgramTypeByProperties
 );
 
 export const selectProgramTypeById = createSelector(
-  fromProgramType.selectProgramTypeState,
-  fromProgramType.getProgramTypeById
+  selectProgramTypeState,
+  getProgramTypeById
 );
 
-export const selectLoading = createSelector(
-  fromProgramType.selectProgramTypeState,
-  fromProgramType.getLoading
+export const selectExists = createSelector(
+  selectProgramTypeState,
+  getExists
 );
 
-export const selectError = createSelector(
-  fromProgramType.selectProgramTypeState,
-  fromProgramType.getError
+export const selectCount = createSelector(
+  selectProgramTypeState,
+  getCount
+);
+
+export const selectProgramTypeLoading = createSelector(
+  selectProgramTypeState,
+  getLoading
+);
+
+export const selectProgramTypeError = createSelector(
+  selectProgramTypeState,
+  getError
 );

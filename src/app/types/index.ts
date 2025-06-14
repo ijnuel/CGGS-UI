@@ -5,6 +5,8 @@ import {
 } from './auth';
 import { StudentFormInterface, StudentsListInterface } from './students';
 import { TestEntityTemplateFormInterface, TestEntityTemplateListInterface } from './test-entity-template';
+import { SubjectFormInterface, SubjectListInterface } from './subject';
+import { ProgramTypeFormInterface, ProgramTypeListInterface } from './program-type';
 import { ApplicationFormInterface, ApplicationListInterface } from './application';
 import { FamilyFormInterface, FamilyListInterface } from './family';
 import { StateFormInterface, StateListInterface } from './state';
@@ -14,7 +16,6 @@ import { CountryFormInterface, CountryListInterface } from './country';
 import { CompanyFormInterface, CompanyListInterface } from './company';
 import { StudentClassFormInterface, StudentClassListInterface } from './student-class';
 import { SchoolConfigurationFormInterface, SchoolConfigurationListInterface } from './school-configuration';
-import { ProgramTypeFormInterface, ProgramTypeListInterface } from './program-type';
 import { ClassLevelFormInterface, ClassLevelListInterface } from './class-level';
 import { ClassFormInterface, ClassListInterface } from './class';
 import { StaffFormInterface, StaffListInterface } from './staff';
@@ -69,6 +70,8 @@ export {
   AdministratorListInterface,
   AdministratorFormInterface,
   TestEntityTemplateListInterface,
+  SubjectListInterface,
+  ProgramTypeListInterface,
   ApplicationListInterface,
   FamilyListInterface,
   StateListInterface,
@@ -78,11 +81,12 @@ export {
   CompanyListInterface,
   StudentClassListInterface,
   SchoolConfigurationListInterface,
-  ProgramTypeListInterface,
   ClassLevelListInterface,
   ClassListInterface,
   StaffListInterface,
   TestEntityTemplateFormInterface,
+  SubjectFormInterface,
+  ProgramTypeFormInterface,
   ApplicationFormInterface,
   FamilyFormInterface,
   StateFormInterface,
@@ -92,7 +96,6 @@ export {
   CompanyFormInterface,
   StudentClassFormInterface,
   SchoolConfigurationFormInterface,
-  ProgramTypeFormInterface,
   ClassLevelFormInterface,
   ClassFormInterface,
   StaffFormInterface,

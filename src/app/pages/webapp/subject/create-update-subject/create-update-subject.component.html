@@ -8,7 +8,7 @@
 ) {
 <div class="pl-8 pr-9 pt-6">
   <div class="flex item-center justify-between">
-    <div class="text-xl font-bold">{{ isEditMode ? 'Edit' : 'Create' }} Program Type</div>
+    <div class="text-xl font-bold">{{ isEditMode ? 'Edit' : 'Create' }} Subject</div>
   </div>
 
   @if (obs.error) {
@@ -34,25 +34,11 @@
             </mat-error>
           </mat-form-field>
         </div>
-        <div>
-          <mat-form-field class="form-input">
-            <mat-label>Level</mat-label>
-            <input
-              type="number"
-              autocomplete="off"
-              matInput
-              [formControl]="formControl.level"
-            />
-            <mat-error>
-              {{ getErrorMessage("level") }}
-            </mat-error>
-          </mat-form-field>
-        </div>
       </div>
     </form>
 
     <div class="actions-btn flex justify-end mt-10 gap-5 form-container mx-auto px-3">
-      <button class="cancel-btn" routerLink="/app/program-type">Cancel</button>
+      <button class="cancel-btn" routerLink="/app/subject">Cancel</button>
       <button class="sec-btn" (click)="submit()" [disabled]="obs.loading">
         {{ isEditMode ? 'Update' : 'Submit' }}
       </button>

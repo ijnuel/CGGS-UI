@@ -5,6 +5,8 @@ import * as fromStudent from './students/students.reducer';
 import * as fromShared from './shared/shared.reducer';
 import * as fromAdministrator from './administrator/administrator.reducer';
 import * as fromTestEntityTemplate from './test-entity-template/test-entity-template.reducer';
+import * as fromSubject from './subject/subject.reducer';
+import * as fromProgramType from './program-type/program-type.reducer';
 import * as fromApplication from './application/application.reducer';
 import * as fromFamily from './family/family.reducer';
 import * as fromState from './state/state.reducer';
@@ -14,7 +16,6 @@ import * as fromCountry from './country/country.reducer';
 import * as fromCompany from './company/company.reducer';
 import * as fromStudentClass from './student-class/student-class.reducer';
 import * as fromSchoolConfiguration from './school-configuration/school-configuration.reducer';
-import * as fromProgramType from './program-type/program-type.reducer';
 import * as fromClassLevel from './class-level/class-level.reducer';
 import * as fromClass from './class/class.reducer';
 import * as fromStaff from './staff/staff.reducer';
@@ -28,6 +29,8 @@ export interface AppState {
   [fromShared.sharedFeatureKey]: fromShared.SharedState;
   [fromAdministrator.administratorFeatureKey]: fromAdministrator.AdministratorState;
   [fromTestEntityTemplate.testEntityTemplateFeatureKey]: fromTestEntityTemplate.TestEntityTemplateState;
+  [fromSubject.subjectFeatureKey]: fromSubject.SubjectState;
+  [fromProgramType.programTypeFeatureKey]: fromProgramType.ProgramTypeState;
   [fromApplication.applicationFeatureKey]: fromApplication.ApplicationState;
   [fromFamily.familyFeatureKey]: fromFamily.FamilyState;
   [fromState.stateFeatureKey]: fromState.StateState;
@@ -37,7 +40,6 @@ export interface AppState {
   [fromCompany.companyFeatureKey]: fromCompany.CompanyState;
   [fromStudentClass.studentClassFeatureKey]: fromStudentClass.StudentClassState;
   [fromSchoolConfiguration.schoolConfigurationFeatureKey]: fromSchoolConfiguration.SchoolConfigurationState;
-  [fromProgramType.programTypeFeatureKey]: fromProgramType.ProgramTypeState;
   [fromClassLevel.classLevelFeatureKey]: fromClassLevel.ClassLevelState;
   [fromClass.classFeatureKey]: fromClass.ClassState;
   [fromStaff.staffFeatureKey]: fromStaff.StaffState;
@@ -50,6 +52,8 @@ export const reducers = {
   [fromShared.sharedFeatureKey]: fromShared.reducer,
   [fromAdministrator.administratorFeatureKey]: fromAdministrator.reducer,
   [fromTestEntityTemplate.testEntityTemplateFeatureKey]: fromTestEntityTemplate.reducer,
+  [fromSubject.subjectFeatureKey]: fromSubject.reducer,
+  [fromProgramType.programTypeFeatureKey]: fromProgramType.reducer,
   [fromApplication.applicationFeatureKey]: fromApplication.reducer,
   [fromFamily.familyFeatureKey]: fromFamily.reducer,
   [fromState.stateFeatureKey]: fromState.reducer,
@@ -59,7 +63,6 @@ export const reducers = {
   [fromCompany.companyFeatureKey]: fromCompany.reducer,
   [fromStudentClass.studentClassFeatureKey]: fromStudentClass.reducer,
   [fromSchoolConfiguration.schoolConfigurationFeatureKey]: fromSchoolConfiguration.reducer,
-  [fromProgramType.programTypeFeatureKey]: fromProgramType.reducer,
   [fromClassLevel.classLevelFeatureKey]: fromClassLevel.reducer,
   [fromClass.classFeatureKey]: fromClass.reducer,
   [fromStaff.staffFeatureKey]: fromStaff.reducer,

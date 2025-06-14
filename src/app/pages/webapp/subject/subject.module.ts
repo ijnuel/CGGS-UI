@@ -8,37 +8,36 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatIconModule } from '@angular/material/icon';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatRadioModule } from '@angular/material/radio';
-import { ProgramTypeComponent } from './program-type.component';
+import { SubjectComponent } from './subject.component';
 import { SharedModule } from '../../../shared/shared.module';
-import { CreateUpdateProgramTypeComponent } from './create-update-program-type/create-update-program-type.component';
+import { CreateUpdateSubjectComponent } from './create-update-subject/create-update-subject.component';
 import { provideNativeDateAdapter } from '@angular/material/core';
-import { MatExpansionModule } from '@angular/material/expansion';
-import { ViewProgramTypeComponent } from './view-program-type/view-program-type.component';
+import { ViewSubjectComponent } from './view-subject/view-subject.component';
 
 const routes: Routes = [
     {
         path: '',
-        component: ProgramTypeComponent,
+        component: SubjectComponent,
     },
 
     {
         path: 'create',
-        component: CreateUpdateProgramTypeComponent,
+        component: CreateUpdateSubjectComponent,
     },
 
     {
         path: 'edit/:id',
-        component: CreateUpdateProgramTypeComponent,
+        component: CreateUpdateSubjectComponent,
     },
 
     {
         path: 'view/:id',
-        component: ViewProgramTypeComponent,
+        component: ViewSubjectComponent,
     },
 ];
 
 @NgModule({
-    declarations: [ProgramTypeComponent, CreateUpdateProgramTypeComponent, ViewProgramTypeComponent],
+    declarations: [SubjectComponent, CreateUpdateSubjectComponent, ViewSubjectComponent],
     imports: [
         CommonModule,
         SharedModule,
@@ -51,8 +50,7 @@ const routes: Routes = [
         MatDatepickerModule,
         MatSelectModule,
         MatRadioModule,
-        MatExpansionModule,
     ],
     providers: [provideNativeDateAdapter()],
 })
-export class ProgramTypeModule { }
+export class SubjectModule { }

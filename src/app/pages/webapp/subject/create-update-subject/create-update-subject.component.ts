@@ -1,6 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { BehaviorSubject, Observable, Subject, takeUntil } from 'rxjs';
-import { ProgramTypeFacade } from '../../../../store/program-type/program-type.facade';
+import { SubjectFacade } from '../../../../store/subject/subject.facade';
 import {
     FormBuilder,
     FormControl,
@@ -8,25 +8,24 @@ import {
     Validators,
 } from '@angular/forms';
 import { getErrorMessageHelper } from '../../../../services/helper.service';
-import { DropdownListInterface, ProgramTypeFormInterface } from '../../../../types';
+import { DropdownListInterface, SubjectFormInterface } from '../../../../types';
 import { SharedFacade } from '../../../../store/shared/shared.facade';
 import { ActivatedRoute, Router } from '@angular/router';
 import { GlobalLoadingFacade } from '../../../../store/global-loading/global-loading.facade';
 
 @Component({
-    selector: 'app-create-update-program-type',
-    templateUrl: './create-update-program-type.component.html',
-    styleUrl: './create-update-program-type.component.scss',
+    selector: 'app-create-update-subject',
+    templateUrl: './create-update-subject.component.html',
+    styleUrl: './create-update-subject.component.scss',
 })
-export class CreateUpdateProgramTypeComponent implements OnInit, OnDestroy {
+export class CreateUpdateSubjectComponent implements OnInit, OnDestroy {
     loading$: Observable<boolean>;
     error$: Observable<string | null>;
-    programTypeById$: Observable<ProgramTypeFormInterface | null>;
+    subjectById$: Observable<SubjectFormInterface | null>;
     dropdownLoading$: Observable<boolean>;
 
     formGroup: FormGroup<{
         name: FormControl;
-        level: FormControl;
     }>;
 
     get formControl() {
@@ -37,34 +36,32 @@ export class CreateUpdateProgramTypeComponent implements OnInit, OnDestroy {
     unsubscribe$ = new Subject<void>();
 
     constructor(
-        private programTypeFacade: ProgramTypeFacade,
+        private subjectFacade: SubjectFacade,
         private fb: FormBuilder,
         private sharedFacade: SharedFacade,
         private route: ActivatedRoute,
         private router: Router,
         private globalLoadingFacade: GlobalLoadingFacade
     ) {
-        this.loading$ = this.programTypeFacade.loading$;
-        this.error$ = this.programTypeFacade.error$;
-        this.programTypeById$ = this.programTypeFacade.programTypeById$;
+        this.loading$ = this.subjectFacade.loading$;
+        this.error$ = this.subjectFacade.error$;
+        this.subjectById$ = this.subjectFacade.subjectById$;
         this.dropdownLoading$ = this.sharedFacade.selectedLoading$;
 
         this.formGroup = this.fb.group({
             name: ['', [Validators.required, Validators.maxLength(255)]],
-            level: [null, [Validators.required, Validators.min(1)]],
         });
     }
 
     ngOnInit() {
-        const programTypeId = this.route.snapshot.params['id'];
-        if (programTypeId) {
+        const subjectId = this.route.snapshot.params['id'];
+        if (subjectId) {
             this.isEditMode = true;
-            this.programTypeFacade.getProgramTypeById(programTypeId);
-            this.programTypeById$.pipe(takeUntil(this.unsubscribe$)).subscribe((data) => {
+            this.subjectFacade.getSubjectById(subjectId);
+            this.subjectById$.pipe(takeUntil(this.unsubscribe$)).subscribe((data) => {
                 if (data) {
                     this.formGroup.patchValue({
-                        name: data.name,
-                        level: data.level,
+                        name: data.name
                     });
                 }
             });
@@ -87,20 +84,21 @@ export class CreateUpdateProgramTypeComponent implements OnInit, OnDestroy {
 
         if (!this.formGroup.valid) return;
 
-        const formData = this.formGroup.value as ProgramTypeFormInterface;
+        const formData = this.formGroup.value as SubjectFormInterface;
+        console.log(this.isEditMode);
         if (this.isEditMode) {
-            this.programTypeFacade.updateProgramType({
+            this.subjectFacade.updateSubject({
                 ...formData,
                 id: this.route.snapshot.params['id']
             });
-            this.globalLoadingFacade.globalSuccessShow('Program Type updated successfully', 3000);
+            this.globalLoadingFacade.globalSuccessShow('Subject updated successfully', 3000);
         } else {
-            this.programTypeFacade.createProgramType(formData);
-            this.globalLoadingFacade.globalSuccessShow('Program Type created successfully', 3000);
+            this.subjectFacade.createSubject(formData);
+            this.globalLoadingFacade.globalSuccessShow('Subject created successfully', 3000);
         }
 
         // Navigate to the list page
-        this.router.navigate(['/app/program-type']);
+        this.router.navigate(['/app/subject']);
     }
 
     ngOnDestroy(): void {

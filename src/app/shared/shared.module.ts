@@ -14,6 +14,7 @@ import { CardComponent } from './card/card.component';
 import { MatPaginator } from '@angular/material/paginator';
 import { ConfirmDialogComponent } from './confirm-dialog/confirm-dialog.component';
 import { ReactiveFormsModule } from '@angular/forms';
+import { MatExpansionModule } from '@angular/material/expansion';
 
 @NgModule({
   declarations: [
@@ -33,6 +34,7 @@ import { ReactiveFormsModule } from '@angular/forms';
     CommonModule,
     MatProgressSpinnerModule,
     MatPaginator,
+    MatExpansionModule,
     ReactiveFormsModule,
   ],
   exports: [

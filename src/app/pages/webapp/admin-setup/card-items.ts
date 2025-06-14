@@ -8,6 +8,12 @@ export default [
     url: '/app/program-type'
   },
   {
+    name: 'Subjects',
+    icon: 'assets/icons/settings-icon.svg',
+    roles: [],
+    url: '/app/subject'
+  },
+  {
     name: 'Class Levels',
     icon: 'assets/icons/settings-icon.svg',
     roles: [],

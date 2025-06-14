@@ -2,35 +2,35 @@ import { Injectable } from '@angular/core';
 import { createEffect, ofType, Actions } from '@ngrx/effects';
 import { of } from 'rxjs';
 import { catchError, map, switchMap, tap } from 'rxjs/operators';
-import * as ProgramTypeAction from './program-type.actions';
+import * as SubjectAction from './subject.actions';
 import { environment } from '../../../environments/environment';
 import {
-  ProgramTypeListInterface,
+  SubjectListInterface,
   PaginatedResponseInterface,
   GenericResponseInterface,
-  ProgramTypeFormInterface,
+  SubjectFormInterface,
 } from '../../types';
 import { HttpClient } from '@angular/common/http';
 import { GlobalLoadingFacade } from '../global-loading/global-loading.facade';
 
 @Injectable()
-export class ProgramTypeEffect {
+export class SubjectEffect {
   // Get All (non-paginated)
-  $programTypeAll = createEffect(() =>
+  $subjectAll = createEffect(() =>
     this.actions$.pipe(
-      ofType(ProgramTypeAction.getProgramTypeAll),
+      ofType(SubjectAction.getSubjectAll),
       switchMap(() =>
         this.http
-          .get<GenericResponseInterface<ProgramTypeListInterface[]>>(
-            `${environment.baseUrl}/ProgramType/GetAll`,
+          .get<GenericResponseInterface<SubjectListInterface[]>>(
+            `${environment.baseUrl}/Subject/GetAll`,
             { withCredentials: true }
           )
           .pipe(
             map((payload) =>
-              ProgramTypeAction.getProgramTypeAllSuccess({ payload })
+              SubjectAction.getSubjectAllSuccess({ payload })
             ),
             catchError((error) => {
-              return of(ProgramTypeAction.getProgramTypeAllFail({ error }));
+              return of(SubjectAction.getSubjectAllFail({ error }));
             })
           )
       )
@@ -38,9 +38,9 @@ export class ProgramTypeEffect {
   );
 
   // Get All Paginated
-  $programTypeList = createEffect(() =>
+  $subjectList = createEffect(() =>
     this.actions$.pipe(
-      ofType(ProgramTypeAction.getProgramTypeList),
+      ofType(SubjectAction.getSubjectList),
       switchMap(({ pageQuery }) => {
         const params: { [key: string]: string | number } = {
           start: pageQuery.start,
@@ -57,8 +57,8 @@ export class ProgramTypeEffect {
         }
 
         return this.http
-          .get<GenericResponseInterface<PaginatedResponseInterface<ProgramTypeListInterface[]>>>(
-            `${environment.baseUrl}/ProgramType/GetAllPaginated`,
+          .get<GenericResponseInterface<PaginatedResponseInterface<SubjectListInterface[]>>>(
+            `${environment.baseUrl}/Subject/GetAllPaginated`,
             {
               params,
               withCredentials: true,
@@ -66,14 +66,14 @@ export class ProgramTypeEffect {
           )
           .pipe(
             map((response) => {
-              const paginatedResponse: PaginatedResponseInterface<ProgramTypeListInterface[]> = {
+              const paginatedResponse: PaginatedResponseInterface<SubjectListInterface[]> = {
                 currentPage: response.entity.currentPage,
                 recordPerPage: response.entity.recordPerPage,
                 totalPages: response.entity.totalPages,
                 totalCount: response.entity.totalCount,
                 data: response.entity.data
               };
-              return ProgramTypeAction.getProgramTypeListSuccess({ 
+              return SubjectAction.getSubjectListSuccess({ 
                 payload: { 
                   entity: paginatedResponse,
                   error: response.error,
@@ -85,7 +85,7 @@ export class ProgramTypeEffect {
               });
             }),
             catchError((error) => {
-              return of(ProgramTypeAction.getProgramTypeListFail({ error }));
+              return of(SubjectAction.getSubjectListFail({ error }));
             })
           );
       })
@@ -93,24 +93,24 @@ export class ProgramTypeEffect {
   );
 
   // Get By Id
-  $programTypeById = createEffect(() =>
+  $subjectById = createEffect(() =>
     this.actions$.pipe(
-      ofType(ProgramTypeAction.getProgramTypeById),
-      switchMap(({ programTypeId }) =>
+      ofType(SubjectAction.getSubjectById),
+      switchMap(({ subjectId }) =>
         this.http
-          .get<GenericResponseInterface<ProgramTypeListInterface>>(
-            `${environment.baseUrl}/ProgramType/GetById`,
+          .get<GenericResponseInterface<SubjectListInterface>>(
+            `${environment.baseUrl}/Subject/GetById`,
             {
-              params: { id: programTypeId },
+              params: { id: subjectId },
               withCredentials: true,
             }
           )
           .pipe(
             map((payload) =>
-              ProgramTypeAction.getProgramTypeByIdSuccess({ payload })
+              SubjectAction.getSubjectByIdSuccess({ payload })
             ),
             catchError((error) => {
-              return of(ProgramTypeAction.getProgramTypeByIdFail({ error }));
+              return of(SubjectAction.getSubjectByIdFail({ error }));
             })
           )
       )
@@ -118,22 +118,22 @@ export class ProgramTypeEffect {
   );
 
   // Get By Properties
-  $programTypeByProperties = createEffect(() =>
+  $subjectByProperties = createEffect(() =>
     this.actions$.pipe(
-      ofType(ProgramTypeAction.getProgramTypeByProperties),
+      ofType(SubjectAction.getSubjectByProperties),
       switchMap(({ properties }) =>
         this.http
-          .post<GenericResponseInterface<ProgramTypeListInterface[]>>(
-            `${environment.baseUrl}/ProgramType/GetByProperties`,
+          .post<GenericResponseInterface<SubjectListInterface[]>>(
+            `${environment.baseUrl}/Subject/GetByProperties`,
             properties,
             { withCredentials: true }
           )
           .pipe(
             map((payload) =>
-              ProgramTypeAction.getProgramTypeByPropertiesSuccess({ payload })
+              SubjectAction.getSubjectByPropertiesSuccess({ payload })
             ),
             catchError((error) => {
-              return of(ProgramTypeAction.getProgramTypeByPropertiesFail({ error }));
+              return of(SubjectAction.getSubjectByPropertiesFail({ error }));
             })
           )
       )
@@ -141,22 +141,22 @@ export class ProgramTypeEffect {
   );
 
   // Exists
-  $programTypeExists = createEffect(() =>
+  $subjectExists = createEffect(() =>
     this.actions$.pipe(
-      ofType(ProgramTypeAction.programTypeExists),
+      ofType(SubjectAction.subjectExists),
       switchMap(({ properties }) =>
         this.http
           .post<GenericResponseInterface<boolean>>(
-            `${environment.baseUrl}/ProgramType/Exists`,
+            `${environment.baseUrl}/Subject/Exists`,
             properties,
             { withCredentials: true }
           )
           .pipe(
             map((payload) =>
-              ProgramTypeAction.programTypeExistsSuccess({ payload })
+              SubjectAction.subjectExistsSuccess({ payload })
             ),
             catchError((error) => {
-              return of(ProgramTypeAction.programTypeExistsFail({ error }));
+              return of(SubjectAction.subjectExistsFail({ error }));
             })
           )
       )
@@ -164,21 +164,21 @@ export class ProgramTypeEffect {
   );
 
   // Count
-  $programTypeCount = createEffect(() =>
+  $subjectCount = createEffect(() =>
     this.actions$.pipe(
-      ofType(ProgramTypeAction.programTypeCount),
+      ofType(SubjectAction.subjectCount),
       switchMap(() =>
         this.http
           .get<GenericResponseInterface<number>>(
-            `${environment.baseUrl}/ProgramType/Count`,
+            `${environment.baseUrl}/Subject/Count`,
             { withCredentials: true }
           )
           .pipe(
             map((payload) =>
-              ProgramTypeAction.programTypeCountSuccess({ payload })
+              SubjectAction.subjectCountSuccess({ payload })
             ),
             catchError((error) => {
-              return of(ProgramTypeAction.programTypeCountFail({ error }));
+              return of(SubjectAction.subjectCountFail({ error }));
             })
           )
       )
@@ -186,22 +186,22 @@ export class ProgramTypeEffect {
   );
 
   // Create
-  $createProgramType = createEffect(() =>
+  $createSubject = createEffect(() =>
     this.actions$.pipe(
-      ofType(ProgramTypeAction.createProgramType),
+      ofType(SubjectAction.createSubject),
       switchMap(({ payload }) =>
         this.http
-          .post<GenericResponseInterface<ProgramTypeListInterface>>(
-            `${environment.baseUrl}/ProgramType/Create`,
+          .post<GenericResponseInterface<SubjectListInterface>>(
+            `${environment.baseUrl}/Subject/Create`,
             payload,
             { withCredentials: true }
           )
           .pipe(
             map((payload) =>
-              ProgramTypeAction.createProgramTypeSuccess({ payload })
+              SubjectAction.createSubjectSuccess({ payload })
             ),
             catchError((error) => {
-              return of(ProgramTypeAction.createProgramTypeFail({ error }));
+              return of(SubjectAction.createSubjectFail({ error }));
             })
           )
       )
@@ -209,22 +209,22 @@ export class ProgramTypeEffect {
   );
 
   // Update
-  $updateProgramType = createEffect(() =>
+  $updateSubject = createEffect(() =>
     this.actions$.pipe(
-      ofType(ProgramTypeAction.updateProgramType),
+      ofType(SubjectAction.updateSubject),
       switchMap(({ payload }) =>
         this.http
-          .put<GenericResponseInterface<ProgramTypeListInterface>>(
-            `${environment.baseUrl}/ProgramType/Update`,
+          .put<GenericResponseInterface<SubjectListInterface>>(
+            `${environment.baseUrl}/Subject/Update`,
             payload,
             { withCredentials: true }
           )
           .pipe(
             map((payload) =>
-              ProgramTypeAction.updateProgramTypeSuccess({ payload })
+              SubjectAction.updateSubjectSuccess({ payload })
             ),
             catchError((error) => {
-              return of(ProgramTypeAction.updateProgramTypeFail({ error }));
+              return of(SubjectAction.updateSubjectFail({ error }));
             })
           )
       )
@@ -232,24 +232,24 @@ export class ProgramTypeEffect {
   );
 
   // Delete
-  $deleteProgramType = createEffect(() =>
+  $deleteSubject = createEffect(() =>
     this.actions$.pipe(
-      ofType(ProgramTypeAction.deleteProgramType),
-      switchMap(({ programTypeId }) =>
+      ofType(SubjectAction.deleteSubject),
+      switchMap(({ subjectId }) =>
         this.http
           .delete<GenericResponseInterface<boolean>>(
-            `${environment.baseUrl}/ProgramType/Delete`,
+            `${environment.baseUrl}/Subject/Delete`,
             {
-              params: { programTypeId },
+              params: { id: subjectId },
               withCredentials: true
             }
           )
           .pipe(
             map((payload) =>
-              ProgramTypeAction.deleteProgramTypeSuccess({ payload })
+              SubjectAction.deleteSubjectSuccess({ payload })
             ),
             catchError((error) => {
-              return of(ProgramTypeAction.deleteProgramTypeFail({ error }));
+              return of(SubjectAction.deleteSubjectFail({ error }));
             })
           )
       )
@@ -257,22 +257,22 @@ export class ProgramTypeEffect {
   );
 
   // Create Many
-  $createManyProgramTypes = createEffect(() =>
+  $createManySubjects = createEffect(() =>
     this.actions$.pipe(
-      ofType(ProgramTypeAction.createManyProgramTypes),
+      ofType(SubjectAction.createManySubjects),
       switchMap(({ payload }) =>
         this.http
-          .post<GenericResponseInterface<ProgramTypeListInterface[]>>(
-            `${environment.baseUrl}/ProgramType/CreateMany`,
+          .post<GenericResponseInterface<SubjectListInterface[]>>(
+            `${environment.baseUrl}/Subject/CreateMany`,
             payload,
             { withCredentials: true }
           )
           .pipe(
             map((payload) =>
-              ProgramTypeAction.createManyProgramTypesSuccess({ payload })
+              SubjectAction.createManySubjectsSuccess({ payload })
             ),
             catchError((error) => {
-              return of(ProgramTypeAction.createManyProgramTypesFail({ error }));
+              return of(SubjectAction.createManySubjectsFail({ error }));
             })
           )
       )
@@ -280,22 +280,22 @@ export class ProgramTypeEffect {
   );
 
   // Update Many
-  $updateManyProgramTypes = createEffect(() =>
+  $updateManySubjects = createEffect(() =>
     this.actions$.pipe(
-      ofType(ProgramTypeAction.updateManyProgramTypes),
+      ofType(SubjectAction.updateManySubjects),
       switchMap(({ payload }) =>
         this.http
-          .post<GenericResponseInterface<ProgramTypeListInterface[]>>(
-            `${environment.baseUrl}/ProgramType/UpdateMany`,
+          .post<GenericResponseInterface<SubjectListInterface[]>>(
+            `${environment.baseUrl}/Subject/UpdateMany`,
             payload,
             { withCredentials: true }
           )
           .pipe(
             map((payload) =>
-              ProgramTypeAction.updateManyProgramTypesSuccess({ payload })
+              SubjectAction.updateManySubjectsSuccess({ payload })
             ),
             catchError((error) => {
-              return of(ProgramTypeAction.updateManyProgramTypesFail({ error }));
+              return of(SubjectAction.updateManySubjectsFail({ error }));
             })
           )
       )
@@ -303,24 +303,24 @@ export class ProgramTypeEffect {
   );
 
   // Delete Many
-  $deleteManyProgramTypes = createEffect(() =>
+  $deleteManySubjects = createEffect(() =>
     this.actions$.pipe(
-      ofType(ProgramTypeAction.deleteManyProgramTypes),
-      switchMap(({ programTypeIds }) =>
+      ofType(SubjectAction.deleteManySubjects),
+      switchMap(({ subjectIds }) =>
         this.http
           .delete<GenericResponseInterface<boolean>>(
-            `${environment.baseUrl}/ProgramType/DeleteMany`,
+            `${environment.baseUrl}/Subject/DeleteMany`,
             {
-              params: { ids: programTypeIds },
+              params: { ids: subjectIds },
               withCredentials: true
             }
           )
           .pipe(
             map((payload) =>
-              ProgramTypeAction.deleteManyProgramTypesSuccess({ payload })
+              SubjectAction.deleteManySubjectsSuccess({ payload })
             ),
             catchError((error) => {
-              return of(ProgramTypeAction.deleteManyProgramTypesFail({ error }));
+              return of(SubjectAction.deleteManySubjectsFail({ error }));
             })
           )
       )
@@ -328,16 +328,16 @@ export class ProgramTypeEffect {
   );
 
   // Loading Effects
-  $programTypeLoading = createEffect(
+  $subjectLoading = createEffect(
     () =>
       this.actions$.pipe(
         ofType(
-          ProgramTypeAction.createProgramType,
-          ProgramTypeAction.updateProgramType,
-          ProgramTypeAction.deleteProgramType,
-          ProgramTypeAction.createManyProgramTypes,
-          ProgramTypeAction.updateManyProgramTypes,
-          ProgramTypeAction.deleteManyProgramTypes
+          SubjectAction.createSubject,
+          SubjectAction.updateSubject,
+          SubjectAction.deleteSubject,
+          SubjectAction.createManySubjects,
+          SubjectAction.updateManySubjects,
+          SubjectAction.deleteManySubjects
         ),
         tap((action) => {
           this.errorLoadingFacade.globalLoadingShow(action.type);
@@ -346,22 +346,22 @@ export class ProgramTypeEffect {
     { dispatch: false }
   );
 
-  $programTypeLoadingHide = createEffect(
+  $subjectLoadingHide = createEffect(
     () =>
       this.actions$.pipe(
         ofType(
-          ProgramTypeAction.createProgramTypeSuccess,
-          ProgramTypeAction.createProgramTypeFail,
-          ProgramTypeAction.updateProgramTypeSuccess,
-          ProgramTypeAction.updateProgramTypeFail,
-          ProgramTypeAction.deleteProgramTypeSuccess,
-          ProgramTypeAction.deleteProgramTypeFail,
-          ProgramTypeAction.createManyProgramTypesSuccess,
-          ProgramTypeAction.createManyProgramTypesFail,
-          ProgramTypeAction.updateManyProgramTypesSuccess,
-          ProgramTypeAction.updateManyProgramTypesFail,
-          ProgramTypeAction.deleteManyProgramTypesSuccess,
-          ProgramTypeAction.deleteManyProgramTypesFail
+          SubjectAction.createSubjectSuccess,
+          SubjectAction.createSubjectFail,
+          SubjectAction.updateSubjectSuccess,
+          SubjectAction.updateSubjectFail,
+          SubjectAction.deleteSubjectSuccess,
+          SubjectAction.deleteSubjectFail,
+          SubjectAction.createManySubjectsSuccess,
+          SubjectAction.createManySubjectsFail,
+          SubjectAction.updateManySubjectsSuccess,
+          SubjectAction.updateManySubjectsFail,
+          SubjectAction.deleteManySubjectsSuccess,
+          SubjectAction.deleteManySubjectsFail
         ),
         tap(() => {
           this.errorLoadingFacade.globalLoadingHide();

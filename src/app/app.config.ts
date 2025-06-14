@@ -27,6 +27,7 @@ import { SharedEffect } from './store/shared/shared.effects';
 import { SharedFacade } from './store/shared/shared.facade';
 import { AdministratorFacade } from './store/administrator/administrator.facade';
 import { TestEntityTemplateFacade } from './store/test-entity-template/test-entity-template.facade';
+import { SubjectFacade } from './store/subject/subject.facade';
 import { ApplicationFacade } from './store/application/application.facade';
 import { FamilyFacade } from './store/family/family.facade';
 import { StateFacade } from './store/state/state.facade';
@@ -42,6 +43,7 @@ import { ClassFacade } from './store/class/class.facade';
 import { StaffFacade } from './store/staff/staff.facade';
 import { AdministratorEffect } from './store/administrator/administrator.effects';
 import { TestEntityTemplateEffect } from './store/test-entity-template/test-entity-template.effects';
+import { SubjectEffect } from './store/subject/subject.effects';
 import { ApplicationEffect } from './store/application/application.effects';
 import { FamilyEffect } from './store/family/family.effects';
 import { StateEffect } from './store/state/state.effects';
@@ -67,6 +69,7 @@ export const appConfig: ApplicationConfig = {
         SharedEffect,
         AdministratorEffect,
         TestEntityTemplateEffect,
+        SubjectEffect,
         ApplicationEffect,
         FamilyEffect,
         StateEffect,
@@ -114,6 +117,7 @@ export const appConfig: ApplicationConfig = {
     SharedFacade,
     AdministratorFacade,
     TestEntityTemplateFacade,
+    SubjectFacade,
     ApplicationFacade,
     FamilyFacade,
     StateFacade,

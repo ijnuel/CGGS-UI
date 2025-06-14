@@ -1,39 +1,105 @@
 import { Injectable } from '@angular/core';
-import { select, Store } from '@ngrx/store';
+import { Store } from '@ngrx/store';
+import { Observable } from 'rxjs';
+import {
+  ProgramTypeListInterface,
+  ProgramTypeFormInterface,
+  PageQueryInterface,
+  PaginatedResponseInterface,
+} from '../../types';
+import * as ProgramTypeAction from './program-type.actions';
+import {
+  selectProgramTypeList,
+  selectProgramTypeAll,
+  selectProgramTypeByProperties,
+  selectProgramTypeById,
+  selectExists,
+  selectCount,
+  selectProgramTypeLoading,
+  selectProgramTypeError,
+} from './program-type.selector';
+import { ProgramTypeState } from './program-type.reducer';
 
-import * as ProgramTypeActions from './program-type.actions';
-import * as ProgramTypeSelector from './program-type.selector';
-import { PageQueryInterface, ProgramTypeFormInterface } from '../../types';
-
-@Injectable()
+@Injectable({
+  providedIn: 'root',
+})
 export class ProgramTypeFacade {
-  selectProgramTypeList$ = this.store.pipe(
-    select(ProgramTypeSelector.selectProgramTypeList)
-  );
+  programTypeList$: Observable<PaginatedResponseInterface<ProgramTypeListInterface[]> | null>;
+  programTypeAll$: Observable<ProgramTypeListInterface[] | null>;
+  programTypeByProperties$: Observable<ProgramTypeListInterface[] | null>;
+  programTypeById$: Observable<ProgramTypeListInterface | null>;
+  exists$: Observable<boolean | null>;
+  count$: Observable<number | null>;
+  loading$: Observable<boolean>;
+  error$: Observable<string | null>;
+  currentPageQuery: PageQueryInterface = {
+    start: 0,
+    recordsPerPage: 10,
+    pageIndex: 0,
+    searchText: ''
+  };
 
-  selectProgramTypeById$ = this.store.pipe(
-    select(ProgramTypeSelector.selectProgramTypeById)
-  );
-
-  selectedLoading$ = this.store.pipe(select(ProgramTypeSelector.selectLoading));
-
-  selectedError$ = this.store.pipe(select(ProgramTypeSelector.selectError));
-
-  constructor(private readonly store: Store) {}
-
-  getProgramTypeList(pageQuery: PageQueryInterface) {
-    this.store.dispatch(ProgramTypeActions.getProgramTypeList({ pageQuery }));
+  constructor(private store: Store<{ programType: ProgramTypeState }>) {
+    this.programTypeList$ = this.store.select(selectProgramTypeList);
+    this.programTypeAll$ = this.store.select(selectProgramTypeAll);
+    this.programTypeByProperties$ = this.store.select(selectProgramTypeByProperties);
+    this.programTypeById$ = this.store.select(selectProgramTypeById);
+    this.exists$ = this.store.select(selectExists);
+    this.count$ = this.store.select(selectCount);
+    this.loading$ = this.store.select(selectProgramTypeLoading);
+    this.error$ = this.store.select(selectProgramTypeError);
   }
 
-  getProgramTypeById(programTypeId: string) {
-    this.store.dispatch(ProgramTypeActions.getProgramTypeById({ programTypeId }));
+  getProgramTypeList(pageQuery: PageQueryInterface): void {
+    this.currentPageQuery = pageQuery;
+    this.store.dispatch(ProgramTypeAction.getProgramTypeList({ pageQuery }));
   }
 
-  createProgramType(payload: ProgramTypeFormInterface) {
-    this.store.dispatch(ProgramTypeActions.createProgramType({ payload }));
+  getCurrentPageQuery(): PageQueryInterface {
+    return this.currentPageQuery;
   }
 
-  updateProgramType(payload: ProgramTypeFormInterface) {
-    this.store.dispatch(ProgramTypeActions.editProgramType({ payload }));
+  getProgramTypeAll(): void {
+    this.store.dispatch(ProgramTypeAction.getProgramTypeAll());
+  }
+
+  getProgramTypeById(programTypeId: string): void {
+    this.store.dispatch(ProgramTypeAction.getProgramTypeById({ programTypeId }));
+  }
+
+  getProgramTypeByProperties(properties: Partial<ProgramTypeFormInterface>): void {
+    this.store.dispatch(ProgramTypeAction.getProgramTypeByProperties({ properties }));
+  }
+
+  programTypeExists(properties: Partial<ProgramTypeFormInterface>): void {
+    this.store.dispatch(ProgramTypeAction.programTypeExists({ properties }));
+  }
+
+  programTypeCount(): void {
+    this.store.dispatch(ProgramTypeAction.programTypeCount());
+  }
+
+  createProgramType(programType: ProgramTypeFormInterface): void {
+    this.store.dispatch(ProgramTypeAction.createProgramType({ payload: programType }));
+  }
+
+  updateProgramType(programType: ProgramTypeFormInterface): void {
+    this.store.dispatch(ProgramTypeAction.updateProgramType({ payload: programType }));
+  }
+
+  deleteProgramType(programTypeId: string): void {
+    this.store.dispatch(ProgramTypeAction.deleteProgramType({ programTypeId }));
+  }
+
+  createManyProgramTypes(programTypes: ProgramTypeFormInterface[]): void {
+    this.store.dispatch(ProgramTypeAction.createManyProgramTypes({ payload: programTypes }));
+  }
+
+  updateManyProgramTypes(programTypes: ProgramTypeFormInterface[]): void {
+    this.store.dispatch(ProgramTypeAction.updateManyProgramTypes({ payload: programTypes }));
+  }
+
+  deleteManyProgramTypes(programTypeIds: string[]): void {
+    this.store.dispatch(ProgramTypeAction.deleteManyProgramTypes({ programTypeIds }));
   }
 }

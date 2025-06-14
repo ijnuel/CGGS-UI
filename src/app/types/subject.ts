@@ -1,14 +1,12 @@
-export interface ProgramTypeListInterface {
+export interface SubjectListInterface {
     id: string;
     name: string;
     description: string;
     createdDate: string;
-    level: number;
 }
 
-export interface ProgramTypeFormInterface {
+export interface SubjectFormInterface {
     id?: string;
     name: string;
     description: string;
-    level: number;
 }

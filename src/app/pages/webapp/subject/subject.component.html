@@ -1,0 +1,33 @@
+<div class="p-6">
+  <div class="flex justify-between items-center mb-4">
+    <h3 class="text-xl font-semibold">Subjects</h3>
+    <div class="flex gap-2">
+      <button mat-raised-button color="primary" (click)="onRefresh()" class="flex items-center">
+        <mat-icon>refresh</mat-icon>
+        <span>Refresh</span>
+      </button>
+      <button mat-raised-button color="accent" routerLink="create" class="flex items-center">
+        <mat-icon>add</mat-icon>
+        <span>Create New</span>
+      </button>
+    </div>
+  </div>
+
+  <app-table
+    [tableData]="(subjectList$ | async)?.data ?? []"
+    [tableHeaderData]="tableHeaderData"
+    [isLoading]="(loading$ | async) ?? false"
+    [totalLength]="(subjectList$ | async)?.totalCount ?? 0"
+    [pageSize]="(subjectList$ | async)?.recordPerPage ?? 10"
+    [pageIndex]="(subjectList$ | async)?.currentPage ?? 0"
+    [showSearch]="true"
+    [showFilters]="true"
+    [showActionColumn]="true"
+    (pageChange)="onPageChange($event)"
+    (search)="onSearch($event)"
+    (filter)="onFilter($event)"
+    (view)="onView($event)"
+    (edit)="onEdit($event)"
+    (delete)="onDelete($event)"
+  ></app-table>
+</div>
