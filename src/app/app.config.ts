@@ -27,6 +27,10 @@ import { SharedEffect } from './store/shared/shared.effects';
 import { SharedFacade } from './store/shared/shared.facade';
 import { AdministratorFacade } from './store/administrator/administrator.facade';
 import { TestEntityTemplateFacade } from './store/test-entity-template/test-entity-template.facade';
+import { ClassSubjectAssessmentFacade } from './store/class-subject-assessment/class-subject-assessment.facade';
+import { ClassSubjectFacade } from './store/class-subject/class-subject.facade';
+import { ClassLevelFacade } from './store/class-level/class-level.facade';
+import { ClassFacade } from './store/class/class.facade';
 import { SubjectFacade } from './store/subject/subject.facade';
 import { ApplicationFacade } from './store/application/application.facade';
 import { FamilyFacade } from './store/family/family.facade';
@@ -38,11 +42,13 @@ import { CompanyFacade } from './store/company/company.facade';
 import { StudentClassFacade } from './store/student-class/student-class.facade';
 import { SchoolConfigurationFacade } from './store/school-configuration/school-configuration.facade';
 import { ProgramTypeFacade } from './store/program-type/program-type.facade';
-import { ClassLevelFacade } from './store/class-level/class-level.facade';
-import { ClassFacade } from './store/class/class.facade';
 import { StaffFacade } from './store/staff/staff.facade';
 import { AdministratorEffect } from './store/administrator/administrator.effects';
 import { TestEntityTemplateEffect } from './store/test-entity-template/test-entity-template.effects';
+import { ClassSubjectAssessmentEffect } from './store/class-subject-assessment/class-subject-assessment.effects';
+import { ClassSubjectEffect } from './store/class-subject/class-subject.effects';
+import { ClassLevelEffect } from './store/class-level/class-level.effects';
+import { ClassEffect } from './store/class/class.effects';
 import { SubjectEffect } from './store/subject/subject.effects';
 import { ApplicationEffect } from './store/application/application.effects';
 import { FamilyEffect } from './store/family/family.effects';
@@ -54,8 +60,6 @@ import { CompanyEffect } from './store/company/company.effects';
 import { StudentClassEffect } from './store/student-class/student-class.effects';
 import { SchoolConfigurationEffect } from './store/school-configuration/school-configuration.effects';
 import { ProgramTypeEffect } from './store/program-type/program-type.effects';
-import { ClassLevelEffect } from './store/class-level/class-level.effects';
-import { ClassEffect } from './store/class/class.effects';
 import { StaffEffect } from './store/staff/staff.effects';
 // import { provideStoreDevtools } from '@ngrx/store-devtools';
 
@@ -69,6 +73,10 @@ export const appConfig: ApplicationConfig = {
         SharedEffect,
         AdministratorEffect,
         TestEntityTemplateEffect,
+        ClassSubjectAssessmentEffect,
+        ClassSubjectEffect,
+        ClassLevelEffect,
+        ClassEffect,
         SubjectEffect,
         ApplicationEffect,
         FamilyEffect,
@@ -80,8 +88,6 @@ export const appConfig: ApplicationConfig = {
         StudentClassEffect,
         SchoolConfigurationEffect,
         ProgramTypeEffect,
-        ClassLevelEffect,
-        ClassEffect,
         StaffEffect,
       ]),
       HttpClientModule
@@ -117,6 +123,10 @@ export const appConfig: ApplicationConfig = {
     SharedFacade,
     AdministratorFacade,
     TestEntityTemplateFacade,
+    ClassSubjectAssessmentFacade,
+    ClassSubjectFacade,
+    ClassLevelFacade,
+    ClassFacade,
     SubjectFacade,
     ApplicationFacade,
     FamilyFacade,
@@ -128,8 +138,6 @@ export const appConfig: ApplicationConfig = {
     StudentClassFacade,
     SchoolConfigurationFacade,
     ProgramTypeFacade,
-    ClassLevelFacade,
-    ClassFacade,
     StaffFacade,
   ],
 };

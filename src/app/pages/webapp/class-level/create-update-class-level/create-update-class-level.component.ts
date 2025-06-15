@@ -10,6 +10,7 @@ import {
 import { getErrorMessageHelper } from '../../../../services/helper.service';
 import { DropdownListInterface, ClassLevelFormInterface } from '../../../../types';
 import { SharedFacade } from '../../../../store/shared/shared.facade';
+import { ActivatedRoute, Router } from '@angular/router';
 import { GlobalLoadingFacade } from '../../../../store/global-loading/global-loading.facade';
 
 @Component({
@@ -19,6 +20,8 @@ import { GlobalLoadingFacade } from '../../../../store/global-loading/global-loa
 })
 export class CreateUpdateClassLevelComponent implements OnInit, OnDestroy {
     loading$: Observable<boolean>;
+    error$: Observable<string | null>;
+    classLevelById$: Observable<ClassLevelFormInterface | null>;
     dropdownLoading$: Observable<boolean>;
 
     formGroup: FormGroup<{
@@ -29,16 +32,20 @@ export class CreateUpdateClassLevelComponent implements OnInit, OnDestroy {
         return this.formGroup.controls;
     }
     today = new Date();
-
+    isEditMode = false;
     unsubscribe$ = new Subject<void>();
 
     constructor(
         private classLevelFacade: ClassLevelFacade,
         private fb: FormBuilder,
         private sharedFacade: SharedFacade,
+        private route: ActivatedRoute,
+        private router: Router,
         private globalLoadingFacade: GlobalLoadingFacade
     ) {
-        this.loading$ = this.classLevelFacade.selectedLoading$;
+        this.loading$ = this.classLevelFacade.loading$;
+        this.error$ = this.classLevelFacade.error$;
+        this.classLevelById$ = this.classLevelFacade.classLevelById$;
         this.dropdownLoading$ = this.sharedFacade.selectedLoading$;
 
         this.formGroup = this.fb.group({
@@ -47,6 +54,24 @@ export class CreateUpdateClassLevelComponent implements OnInit, OnDestroy {
     }
 
     ngOnInit() {
+        const classLevelId = this.route.snapshot.params['id'];
+        if (classLevelId) {
+            this.isEditMode = true;
+            this.classLevelFacade.getClassLevelById(classLevelId);
+            this.classLevelById$.pipe(takeUntil(this.unsubscribe$)).subscribe((data) => {
+                if (data) {
+                    this.formGroup.patchValue({
+                        name: data.name
+                    });
+                }
+            });
+        }
+
+        this.error$.pipe(takeUntil(this.unsubscribe$)).subscribe((error) => {
+            if (error) {
+                this.globalLoadingFacade.globalErrorShow(error, 3000);
+            }
+        });
     }
 
     getErrorMessage(controlName: string): string | null {
@@ -59,11 +84,20 @@ export class CreateUpdateClassLevelComponent implements OnInit, OnDestroy {
 
         if (!this.formGroup.valid) return;
 
-        this.classLevelFacade.createClassLevel({
-            ...(this.formGroup.value as ClassLevelFormInterface),
-        }).subscribe(() => {
-            this.globalLoadingFacade.globalSuccessShow('Class level created successfully', 3000);
-        });
+        const formData = this.formGroup.value as ClassLevelFormInterface;
+        if (this.isEditMode) {
+            this.classLevelFacade.updateClassLevel({
+                ...formData,
+                id: this.route.snapshot.params['id']
+            });
+            this.globalLoadingFacade.globalSuccessShow('Class Level updated successfully', 3000);
+        } else {
+            this.classLevelFacade.createClassLevel(formData);
+            this.globalLoadingFacade.globalSuccessShow('Class Level created successfully', 3000);
+        }
+
+        // Navigate to the list page
+        this.router.navigate(['/app/class-level']);
     }
 
     ngOnDestroy(): void {

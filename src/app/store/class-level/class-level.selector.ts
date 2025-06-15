@@ -1,28 +1,55 @@
 import { createSelector } from '@ngrx/store';
-import * as fromClassLevel from './class-level.reducer';
-import * as fromApp from '../app.reducer';
+import {
+  getClassLevelList,
+  getClassLevelAll,
+  getClassLevelByProperties,
+  getClassLevelById,
+  getExists,
+  getCount,
+  getLoading,
+  getError,
+  ClassLevelState,
+} from './class-level.reducer';
 
-export const selectClassLevelState = createSelector(
-  fromApp.selectAppState,
-  (state) => state[fromClassLevel.classLevelFeatureKey]
-);
+export const selectClassLevelState = (state: { classLevel: ClassLevelState }) =>
+  state.classLevel;
 
 export const selectClassLevelList = createSelector(
-  fromClassLevel.selectClassLevelState,
-  fromClassLevel.getClassLevelList
+  selectClassLevelState,
+  getClassLevelList
+);
+
+export const selectClassLevelAll = createSelector(
+  selectClassLevelState,
+  getClassLevelAll
+);
+
+export const selectClassLevelByProperties = createSelector(
+  selectClassLevelState,
+  getClassLevelByProperties
 );
 
 export const selectClassLevelById = createSelector(
-  fromClassLevel.selectClassLevelState,
-  fromClassLevel.getClassLevelById
+  selectClassLevelState,
+  getClassLevelById
 );
 
-export const selectLoading = createSelector(
-  fromClassLevel.selectClassLevelState,
-  fromClassLevel.getLoading
+export const selectExists = createSelector(
+  selectClassLevelState,
+  getExists
 );
 
-export const selectError = createSelector(
-  fromClassLevel.selectClassLevelState,
-  fromClassLevel.getError
+export const selectCount = createSelector(
+  selectClassLevelState,
+  getCount
+);
+
+export const selectClassLevelLoading = createSelector(
+  selectClassLevelState,
+  getLoading
+);
+
+export const selectClassLevelError = createSelector(
+  selectClassLevelState,
+  getError
 );

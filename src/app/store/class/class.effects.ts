@@ -8,12 +8,36 @@ import {
   ClassListInterface,
   PaginatedResponseInterface,
   GenericResponseInterface,
+  ClassFormInterface,
 } from '../../types';
 import { HttpClient } from '@angular/common/http';
 import { GlobalLoadingFacade } from '../global-loading/global-loading.facade';
 
 @Injectable()
 export class ClassEffect {
+  // Get All (non-paginated)
+  $classAll = createEffect(() =>
+    this.actions$.pipe(
+      ofType(ClassAction.getClassAll),
+      switchMap(() =>
+        this.http
+          .get<GenericResponseInterface<ClassListInterface[]>>(
+            `${environment.baseUrl}/Class/GetAll`,
+            { withCredentials: true }
+          )
+          .pipe(
+            map((payload) =>
+              ClassAction.getClassAllSuccess({ payload })
+            ),
+            catchError((error) => {
+              return of(ClassAction.getClassAllFail({ error }));
+            })
+          )
+      )
+    )
+  );
+
+  // Get All Paginated
   $classList = createEffect(() =>
     this.actions$.pipe(
       ofType(ClassAction.getClassList),
@@ -41,9 +65,25 @@ export class ClassEffect {
             }
           )
           .pipe(
-            map((payload) =>
-              ClassAction.getClassListSuccess({ payload })
-            ),
+            map((response) => {
+              const paginatedResponse: PaginatedResponseInterface<ClassListInterface[]> = {
+                currentPage: response.entity.currentPage,
+                recordPerPage: response.entity.recordPerPage,
+                totalPages: response.entity.totalPages,
+                totalCount: response.entity.totalCount,
+                data: response.entity.data
+              };
+              return ClassAction.getClassListSuccess({ 
+                payload: { 
+                  entity: paginatedResponse,
+                  error: response.error,
+                  exceptionError: response.exceptionError,
+                  message: response.message,
+                  messages: response.messages,
+                  succeeded: response.succeeded
+                } 
+              });
+            }),
             catchError((error) => {
               return of(ClassAction.getClassListFail({ error }));
             })
@@ -52,6 +92,7 @@ export class ClassEffect {
     )
   );
 
+  // Get By Id
   $classById = createEffect(() =>
     this.actions$.pipe(
       ofType(ClassAction.getClassById),
@@ -60,15 +101,13 @@ export class ClassEffect {
           .get<GenericResponseInterface<ClassListInterface>>(
             `${environment.baseUrl}/Class/GetById`,
             {
-              params: { classId },
+              params: { id: classId },
               withCredentials: true,
             }
           )
           .pipe(
             map((payload) =>
-              ClassAction.getClassByIdSuccess({
-                payload,
-              })
+              ClassAction.getClassByIdSuccess({ payload })
             ),
             catchError((error) => {
               return of(ClassAction.getClassByIdFail({ error }));
@@ -78,6 +117,75 @@ export class ClassEffect {
     )
   );
 
+  // Get By Properties
+  $classByProperties = createEffect(() =>
+    this.actions$.pipe(
+      ofType(ClassAction.getClassByProperties),
+      switchMap(({ properties }) =>
+        this.http
+          .post<GenericResponseInterface<ClassListInterface[]>>(
+            `${environment.baseUrl}/Class/GetByProperties`,
+            properties,
+            { withCredentials: true }
+          )
+          .pipe(
+            map((payload) =>
+              ClassAction.getClassByPropertiesSuccess({ payload })
+            ),
+            catchError((error) => {
+              return of(ClassAction.getClassByPropertiesFail({ error }));
+            })
+          )
+      )
+    )
+  );
+
+  // Exists
+  $classExists = createEffect(() =>
+    this.actions$.pipe(
+      ofType(ClassAction.classExists),
+      switchMap(({ properties }) =>
+        this.http
+          .post<GenericResponseInterface<boolean>>(
+            `${environment.baseUrl}/Class/Exists`,
+            properties,
+            { withCredentials: true }
+          )
+          .pipe(
+            map((payload) =>
+              ClassAction.classExistsSuccess({ payload })
+            ),
+            catchError((error) => {
+              return of(ClassAction.classExistsFail({ error }));
+            })
+          )
+      )
+    )
+  );
+
+  // Count
+  $classCount = createEffect(() =>
+    this.actions$.pipe(
+      ofType(ClassAction.classCount),
+      switchMap(() =>
+        this.http
+          .get<GenericResponseInterface<number>>(
+            `${environment.baseUrl}/Class/Count`,
+            { withCredentials: true }
+          )
+          .pipe(
+            map((payload) =>
+              ClassAction.classCountSuccess({ payload })
+            ),
+            catchError((error) => {
+              return of(ClassAction.classCountFail({ error }));
+            })
+          )
+      )
+    )
+  );
+
+  // Create
   $createClass = createEffect(() =>
     this.actions$.pipe(
       ofType(ClassAction.createClass),
@@ -90,10 +198,7 @@ export class ClassEffect {
           )
           .pipe(
             map((payload) =>
-              ClassAction.createClassSuccess({
-                message: 'Class created successfully',
-                class: payload.entity,
-              })
+              ClassAction.createClassSuccess({ payload })
             ),
             catchError((error) => {
               return of(ClassAction.createClassFail({ error }));
@@ -103,35 +208,137 @@ export class ClassEffect {
     )
   );
 
+  // Update
   $updateClass = createEffect(() =>
     this.actions$.pipe(
-      ofType(ClassAction.editClass),
+      ofType(ClassAction.updateClass),
       switchMap(({ payload }) =>
         this.http
-          .post<GenericResponseInterface<ClassListInterface>>(
+          .put<GenericResponseInterface<ClassListInterface>>(
             `${environment.baseUrl}/Class/Update`,
             payload,
             { withCredentials: true }
           )
           .pipe(
             map((payload) =>
-              ClassAction.editClassSuccess({
-                message: 'Class updated successfully',
-                class: payload.entity,
-              })
+              ClassAction.updateClassSuccess({ payload })
             ),
             catchError((error) => {
-              return of(ClassAction.editClassFail({ error }));
+              return of(ClassAction.updateClassFail({ error }));
             })
           )
       )
     )
   );
 
+  // Delete
+  $deleteClass = createEffect(() =>
+    this.actions$.pipe(
+      ofType(ClassAction.deleteClass),
+      switchMap(({ classId }) =>
+        this.http
+          .delete<GenericResponseInterface<boolean>>(
+            `${environment.baseUrl}/Class/Delete`,
+            {
+              params: { id: classId },
+              withCredentials: true
+            }
+          )
+          .pipe(
+            map((payload) =>
+              ClassAction.deleteClassSuccess({ payload })
+            ),
+            catchError((error) => {
+              return of(ClassAction.deleteClassFail({ error }));
+            })
+          )
+      )
+    )
+  );
+
+  // Create Many
+  $createManyClasss = createEffect(() =>
+    this.actions$.pipe(
+      ofType(ClassAction.createManyClasss),
+      switchMap(({ payload }) =>
+        this.http
+          .post<GenericResponseInterface<ClassListInterface[]>>(
+            `${environment.baseUrl}/Class/CreateMany`,
+            payload,
+            { withCredentials: true }
+          )
+          .pipe(
+            map((payload) =>
+              ClassAction.createManyClasssSuccess({ payload })
+            ),
+            catchError((error) => {
+              return of(ClassAction.createManyClasssFail({ error }));
+            })
+          )
+      )
+    )
+  );
+
+  // Update Many
+  $updateManyClasss = createEffect(() =>
+    this.actions$.pipe(
+      ofType(ClassAction.updateManyClasss),
+      switchMap(({ payload }) =>
+        this.http
+          .post<GenericResponseInterface<ClassListInterface[]>>(
+            `${environment.baseUrl}/Class/UpdateMany`,
+            payload,
+            { withCredentials: true }
+          )
+          .pipe(
+            map((payload) =>
+              ClassAction.updateManyClasssSuccess({ payload })
+            ),
+            catchError((error) => {
+              return of(ClassAction.updateManyClasssFail({ error }));
+            })
+          )
+      )
+    )
+  );
+
+  // Delete Many
+  $deleteManyClasss = createEffect(() =>
+    this.actions$.pipe(
+      ofType(ClassAction.deleteManyClasss),
+      switchMap(({ classIds }) =>
+        this.http
+          .delete<GenericResponseInterface<boolean>>(
+            `${environment.baseUrl}/Class/DeleteMany`,
+            {
+              params: { ids: classIds },
+              withCredentials: true
+            }
+          )
+          .pipe(
+            map((payload) =>
+              ClassAction.deleteManyClasssSuccess({ payload })
+            ),
+            catchError((error) => {
+              return of(ClassAction.deleteManyClasssFail({ error }));
+            })
+          )
+      )
+    )
+  );
+
+  // Loading Effects
   $classLoading = createEffect(
     () =>
       this.actions$.pipe(
-        ofType(ClassAction.createClass, ClassAction.editClass),
+        ofType(
+          ClassAction.createClass,
+          ClassAction.updateClass,
+          ClassAction.deleteClass,
+          ClassAction.createManyClasss,
+          ClassAction.updateManyClasss,
+          ClassAction.deleteManyClasss
+        ),
         tap((action) => {
           this.errorLoadingFacade.globalLoadingShow(action.type);
         })
@@ -145,8 +352,16 @@ export class ClassEffect {
         ofType(
           ClassAction.createClassSuccess,
           ClassAction.createClassFail,
-          ClassAction.editClassSuccess,
-          ClassAction.editClassFail
+          ClassAction.updateClassSuccess,
+          ClassAction.updateClassFail,
+          ClassAction.deleteClassSuccess,
+          ClassAction.deleteClassFail,
+          ClassAction.createManyClasssSuccess,
+          ClassAction.createManyClasssFail,
+          ClassAction.updateManyClasssSuccess,
+          ClassAction.updateManyClasssFail,
+          ClassAction.deleteManyClasssSuccess,
+          ClassAction.deleteManyClasssFail
         ),
         tap(() => {
           this.errorLoadingFacade.globalLoadingHide();

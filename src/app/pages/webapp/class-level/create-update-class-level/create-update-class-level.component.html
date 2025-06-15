@@ -1,31 +1,48 @@
-@if ( { loading: loading$ | async, dropdownLoading: dropdownLoading$ | async }; as obs ) {
+@if (
+  {
+    loading: loading$ | async,
+    dropdownLoading: dropdownLoading$ | async,
+    error: error$ | async
+  };
+  as obs
+) {
 <div class="pl-8 pr-9 pt-6">
-    <div class="flex item-center justify-between">
-        <div class="text-xl font-bold">Create Class Level</div>
+  <div class="flex item-center justify-between">
+    <div class="text-xl font-bold">{{ isEditMode ? 'Edit' : 'Create' }} Class Level</div>
+  </div>
+
+  @if (obs.error) {
+    <div class="mt-4 p-4 bg-red-100 text-red-700 rounded">
+      {{ obs.error }}
     </div>
+  }
 
-    <div class="mt-8">
-        <form [formGroup]="formGroup">
-            <div class="grid grid-cols-2 gap-x-4 mt-2">
-                <div>
-                    <mat-form-field class="form-input">
-                        <mat-label>Name</mat-label>
-                        <input type="text"
-                               autocomplete="off"
-                               matInput
-                               [formControl]="formControl.name" />
-                        <mat-error>
-                            {{ getErrorMessage("name") }}
-                        </mat-error>
-                    </mat-form-field>
-                </div>
-            </div>
-        </form>
-
-        <div class="actions-btn flex justify-end mt-10 gap-5 form-container mx-auto px-3">
-            <button class="cancel-btn" routerLink="create">Cancel</button>
-            <button class="sec-btn" (click)="submit()">Submit</button>
+  <div class="mt-8">
+    <form [formGroup]="formGroup">
+      <div class="grid grid-cols-2 gap-x-4 mt-2">
+        <div>
+          <mat-form-field class="form-input">
+            <mat-label>Name</mat-label>
+            <input
+              type="text"
+              autocomplete="off"
+              matInput
+              [formControl]="formControl.name"
+            />
+            <mat-error>
+              {{ getErrorMessage("name") }}
+            </mat-error>
+          </mat-form-field>
         </div>
+      </div>
+    </form>
+
+    <div class="actions-btn flex justify-end mt-10 gap-5 form-container mx-auto px-3">
+      <button class="cancel-btn" routerLink="/app/class-level">Cancel</button>
+      <button class="sec-btn" (click)="submit()" [disabled]="obs.loading">
+        {{ isEditMode ? 'Update' : 'Submit' }}
+      </button>
     </div>
+  </div>
 </div>
 }

@@ -1,39 +1,105 @@
 import { Injectable } from '@angular/core';
-import { select, Store } from '@ngrx/store';
+import { Store } from '@ngrx/store';
+import { Observable } from 'rxjs';
+import {
+  ClassListInterface,
+  ClassFormInterface,
+  PageQueryInterface,
+  PaginatedResponseInterface,
+} from '../../types';
+import * as ClassAction from './class.actions';
+import {
+  selectClassList,
+  selectClassAll,
+  selectClassByProperties,
+  selectClassById,
+  selectExists,
+  selectCount,
+  selectClassLoading,
+  selectClassError,
+} from './class.selector';
+import { ClassState } from './class.reducer';
 
-import * as ClassActions from './class.actions';
-import * as ClassSelector from './class.selector';
-import { PageQueryInterface, ClassFormInterface } from '../../types';
-
-@Injectable()
+@Injectable({
+  providedIn: 'root',
+})
 export class ClassFacade {
-  selectClassList$ = this.store.pipe(
-    select(ClassSelector.selectClassList)
-  );
+  classList$: Observable<PaginatedResponseInterface<ClassListInterface[]> | null>;
+  classAll$: Observable<ClassListInterface[] | null>;
+  classByProperties$: Observable<ClassListInterface[] | null>;
+  classById$: Observable<ClassListInterface | null>;
+  exists$: Observable<boolean | null>;
+  count$: Observable<number | null>;
+  loading$: Observable<boolean>;
+  error$: Observable<string | null>;
+  currentPageQuery: PageQueryInterface = {
+    start: 0,
+    recordsPerPage: 10,
+    pageIndex: 0,
+    searchText: ''
+  };
 
-  selectClassById$ = this.store.pipe(
-    select(ClassSelector.selectClassById)
-  );
-
-  selectedLoading$ = this.store.pipe(select(ClassSelector.selectLoading));
-
-  selectedError$ = this.store.pipe(select(ClassSelector.selectError));
-
-  constructor(private readonly store: Store) {}
-
-  getClassList(pageQuery: PageQueryInterface) {
-    this.store.dispatch(ClassActions.getClassList({ pageQuery }));
+  constructor(private store: Store<{ class: ClassState }>) {
+    this.classList$ = this.store.select(selectClassList);
+    this.classAll$ = this.store.select(selectClassAll);
+    this.classByProperties$ = this.store.select(selectClassByProperties);
+    this.classById$ = this.store.select(selectClassById);
+    this.exists$ = this.store.select(selectExists);
+    this.count$ = this.store.select(selectCount);
+    this.loading$ = this.store.select(selectClassLoading);
+    this.error$ = this.store.select(selectClassError);
   }
 
-  getClassById(classId: string) {
-    this.store.dispatch(ClassActions.getClassById({ classId }));
+  getClassList(pageQuery: PageQueryInterface): void {
+    this.currentPageQuery = pageQuery;
+    this.store.dispatch(ClassAction.getClassList({ pageQuery }));
   }
 
-  createClass(payload: ClassFormInterface) {
-    this.store.dispatch(ClassActions.createClass({ payload }));
+  getCurrentPageQuery(): PageQueryInterface {
+    return this.currentPageQuery;
   }
 
-  updateClass(payload: ClassFormInterface) {
-    this.store.dispatch(ClassActions.editClass({ payload }));
+  getClassAll(): void {
+    this.store.dispatch(ClassAction.getClassAll());
+  }
+
+  getClassById(classId: string): void {
+    this.store.dispatch(ClassAction.getClassById({ classId }));
+  }
+
+  getClassByProperties(properties: Partial<ClassFormInterface>): void {
+    this.store.dispatch(ClassAction.getClassByProperties({ properties }));
+  }
+
+  classExists(properties: Partial<ClassFormInterface>): void {
+    this.store.dispatch(ClassAction.classExists({ properties }));
+  }
+
+  classCount(): void {
+    this.store.dispatch(ClassAction.classCount());
+  }
+
+  createClass(classDto: ClassFormInterface): void {
+    this.store.dispatch(ClassAction.createClass({ payload: classDto }));
+  }
+
+  updateClass(classDto: ClassFormInterface): void {
+    this.store.dispatch(ClassAction.updateClass({ payload: classDto }));
+  }
+
+  deleteClass(classId: string): void {
+    this.store.dispatch(ClassAction.deleteClass({ classId }));
+  }
+
+  createManyClasss(classs: ClassFormInterface[]): void {
+    this.store.dispatch(ClassAction.createManyClasss({ payload: classs }));
+  }
+
+  updateManyClasss(classs: ClassFormInterface[]): void {
+    this.store.dispatch(ClassAction.updateManyClasss({ payload: classs }));
+  }
+
+  deleteManyClasss(classIds: string[]): void {
+    this.store.dispatch(ClassAction.deleteManyClasss({ classIds }));
   }
 }

@@ -59,7 +59,7 @@
           <th mat-header-cell *matHeaderCellDef class="w-32">Actions</th>
           <td mat-cell *matCellDef="let row" class="w-32">
             <div class="flex gap-2">
-              <button mat-icon-button color="primary" (click)="onView(row)" matTooltip="View">
+              <button *ngIf="showViewIcon" mat-icon-button color="primary" (click)="onView(row)" matTooltip="View">
                 <mat-icon>visibility</mat-icon>
               </button>
               <button mat-icon-button color="accent" (click)="onEdit(row)" matTooltip="Edit">
@@ -87,7 +87,7 @@
       </div>
 
       <!-- Pagination -->
-      <mat-paginator
+      <mat-paginator *ngIf="showPaginator"
         [length]="totalLength"
         [pageSize]="pageSize"
         [pageIndex]="pageIndex"

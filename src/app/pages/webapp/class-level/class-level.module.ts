@@ -12,6 +12,7 @@ import { ClassLevelComponent } from './class-level.component';
 import { SharedModule } from '../../../shared/shared.module';
 import { CreateUpdateClassLevelComponent } from './create-update-class-level/create-update-class-level.component';
 import { provideNativeDateAdapter } from '@angular/material/core';
+import { ViewClassLevelComponent } from './view-class-level/view-class-level.component';
 
 const routes: Routes = [
     {
@@ -25,13 +26,18 @@ const routes: Routes = [
     },
 
     {
-        path: 'edit/:classLevelId',
+        path: 'edit/:id',
         component: CreateUpdateClassLevelComponent,
+    },
+
+    {
+        path: 'view/:id',
+        component: ViewClassLevelComponent,
     },
 ];
 
 @NgModule({
-    declarations: [ClassLevelComponent, CreateUpdateClassLevelComponent],
+    declarations: [ClassLevelComponent, CreateUpdateClassLevelComponent, ViewClassLevelComponent],
     imports: [
         CommonModule,
         SharedModule,

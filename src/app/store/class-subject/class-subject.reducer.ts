@@ -1,170 +1,290 @@
-import { createReducer, on } from '@ngrx/store';
-import * as ClassSubjectActions from './class-subject.actions';
-import { ClassSubjectInterface } from '../../types/class-subject';
+import { createFeatureSelector, createReducer, on } from '@ngrx/store';
+import * as ClassSubjectAction from './class-subject.actions';
+import {
+  PageQueryInterface,
+  PaginatedResponseInterface,
+  ClassSubjectListInterface,
+} from '../../types';
+
+export const classSubjectFeatureKey = 'classSubject';
 
 export interface ClassSubjectState {
-  entities: ClassSubjectInterface[];
-  selected: ClassSubjectInterface | null;
+  classSubjectList: PaginatedResponseInterface<ClassSubjectListInterface[]> | null;
+  classSubjectAll: ClassSubjectListInterface[] | null;
+  classSubjectByProperties: ClassSubjectListInterface[] | null;
+  classSubjectById: ClassSubjectListInterface | null;
+  exists: boolean | null;
+  count: number | null;
+  pageQuery: PageQueryInterface | null;
   loading: boolean;
   error: string | null;
-  count: number;
 }
 
 export const initialState: ClassSubjectState = {
-  entities: [],
-  selected: null,
+  classSubjectList: null,
+  classSubjectAll: null,
+  classSubjectByProperties: null,
+  classSubjectById: null,
+  exists: null,
+  count: null,
+  pageQuery: null,
   loading: false,
   error: null,
-  count: 0,
 };
 
-export const classSubjectReducer = createReducer(
+export const reducer = createReducer(
   initialState,
-  on(
-    ClassSubjectActions.loadClassSubjects,
-    ClassSubjectActions.loadClassSubjectsPaginated,
-    ClassSubjectActions.getClassSubjectById,
-    ClassSubjectActions.getClassSubjectByProperties,
-    ClassSubjectActions.createClassSubject,
-    ClassSubjectActions.updateClassSubject,
-    ClassSubjectActions.deleteClassSubject,
-    ClassSubjectActions.createManyClassSubjects,
-    ClassSubjectActions.updateManyClassSubjects,
-    ClassSubjectActions.deleteManyClassSubjects,
-    (state) => ({ ...state, loading: true, error: null })
-  ),
-  on(ClassSubjectActions.loadClassSubjectsSuccess, (state, { payload }) => ({
+  // Get All
+  on(ClassSubjectAction.getClassSubjectAll, (state) => ({
     ...state,
-    entities: payload.entity,
-    loading: false,
+    loading: true,
     error: null,
   })),
-  on(ClassSubjectActions.loadClassSubjectsFail, (state, { error }) => ({
+  on(ClassSubjectAction.getClassSubjectAllSuccess, (state, { payload }) => ({
+    ...state,
+    classSubjectAll: payload.entity,
+    loading: false,
+  })),
+  on(ClassSubjectAction.getClassSubjectAllFail, (state, { error }) => ({
     ...state,
     loading: false,
     error,
   })),
-  on(ClassSubjectActions.loadClassSubjectsPaginatedSuccess, (state, { payload }) => ({
+
+  // Get List
+  on(ClassSubjectAction.getClassSubjectList, (state, { pageQuery }) => ({
     ...state,
-    entities: payload.data,
-    loading: false,
+    pageQuery,
+    loading: true,
     error: null,
   })),
-  on(ClassSubjectActions.loadClassSubjectsPaginatedFail, (state, { error }) => ({
+  on(ClassSubjectAction.getClassSubjectListSuccess, (state, { payload }) => ({
+    ...state,
+    classSubjectList: payload.entity,
+    loading: false,
+  })),
+  on(ClassSubjectAction.getClassSubjectListFail, (state, { error }) => ({
     ...state,
     loading: false,
     error,
   })),
-  on(ClassSubjectActions.getClassSubjectByIdSuccess, (state, { payload }) => ({
+
+  // Get By Id
+  on(ClassSubjectAction.getClassSubjectById, (state) => ({
     ...state,
-    selected: payload.entity,
-    loading: false,
+    loading: true,
     error: null,
   })),
-  on(ClassSubjectActions.getClassSubjectByIdFail, (state, { error }) => ({
+  on(ClassSubjectAction.getClassSubjectByIdSuccess, (state, { payload }) => ({
+    ...state,
+    classSubjectById: payload.entity,
+    loading: false,
+  })),
+  on(ClassSubjectAction.getClassSubjectByIdFail, (state, { error }) => ({
     ...state,
     loading: false,
     error,
   })),
-  on(ClassSubjectActions.getClassSubjectByPropertiesSuccess, (state, { payload }) => ({
+
+  // Get By Properties
+  on(ClassSubjectAction.getClassSubjectByProperties, (state) => ({
     ...state,
-    entities: payload.entity,
-    loading: false,
+    loading: true,
     error: null,
   })),
-  on(ClassSubjectActions.getClassSubjectByPropertiesFail, (state, { error }) => ({
+  on(ClassSubjectAction.getClassSubjectByPropertiesSuccess, (state, { payload }) => ({
+    ...state,
+    classSubjectByProperties: payload.entity,
+    loading: false,
+  })),
+  on(ClassSubjectAction.getClassSubjectByPropertiesFail, (state, { error }) => ({
     ...state,
     loading: false,
     error,
   })),
-  on(ClassSubjectActions.createClassSubjectSuccess, (state, { payload }) => ({
+
+  // Exists
+  on(ClassSubjectAction.classSubjectExists, (state) => ({
     ...state,
-    entities: [...state.entities, payload.entity],
-    loading: false,
+    loading: true,
     error: null,
   })),
-  on(ClassSubjectActions.createClassSubjectFail, (state, { error }) => ({
+  on(ClassSubjectAction.classSubjectExistsSuccess, (state, { payload }) => ({
+    ...state,
+    exists: payload.entity,
+    loading: false,
+  })),
+  on(ClassSubjectAction.classSubjectExistsFail, (state, { error }) => ({
     ...state,
     loading: false,
     error,
   })),
-  on(ClassSubjectActions.updateClassSubjectSuccess, (state, { payload }) => ({
+
+  // Count
+  on(ClassSubjectAction.classSubjectCount, (state) => ({
     ...state,
-    entities: state.entities.map(e => e.id === payload.entity.id ? payload.entity : e),
-    loading: false,
+    loading: true,
     error: null,
   })),
-  on(ClassSubjectActions.updateClassSubjectFail, (state, { error }) => ({
-    ...state,
-    loading: false,
-    error,
-  })),
-  on(ClassSubjectActions.deleteClassSubjectSuccess, (state, { payload }) => ({
-    ...state,
-    entities: state.entities.filter(e => e.id !== payload.entity?.id),
-    loading: false,
-    error: null,
-  })),
-  on(ClassSubjectActions.deleteClassSubjectFail, (state, { error }) => ({
-    ...state,
-    loading: false,
-    error,
-  })),
-  on(ClassSubjectActions.createManyClassSubjectsSuccess, (state, { payload }) => ({
-    ...state,
-    entities: [...state.entities, ...(payload.entity || [])],
-    loading: false,
-    error: null,
-  })),
-  on(ClassSubjectActions.createManyClassSubjectsFail, (state, { error }) => ({
-    ...state,
-    loading: false,
-    error,
-  })),
-  on(ClassSubjectActions.updateManyClassSubjectsSuccess, (state, { payload }) => ({
-    ...state,
-    entities: state.entities.map(e => {
-      const updated = (payload.entity || []).find(u => u.id === e.id);
-      return updated ? updated : e;
-    }),
-    loading: false,
-    error: null,
-  })),
-  on(ClassSubjectActions.updateManyClassSubjectsFail, (state, { error }) => ({
-    ...state,
-    loading: false,
-    error,
-  })),
-  on(ClassSubjectActions.deleteManyClassSubjectsSuccess, (state, { payload }) => ({
-    ...state,
-    entities: state.entities.filter(e => !(payload.entity || []).includes(e.id)),
-    loading: false,
-    error: null,
-  })),
-  on(ClassSubjectActions.deleteManyClassSubjectsFail, (state, { error }) => ({
-    ...state,
-    loading: false,
-    error,
-  })),
-  on(ClassSubjectActions.classSubjectCountSuccess, (state, { payload }) => ({
+  on(ClassSubjectAction.classSubjectCountSuccess, (state, { payload }) => ({
     ...state,
     count: payload.entity,
     loading: false,
-    error: null,
   })),
-  on(ClassSubjectActions.classSubjectCountFail, (state, { error }) => ({
+  on(ClassSubjectAction.classSubjectCountFail, (state, { error }) => ({
     ...state,
     loading: false,
     error,
   })),
-  on(ClassSubjectActions.classSubjectExistsSuccess, (state, { payload }) => ({
+
+  // Create
+  on(ClassSubjectAction.createClassSubject, (state) => ({
     ...state,
-    loading: false,
+    loading: true,
     error: null,
   })),
-  on(ClassSubjectActions.classSubjectExistsFail, (state, { error }) => ({
+  on(ClassSubjectAction.createClassSubjectSuccess, (state, { payload }) => ({
+    ...state,
+    classSubjectList: state.classSubjectList
+      ? {
+          ...state.classSubjectList,
+          data: [...state.classSubjectList.data, payload.entity],
+        }
+      : null,
+    loading: false,
+  })),
+  on(ClassSubjectAction.createClassSubjectFail, (state, { error }) => ({
+    ...state,
+    loading: false,
+    error,
+  })),
+
+  // Update
+  on(ClassSubjectAction.updateClassSubject, (state) => ({
+    ...state,
+    loading: true,
+    error: null,
+  })),
+  on(ClassSubjectAction.updateClassSubjectSuccess, (state, { payload }) => ({
+    ...state,
+    classSubjectList: state.classSubjectList
+      ? {
+          ...state.classSubjectList,
+          data: state.classSubjectList.data.map((item: ClassSubjectListInterface) =>
+            item.id === payload.entity.id ? payload.entity : item
+          ),
+        }
+      : null,
+    classSubjectById:
+      state.classSubjectById?.id === payload.entity.id
+        ? payload.entity
+        : state.classSubjectById,
+    loading: false,
+  })),
+  on(ClassSubjectAction.updateClassSubjectFail, (state, { error }) => ({
+    ...state,
+    loading: false,
+    error,
+  })),
+
+  // Delete
+  on(ClassSubjectAction.deleteClassSubject, (state) => ({
+    ...state,
+    loading: true,
+    error: null,
+  })),
+  on(ClassSubjectAction.deleteClassSubjectSuccess, (state) => ({
+    ...state,
+    classSubjectById: null,
+    classSubjectList: state.classSubjectList
+      ? {
+          ...state.classSubjectList,
+          data: state.classSubjectList.data.filter((item) => item.id !== state.classSubjectById?.id),
+        }
+      : null,
+    loading: false,
+  })),
+  on(ClassSubjectAction.deleteClassSubjectFail, (state, { error }) => ({
+    ...state,
+    loading: false,
+    error,
+  })),
+
+  // Create Many
+  on(ClassSubjectAction.createManyClassSubjects, (state) => ({
+    ...state,
+    loading: true,
+    error: null,
+  })),
+  on(ClassSubjectAction.createManyClassSubjectsSuccess, (state, { payload }) => ({
+    ...state,
+    classSubjectList: state.classSubjectList
+      ? {
+          ...state.classSubjectList,
+          data: [...state.classSubjectList.data, ...payload.entity],
+        }
+      : null,
+    loading: false,
+  })),
+  on(ClassSubjectAction.createManyClassSubjectsFail, (state, { error }) => ({
+    ...state,
+    loading: false,
+    error,
+  })),
+
+  // Update Many
+  on(ClassSubjectAction.updateManyClassSubjects, (state) => ({
+    ...state,
+    loading: true,
+    error: null,
+  })),
+  on(ClassSubjectAction.updateManyClassSubjectsSuccess, (state, { payload }) => ({
+    ...state,
+    classSubjectList: state.classSubjectList
+      ? {
+          ...state.classSubjectList,
+          data: state.classSubjectList.data.map((item: ClassSubjectListInterface) => {
+            const updatedItem = payload.entity.find((updated) => updated.id === item.id);
+            return updatedItem || item;
+          }),
+        }
+      : null,
+    loading: false,
+  })),
+  on(ClassSubjectAction.updateManyClassSubjectsFail, (state, { error }) => ({
+    ...state,
+    loading: false,
+    error,
+  })),
+
+  // Delete Many
+  on(ClassSubjectAction.deleteManyClassSubjects, (state) => ({
+    ...state,
+    loading: true,
+    error: null,
+  })),
+  on(ClassSubjectAction.deleteManyClassSubjectsSuccess, (state) => ({
+    ...state,
+    classSubjectList: null,
+    loading: false,
+  })),
+  on(ClassSubjectAction.deleteManyClassSubjectsFail, (state, { error }) => ({
     ...state,
     loading: false,
     error,
   }))
-); 
+);
+
+export const selectClassSubjectState = createFeatureSelector<ClassSubjectState>(
+  classSubjectFeatureKey
+);
+
+export const getClassSubjectList = (state: ClassSubjectState) => state.classSubjectList;
+export const getClassSubjectAll = (state: ClassSubjectState) => state.classSubjectAll;
+export const getClassSubjectByProperties = (state: ClassSubjectState) =>
+  state.classSubjectByProperties;
+export const getClassSubjectById = (state: ClassSubjectState) => state.classSubjectById;
+export const getExists = (state: ClassSubjectState) => state.exists;
+export const getCount = (state: ClassSubjectState) => state.count;
+export const getLoading = (state: ClassSubjectState) => state.loading;
+export const getError = (state: ClassSubjectState) => state.error;

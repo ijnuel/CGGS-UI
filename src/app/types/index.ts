@@ -5,6 +5,10 @@ import {
 } from './auth';
 import { StudentFormInterface, StudentsListInterface } from './students';
 import { TestEntityTemplateFormInterface, TestEntityTemplateListInterface } from './test-entity-template';
+import { ClassSubjectAssessmentFormInterface, ClassSubjectAssessmentListInterface } from './class-subject-assessment';
+import { ClassSubjectFormInterface, ClassSubjectListInterface } from './class-subject';
+import { ClassLevelFormInterface, ClassLevelListInterface } from './class-level';
+import { ClassFormInterface, ClassListInterface } from './class';
 import { SubjectFormInterface, SubjectListInterface } from './subject';
 import { ProgramTypeFormInterface, ProgramTypeListInterface } from './program-type';
 import { ApplicationFormInterface, ApplicationListInterface } from './application';
@@ -16,8 +20,6 @@ import { CountryFormInterface, CountryListInterface } from './country';
 import { CompanyFormInterface, CompanyListInterface } from './company';
 import { StudentClassFormInterface, StudentClassListInterface } from './student-class';
 import { SchoolConfigurationFormInterface, SchoolConfigurationListInterface } from './school-configuration';
-import { ClassLevelFormInterface, ClassLevelListInterface } from './class-level';
-import { ClassFormInterface, ClassListInterface } from './class';
 import { StaffFormInterface, StaffListInterface } from './staff';
 import { AdministratorFormInterface, AdministratorListInterface } from './administrator';
 import {
@@ -70,6 +72,10 @@ export {
   AdministratorListInterface,
   AdministratorFormInterface,
   TestEntityTemplateListInterface,
+  ClassSubjectAssessmentListInterface,
+  ClassSubjectListInterface,
+  ClassLevelListInterface,
+  ClassListInterface,
   SubjectListInterface,
   ProgramTypeListInterface,
   ApplicationListInterface,
@@ -81,10 +87,12 @@ export {
   CompanyListInterface,
   StudentClassListInterface,
   SchoolConfigurationListInterface,
-  ClassLevelListInterface,
-  ClassListInterface,
   StaffListInterface,
   TestEntityTemplateFormInterface,
+  ClassSubjectAssessmentFormInterface,
+  ClassSubjectFormInterface,
+  ClassLevelFormInterface,
+  ClassFormInterface,
   SubjectFormInterface,
   ProgramTypeFormInterface,
   ApplicationFormInterface,
@@ -96,7 +104,5 @@ export {
   CompanyFormInterface,
   StudentClassFormInterface,
   SchoolConfigurationFormInterface,
-  ClassLevelFormInterface,
-  ClassFormInterface,
   StaffFormInterface,
 };

@@ -23,3 +23,19 @@ export const tableHeader: TableHeaderInterface[] = [
     align: 'right'
   }
 ];
+export const assessmentTypeTableHeader: TableHeaderInterface[] = [
+  {
+    name: 'Assessment Type',
+    key: 'assessmentType',
+    filterable: true,
+    type: 'text',
+    align: 'left'
+  },
+  {
+    name: 'Score Weight',
+    key: 'scoreWeigth',
+    filterable: true,
+    type: 'number',
+    align: 'right'
+  }
+];

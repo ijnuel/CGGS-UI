@@ -1,44 +1,105 @@
 import { Injectable } from '@angular/core';
-import { select, Store } from '@ngrx/store';
+import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
+import {
+  ClassLevelListInterface,
+  ClassLevelFormInterface,
+  PageQueryInterface,
+  PaginatedResponseInterface,
+} from '../../types';
+import * as ClassLevelAction from './class-level.actions';
+import {
+  selectClassLevelList,
+  selectClassLevelAll,
+  selectClassLevelByProperties,
+  selectClassLevelById,
+  selectExists,
+  selectCount,
+  selectClassLevelLoading,
+  selectClassLevelError,
+} from './class-level.selector';
+import { ClassLevelState } from './class-level.reducer';
 
-import * as ClassLevelActions from './class-level.actions';
-import * as ClassLevelSelector from './class-level.selector';
-import { PageQueryInterface, ClassLevelFormInterface } from '../../types';
-
-@Injectable()
+@Injectable({
+  providedIn: 'root',
+})
 export class ClassLevelFacade {
-  selectClassLevelList$ = this.store.pipe(
-    select(ClassLevelSelector.selectClassLevelList)
-  );
+  classLevelList$: Observable<PaginatedResponseInterface<ClassLevelListInterface[]> | null>;
+  classLevelAll$: Observable<ClassLevelListInterface[] | null>;
+  classLevelByProperties$: Observable<ClassLevelListInterface[] | null>;
+  classLevelById$: Observable<ClassLevelListInterface | null>;
+  exists$: Observable<boolean | null>;
+  count$: Observable<number | null>;
+  loading$: Observable<boolean>;
+  error$: Observable<string | null>;
+  currentPageQuery: PageQueryInterface = {
+    start: 0,
+    recordsPerPage: 10,
+    pageIndex: 0,
+    searchText: ''
+  };
 
-  selectClassLevelById$ = this.store.pipe(
-    select(ClassLevelSelector.selectClassLevelById)
-  );
-
-  selectedLoading$ = this.store.pipe(select(ClassLevelSelector.selectLoading));
-
-  selectedError$ = this.store.pipe(select(ClassLevelSelector.selectError));
-
-  constructor(private readonly store: Store) {}
-
-  getClassLevelList(pageQuery: PageQueryInterface) {
-    this.store.dispatch(ClassLevelActions.getClassLevelList({ pageQuery }));
+  constructor(private store: Store<{ classLevel: ClassLevelState }>) {
+    this.classLevelList$ = this.store.select(selectClassLevelList);
+    this.classLevelAll$ = this.store.select(selectClassLevelAll);
+    this.classLevelByProperties$ = this.store.select(selectClassLevelByProperties);
+    this.classLevelById$ = this.store.select(selectClassLevelById);
+    this.exists$ = this.store.select(selectExists);
+    this.count$ = this.store.select(selectCount);
+    this.loading$ = this.store.select(selectClassLevelLoading);
+    this.error$ = this.store.select(selectClassLevelError);
   }
 
-  getClassLevelById(classLevelId: string) {
-    this.store.dispatch(ClassLevelActions.getClassLevelById({ classLevelId }));
+  getClassLevelList(pageQuery: PageQueryInterface): void {
+    this.currentPageQuery = pageQuery;
+    this.store.dispatch(ClassLevelAction.getClassLevelList({ pageQuery }));
   }
 
-  createClassLevel(payload: ClassLevelFormInterface): Observable<void> {
-    this.store.dispatch(ClassLevelActions.createClassLevel({ payload }));
-    return new Observable<void>(observer => {
-        observer.next();
-        observer.complete();
-    });
+  getCurrentPageQuery(): PageQueryInterface {
+    return this.currentPageQuery;
   }
 
-  updateClassLevel(payload: ClassLevelFormInterface) {
-    this.store.dispatch(ClassLevelActions.editClassLevel({ payload }));
+  getClassLevelAll(): void {
+    this.store.dispatch(ClassLevelAction.getClassLevelAll());
+  }
+
+  getClassLevelById(classLevelId: string): void {
+    this.store.dispatch(ClassLevelAction.getClassLevelById({ classLevelId }));
+  }
+
+  getClassLevelByProperties(properties: Partial<ClassLevelFormInterface>): void {
+    this.store.dispatch(ClassLevelAction.getClassLevelByProperties({ properties }));
+  }
+
+  classLevelExists(properties: Partial<ClassLevelFormInterface>): void {
+    this.store.dispatch(ClassLevelAction.classLevelExists({ properties }));
+  }
+
+  classLevelCount(): void {
+    this.store.dispatch(ClassLevelAction.classLevelCount());
+  }
+
+  createClassLevel(classLevel: ClassLevelFormInterface): void {
+    this.store.dispatch(ClassLevelAction.createClassLevel({ payload: classLevel }));
+  }
+
+  updateClassLevel(classLevel: ClassLevelFormInterface): void {
+    this.store.dispatch(ClassLevelAction.updateClassLevel({ payload: classLevel }));
+  }
+
+  deleteClassLevel(classLevelId: string): void {
+    this.store.dispatch(ClassLevelAction.deleteClassLevel({ classLevelId }));
+  }
+
+  createManyClassLevels(classLevels: ClassLevelFormInterface[]): void {
+    this.store.dispatch(ClassLevelAction.createManyClassLevels({ payload: classLevels }));
+  }
+
+  updateManyClassLevels(classLevels: ClassLevelFormInterface[]): void {
+    this.store.dispatch(ClassLevelAction.updateManyClassLevels({ payload: classLevels }));
+  }
+
+  deleteManyClassLevels(classLevelIds: string[]): void {
+    this.store.dispatch(ClassLevelAction.deleteManyClassLevels({ classLevelIds }));
   }
 }

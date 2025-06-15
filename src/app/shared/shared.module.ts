@@ -47,6 +47,13 @@ import { MatExpansionModule } from '@angular/material/expansion';
     LoadingSpinnerDirective,
     ConfirmDialogComponent,
     TableLoaderComponent,
+    RouterModule,
+    MaterialModule,
+    CommonModule,
+    MatProgressSpinnerModule,
+    MatPaginator,
+    MatExpansionModule,
+    ReactiveFormsModule,
   ],
 })
 export class SharedModule {}

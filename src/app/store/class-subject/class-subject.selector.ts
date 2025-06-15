@@ -1,29 +1,55 @@
-import { createFeatureSelector, createSelector } from '@ngrx/store';
-import { ClassSubjectState } from './class-subject.reducer';
+import { createSelector } from '@ngrx/store';
+import {
+  getClassSubjectList,
+  getClassSubjectAll,
+  getClassSubjectByProperties,
+  getClassSubjectById,
+  getExists,
+  getCount,
+  getLoading,
+  getError,
+  ClassSubjectState,
+} from './class-subject.reducer';
 
-export const selectClassSubjectState = createFeatureSelector<ClassSubjectState>('classSubject');
+export const selectClassSubjectState = (state: { classSubject: ClassSubjectState }) =>
+  state.classSubject;
 
-export const selectAllClassSubjects = createSelector(
+export const selectClassSubjectList = createSelector(
   selectClassSubjectState,
-  (state) => state.entities
+  getClassSubjectList
+);
+
+export const selectClassSubjectAll = createSelector(
+  selectClassSubjectState,
+  getClassSubjectAll
+);
+
+export const selectClassSubjectByProperties = createSelector(
+  selectClassSubjectState,
+  getClassSubjectByProperties
+);
+
+export const selectClassSubjectById = createSelector(
+  selectClassSubjectState,
+  getClassSubjectById
+);
+
+export const selectExists = createSelector(
+  selectClassSubjectState,
+  getExists
+);
+
+export const selectCount = createSelector(
+  selectClassSubjectState,
+  getCount
 );
 
 export const selectClassSubjectLoading = createSelector(
   selectClassSubjectState,
-  (state) => state.loading
+  getLoading
 );
 
 export const selectClassSubjectError = createSelector(
   selectClassSubjectState,
-  (state) => state.error
+  getError
 );
-
-export const selectSelectedClassSubject = createSelector(
-  selectClassSubjectState,
-  (state) => state.selected
-);
-
-export const selectClassSubjectCount = createSelector(
-  selectClassSubjectState,
-  (state) => state.count
-); 

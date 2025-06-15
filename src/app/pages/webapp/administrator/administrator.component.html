@@ -2,13 +2,13 @@
   <div class="flex justify-between items-center mb-4">
     <h3 class="text-xl font-semibold">Administrators</h3>
     <div class="flex gap-2">
-      <button mat-icon-button (click)="onRefresh()" class="flex items-center gap-1">
+      <button mat-raised-button color="primary" (click)="onRefresh()" class="flex items-center">
         <mat-icon>refresh</mat-icon>
         <span>Refresh</span>
       </button>
-      <button mat-icon-button routerLink="create" class="flex items-center gap-1">
+      <button mat-raised-button color="accent" routerLink="create" class="flex items-center">
         <mat-icon>add</mat-icon>
-        <span>Create</span>
+        <span>Create New</span>
       </button>
     </div>
   </div>

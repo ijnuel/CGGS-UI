@@ -1,14 +1,20 @@
-export interface ClassSubjectInterface {
-  id: string;
-  classId: string;
-  subjectId: string;
-  // Add other fields as needed from your API
+export interface ClassSubjectListInterface {
+    id: string;
+    name: string;
+    description: string;
+    createdDate: string;
+    classId: string;
+    subjectId: string;
+    sessionId: string;
+    term: number;
 }
 
 export interface ClassSubjectFormInterface {
-  classId: string;
-  subjectId: string;
-  // Add other fields as needed for creation/updating
+    id?: string;
+    name: string;
+    description: string;
+    classId: string;
+    subjectId: string;
+    sessionId: string;
+    term: number;
 }
-
-export interface ClassSubjectListInterface extends ClassSubjectInterface {} 
