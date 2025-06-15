@@ -212,7 +212,7 @@
                 <div *ngIf="addFormVisibleFor === classLevel.id" class="p-3 border rounded">
                   <form [formGroup]="addClassArmForm">
                     <mat-form-field appearance="outline" class="w-full">
-                      <mat-label>Class Arm</mat-label>
+                      <mat-label>Class Arm (e.g A, B, C...)</mat-label>
                       <input matInput type="text" formControlName="name" required />
                     </mat-form-field>
                   </form>
@@ -242,7 +242,7 @@
           <div *ngIf="addFormVisibleFor === programType.id" class="p-3 border rounded">
             <form [formGroup]="addClassLevelForm">
               <mat-form-field appearance="outline" class="w-full">
-                <mat-label>Level</mat-label>
+                <mat-label>Level (e.g 1, 2, 3...)</mat-label>
                 <input matInput type="number" formControlName="level" required />
               </mat-form-field>
             </form>
