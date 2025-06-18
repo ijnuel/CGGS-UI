@@ -27,13 +27,13 @@ import { SharedEffect } from './store/shared/shared.effects';
 import { SharedFacade } from './store/shared/shared.facade';
 import { AdministratorFacade } from './store/administrator/administrator.facade';
 import { TestEntityTemplateFacade } from './store/test-entity-template/test-entity-template.facade';
+import { FamilyFacade } from './store/family/family.facade';
 import { ClassSubjectAssessmentFacade } from './store/class-subject-assessment/class-subject-assessment.facade';
 import { ClassSubjectFacade } from './store/class-subject/class-subject.facade';
 import { ClassLevelFacade } from './store/class-level/class-level.facade';
 import { ClassFacade } from './store/class/class.facade';
 import { SubjectFacade } from './store/subject/subject.facade';
 import { ApplicationFacade } from './store/application/application.facade';
-import { FamilyFacade } from './store/family/family.facade';
 import { StateFacade } from './store/state/state.facade';
 import { SessionFacade } from './store/session/session.facade';
 import { LocalGovernmentAreaFacade } from './store/local-government-area/local-government-area.facade';
@@ -45,13 +45,13 @@ import { ProgramTypeFacade } from './store/program-type/program-type.facade';
 import { StaffFacade } from './store/staff/staff.facade';
 import { AdministratorEffect } from './store/administrator/administrator.effects';
 import { TestEntityTemplateEffect } from './store/test-entity-template/test-entity-template.effects';
+import { FamilyEffect } from './store/family/family.effects';
 import { ClassSubjectAssessmentEffect } from './store/class-subject-assessment/class-subject-assessment.effects';
 import { ClassSubjectEffect } from './store/class-subject/class-subject.effects';
 import { ClassLevelEffect } from './store/class-level/class-level.effects';
 import { ClassEffect } from './store/class/class.effects';
 import { SubjectEffect } from './store/subject/subject.effects';
 import { ApplicationEffect } from './store/application/application.effects';
-import { FamilyEffect } from './store/family/family.effects';
 import { StateEffect } from './store/state/state.effects';
 import { SessionEffect } from './store/session/session.effects';
 import { LocalGovernmentAreaEffect } from './store/local-government-area/local-government-area.effects';
@@ -73,13 +73,13 @@ export const appConfig: ApplicationConfig = {
         SharedEffect,
         AdministratorEffect,
         TestEntityTemplateEffect,
+        FamilyEffect,
         ClassSubjectAssessmentEffect,
         ClassSubjectEffect,
         ClassLevelEffect,
         ClassEffect,
         SubjectEffect,
         ApplicationEffect,
-        FamilyEffect,
         StateEffect,
         SessionEffect,
         LocalGovernmentAreaEffect,
@@ -123,13 +123,13 @@ export const appConfig: ApplicationConfig = {
     SharedFacade,
     AdministratorFacade,
     TestEntityTemplateFacade,
+    FamilyFacade,
     ClassSubjectAssessmentFacade,
     ClassSubjectFacade,
     ClassLevelFacade,
     ClassFacade,
     SubjectFacade,
     ApplicationFacade,
-    FamilyFacade,
     StateFacade,
     SessionFacade,
     LocalGovernmentAreaFacade,

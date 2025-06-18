@@ -1,28 +1,55 @@
 import { createSelector } from '@ngrx/store';
-import * as fromFamily from './family.reducer';
-import * as fromApp from '../app.reducer';
+import {
+  getFamilyList,
+  getFamilyAll,
+  getFamilyByProperties,
+  getFamilyById,
+  getExists,
+  getCount,
+  getLoading,
+  getError,
+  FamilyState,
+} from './family.reducer';
 
-export const selectFamilyState = createSelector(
-  fromApp.selectAppState,
-  (state) => state[fromFamily.familyFeatureKey]
-);
+export const selectFamilyState = (state: { family: FamilyState }) =>
+  state.family;
 
 export const selectFamilyList = createSelector(
-  fromFamily.selectFamilyState,
-  fromFamily.getFamilyList
+  selectFamilyState,
+  getFamilyList
+);
+
+export const selectFamilyAll = createSelector(
+  selectFamilyState,
+  getFamilyAll
+);
+
+export const selectFamilyByProperties = createSelector(
+  selectFamilyState,
+  getFamilyByProperties
 );
 
 export const selectFamilyById = createSelector(
-  fromFamily.selectFamilyState,
-  fromFamily.getFamilyById
+  selectFamilyState,
+  getFamilyById
 );
 
-export const selectLoading = createSelector(
-  fromFamily.selectFamilyState,
-  fromFamily.getLoading
+export const selectExists = createSelector(
+  selectFamilyState,
+  getExists
 );
 
-export const selectError = createSelector(
-  fromFamily.selectFamilyState,
-  fromFamily.getError
+export const selectCount = createSelector(
+  selectFamilyState,
+  getCount
+);
+
+export const selectFamilyLoading = createSelector(
+  selectFamilyState,
+  getLoading
+);
+
+export const selectFamilyError = createSelector(
+  selectFamilyState,
+  getError
 );

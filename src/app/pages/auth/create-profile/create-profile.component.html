@@ -76,13 +76,13 @@ async }; as obs ) {
 
         <mat-form-field class="mx-5">
           <mat-label>Local Government</mat-label>
-          <mat-select [formControl]="formControl.originLgaId">
+          <mat-select [formControl]="formControl.originLGAId">
             @for (lga of obs.selectedStateLgaList; track $index) {
             <mat-option [value]="lga.value"> {{ lga.name }}</mat-option>
             }
           </mat-select>
           <mat-error>
-            {{ getErrorMessage("originLgaId") }}
+            {{ getErrorMessage("originLGAId") }}
           </mat-error>
         </mat-form-field>
 

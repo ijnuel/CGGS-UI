@@ -29,7 +29,7 @@ export class CreateProfileComponent {
     email: FormControl;
     lastName: FormControl;
     religion: FormControl;
-    originLgaId: FormControl;
+    originLGAId: FormControl;
     stateOfOriginId: FormControl;
     nationalityId: FormControl;
     homeAddress: FormControl;
@@ -65,7 +65,7 @@ export class CreateProfileComponent {
     private toast: ToastNotificationService,
     private actions$: Actions
   ) {
-    this.loading$ = this.familyFacade.selectedLoading$;
+    this.loading$ = this.familyFacade.loading$;
     this.dropdownLoading$ = this.sharedFacade.selectedLoading$;
     this.genderList$ = this.sharedFacade.selectGenderList$;
     this.religionList$ = this.sharedFacade.selectReligionList$;
@@ -75,7 +75,7 @@ export class CreateProfileComponent {
       email: ['', [Validators.required, Validators.email]],
       lastName: ['', [Validators.required]],
       religion: ['', [Validators.required]],
-      originLgaId: ['', [Validators.required]],
+      originLGAId: ['', [Validators.required]],
       stateOfOriginId: ['', [Validators.required]],
       nationalityId: ['', [Validators.required]],
       homeAddress: ['', [Validators.required]],

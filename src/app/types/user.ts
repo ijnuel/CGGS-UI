@@ -6,7 +6,7 @@ export interface CurrentUserInterface {
   gender: number;
   religion: number;
   dateOfBirth: Date;
-  originLgaId: string;
+  originLGAId: string;
   stateOfOriginId: string;
   nationalityId: string;
   homeAddress: string;

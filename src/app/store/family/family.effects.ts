@@ -8,12 +8,36 @@ import {
   FamilyListInterface,
   PaginatedResponseInterface,
   GenericResponseInterface,
+  FamilyFormInterface,
 } from '../../types';
 import { HttpClient } from '@angular/common/http';
 import { GlobalLoadingFacade } from '../global-loading/global-loading.facade';
 
 @Injectable()
 export class FamilyEffect {
+  // Get All (non-paginated)
+  $familyAll = createEffect(() =>
+    this.actions$.pipe(
+      ofType(FamilyAction.getFamilyAll),
+      switchMap(() =>
+        this.http
+          .get<GenericResponseInterface<FamilyListInterface[]>>(
+            `${environment.baseUrl}/Family/GetAll`,
+            { withCredentials: true }
+          )
+          .pipe(
+            map((payload) =>
+              FamilyAction.getFamilyAllSuccess({ payload })
+            ),
+            catchError((error) => {
+              return of(FamilyAction.getFamilyAllFail({ error }));
+            })
+          )
+      )
+    )
+  );
+
+  // Get All Paginated
   $familyList = createEffect(() =>
     this.actions$.pipe(
       ofType(FamilyAction.getFamilyList),
@@ -41,9 +65,25 @@ export class FamilyEffect {
             }
           )
           .pipe(
-            map((payload) =>
-              FamilyAction.getFamilyListSuccess({ payload })
-            ),
+            map((response) => {
+              const paginatedResponse: PaginatedResponseInterface<FamilyListInterface[]> = {
+                currentPage: response.entity.currentPage,
+                recordPerPage: response.entity.recordPerPage,
+                totalPages: response.entity.totalPages,
+                totalCount: response.entity.totalCount,
+                data: response.entity.data
+              };
+              return FamilyAction.getFamilyListSuccess({ 
+                payload: { 
+                  entity: paginatedResponse,
+                  error: response.error,
+                  exceptionError: response.exceptionError,
+                  message: response.message,
+                  messages: response.messages,
+                  succeeded: response.succeeded
+                } 
+              });
+            }),
             catchError((error) => {
               return of(FamilyAction.getFamilyListFail({ error }));
             })
@@ -52,6 +92,7 @@ export class FamilyEffect {
     )
   );
 
+  // Get By Id
   $familyById = createEffect(() =>
     this.actions$.pipe(
       ofType(FamilyAction.getFamilyById),
@@ -60,15 +101,13 @@ export class FamilyEffect {
           .get<GenericResponseInterface<FamilyListInterface>>(
             `${environment.baseUrl}/Family/GetById`,
             {
-              params: { familyId },
+              params: { id: familyId },
               withCredentials: true,
             }
           )
           .pipe(
             map((payload) =>
-              FamilyAction.getFamilyByIdSuccess({
-                payload,
-              })
+              FamilyAction.getFamilyByIdSuccess({ payload })
             ),
             catchError((error) => {
               return of(FamilyAction.getFamilyByIdFail({ error }));
@@ -78,6 +117,75 @@ export class FamilyEffect {
     )
   );
 
+  // Get By Properties
+  $familyByProperties = createEffect(() =>
+    this.actions$.pipe(
+      ofType(FamilyAction.getFamilyByProperties),
+      switchMap(({ properties }) =>
+        this.http
+          .post<GenericResponseInterface<FamilyListInterface[]>>(
+            `${environment.baseUrl}/Family/GetByProperties`,
+            properties,
+            { withCredentials: true }
+          )
+          .pipe(
+            map((payload) =>
+              FamilyAction.getFamilyByPropertiesSuccess({ payload })
+            ),
+            catchError((error) => {
+              return of(FamilyAction.getFamilyByPropertiesFail({ error }));
+            })
+          )
+      )
+    )
+  );
+
+  // Exists
+  $familyExists = createEffect(() =>
+    this.actions$.pipe(
+      ofType(FamilyAction.familyExists),
+      switchMap(({ properties }) =>
+        this.http
+          .post<GenericResponseInterface<boolean>>(
+            `${environment.baseUrl}/Family/Exists`,
+            properties,
+            { withCredentials: true }
+          )
+          .pipe(
+            map((payload) =>
+              FamilyAction.familyExistsSuccess({ payload })
+            ),
+            catchError((error) => {
+              return of(FamilyAction.familyExistsFail({ error }));
+            })
+          )
+      )
+    )
+  );
+
+  // Count
+  $familyCount = createEffect(() =>
+    this.actions$.pipe(
+      ofType(FamilyAction.familyCount),
+      switchMap(() =>
+        this.http
+          .get<GenericResponseInterface<number>>(
+            `${environment.baseUrl}/Family/Count`,
+            { withCredentials: true }
+          )
+          .pipe(
+            map((payload) =>
+              FamilyAction.familyCountSuccess({ payload })
+            ),
+            catchError((error) => {
+              return of(FamilyAction.familyCountFail({ error }));
+            })
+          )
+      )
+    )
+  );
+
+  // Create
   $createFamily = createEffect(() =>
     this.actions$.pipe(
       ofType(FamilyAction.createFamily),
@@ -90,10 +198,7 @@ export class FamilyEffect {
           )
           .pipe(
             map((payload) =>
-              FamilyAction.createFamilySuccess({
-                message: 'Family created successfully',
-                family: payload.entity,
-              })
+              FamilyAction.createFamilySuccess({ payload })
             ),
             catchError((error) => {
               return of(FamilyAction.createFamilyFail({ error }));
@@ -103,35 +208,137 @@ export class FamilyEffect {
     )
   );
 
+  // Update
   $updateFamily = createEffect(() =>
     this.actions$.pipe(
-      ofType(FamilyAction.editFamily),
+      ofType(FamilyAction.updateFamily),
       switchMap(({ payload }) =>
         this.http
-          .post<GenericResponseInterface<FamilyListInterface>>(
+          .put<GenericResponseInterface<FamilyListInterface>>(
             `${environment.baseUrl}/Family/Update`,
             payload,
             { withCredentials: true }
           )
           .pipe(
             map((payload) =>
-              FamilyAction.editFamilySuccess({
-                message: 'Family updated successfully',
-                family: payload.entity,
-              })
+              FamilyAction.updateFamilySuccess({ payload })
             ),
             catchError((error) => {
-              return of(FamilyAction.editFamilyFail({ error }));
+              return of(FamilyAction.updateFamilyFail({ error }));
             })
           )
       )
     )
   );
 
+  // Delete
+  $deleteFamily = createEffect(() =>
+    this.actions$.pipe(
+      ofType(FamilyAction.deleteFamily),
+      switchMap(({ familyId }) =>
+        this.http
+          .delete<GenericResponseInterface<boolean>>(
+            `${environment.baseUrl}/Family/Delete`,
+            {
+              params: { id: familyId },
+              withCredentials: true
+            }
+          )
+          .pipe(
+            map((payload) =>
+              FamilyAction.deleteFamilySuccess({ payload })
+            ),
+            catchError((error) => {
+              return of(FamilyAction.deleteFamilyFail({ error }));
+            })
+          )
+      )
+    )
+  );
+
+  // Create Many
+  $createManyFamilys = createEffect(() =>
+    this.actions$.pipe(
+      ofType(FamilyAction.createManyFamilys),
+      switchMap(({ payload }) =>
+        this.http
+          .post<GenericResponseInterface<FamilyListInterface[]>>(
+            `${environment.baseUrl}/Family/CreateMany`,
+            payload,
+            { withCredentials: true }
+          )
+          .pipe(
+            map((payload) =>
+              FamilyAction.createManyFamilysSuccess({ payload })
+            ),
+            catchError((error) => {
+              return of(FamilyAction.createManyFamilysFail({ error }));
+            })
+          )
+      )
+    )
+  );
+
+  // Update Many
+  $updateManyFamilys = createEffect(() =>
+    this.actions$.pipe(
+      ofType(FamilyAction.updateManyFamilys),
+      switchMap(({ payload }) =>
+        this.http
+          .post<GenericResponseInterface<FamilyListInterface[]>>(
+            `${environment.baseUrl}/Family/UpdateMany`,
+            payload,
+            { withCredentials: true }
+          )
+          .pipe(
+            map((payload) =>
+              FamilyAction.updateManyFamilysSuccess({ payload })
+            ),
+            catchError((error) => {
+              return of(FamilyAction.updateManyFamilysFail({ error }));
+            })
+          )
+      )
+    )
+  );
+
+  // Delete Many
+  $deleteManyFamilys = createEffect(() =>
+    this.actions$.pipe(
+      ofType(FamilyAction.deleteManyFamilys),
+      switchMap(({ familyIds }) =>
+        this.http
+          .delete<GenericResponseInterface<boolean>>(
+            `${environment.baseUrl}/Family/DeleteMany`,
+            {
+              params: { ids: familyIds },
+              withCredentials: true
+            }
+          )
+          .pipe(
+            map((payload) =>
+              FamilyAction.deleteManyFamilysSuccess({ payload })
+            ),
+            catchError((error) => {
+              return of(FamilyAction.deleteManyFamilysFail({ error }));
+            })
+          )
+      )
+    )
+  );
+
+  // Loading Effects
   $familyLoading = createEffect(
     () =>
       this.actions$.pipe(
-        ofType(FamilyAction.createFamily, FamilyAction.editFamily),
+        ofType(
+          FamilyAction.createFamily,
+          FamilyAction.updateFamily,
+          FamilyAction.deleteFamily,
+          FamilyAction.createManyFamilys,
+          FamilyAction.updateManyFamilys,
+          FamilyAction.deleteManyFamilys
+        ),
         tap((action) => {
           this.errorLoadingFacade.globalLoadingShow(action.type);
         })
@@ -145,8 +352,16 @@ export class FamilyEffect {
         ofType(
           FamilyAction.createFamilySuccess,
           FamilyAction.createFamilyFail,
-          FamilyAction.editFamilySuccess,
-          FamilyAction.editFamilyFail
+          FamilyAction.updateFamilySuccess,
+          FamilyAction.updateFamilyFail,
+          FamilyAction.deleteFamilySuccess,
+          FamilyAction.deleteFamilyFail,
+          FamilyAction.createManyFamilysSuccess,
+          FamilyAction.createManyFamilysFail,
+          FamilyAction.updateManyFamilysSuccess,
+          FamilyAction.updateManyFamilysFail,
+          FamilyAction.deleteManyFamilysSuccess,
+          FamilyAction.deleteManyFamilysFail
         ),
         tap(() => {
           this.errorLoadingFacade.globalLoadingHide();

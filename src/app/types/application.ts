@@ -7,7 +7,7 @@ export interface ApplicationListInterface {
     gender: number;
     religion: number;
     dateOfBirth: Date;
-    originLgaId: string;
+    originLGAId: string;
     stateOfOriginId: string;
     nationalityId: string;
     homeAddress: string;
@@ -25,7 +25,7 @@ export interface ApplicationFormInterface {
     gender: number;
     religion: number;
     dateOfBirth: Date;
-    originLgaId: string;
+    originLGAId: string;
     stateOfOriginId: string;
     nationalityId: string;
     homeAddress: string;

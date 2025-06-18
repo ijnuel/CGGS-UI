@@ -1,6 +1,6 @@
-export interface StaffListInterface {
+export interface StudentListInterface {
     id: string;
-    teacherNo: string;
+    studentNo: string;
     userId: string;
     email: string;
     firstName: string;
@@ -16,11 +16,12 @@ export interface StaffListInterface {
     residentialCity: string;
     residentialStateId: string;
     phoneNumber: string;
+    familyId: string;
 }
 
-export interface StaffFormInterface {
+export interface StudentFormInterface {
     id?: string;
-    teacherNo: string;
+    studentNo: string;
     userId: string;
     email: string;
     firstName: string;
@@ -36,4 +37,5 @@ export interface StaffFormInterface {
     residentialCity: string;
     residentialStateId: string;
     phoneNumber: string;
+    familyId: string;
 }

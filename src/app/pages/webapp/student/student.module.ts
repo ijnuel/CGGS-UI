@@ -12,6 +12,7 @@ import { StudentComponent } from './student.component';
 import { SharedModule } from '../../../shared/shared.module';
 import { CreateUpdateStudentComponent } from './create-update-student/create-update-student.component';
 import { provideNativeDateAdapter } from '@angular/material/core';
+import { ViewStudentComponent } from './view-student/view-student.component';
 
 const routes: Routes = [
     {
@@ -25,13 +26,18 @@ const routes: Routes = [
     },
 
     {
-        path: 'edit/:studentId',
+        path: 'edit/:id',
         component: CreateUpdateStudentComponent,
+    },
+
+    {
+        path: 'view/:id',
+        component: ViewStudentComponent,
     },
 ];
 
 @NgModule({
-    declarations: [StudentComponent, CreateUpdateStudentComponent],
+    declarations: [StudentComponent, CreateUpdateStudentComponent, ViewStudentComponent],
     imports: [
         CommonModule,
         SharedModule,

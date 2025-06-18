@@ -3,8 +3,9 @@ import {
   UserRolesEnum,
   LoginResponseInterface,
 } from './auth';
-import { StudentFormInterface, StudentsListInterface } from './students';
 import { TestEntityTemplateFormInterface, TestEntityTemplateListInterface } from './test-entity-template';
+import { FamilyFormInterface, FamilyListInterface } from './family';
+import { StudentFormInterface, StudentListInterface } from './student';
 import { ClassSubjectAssessmentFormInterface, ClassSubjectAssessmentListInterface } from './class-subject-assessment';
 import { ClassSubjectFormInterface, ClassSubjectListInterface } from './class-subject';
 import { ClassLevelFormInterface, ClassLevelListInterface } from './class-level';
@@ -12,7 +13,6 @@ import { ClassFormInterface, ClassListInterface } from './class';
 import { SubjectFormInterface, SubjectListInterface } from './subject';
 import { ProgramTypeFormInterface, ProgramTypeListInterface } from './program-type';
 import { ApplicationFormInterface, ApplicationListInterface } from './application';
-import { FamilyFormInterface, FamilyListInterface } from './family';
 import { StateFormInterface, StateListInterface } from './state';
 import { SessionFormInterface, SessionListInterface } from './session';
 import { LocalGovernmentAreaFormInterface, LocalGovernmentAreaListInterface } from './local-government-area';
@@ -66,12 +66,13 @@ export {
   UserRolesEnum,
   CurrentUserInterface,
   PageQueryInterface,
-  StudentsListInterface,
   StudentFormInterface,
   DropdownListInterface,
   AdministratorListInterface,
   AdministratorFormInterface,
   TestEntityTemplateListInterface,
+  FamilyListInterface,
+  StudentListInterface,
   ClassSubjectAssessmentListInterface,
   ClassSubjectListInterface,
   ClassLevelListInterface,
@@ -79,7 +80,6 @@ export {
   SubjectListInterface,
   ProgramTypeListInterface,
   ApplicationListInterface,
-  FamilyListInterface,
   StateListInterface,
   SessionListInterface,
   LocalGovernmentAreaListInterface,
@@ -89,6 +89,7 @@ export {
   SchoolConfigurationListInterface,
   StaffListInterface,
   TestEntityTemplateFormInterface,
+  FamilyFormInterface,
   ClassSubjectAssessmentFormInterface,
   ClassSubjectFormInterface,
   ClassLevelFormInterface,
@@ -96,7 +97,6 @@ export {
   SubjectFormInterface,
   ProgramTypeFormInterface,
   ApplicationFormInterface,
-  FamilyFormInterface,
   StateFormInterface,
   SessionFormInterface,
   LocalGovernmentAreaFormInterface,

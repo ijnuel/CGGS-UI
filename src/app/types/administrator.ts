@@ -8,7 +8,7 @@ export interface AdministratorListInterface {
   gender: number;
   religion: number;
   dateOfBirth: Date;
-  originLgaId: string;
+  originLGAId: string;
   stateOfOriginId: string;
   nationalityId: string;
   homeAddress: string;
@@ -27,7 +27,7 @@ export interface AdministratorFormInterface {
   gender: number;
   religion: number;
   dateOfBirth: Date;
-  originLgaId: string;
+  originLGAId: string;
   stateOfOriginId: string;
   nationalityId: string;
   homeAddress: string;

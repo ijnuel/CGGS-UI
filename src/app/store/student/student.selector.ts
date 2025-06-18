@@ -1,28 +1,55 @@
 import { createSelector } from '@ngrx/store';
-import * as fromStudents from './student.reducer';
-import * as fromApp from '../app.reducer';
+import {
+  getStudentList,
+  getStudentAll,
+  getStudentByProperties,
+  getStudentById,
+  getExists,
+  getCount,
+  getLoading,
+  getError,
+  StudentState,
+} from './student.reducer';
 
-export const selectStudentsState = createSelector(
-  fromApp.selectAppState,
-  (state) => state[fromStudents.studentsFeatureKey]
+export const selectStudentState = (state: { student: StudentState }) =>
+  state.student;
+
+export const selectStudentList = createSelector(
+  selectStudentState,
+  getStudentList
 );
 
-export const selectStudentsList = createSelector(
-  fromStudents.selectStudentState,
-  fromStudents.getStudentList
+export const selectStudentAll = createSelector(
+  selectStudentState,
+  getStudentAll
+);
+
+export const selectStudentByProperties = createSelector(
+  selectStudentState,
+  getStudentByProperties
 );
 
 export const selectStudentById = createSelector(
-  fromStudents.selectStudentState,
-  fromStudents.getStudentById
+  selectStudentState,
+  getStudentById
 );
 
-export const selectLoading = createSelector(
-  fromStudents.selectStudentState,
-  fromStudents.getLoading
+export const selectExists = createSelector(
+  selectStudentState,
+  getExists
 );
 
-export const selectError = createSelector(
-  fromStudents.selectStudentState,
-  fromStudents.getError
+export const selectCount = createSelector(
+  selectStudentState,
+  getCount
+);
+
+export const selectStudentLoading = createSelector(
+  selectStudentState,
+  getLoading
+);
+
+export const selectStudentError = createSelector(
+  selectStudentState,
+  getError
 );

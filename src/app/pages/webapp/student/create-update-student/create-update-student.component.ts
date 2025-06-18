@@ -7,11 +7,13 @@ import {
   FormGroup,
   Validators,
 } from '@angular/forms';
-import { getErrorMessageHelper, initUserProfileForm } from '../../../../services/helper.service';
-import { DropdownListInterface, StudentFormInterface } from '../../../../types';
+import { initUserProfileForm } from '../../../../services/helper.service';
+import { getErrorMessageHelper } from '../../../../services/helper.service';
+import { DropdownListInterface, FamilyListInterface, StudentFormInterface, StudentListInterface } from '../../../../types';
 import { SharedFacade } from '../../../../store/shared/shared.facade';
-import { ToastNotificationService, NotificationTypeEnums } from '../../../../services/toast-notification.service';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
+import { GlobalLoadingFacade } from '../../../../store/global-loading/global-loading.facade';
+import { FamilyFacade } from '../../../../store/family/family.facade';
 
 @Component({
   selector: 'app-create-update-student',
@@ -20,6 +22,8 @@ import { Router } from '@angular/router';
 })
 export class CreateUpdateStudentComponent implements OnInit, OnDestroy {
   loading$: Observable<boolean>;
+  error$: Observable<string | null>;
+  studentById$: Observable<StudentListInterface | null>;
   dropdownLoading$: Observable<boolean>;
 
   formGroup: FormGroup<{
@@ -29,7 +33,7 @@ export class CreateUpdateStudentComponent implements OnInit, OnDestroy {
     dateOfBirth: FormControl;
     religion: FormControl;
     gender: FormControl;
-    originLgaId: FormControl;
+    originLGAId: FormControl;
     stateOfOriginId: FormControl;
     nationalityId: FormControl;
     homeAddress: FormControl;
@@ -38,38 +42,46 @@ export class CreateUpdateStudentComponent implements OnInit, OnDestroy {
     phoneNumber: FormControl;
     studentNo: FormControl;
     email: FormControl;
+    familyId: FormControl;
   }>;
 
   get formControl() {
     return this.formGroup.controls;
   }
   today = new Date();
-
-  genderList$: Observable<DropdownListInterface[] | null>;
-  religionList$: Observable<DropdownListInterface[] | null>;
-  countryList$: Observable<DropdownListInterface[] | null>;
-
-  selectedCountryStateList$ = new BehaviorSubject<
+  isEditMode = false;
+  unsubscribe$ = new Subject<void>(); selectedCountryStateList$ = new BehaviorSubject<
     DropdownListInterface[] | null
   >(null);
   selectedStateLgaList$ = new BehaviorSubject<DropdownListInterface[] | null>(
     null
   );
 
-  unsubscribe$ = new Subject<void>();
+
+  genderList$: Observable<DropdownListInterface[] | null>;
+  religionList$: Observable<DropdownListInterface[] | null>;
+  countryList$: Observable<DropdownListInterface[] | null>;
+  familyList$: Observable<FamilyListInterface[] | null>;
+
 
   constructor(
-    private studentsFacade: StudentFacade,
+    private studentFacade: StudentFacade,
     private fb: FormBuilder,
     private sharedFacade: SharedFacade,
-    private toast: ToastNotificationService,
-    private router: Router
+    private familyFacade: FamilyFacade,
+    private route: ActivatedRoute,
+    private router: Router,
+    private globalLoadingFacade: GlobalLoadingFacade,
   ) {
-    this.loading$ = this.studentsFacade.selectedLoading$;
     this.dropdownLoading$ = this.sharedFacade.selectedLoading$;
     this.genderList$ = this.sharedFacade.selectGenderList$;
     this.religionList$ = this.sharedFacade.selectReligionList$;
     this.countryList$ = this.sharedFacade.selectCountryList$;
+    this.familyList$ = this.familyFacade.familyAll$;
+    this.loading$ = this.studentFacade.loading$;
+    this.error$ = this.studentFacade.error$;
+    this.studentById$ = this.studentFacade.studentById$;
+    this.dropdownLoading$ = this.sharedFacade.selectedLoading$;
 
     this.formGroup = this.fb.group({
       firstName: ['', [Validators.required, Validators.maxLength(255)]],
@@ -82,16 +94,51 @@ export class CreateUpdateStudentComponent implements OnInit, OnDestroy {
       gender: ['', [Validators.required]],
       nationalityId: null,
       stateOfOriginId: null,
-      originLgaId: null,
+      originLGAId: null,
       homeAddress: null,
       residentialStateId: null,
       residentialCity: null,
       studentNo: null,
+      familyId: null,
     });
   }
 
   ngOnInit() {
-    initUserProfileForm(this.sharedFacade, this.formControl, this.unsubscribe$, this.selectedCountryStateList$, this.selectedStateLgaList$);    
+    this.familyFacade.getFamilyAll();
+    initUserProfileForm(this.sharedFacade, this.formControl, this.unsubscribe$, this.selectedCountryStateList$, this.selectedStateLgaList$);
+    const studentId = this.route.snapshot.params['id'];
+    if (studentId) {
+      this.isEditMode = true;
+      this.studentFacade.getStudentById(studentId);
+      this.studentById$.pipe(takeUntil(this.unsubscribe$)).subscribe((data) => {
+        if (data) {
+          this.formGroup.patchValue({
+              firstName: data.firstName,
+              lastName: data.lastName,
+              middleName: data.middleName,
+              dateOfBirth: data.dateOfBirth,
+              phoneNumber: data.phoneNumber,
+              email: data.email,
+              religion: data.religion,
+              gender: data.gender,
+              nationalityId: data.nationalityId,
+              stateOfOriginId: data.stateOfOriginId,
+              originLGAId: data.originLGAId,
+              homeAddress: data.homeAddress,
+              residentialStateId: data.residentialStateId,
+              residentialCity: data.residentialCity,
+              studentNo: data.studentNo,
+              familyId: data.familyId,
+          });
+        }
+      });
+    }
+
+    this.error$.pipe(takeUntil(this.unsubscribe$)).subscribe((error) => {
+      if (error) {
+        this.globalLoadingFacade.globalErrorShow(error, 3000);
+      }
+    });
   }
 
   getErrorMessage(controlName: string): string | null {
@@ -104,25 +151,20 @@ export class CreateUpdateStudentComponent implements OnInit, OnDestroy {
 
     if (!this.formGroup.valid) return;
 
-    this.studentsFacade.createStudent({
-      ...(this.formGroup.value as StudentFormInterface),
-    });
-
-    // Listen for loading to become false and no error, then show toast and navigate
-    this.studentsFacade.selectedLoading$
-      .pipe(takeUntil(this.unsubscribe$))
-      .subscribe((loading) => {
-        if (!loading) {
-          this.studentsFacade.selectedError$
-            .pipe(takeUntil(this.unsubscribe$))
-            .subscribe((error) => {
-              if (!error) {
-                this.toast.openToast('Student created successfully!', NotificationTypeEnums.SUCCESS);
-                this.router.navigate(['/app/student']);
-              }
-            });
-        }
+    const formData = this.formGroup.value as StudentFormInterface;
+    if (this.isEditMode) {
+      this.studentFacade.updateStudent({
+        ...formData,
+        id: this.route.snapshot.params['id']
       });
+      this.globalLoadingFacade.globalSuccessShow('Student updated successfully', 3000);
+    } else {
+      this.studentFacade.createStudent(formData);
+      this.globalLoadingFacade.globalSuccessShow('Student created successfully', 3000);
+    }
+
+    // Navigate to the list page
+    this.router.navigate(['/app/student']);
   }
 
   ngOnDestroy(): void {

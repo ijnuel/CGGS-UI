@@ -5,6 +5,7 @@ import * as fromStudent from './student/student.reducer';
 import * as fromShared from './shared/shared.reducer';
 import * as fromAdministrator from './administrator/administrator.reducer';
 import * as fromTestEntityTemplate from './test-entity-template/test-entity-template.reducer';
+import * as fromFamily from './family/family.reducer';
 import * as fromClassSubjectAssessment from './class-subject-assessment/class-subject-assessment.reducer';
 import * as fromClassSubject from './class-subject/class-subject.reducer';
 import * as fromClassLevel from './class-level/class-level.reducer';
@@ -12,7 +13,6 @@ import * as fromClass from './class/class.reducer';
 import * as fromSubject from './subject/subject.reducer';
 import * as fromProgramType from './program-type/program-type.reducer';
 import * as fromApplication from './application/application.reducer';
-import * as fromFamily from './family/family.reducer';
 import * as fromState from './state/state.reducer';
 import * as fromSession from './session/session.reducer';
 import * as fromLocalGovernmentArea from './local-government-area/local-government-area.reducer';
@@ -27,10 +27,11 @@ export const appFeatureKey = 'appFeatureKey';
 
 export interface AppState {
   [fromAuth.authFeatureKey]: fromAuth.AuthState;
-  [fromStudent.studentsFeatureKey]: fromStudent.StudentsState;
   [fromShared.sharedFeatureKey]: fromShared.SharedState;
   [fromAdministrator.administratorFeatureKey]: fromAdministrator.AdministratorState;
   [fromTestEntityTemplate.testEntityTemplateFeatureKey]: fromTestEntityTemplate.TestEntityTemplateState;
+  [fromFamily.familyFeatureKey]: fromFamily.FamilyState;
+  [fromStudent.studentFeatureKey]: fromStudent.StudentState;
   [fromClassSubjectAssessment.classSubjectAssessmentFeatureKey]: fromClassSubjectAssessment.ClassSubjectAssessmentState;
   [fromClassSubject.classSubjectFeatureKey]: fromClassSubject.ClassSubjectState;
   [fromClassLevel.classLevelFeatureKey]: fromClassLevel.ClassLevelState;
@@ -38,7 +39,6 @@ export interface AppState {
   [fromSubject.subjectFeatureKey]: fromSubject.SubjectState;
   [fromProgramType.programTypeFeatureKey]: fromProgramType.ProgramTypeState;
   [fromApplication.applicationFeatureKey]: fromApplication.ApplicationState;
-  [fromFamily.familyFeatureKey]: fromFamily.FamilyState;
   [fromState.stateFeatureKey]: fromState.StateState;
   [fromSession.sessionFeatureKey]: fromSession.SessionState;
   [fromLocalGovernmentArea.localGovernmentAreaFeatureKey]: fromLocalGovernmentArea.LocalGovernmentAreaState;
@@ -52,10 +52,11 @@ export interface AppState {
 
 export const reducers = {
   [fromAuth.authFeatureKey]: fromAuth.authReducer, // Updated to use authReducer
-  [fromStudent.studentsFeatureKey]: fromStudent.reducer,
   [fromShared.sharedFeatureKey]: fromShared.reducer,
   [fromAdministrator.administratorFeatureKey]: fromAdministrator.reducer,
   [fromTestEntityTemplate.testEntityTemplateFeatureKey]: fromTestEntityTemplate.reducer,
+  [fromFamily.familyFeatureKey]: fromFamily.reducer,
+  [fromStudent.studentFeatureKey]: fromStudent.reducer,
   [fromClassSubjectAssessment.classSubjectAssessmentFeatureKey]: fromClassSubjectAssessment.reducer,
   [fromClassSubject.classSubjectFeatureKey]: fromClassSubject.reducer,
   [fromClassLevel.classLevelFeatureKey]: fromClassLevel.reducer,
@@ -63,7 +64,6 @@ export const reducers = {
   [fromSubject.subjectFeatureKey]: fromSubject.reducer,
   [fromProgramType.programTypeFeatureKey]: fromProgramType.reducer,
   [fromApplication.applicationFeatureKey]: fromApplication.reducer,
-  [fromFamily.familyFeatureKey]: fromFamily.reducer,
   [fromState.stateFeatureKey]: fromState.reducer,
   [fromSession.sessionFeatureKey]: fromSession.reducer,
   [fromLocalGovernmentArea.localGovernmentAreaFeatureKey]: fromLocalGovernmentArea.reducer,

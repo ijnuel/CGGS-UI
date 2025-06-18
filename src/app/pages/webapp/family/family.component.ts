@@ -27,8 +27,8 @@ export class FamilyComponent implements OnInit {
   loading$: Observable<boolean>;
 
   constructor(private familyFacade: FamilyFacade) {
-    this.familyList$ = this.familyFacade.selectFamilyList$;
-    this.loading$ = this.familyFacade.selectedLoading$;
+    this.familyList$ = this.familyFacade.familyList$;
+    this.loading$ = this.familyFacade.loading$;
   }
 
   ngOnInit() {
