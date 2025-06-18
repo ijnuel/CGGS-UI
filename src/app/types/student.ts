@@ -17,6 +17,7 @@ export interface StudentListInterface {
     residentialStateId: string;
     phoneNumber: string;
     familyId: string;
+    classId: string;
 }
 
 export interface StudentFormInterface {
@@ -38,4 +39,5 @@ export interface StudentFormInterface {
     residentialStateId: string;
     phoneNumber: string;
     familyId: string;
+    classId: string;
 }

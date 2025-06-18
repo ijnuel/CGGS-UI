@@ -9,11 +9,14 @@ import {
 } from '@angular/forms';
 import { initUserProfileForm } from '../../../../services/helper.service';
 import { getErrorMessageHelper } from '../../../../services/helper.service';
-import { DropdownListInterface, FamilyListInterface, StudentFormInterface, StudentListInterface } from '../../../../types';
+import { ClassLevelListInterface, ClassListInterface, DropdownListInterface, FamilyListInterface, ProgramTypeListInterface, StudentFormInterface, StudentListInterface } from '../../../../types';
 import { SharedFacade } from '../../../../store/shared/shared.facade';
 import { ActivatedRoute, Router } from '@angular/router';
 import { GlobalLoadingFacade } from '../../../../store/global-loading/global-loading.facade';
 import { FamilyFacade } from '../../../../store/family/family.facade';
+import { ClassFacade } from '../../../../store/class/class.facade';
+import { ProgramTypeFacade } from '../../../../store/program-type/program-type.facade';
+import { ClassLevelFacade } from '../../../../store/class-level/class-level.facade';
 
 @Component({
   selector: 'app-create-update-student',
@@ -43,6 +46,7 @@ export class CreateUpdateStudentComponent implements OnInit, OnDestroy {
     studentNo: FormControl;
     email: FormControl;
     familyId: FormControl;
+    classId: FormControl;
   }>;
 
   get formControl() {
@@ -62,6 +66,7 @@ export class CreateUpdateStudentComponent implements OnInit, OnDestroy {
   religionList$: Observable<DropdownListInterface[] | null>;
   countryList$: Observable<DropdownListInterface[] | null>;
   familyList$: Observable<FamilyListInterface[] | null>;
+  classList$: Observable<ClassListInterface[] | null>;
 
 
   constructor(
@@ -69,6 +74,7 @@ export class CreateUpdateStudentComponent implements OnInit, OnDestroy {
     private fb: FormBuilder,
     private sharedFacade: SharedFacade,
     private familyFacade: FamilyFacade,
+    private classFacade: ClassFacade,
     private route: ActivatedRoute,
     private router: Router,
     private globalLoadingFacade: GlobalLoadingFacade,
@@ -78,6 +84,7 @@ export class CreateUpdateStudentComponent implements OnInit, OnDestroy {
     this.religionList$ = this.sharedFacade.selectReligionList$;
     this.countryList$ = this.sharedFacade.selectCountryList$;
     this.familyList$ = this.familyFacade.familyAll$;
+    this.classList$ = this.classFacade.classAll$;
     this.loading$ = this.studentFacade.loading$;
     this.error$ = this.studentFacade.error$;
     this.studentById$ = this.studentFacade.studentById$;
@@ -90,6 +97,7 @@ export class CreateUpdateStudentComponent implements OnInit, OnDestroy {
       dateOfBirth: null,
       phoneNumber: null,
       email: null,
+      classId: ['', [Validators.required]],
       religion: ['', [Validators.required]],
       gender: ['', [Validators.required]],
       nationalityId: null,
@@ -105,6 +113,7 @@ export class CreateUpdateStudentComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.familyFacade.getFamilyAll();
+    this.classFacade.getClassAll();
     initUserProfileForm(this.sharedFacade, this.formControl, this.unsubscribe$, this.selectedCountryStateList$, this.selectedStateLgaList$);
     const studentId = this.route.snapshot.params['id'];
     if (studentId) {
@@ -129,6 +138,7 @@ export class CreateUpdateStudentComponent implements OnInit, OnDestroy {
               residentialCity: data.residentialCity,
               studentNo: data.studentNo,
               familyId: data.familyId,
+              classId: data.classId,
           });
         }
       });
