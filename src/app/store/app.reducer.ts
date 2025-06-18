@@ -1,7 +1,7 @@
 import { createFeatureSelector } from '@ngrx/store';
 
 import * as fromAuth from './auth/auth.reducer';
-import * as fromStudent from './students/students.reducer';
+import * as fromStudent from './student/student.reducer';
 import * as fromShared from './shared/shared.reducer';
 import * as fromAdministrator from './administrator/administrator.reducer';
 import * as fromTestEntityTemplate from './test-entity-template/test-entity-template.reducer';

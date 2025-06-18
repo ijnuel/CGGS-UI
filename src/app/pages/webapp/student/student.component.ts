@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { tableHeader } from './table-header';
-import { StudentsFacade } from '../../../store/students/students.facade';
+import { StudentFacade } from '../../../store/student/student.facade';
 import { Observable } from 'rxjs';
 import {
   PageQueryInterface,
@@ -10,11 +10,11 @@ import {
 import { PageEvent } from '@angular/material/paginator';
 
 @Component({
-    selector: 'app-students',
-    templateUrl: './students.component.html',
-    styleUrl: './students.component.scss',
+    selector: 'app-student',
+    templateUrl: './student.component.html',
+    styleUrl: './student.component.scss',
 })
-export class StudentsComponent implements OnInit {
+export class StudentComponent implements OnInit {
   header = tableHeader;
   pageQuery: PageQueryInterface = {
     start: 0,
@@ -26,7 +26,7 @@ export class StudentsComponent implements OnInit {
   > | null>;
   loading$: Observable<boolean>;
 
-  constructor(private studentsFacade: StudentsFacade) {
+  constructor(private studentsFacade: StudentFacade) {
     this.studentsList$ = this.studentsFacade.selectStudentsList$;
     this.loading$ = this.studentsFacade.selectedLoading$;
   }

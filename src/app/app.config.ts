@@ -21,8 +21,8 @@ import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { AppInterceptorService } from './services/app.interceptor.service';
 import { GlobalLoadingFacade } from './store/global-loading/global-loading.facade';
 import { provideHotToastConfig } from '@ngneat/hot-toast';
-import { StudentsFacade } from './store/students/students.facade';
-import { StudentsEffect } from './store/students/students.effects';
+import { StudentFacade } from './store/student/student.facade';
+import { StudentEffect } from './store/student/student.effects';
 import { SharedEffect } from './store/shared/shared.effects';
 import { SharedFacade } from './store/shared/shared.facade';
 import { AdministratorFacade } from './store/administrator/administrator.facade';
@@ -69,7 +69,7 @@ export const appConfig: ApplicationConfig = {
       StoreModule.forRoot(reducers),
       EffectsModule.forRoot([
         AuthEffect,
-        StudentsEffect,
+        StudentEffect,
         SharedEffect,
         AdministratorEffect,
         TestEntityTemplateEffect,
@@ -119,7 +119,7 @@ export const appConfig: ApplicationConfig = {
     // STORE FACADES
     AuthFacade,
     GlobalLoadingFacade,
-    StudentsFacade,
+    StudentFacade,
     SharedFacade,
     AdministratorFacade,
     TestEntityTemplateFacade,

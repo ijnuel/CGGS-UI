@@ -8,30 +8,30 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatIconModule } from '@angular/material/icon';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatRadioModule } from '@angular/material/radio';
-import { StudentsComponent } from './students.component';
+import { StudentComponent } from './student.component';
 import { SharedModule } from '../../../shared/shared.module';
-import { CreateUpdateStudentsComponent } from './create-update-students/create-update-students.component';
+import { CreateUpdateStudentComponent } from './create-update-student/create-update-student.component';
 import { provideNativeDateAdapter } from '@angular/material/core';
 
 const routes: Routes = [
     {
         path: '',
-        component: StudentsComponent,
+        component: StudentComponent,
     },
 
     {
         path: 'create',
-        component: CreateUpdateStudentsComponent,
+        component: CreateUpdateStudentComponent,
     },
 
     {
         path: 'edit/:studentId',
-        component: CreateUpdateStudentsComponent,
+        component: CreateUpdateStudentComponent,
     },
 ];
 
 @NgModule({
-    declarations: [StudentsComponent, CreateUpdateStudentsComponent],
+    declarations: [StudentComponent, CreateUpdateStudentComponent],
     imports: [
         CommonModule,
         SharedModule,
@@ -47,4 +47,4 @@ const routes: Routes = [
     ],
     providers: [provideNativeDateAdapter()],
 })
-export class StudentsModule { }
+export class StudentModule { }

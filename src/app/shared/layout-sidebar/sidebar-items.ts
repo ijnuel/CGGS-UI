@@ -12,7 +12,7 @@ export default [
     name: 'Students',
     icon: 'assets/icons/users-icon.svg',
     roles: [],
-    url: '/app/students'
+    url: '/app/student'
   },
   {
     name: 'Administrators',

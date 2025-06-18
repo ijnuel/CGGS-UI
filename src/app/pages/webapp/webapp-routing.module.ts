@@ -18,9 +18,9 @@ const routes: Routes = [
           import('./dashboard/dashboard.module').then((m) => m.DashboardModule),
       },
       {
-        path: 'students',
+        path: 'student',
         loadChildren: () =>
-          import('./students/students.module').then((m) => m.StudentsModule),
+          import('./student/student.module').then((m) => m.StudentModule),
       },
       { path: 'test-entity-template', loadChildren: () => import('./test-entity-template/test-entity-template.module').then((m) => m.TestEntityTemplateModule), },
       { path: 'class-subject-assessment', loadChildren: () => import('./class-subject-assessment/class-subject-assessment.module').then((m) => m.ClassSubjectAssessmentModule), },
