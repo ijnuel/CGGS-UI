@@ -12,6 +12,7 @@ import { FamilyComponent } from './family.component';
 import { SharedModule } from '../../../shared/shared.module';
 import { CreateUpdateFamilyComponent } from './create-update-family/create-update-family.component';
 import { provideNativeDateAdapter } from '@angular/material/core';
+import { ViewFamilyComponent } from './view-family/view-family.component';
 
 const routes: Routes = [
     {
@@ -25,13 +26,18 @@ const routes: Routes = [
     },
 
     {
-        path: 'edit/:familyId',
+        path: 'edit/:id',
         component: CreateUpdateFamilyComponent,
+    },
+
+    {
+        path: 'view/:id',
+        component: ViewFamilyComponent,
     },
 ];
 
 @NgModule({
-    declarations: [FamilyComponent, CreateUpdateFamilyComponent],
+    declarations: [FamilyComponent, CreateUpdateFamilyComponent, ViewFamilyComponent],
     imports: [
         CommonModule,
         SharedModule,
