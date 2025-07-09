@@ -16,6 +16,7 @@ import { ClassSubjectFacade } from '../../../store/class-subject/class-subject.f
 import { ClassSubjectAssessmentFacade } from '../../../store/class-subject-assessment/class-subject-assessment.facade';
 import { SubjectFacade } from '../../../store/subject/subject.facade';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+// import { ProgramSetupLevelConfig } from '../../../shared/program-setup-level-panel';
 
 @Component({
     selector: 'app-program-type',
@@ -62,6 +63,7 @@ export class ProgramTypeComponent implements OnInit {
   classSubjectAllSnapShot: ClassSubjectListInterface[] = [];
   classSubjectAssessmentAllSnapShot: ClassSubjectAssessmentListInterface[] = [];
   subjectAllSnapShot: SubjectListInterface[] = [];
+  // programTypeConfig!: ProgramSetupLevelConfig;
 
   constructor(
     private router: Router,
@@ -173,6 +175,7 @@ export class ProgramTypeComponent implements OnInit {
         this.subjectAllSnapShot = [...data].sort((a, b) => a.name.localeCompare(b.name));
       }
     });
+    // this.programTypeConfig = this.buildProgramTypeConfig();
   }
 
   loadProgramTypes(programSetupLevel: ProgramSetupLevel = ProgramSetupLevel.PROGRAMTYPE) {
@@ -406,6 +409,105 @@ export class ProgramTypeComponent implements OnInit {
     this.hideAddForm();
     this.classSubjectAssessmentFacade.getClassSubjectAssessmentAll();
   }
+
+  // buildProgramTypeConfig(): ProgramSetupLevelConfig {
+  //   return {
+  //     label: 'Program Type',
+  //     formGroup: this.addClassLevelForm,
+  //     submitHandler: (programType: any) => this.submitClassLevel(programType),
+  //     childItemsFn: (programTypeId: string) => this.getClassLevels(programTypeId),
+  //     showAddButton: true,
+  //     childConfig: {
+  //       label: 'Class Level',
+  //       formGroup: this.addClassArmForm,
+  //       submitHandler: (classLevel: any) => this.submitClassArm(classLevel),
+  //       childItemsFn: (classLevelId: string) => this.getClasses(classLevelId),
+  //       showAddButton: true,
+  //       childConfig: {
+  //         label: 'Class Arm',
+  //         formGroup: this.addClassSubjectForm,
+  //         submitHandler: (classArm: any) => this.submitClassSubject(classArm),
+  //         childItemsFn: (classId: string) => this.getClassSubjects(classId),
+  //         showAddButton: true,
+  //         childConfig: {
+  //           label: 'Class Subject',
+  //           formGroup: this.addClassSubjectAssessmentForm,
+  //           submitHandler: (classSubject: any) => this.submitClassSubjectAssessment(classSubject),
+  //           childItemsFn: (classSubjectId: string) => [], // No further child
+  //           showAddButton: true,
+  //           showTable: true,
+  //           tableHeaderData: this.assessmentTypeTableHeaderData,
+  //           getTableData: (classSubjectId: string) => this.getClassSubjectAssessments(classSubjectId),
+  //         },
+  //       },
+  //     },
+  //   };
+  // }
+
+  // // Generic handlers for add, edit, delete, refresh, and submit
+  // onPanelEdit(event: { item: any, level: string }) {
+  //   const { item, level } = event;
+  //   switch (level) {
+  //     case 'Program Type':
+  //       // Navigate to edit page for program type
+  //       this.router.navigate(['edit', item.id], { relativeTo: this.route });
+  //       break;
+  //     case 'Class Level':
+  //       this.addClassLevelForm.patchValue({ id: item.id, level: item.level });
+  //       this.addFormVisibleFor = item.programmeTypeId;
+  //       break;
+  //     case 'Class Arm':
+  //       this.addClassArmForm.patchValue({ id: item.id, name: item.name });
+  //       this.addFormVisibleFor = item.classLevelId;
+  //       break;
+  //     case 'Class Subject':
+  //       this.addClassSubjectForm.patchValue({ id: item.id, subjectId: item.subjectId });
+  //       this.addFormVisibleFor = item.classId;
+  //       break;
+  //     case 'Class Subject Assessment':
+  //       this.addClassSubjectAssessmentForm.patchValue({ id: item.id, assessmentType: item.assessmentType, scoreWeigth: item.scoreWeigth });
+  //       this.addFormVisibleFor = item.classSubjectId;
+  //       break;
+  //   }
+  // }
+  // onPanelDelete(event: { item: any, level: string }) {
+  //   const { item, level } = event;
+  //   let programSetupLevel = level as ProgramSetupLevel;
+  //   this.onDelete(item, programSetupLevel);
+  // }
+  // onPanelAdd(event: { item: any, level: string }) {
+  //   // Not used in this context, but could be implemented for custom add logic
+  // }
+  // onPanelRefresh(event: { item: any, level: string }) {
+  //   const { level } = event;
+  //   switch (level) {
+  //     case 'Program Type':
+  //       this.programTypeFacade.getProgramTypeAll();
+  //       this.subjectFacade.getSubjectAll();
+  //       break;
+  //     case 'Class Level':
+  //       this.classLevelFacade.getClassLevelAll();
+  //       break;
+  //     case 'Class Arm':
+  //       this.classFacade.getClassAll();
+  //       break;
+  //     case 'Class Subject':
+  //       this.classSubjectFacade.getClassSubjectAll();
+  //       break;
+  //     case 'Class Subject Assessment':
+  //       this.classSubjectAssessmentFacade.getClassSubjectAssessmentAll();
+  //       break;
+  //   }
+  // }
+  // onPanelShowAddForm(event: { id: string, level: string }) {
+  //   this.addFormVisibleFor = event.id;
+  // }
+  // onPanelHideAddForm(event: { level: string }) {
+  //   this.hideAddForm();
+  // }
+  // onPanelSubmit(event: { item: any, level: string, config: ProgramSetupLevelConfig }) {
+  //   event.config.submitHandler(event.item);
+  // }
 }
 
 export enum ProgramSetupLevel {

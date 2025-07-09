@@ -15,6 +15,7 @@ import { MatPaginator } from '@angular/material/paginator';
 import { ConfirmDialogComponent } from './confirm-dialog/confirm-dialog.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MatExpansionModule } from '@angular/material/expansion';
+import { ProgramSetupLevelPanelComponent } from './program-setup-level-panel';
 
 @NgModule({
   declarations: [
@@ -27,6 +28,7 @@ import { MatExpansionModule } from '@angular/material/expansion';
     TableLoaderComponent,
     LoadingSpinnerDirective,
     ConfirmDialogComponent,
+    ProgramSetupLevelPanelComponent,
   ],
   imports: [
     RouterModule,
@@ -54,6 +56,7 @@ import { MatExpansionModule } from '@angular/material/expansion';
     MatPaginator,
     MatExpansionModule,
     ReactiveFormsModule,
+    ProgramSetupLevelPanelComponent,
   ],
 })
 export class SharedModule {}
