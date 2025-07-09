@@ -17,6 +17,8 @@ import {
   selectCount,
   selectStudentLoading,
   selectStudentError,
+  selectStudentCreateSuccess,
+  selectStudentUpdateSuccess,
 } from './student.selector';
 import { StudentState } from './student.reducer';
 
@@ -32,6 +34,8 @@ export class StudentFacade {
   count$: Observable<number | null>;
   loading$: Observable<boolean>;
   error$: Observable<string | null>;
+  createSuccess$: Observable<boolean>;
+  updateSuccess$: Observable<boolean>;
   currentPageQuery: PageQueryInterface = {
     start: 0,
     recordsPerPage: 10,
@@ -48,6 +52,8 @@ export class StudentFacade {
     this.count$ = this.store.select(selectCount);
     this.loading$ = this.store.select(selectStudentLoading);
     this.error$ = this.store.select(selectStudentError);
+    this.createSuccess$ = this.store.select(selectStudentCreateSuccess);
+    this.updateSuccess$ = this.store.select(selectStudentUpdateSuccess);
   }
 
   getStudentList(pageQuery: PageQueryInterface): void {

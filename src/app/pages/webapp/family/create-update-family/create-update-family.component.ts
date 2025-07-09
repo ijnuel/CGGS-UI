@@ -66,6 +66,23 @@ export class CreateUpdateFamilyComponent implements OnInit, OnDestroy {
                 }
             });
         }
+
+        this.familyFacade.createSuccess$
+            .pipe(takeUntil(this.unsubscribe$))
+            .subscribe((success) => {
+                if (success && !this.isEditMode) {
+                    this.router.navigate(['/app/family']);
+                    this.globalLoadingFacade.globalSuccessShow('Family created successfully', 3000);
+                }
+            });
+        this.familyFacade.updateSuccess$
+            .pipe(takeUntil(this.unsubscribe$))
+            .subscribe((success) => {
+                if (success && this.isEditMode) {
+                    this.router.navigate(['/app/family']);
+                    this.globalLoadingFacade.globalSuccessShow('Family updated successfully', 3000);
+                }
+            });
     }
 
     getErrorMessage(controlName: string): string | null {
@@ -84,14 +101,9 @@ export class CreateUpdateFamilyComponent implements OnInit, OnDestroy {
                 ...formData,
                 id: this.route.snapshot.params['id']
             });
-            this.globalLoadingFacade.globalSuccessShow('Family updated successfully', 3000);
         } else {
             this.familyFacade.createFamily(formData);
-            this.globalLoadingFacade.globalSuccessShow('Family created successfully', 3000);
         }
-
-        // Navigate to the list page
-        this.router.navigate(['/app/family']);
     }
 
     ngOnDestroy(): void {

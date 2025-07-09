@@ -12,22 +12,22 @@
       </button>
     </div>
   </div>
-  <div *ngIf="administratorList$ | async as administratorList">
-    <app-table
-      [isLoading]="(loading$ | async) ?? false"
-      [showActionColumn]="true"
-      [tableData]="administratorList.data"
-      [tableHeaderData]="tableHeaderData"
-      [pageSize]="administratorList.recordPerPage"
-      [totalLength]="administratorList.totalCount"
-      [pageIndex]="pageQuery.pageIndex ?? 0"
-      (pageChange)="onPageChange($event)"
-      (search)="onSearch($event)"
-      (filter)="onFilter($event)"
-      (refresh)="onRefresh()"
-      (view)="onView($event)"
-      (edit)="onEdit($event)"
-      (delete)="onDelete($event)"
-    ></app-table>
-  </div>
+
+  <app-table
+    [tableData]="(administratorList$ | async)?.data ?? []"
+    [tableHeaderData]="tableHeaderData"
+    [isLoading]="(loading$ | async) ?? false"
+    [totalLength]="(administratorList$ | async)?.totalCount ?? 0"
+    [pageSize]="(administratorList$ | async)?.recordPerPage ?? 10"
+    [pageIndex]="(administratorList$ | async)?.currentPage ?? 0"
+    [showSearch]="true"
+    [showFilters]="true"
+    [showActionColumn]="true"
+    (pageChange)="onPageChange($event)"
+    (search)="onSearch($event)"
+    (filter)="onFilter($event)"
+    (view)="onView($event)"
+    (edit)="onEdit($event)"
+    (delete)="onDelete($event)"
+  ></app-table>
 </div>

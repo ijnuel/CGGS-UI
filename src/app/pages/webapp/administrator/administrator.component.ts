@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
 import { AdministratorFacade } from '../../../store/administrator/administrator.facade';
-import { AdministratorListInterface } from '../../../types';
+import { AdministratorListInterface } from '../../../types/administrator';
 import { PaginatedResponseInterface } from '../../../types';
 import { PageQueryInterface } from '../../../types';
 import { TableHeaderInterface } from '../../../types/table';
@@ -20,11 +20,6 @@ export class AdministratorComponent implements OnInit {
   administratorList$: Observable<PaginatedResponseInterface<AdministratorListInterface[]> | null>;
   loading$: Observable<boolean>;
   tableHeaderData: TableHeaderInterface[] = tableHeader;
-  pageQuery: PageQueryInterface = {
-    start: 0,
-    recordsPerPage: 10,
-    pageIndex: 0
-  };
 
   constructor(
     private router: Router,
@@ -33,8 +28,8 @@ export class AdministratorComponent implements OnInit {
     private dialog: MatDialog,
     private toastService: ToastNotificationService
   ) {
-    this.administratorList$ = this.administratorFacade.selectAdministratorList$;
-    this.loading$ = this.administratorFacade.selectedLoading$;
+    this.administratorList$ = this.administratorFacade.administratorList$;
+    this.loading$ = this.administratorFacade.loading$;
   }
 
   ngOnInit() {
@@ -96,8 +91,7 @@ export class AdministratorComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
-        // Implement delete logic here, e.g.:
-        // this.administratorFacade.deleteAdministrator(row.id);
+        this.administratorFacade.deleteAdministrator(row.id);
         this.toastService.openToast('Administrator deleted successfully', NotificationTypeEnums.SUCCESS);
         this.loadAdministrators();
       }

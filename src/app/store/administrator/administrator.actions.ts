@@ -7,96 +7,14 @@ import {
   AdministratorFormInterface,
 } from '../../types';
 
-export const getAdministratorList = createAction(
-  '[Administrator] Get Administrator List',
-  props<{
-    pageQuery: PageQueryInterface;
-  }>()
-);
-
-export const getAdministratorListSuccess = createAction(
-  '[Administrator/API] Get Administrator List Success',
-  props<{
-    payload: GenericResponseInterface<
-      PaginatedResponseInterface<AdministratorListInterface[]>
-    >;
-  }>()
-);
-
-export const getAdministratorListFail = createAction(
-  '[Administrator/API] Get Administrator List Fail',
-  props<{ error: string }>()
-);
-
-export const getAdministratorById = createAction(
-  '[Administrator] Get Administrator By Id',
-  props<{ administratorId: string }>()
-);
-
-export const getAdministratorByIdSuccess = createAction(
-  '[Administrator/API] Get Administrator By Id Success',
-  props<{
-    payload: GenericResponseInterface<AdministratorListInterface>;
-  }>()
-);
-
-export const getAdministratorByIdFail = createAction(
-  '[Administrator/API] Get Administrator By Id Fail',
-  props<{ error: string }>()
-);
-
-export const createAdministrator = createAction(
-  '[Administrator] Create Administrator',
-  props<{ payload: AdministratorFormInterface }>()
-);
-
-export const createAdministratorSuccess = createAction(
-  '[Administrator/API] Create Administrator Success',
-  props<{ message: string; administrator: AdministratorListInterface }>()
-);
-
-export const createAdministratorFail = createAction(
-  '[Administrator/API] Create Administrator Fail',
-  props<{ error: string }>()
-);
-
-export const editAdministrator = createAction(
-  '[Administrator] Edit Administrator',
-  props<{ payload: AdministratorFormInterface }>()
-);
-
-export const editAdministratorSuccess = createAction(
-  '[Administrator/API] Edit Administrator Success',
-  props<{ message: string; administrator: AdministratorListInterface }>()
-);
-
-export const editAdministratorFail = createAction(
-  '[Administrator/API] Edit Administrator Fail',
-  props<{ error: string }>()
-);
-
-export const deleteAdministrator = createAction(
-  '[Administrator] Delete Administrator',
-  props<{ administratorId: string }>()
-);
-
-export const deleteAdministratorSuccess = createAction(
-  '[Administrator/API] Delete Administrator Success',
-  props<{ message: string }>()
-);
-
-export const deleteAdministratorFail = createAction(
-  '[Administrator/API] Delete Administrator Fail',
-  props<{ error: string }>()
-);
-
-export const getAdministratorAll = createAction(
-  '[Administrator] Get All',
-);
+// Get All (non-paginated)
+export const getAdministratorAll = createAction('[Administrator] Get All');
 
 export const getAdministratorAllSuccess = createAction(
   '[Administrator/API] Get All Success',
-  props<{ payload: any }>()
+  props<{
+    payload: GenericResponseInterface<AdministratorListInterface[]>;
+  }>()
 );
 
 export const getAdministratorAllFail = createAction(
@@ -104,14 +22,55 @@ export const getAdministratorAllFail = createAction(
   props<{ error: string }>()
 );
 
+// Get All Paginated
+export const getAdministratorList = createAction(
+  '[Administrator] Get List',
+  props<{
+    pageQuery: PageQueryInterface;
+  }>()
+);
+
+export const getAdministratorListSuccess = createAction(
+  '[Administrator/API] Get List Success',
+  props<{
+    payload: GenericResponseInterface<PaginatedResponseInterface<AdministratorListInterface[]>>;
+  }>()
+);
+
+export const getAdministratorListFail = createAction(
+  '[Administrator/API] Get List Fail',
+  props<{ error: string }>()
+);
+
+// Get By Id
+export const getAdministratorById = createAction(
+  '[Administrator] Get By Id',
+  props<{ administratorId: string }>()
+);
+
+export const getAdministratorByIdSuccess = createAction(
+  '[Administrator/API] Get By Id Success',
+  props<{
+    payload: GenericResponseInterface<AdministratorListInterface>;
+  }>()
+);
+
+export const getAdministratorByIdFail = createAction(
+  '[Administrator/API] Get By Id Fail',
+  props<{ error: string }>()
+);
+
+// Get By Properties
 export const getAdministratorByProperties = createAction(
   '[Administrator] Get By Properties',
-  props<{ queryProperties: any[] }>()
+  props<{ properties: Partial<AdministratorFormInterface> }>()
 );
 
 export const getAdministratorByPropertiesSuccess = createAction(
   '[Administrator/API] Get By Properties Success',
-  props<{ payload: any }>()
+  props<{
+    payload: GenericResponseInterface<AdministratorListInterface[]>;
+  }>()
 );
 
 export const getAdministratorByPropertiesFail = createAction(
@@ -119,14 +78,17 @@ export const getAdministratorByPropertiesFail = createAction(
   props<{ error: string }>()
 );
 
+// Exists
 export const administratorExists = createAction(
   '[Administrator] Exists',
-  props<{ id: string }>()
+  props<{ properties: Partial<AdministratorFormInterface> }>()
 );
 
 export const administratorExistsSuccess = createAction(
   '[Administrator/API] Exists Success',
-  props<{ payload: boolean }>()
+  props<{
+    payload: GenericResponseInterface<boolean>;
+  }>()
 );
 
 export const administratorExistsFail = createAction(
@@ -134,13 +96,14 @@ export const administratorExistsFail = createAction(
   props<{ error: string }>()
 );
 
-export const administratorCount = createAction(
-  '[Administrator] Count',
-);
+// Count
+export const administratorCount = createAction('[Administrator] Count');
 
 export const administratorCountSuccess = createAction(
   '[Administrator/API] Count Success',
-  props<{ payload: number }>()
+  props<{
+    payload: GenericResponseInterface<number>;
+  }>()
 );
 
 export const administratorCountFail = createAction(
@@ -148,14 +111,71 @@ export const administratorCountFail = createAction(
   props<{ error: string }>()
 );
 
+// Create
+export const createAdministrator = createAction(
+  '[Administrator] Create',
+  props<{ payload: AdministratorFormInterface }>()
+);
+
+export const createAdministratorSuccess = createAction(
+  '[Administrator/API] Create Success',
+  props<{
+    payload: GenericResponseInterface<AdministratorListInterface>;
+  }>()
+);
+
+export const createAdministratorFail = createAction(
+  '[Administrator/API] Create Fail',
+  props<{ error: string }>()
+);
+
+// Update
+export const updateAdministrator = createAction(
+  '[Administrator] Update',
+  props<{ payload: AdministratorFormInterface }>()
+);
+
+export const updateAdministratorSuccess = createAction(
+  '[Administrator/API] Update Success',
+  props<{
+    payload: GenericResponseInterface<AdministratorListInterface>;
+  }>()
+);
+
+export const updateAdministratorFail = createAction(
+  '[Administrator/API] Update Fail',
+  props<{ error: string }>()
+);
+
+// Delete
+export const deleteAdministrator = createAction(
+  '[Administrator] Delete',
+  props<{ administratorId: string }>()
+);
+
+export const deleteAdministratorSuccess = createAction(
+  '[Administrator/API] Delete Success',
+  props<{
+    payload: GenericResponseInterface<boolean>;
+  }>()
+);
+
+export const deleteAdministratorFail = createAction(
+  '[Administrator/API] Delete Fail',
+  props<{ error: string }>()
+);
+
+// Create Many
 export const createManyAdministrators = createAction(
   '[Administrator] Create Many',
-  props<{ payload: any[] }>()
+  props<{ payload: AdministratorFormInterface[] }>()
 );
 
 export const createManyAdministratorsSuccess = createAction(
   '[Administrator/API] Create Many Success',
-  props<{ payload: any }>()
+  props<{
+    payload: GenericResponseInterface<AdministratorListInterface[]>;
+  }>()
 );
 
 export const createManyAdministratorsFail = createAction(
@@ -163,14 +183,17 @@ export const createManyAdministratorsFail = createAction(
   props<{ error: string }>()
 );
 
+// Update Many
 export const updateManyAdministrators = createAction(
   '[Administrator] Update Many',
-  props<{ payload: any[] }>()
+  props<{ payload: AdministratorFormInterface[] }>()
 );
 
 export const updateManyAdministratorsSuccess = createAction(
   '[Administrator/API] Update Many Success',
-  props<{ payload: any }>()
+  props<{
+    payload: GenericResponseInterface<AdministratorListInterface[]>;
+  }>()
 );
 
 export const updateManyAdministratorsFail = createAction(
@@ -178,14 +201,17 @@ export const updateManyAdministratorsFail = createAction(
   props<{ error: string }>()
 );
 
+// Delete Many
 export const deleteManyAdministrators = createAction(
   '[Administrator] Delete Many',
-  props<{ ids: string[] }>()
+  props<{ administratorIds: string[] }>()
 );
 
 export const deleteManyAdministratorsSuccess = createAction(
   '[Administrator/API] Delete Many Success',
-  props<{ payload: any }>()
+  props<{
+    payload: GenericResponseInterface<boolean>;
+  }>()
 );
 
 export const deleteManyAdministratorsFail = createAction(

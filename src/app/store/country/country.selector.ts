@@ -1,28 +1,65 @@
 import { createSelector } from '@ngrx/store';
-import * as fromCountry from './country.reducer';
-import * as fromApp from '../app.reducer';
+import {
+  getCountryList,
+  getCountryAll,
+  getCountryByProperties,
+  getCountryById,
+  getExists,
+  getCount,
+  getLoading,
+  getError,
+  CountryState,
+} from './country.reducer';
 
-export const selectCountryState = createSelector(
-  fromApp.selectAppState,
-  (state) => state[fromCountry.countryFeatureKey]
-);
+export const selectCountryState = (state: { country: CountryState }) =>
+  state.country;
 
 export const selectCountryList = createSelector(
-  fromCountry.selectCountryState,
-  fromCountry.getCountryList
+  selectCountryState,
+  getCountryList
+);
+
+export const selectCountryAll = createSelector(
+  selectCountryState,
+  getCountryAll
+);
+
+export const selectCountryByProperties = createSelector(
+  selectCountryState,
+  getCountryByProperties
 );
 
 export const selectCountryById = createSelector(
-  fromCountry.selectCountryState,
-  fromCountry.getCountryById
+  selectCountryState,
+  getCountryById
 );
 
-export const selectLoading = createSelector(
-  fromCountry.selectCountryState,
-  fromCountry.getLoading
+export const selectExists = createSelector(
+  selectCountryState,
+  getExists
 );
 
-export const selectError = createSelector(
-  fromCountry.selectCountryState,
-  fromCountry.getError
+export const selectCount = createSelector(
+  selectCountryState,
+  getCount
+);
+
+export const selectCountryLoading = createSelector(
+  selectCountryState,
+  getLoading
+);
+
+export const selectCountryError = createSelector(
+  selectCountryState,
+  getError
+);
+
+export const selectCountryCreateSuccess = createSelector(
+    selectCountryState,
+    (state) => state.createSuccess
+);
+
+export const selectCountryUpdateSuccess = createSelector(
+    selectCountryState,
+    (state) => state.updateSuccess
 );

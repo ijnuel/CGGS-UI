@@ -12,6 +12,7 @@ import { SessionComponent } from './session.component';
 import { SharedModule } from '../../../shared/shared.module';
 import { CreateUpdateSessionComponent } from './create-update-session/create-update-session.component';
 import { provideNativeDateAdapter } from '@angular/material/core';
+import { ViewSessionComponent } from './view-session/view-session.component';
 
 const routes: Routes = [
     {
@@ -25,13 +26,18 @@ const routes: Routes = [
     },
 
     {
-        path: 'edit/:sessionId',
+        path: 'edit/:id',
         component: CreateUpdateSessionComponent,
+    },
+
+    {
+        path: 'view/:id',
+        component: ViewSessionComponent,
     },
 ];
 
 @NgModule({
-    declarations: [SessionComponent, CreateUpdateSessionComponent],
+    declarations: [SessionComponent, CreateUpdateSessionComponent, ViewSessionComponent],
     imports: [
         CommonModule,
         SharedModule,

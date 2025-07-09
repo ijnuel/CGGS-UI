@@ -2,31 +2,28 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { AdministratorFacade } from '../../../../store/administrator/administrator.facade';
+import { AdministratorFormInterface } from '../../../../types';
 
 @Component({
   selector: 'app-view-administrator',
   templateUrl: './view-administrator.component.html',
-  styleUrls: ['./view-administrator.component.scss']
+  styleUrls: ['./view-administrator.component.scss'],
 })
 export class ViewAdministratorComponent implements OnInit {
-  administrator$: Observable<any> = this.administratorFacade.selectAdministratorById$;
+  administrator$: Observable<AdministratorFormInterface | null>;
 
   constructor(
     private route: ActivatedRoute,
-    private router: Router,
-    private administratorFacade: AdministratorFacade
+    private administratorFacade: AdministratorFacade,
+    private router: Router
   ) {
-    this.administrator$ = this.administratorFacade.selectedAdministrator$;
+    this.administrator$ = this.administratorFacade.administratorById$;
   }
 
   ngOnInit() {
-    const id = this.route.snapshot.paramMap.get('id');
-    if (id) {
-      this.administratorFacade.getAdministratorById(id);
+    const administratorId = this.route.snapshot.params['id'];
+    if (administratorId) {
+      this.administratorFacade.getAdministratorById(administratorId);
     }
-  }
-
-  goBack() {
-    this.router.navigate(['../'], { relativeTo: this.route });
   }
 } 

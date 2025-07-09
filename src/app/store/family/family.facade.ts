@@ -17,6 +17,8 @@ import {
   selectCount,
   selectFamilyLoading,
   selectFamilyError,
+  selectFamilyCreateSuccess,
+  selectFamilyUpdateSuccess,
 } from './family.selector';
 import { FamilyState } from './family.reducer';
 
@@ -32,6 +34,8 @@ export class FamilyFacade {
   count$: Observable<number | null>;
   loading$: Observable<boolean>;
   error$: Observable<string | null>;
+  createSuccess$: Observable<boolean>;
+  updateSuccess$: Observable<boolean>;
   currentPageQuery: PageQueryInterface = {
     start: 0,
     recordsPerPage: 10,
@@ -48,6 +52,8 @@ export class FamilyFacade {
     this.count$ = this.store.select(selectCount);
     this.loading$ = this.store.select(selectFamilyLoading);
     this.error$ = this.store.select(selectFamilyError);
+    this.createSuccess$ = this.store.select(selectFamilyCreateSuccess);
+    this.updateSuccess$ = this.store.select(selectFamilyUpdateSuccess);
   }
 
   getFamilyList(pageQuery: PageQueryInterface): void {

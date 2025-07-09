@@ -1,23 +1,33 @@
-@if ( { schoolConfigurationList: schoolConfigurationList$ | async, loading: loading$ | async }; as obs
-) {
-<div class="pl-8 pr-9 pt-6">
-  <div class="flex item-center justify-between">
-    <div class="text-xl font-bold">School Configurations</div>
-
-    <button class="sec-btn" routerLink="create">Create School Configuration</button>
+<div class="p-6">
+  <div class="flex justify-between items-center mb-4">
+    <h3 class="text-xl font-semibold">School Configurations</h3>
+    <div class="flex gap-2">
+      <button mat-raised-button color="primary" (click)="onRefresh()" class="flex items-center">
+        <mat-icon>refresh</mat-icon>
+        <span>Refresh</span>
+      </button>
+      <button mat-raised-button color="accent" routerLink="create" class="flex items-center">
+        <mat-icon>add</mat-icon>
+        <span>Create New</span>
+      </button>
+    </div>
   </div>
 
-  <div class="mt-8">
-    <app-table
-      [isLoading]="obs.loading ?? false"
-      [showActionColumn]="true"
-      [tableData]="obs.schoolConfigurationList?.data ?? null"
-      [tableHeaderData]="header"
-      [pageSize]="obs.schoolConfigurationList?.recordPerPage!"
-      [totalLength]="obs.schoolConfigurationList?.totalCount!"
-      [pageIndex]="pageQuery.pageIndex!"
-      (pageChange)="onPageChange($event)"
-    ></app-table>
-  </div>
+  <app-table
+    [tableData]="(schoolConfigurationList$ | async)?.data ?? []"
+    [tableHeaderData]="tableHeaderData"
+    [isLoading]="(loading$ | async) ?? false"
+    [totalLength]="(schoolConfigurationList$ | async)?.totalCount ?? 0"
+    [pageSize]="(schoolConfigurationList$ | async)?.recordPerPage ?? 10"
+    [pageIndex]="(schoolConfigurationList$ | async)?.currentPage ?? 0"
+    [showSearch]="true"
+    [showFilters]="true"
+    [showActionColumn]="true"
+    (pageChange)="onPageChange($event)"
+    (search)="onSearch($event)"
+    (filter)="onFilter($event)"
+    (view)="onView($event)"
+    (edit)="onEdit($event)"
+    (delete)="onDelete($event)"
+  ></app-table>
 </div>
-}

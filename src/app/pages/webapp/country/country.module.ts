@@ -12,6 +12,7 @@ import { CountryComponent } from './country.component';
 import { SharedModule } from '../../../shared/shared.module';
 import { CreateUpdateCountryComponent } from './create-update-country/create-update-country.component';
 import { provideNativeDateAdapter } from '@angular/material/core';
+import { ViewCountryComponent } from './view-country/view-country.component';
 
 const routes: Routes = [
     {
@@ -25,13 +26,18 @@ const routes: Routes = [
     },
 
     {
-        path: 'edit/:countryId',
+        path: 'edit/:id',
         component: CreateUpdateCountryComponent,
+    },
+
+    {
+        path: 'view/:id',
+        component: ViewCountryComponent,
     },
 ];
 
 @NgModule({
-    declarations: [CountryComponent, CreateUpdateCountryComponent],
+    declarations: [CountryComponent, CreateUpdateCountryComponent, ViewCountryComponent],
     imports: [
         CommonModule,
         SharedModule,

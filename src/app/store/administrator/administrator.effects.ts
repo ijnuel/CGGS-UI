@@ -8,14 +8,36 @@ import {
   AdministratorListInterface,
   PaginatedResponseInterface,
   GenericResponseInterface,
+  AdministratorFormInterface,
 } from '../../types';
 import { HttpClient } from '@angular/common/http';
 import { GlobalLoadingFacade } from '../global-loading/global-loading.facade';
-import { Router } from '@angular/router';
-import { ToastNotificationService, NotificationTypeEnums } from '../../services/toast-notification.service';
 
 @Injectable()
 export class AdministratorEffect {
+  // Get All (non-paginated)
+  $administratorAll = createEffect(() =>
+    this.actions$.pipe(
+      ofType(AdministratorAction.getAdministratorAll),
+      switchMap(() =>
+        this.http
+          .get<GenericResponseInterface<AdministratorListInterface[]>>(
+            `${environment.baseUrl}/Administrator/GetAll`,
+            { withCredentials: true }
+          )
+          .pipe(
+            map((payload) =>
+              AdministratorAction.getAdministratorAllSuccess({ payload })
+            ),
+            catchError((error) => {
+              return of(AdministratorAction.getAdministratorAllFail({ error }));
+            })
+          )
+      )
+    )
+  );
+
+  // Get All Paginated
   $administratorList = createEffect(() =>
     this.actions$.pipe(
       ofType(AdministratorAction.getAdministratorList),
@@ -43,9 +65,25 @@ export class AdministratorEffect {
             }
           )
           .pipe(
-            map((payload) =>
-              AdministratorAction.getAdministratorListSuccess({ payload })
-            ),
+            map((response) => {
+              const paginatedResponse: PaginatedResponseInterface<AdministratorListInterface[]> = {
+                currentPage: response.entity.currentPage,
+                recordPerPage: response.entity.recordPerPage,
+                totalPages: response.entity.totalPages,
+                totalCount: response.entity.totalCount,
+                data: response.entity.data
+              };
+              return AdministratorAction.getAdministratorListSuccess({ 
+                payload: { 
+                  entity: paginatedResponse,
+                  error: response.error,
+                  exceptionError: response.exceptionError,
+                  message: response.message,
+                  messages: response.messages,
+                  succeeded: response.succeeded
+                } 
+              });
+            }),
             catchError((error) => {
               return of(AdministratorAction.getAdministratorListFail({ error }));
             })
@@ -54,6 +92,7 @@ export class AdministratorEffect {
     )
   );
 
+  // Get By Id
   $administratorById = createEffect(() =>
     this.actions$.pipe(
       ofType(AdministratorAction.getAdministratorById),
@@ -68,9 +107,7 @@ export class AdministratorEffect {
           )
           .pipe(
             map((payload) =>
-              AdministratorAction.getAdministratorByIdSuccess({
-                payload,
-              })
+              AdministratorAction.getAdministratorByIdSuccess({ payload })
             ),
             catchError((error) => {
               return of(AdministratorAction.getAdministratorByIdFail({ error }));
@@ -80,6 +117,75 @@ export class AdministratorEffect {
     )
   );
 
+  // Get By Properties
+  $administratorByProperties = createEffect(() =>
+    this.actions$.pipe(
+      ofType(AdministratorAction.getAdministratorByProperties),
+      switchMap(({ properties }) =>
+        this.http
+          .post<GenericResponseInterface<AdministratorListInterface[]>>(
+            `${environment.baseUrl}/Administrator/GetByProperties`,
+            properties,
+            { withCredentials: true }
+          )
+          .pipe(
+            map((payload) =>
+              AdministratorAction.getAdministratorByPropertiesSuccess({ payload })
+            ),
+            catchError((error) => {
+              return of(AdministratorAction.getAdministratorByPropertiesFail({ error }));
+            })
+          )
+      )
+    )
+  );
+
+  // Exists
+  $administratorExists = createEffect(() =>
+    this.actions$.pipe(
+      ofType(AdministratorAction.administratorExists),
+      switchMap(({ properties }) =>
+        this.http
+          .post<GenericResponseInterface<boolean>>(
+            `${environment.baseUrl}/Administrator/Exists`,
+            properties,
+            { withCredentials: true }
+          )
+          .pipe(
+            map((payload) =>
+              AdministratorAction.administratorExistsSuccess({ payload })
+            ),
+            catchError((error) => {
+              return of(AdministratorAction.administratorExistsFail({ error }));
+            })
+          )
+      )
+    )
+  );
+
+  // Count
+  $administratorCount = createEffect(() =>
+    this.actions$.pipe(
+      ofType(AdministratorAction.administratorCount),
+      switchMap(() =>
+        this.http
+          .get<GenericResponseInterface<number>>(
+            `${environment.baseUrl}/Administrator/Count`,
+            { withCredentials: true }
+          )
+          .pipe(
+            map((payload) =>
+              AdministratorAction.administratorCountSuccess({ payload })
+            ),
+            catchError((error) => {
+              return of(AdministratorAction.administratorCountFail({ error }));
+            })
+          )
+      )
+    )
+  );
+
+  // Create
   $createAdministrator = createEffect(() =>
     this.actions$.pipe(
       ofType(AdministratorAction.createAdministrator),
@@ -92,10 +198,7 @@ export class AdministratorEffect {
           )
           .pipe(
             map((payload) =>
-              AdministratorAction.createAdministratorSuccess({
-                message: 'Administrator created successfully',
-                administrator: payload.entity,
-              })
+              AdministratorAction.createAdministratorSuccess({ payload })
             ),
             catchError((error) => {
               return of(AdministratorAction.createAdministratorFail({ error }));
@@ -105,9 +208,10 @@ export class AdministratorEffect {
     )
   );
 
+  // Update
   $updateAdministrator = createEffect(() =>
     this.actions$.pipe(
-      ofType(AdministratorAction.editAdministrator),
+      ofType(AdministratorAction.updateAdministrator),
       switchMap(({ payload }) =>
         this.http
           .put<GenericResponseInterface<AdministratorListInterface>>(
@@ -117,36 +221,32 @@ export class AdministratorEffect {
           )
           .pipe(
             map((payload) =>
-              AdministratorAction.editAdministratorSuccess({
-                message: 'Administrator updated successfully',
-                administrator: payload.entity,
-              })
+              AdministratorAction.updateAdministratorSuccess({ payload })
             ),
             catchError((error) => {
-              return of(AdministratorAction.editAdministratorFail({ error }));
+              return of(AdministratorAction.updateAdministratorFail({ error }));
             })
           )
       )
     )
   );
 
+  // Delete
   $deleteAdministrator = createEffect(() =>
     this.actions$.pipe(
       ofType(AdministratorAction.deleteAdministrator),
       switchMap(({ administratorId }) =>
         this.http
-          .delete<GenericResponseInterface<any>>(
+          .delete<GenericResponseInterface<boolean>>(
             `${environment.baseUrl}/Administrator/Delete`,
             {
               params: { id: administratorId },
-              withCredentials: true,
+              withCredentials: true
             }
           )
           .pipe(
-            map(() =>
-              AdministratorAction.deleteAdministratorSuccess({
-                message: 'Administrator deleted successfully',
-              })
+            map((payload) =>
+              AdministratorAction.deleteAdministratorSuccess({ payload })
             ),
             catchError((error) => {
               return of(AdministratorAction.deleteAdministratorFail({ error }));
@@ -156,10 +256,89 @@ export class AdministratorEffect {
     )
   );
 
+  // Create Many
+  $createManyAdministrators = createEffect(() =>
+    this.actions$.pipe(
+      ofType(AdministratorAction.createManyAdministrators),
+      switchMap(({ payload }) =>
+        this.http
+          .post<GenericResponseInterface<AdministratorListInterface[]>>(
+            `${environment.baseUrl}/Administrator/CreateMany`,
+            payload,
+            { withCredentials: true }
+          )
+          .pipe(
+            map((payload) =>
+              AdministratorAction.createManyAdministratorsSuccess({ payload })
+            ),
+            catchError((error) => {
+              return of(AdministratorAction.createManyAdministratorsFail({ error }));
+            })
+          )
+      )
+    )
+  );
+
+  // Update Many
+  $updateManyAdministrators = createEffect(() =>
+    this.actions$.pipe(
+      ofType(AdministratorAction.updateManyAdministrators),
+      switchMap(({ payload }) =>
+        this.http
+          .post<GenericResponseInterface<AdministratorListInterface[]>>(
+            `${environment.baseUrl}/Administrator/UpdateMany`,
+            payload,
+            { withCredentials: true }
+          )
+          .pipe(
+            map((payload) =>
+              AdministratorAction.updateManyAdministratorsSuccess({ payload })
+            ),
+            catchError((error) => {
+              return of(AdministratorAction.updateManyAdministratorsFail({ error }));
+            })
+          )
+      )
+    )
+  );
+
+  // Delete Many
+  $deleteManyAdministrators = createEffect(() =>
+    this.actions$.pipe(
+      ofType(AdministratorAction.deleteManyAdministrators),
+      switchMap(({ administratorIds }) =>
+        this.http
+          .delete<GenericResponseInterface<boolean>>(
+            `${environment.baseUrl}/Administrator/DeleteMany`,
+            {
+              params: { ids: administratorIds },
+              withCredentials: true
+            }
+          )
+          .pipe(
+            map((payload) =>
+              AdministratorAction.deleteManyAdministratorsSuccess({ payload })
+            ),
+            catchError((error) => {
+              return of(AdministratorAction.deleteManyAdministratorsFail({ error }));
+            })
+          )
+      )
+    )
+  );
+
+  // Loading Effects
   $administratorLoading = createEffect(
     () =>
       this.actions$.pipe(
-        ofType(AdministratorAction.createAdministrator, AdministratorAction.editAdministrator),
+        ofType(
+          AdministratorAction.createAdministrator,
+          AdministratorAction.updateAdministrator,
+          AdministratorAction.deleteAdministrator,
+          AdministratorAction.createManyAdministrators,
+          AdministratorAction.updateManyAdministrators,
+          AdministratorAction.deleteManyAdministrators
+        ),
         tap((action) => {
           this.errorLoadingFacade.globalLoadingShow(action.type);
         })
@@ -173,8 +352,16 @@ export class AdministratorEffect {
         ofType(
           AdministratorAction.createAdministratorSuccess,
           AdministratorAction.createAdministratorFail,
-          AdministratorAction.editAdministratorSuccess,
-          AdministratorAction.editAdministratorFail
+          AdministratorAction.updateAdministratorSuccess,
+          AdministratorAction.updateAdministratorFail,
+          AdministratorAction.deleteAdministratorSuccess,
+          AdministratorAction.deleteAdministratorFail,
+          AdministratorAction.createManyAdministratorsSuccess,
+          AdministratorAction.createManyAdministratorsFail,
+          AdministratorAction.updateManyAdministratorsSuccess,
+          AdministratorAction.updateManyAdministratorsFail,
+          AdministratorAction.deleteManyAdministratorsSuccess,
+          AdministratorAction.deleteManyAdministratorsFail
         ),
         tap(() => {
           this.errorLoadingFacade.globalLoadingHide();
@@ -183,106 +370,9 @@ export class AdministratorEffect {
     { dispatch: false }
   );
 
-  $getAdministratorAll = createEffect(() =>
-    this.actions$.pipe(
-      ofType(AdministratorAction.getAdministratorAll),
-      switchMap(() =>
-        this.http.get<any>(`${environment.baseUrl}/Administrator/GetAll`, { withCredentials: true })
-          .pipe(
-            map((payload) => AdministratorAction.getAdministratorAllSuccess({ payload })),
-            catchError((error) => of(AdministratorAction.getAdministratorAllFail({ error })))
-          )
-      )
-    )
-  );
-
-  $getAdministratorByProperties = createEffect(() =>
-    this.actions$.pipe(
-      ofType(AdministratorAction.getAdministratorByProperties),
-      switchMap(({ queryProperties }) =>
-        this.http.get<any>(`${environment.baseUrl}/Administrator/GetByProperties`, {
-          params: { queryProperties: JSON.stringify(queryProperties) },
-          withCredentials: true
-        })
-        .pipe(
-          map((payload) => AdministratorAction.getAdministratorByPropertiesSuccess({ payload })),
-          catchError((error) => of(AdministratorAction.getAdministratorByPropertiesFail({ error })))
-        )
-      )
-    )
-  );
-
-  $administratorExists = createEffect(() =>
-    this.actions$.pipe(
-      ofType(AdministratorAction.administratorExists),
-      switchMap(({ id }) =>
-        this.http.get<any>(`${environment.baseUrl}/Administrator/Exists`, {
-          params: { id },
-          withCredentials: true
-        })
-        .pipe(
-          map((payload) => AdministratorAction.administratorExistsSuccess({ payload })),
-          catchError((error) => of(AdministratorAction.administratorExistsFail({ error })))
-        )
-      )
-    )
-  );
-
-  $administratorCount = createEffect(() =>
-    this.actions$.pipe(
-      ofType(AdministratorAction.administratorCount),
-      switchMap(() =>
-        this.http.get<any>(`${environment.baseUrl}/Administrator/Count`, { withCredentials: true })
-          .pipe(
-            map((payload) => AdministratorAction.administratorCountSuccess({ payload })),
-            catchError((error) => of(AdministratorAction.administratorCountFail({ error })))
-          )
-      )
-    )
-  );
-
-  $createManyAdministrators = createEffect(() =>
-    this.actions$.pipe(
-      ofType(AdministratorAction.createManyAdministrators),
-      switchMap(({ payload }) =>
-        this.http.post<any>(`${environment.baseUrl}/Administrator/CreateMany`, payload, { withCredentials: true })
-          .pipe(
-            map((payload) => AdministratorAction.createManyAdministratorsSuccess({ payload })),
-            catchError((error) => of(AdministratorAction.createManyAdministratorsFail({ error })))
-          )
-      )
-    )
-  );
-
-  $createAdministratorSuccessToast = createEffect(
-    () =>
-      this.actions$.pipe(
-        ofType(AdministratorAction.createAdministratorSuccess),
-        tap(() => {
-          this.toastService.openToast('Administrator created successfully', NotificationTypeEnums.SUCCESS);
-          this.router.navigate(['/app/administrator']);
-        })
-      ),
-    { dispatch: false }
-  );
-
-  $editAdministratorSuccessToast = createEffect(
-    () =>
-      this.actions$.pipe(
-        ofType(AdministratorAction.editAdministratorSuccess),
-        tap(() => {
-          this.toastService.openToast('Administrator updated successfully', NotificationTypeEnums.SUCCESS);
-          this.router.navigate(['/app/administrator']);
-        })
-      ),
-    { dispatch: false }
-  );
-
   constructor(
     private actions$: Actions,
     private http: HttpClient,
-    private errorLoadingFacade: GlobalLoadingFacade,
-    private toastService: ToastNotificationService,
-    private router: Router
+    private errorLoadingFacade: GlobalLoadingFacade
   ) {}
 }

@@ -8,12 +8,36 @@ import {
   ApplicationListInterface,
   PaginatedResponseInterface,
   GenericResponseInterface,
+  ApplicationFormInterface,
 } from '../../types';
 import { HttpClient } from '@angular/common/http';
 import { GlobalLoadingFacade } from '../global-loading/global-loading.facade';
 
 @Injectable()
 export class ApplicationEffect {
+  // Get All (non-paginated)
+  $applicationAll = createEffect(() =>
+    this.actions$.pipe(
+      ofType(ApplicationAction.getApplicationAll),
+      switchMap(() =>
+        this.http
+          .get<GenericResponseInterface<ApplicationListInterface[]>>(
+            `${environment.baseUrl}/Application/GetAll`,
+            { withCredentials: true }
+          )
+          .pipe(
+            map((payload) =>
+              ApplicationAction.getApplicationAllSuccess({ payload })
+            ),
+            catchError((error) => {
+              return of(ApplicationAction.getApplicationAllFail({ error }));
+            })
+          )
+      )
+    )
+  );
+
+  // Get All Paginated
   $applicationList = createEffect(() =>
     this.actions$.pipe(
       ofType(ApplicationAction.getApplicationList),
@@ -41,9 +65,25 @@ export class ApplicationEffect {
             }
           )
           .pipe(
-            map((payload) =>
-              ApplicationAction.getApplicationListSuccess({ payload })
-            ),
+            map((response) => {
+              const paginatedResponse: PaginatedResponseInterface<ApplicationListInterface[]> = {
+                currentPage: response.entity.currentPage,
+                recordPerPage: response.entity.recordPerPage,
+                totalPages: response.entity.totalPages,
+                totalCount: response.entity.totalCount,
+                data: response.entity.data
+              };
+              return ApplicationAction.getApplicationListSuccess({ 
+                payload: { 
+                  entity: paginatedResponse,
+                  error: response.error,
+                  exceptionError: response.exceptionError,
+                  message: response.message,
+                  messages: response.messages,
+                  succeeded: response.succeeded
+                } 
+              });
+            }),
             catchError((error) => {
               return of(ApplicationAction.getApplicationListFail({ error }));
             })
@@ -52,6 +92,7 @@ export class ApplicationEffect {
     )
   );
 
+  // Get By Id
   $applicationById = createEffect(() =>
     this.actions$.pipe(
       ofType(ApplicationAction.getApplicationById),
@@ -60,15 +101,13 @@ export class ApplicationEffect {
           .get<GenericResponseInterface<ApplicationListInterface>>(
             `${environment.baseUrl}/Application/GetById`,
             {
-              params: { applicationId },
+              params: { id: applicationId },
               withCredentials: true,
             }
           )
           .pipe(
             map((payload) =>
-              ApplicationAction.getApplicationByIdSuccess({
-                payload,
-              })
+              ApplicationAction.getApplicationByIdSuccess({ payload })
             ),
             catchError((error) => {
               return of(ApplicationAction.getApplicationByIdFail({ error }));
@@ -78,6 +117,75 @@ export class ApplicationEffect {
     )
   );
 
+  // Get By Properties
+  $applicationByProperties = createEffect(() =>
+    this.actions$.pipe(
+      ofType(ApplicationAction.getApplicationByProperties),
+      switchMap(({ properties }) =>
+        this.http
+          .post<GenericResponseInterface<ApplicationListInterface[]>>(
+            `${environment.baseUrl}/Application/GetByProperties`,
+            properties,
+            { withCredentials: true }
+          )
+          .pipe(
+            map((payload) =>
+              ApplicationAction.getApplicationByPropertiesSuccess({ payload })
+            ),
+            catchError((error) => {
+              return of(ApplicationAction.getApplicationByPropertiesFail({ error }));
+            })
+          )
+      )
+    )
+  );
+
+  // Exists
+  $applicationExists = createEffect(() =>
+    this.actions$.pipe(
+      ofType(ApplicationAction.applicationExists),
+      switchMap(({ properties }) =>
+        this.http
+          .post<GenericResponseInterface<boolean>>(
+            `${environment.baseUrl}/Application/Exists`,
+            properties,
+            { withCredentials: true }
+          )
+          .pipe(
+            map((payload) =>
+              ApplicationAction.applicationExistsSuccess({ payload })
+            ),
+            catchError((error) => {
+              return of(ApplicationAction.applicationExistsFail({ error }));
+            })
+          )
+      )
+    )
+  );
+
+  // Count
+  $applicationCount = createEffect(() =>
+    this.actions$.pipe(
+      ofType(ApplicationAction.applicationCount),
+      switchMap(() =>
+        this.http
+          .get<GenericResponseInterface<number>>(
+            `${environment.baseUrl}/Application/Count`,
+            { withCredentials: true }
+          )
+          .pipe(
+            map((payload) =>
+              ApplicationAction.applicationCountSuccess({ payload })
+            ),
+            catchError((error) => {
+              return of(ApplicationAction.applicationCountFail({ error }));
+            })
+          )
+      )
+    )
+  );
+
+  // Create
   $createApplication = createEffect(() =>
     this.actions$.pipe(
       ofType(ApplicationAction.createApplication),
@@ -90,10 +198,7 @@ export class ApplicationEffect {
           )
           .pipe(
             map((payload) =>
-              ApplicationAction.createApplicationSuccess({
-                message: 'Application created successfully',
-                application: payload.entity,
-              })
+              ApplicationAction.createApplicationSuccess({ payload })
             ),
             catchError((error) => {
               return of(ApplicationAction.createApplicationFail({ error }));
@@ -103,35 +208,137 @@ export class ApplicationEffect {
     )
   );
 
+  // Update
   $updateApplication = createEffect(() =>
     this.actions$.pipe(
-      ofType(ApplicationAction.editApplication),
+      ofType(ApplicationAction.updateApplication),
       switchMap(({ payload }) =>
         this.http
-          .post<GenericResponseInterface<ApplicationListInterface>>(
+          .put<GenericResponseInterface<ApplicationListInterface>>(
             `${environment.baseUrl}/Application/Update`,
             payload,
             { withCredentials: true }
           )
           .pipe(
             map((payload) =>
-              ApplicationAction.editApplicationSuccess({
-                message: 'Application updated successfully',
-                application: payload.entity,
-              })
+              ApplicationAction.updateApplicationSuccess({ payload })
             ),
             catchError((error) => {
-              return of(ApplicationAction.editApplicationFail({ error }));
+              return of(ApplicationAction.updateApplicationFail({ error }));
             })
           )
       )
     )
   );
 
+  // Delete
+  $deleteApplication = createEffect(() =>
+    this.actions$.pipe(
+      ofType(ApplicationAction.deleteApplication),
+      switchMap(({ applicationId }) =>
+        this.http
+          .delete<GenericResponseInterface<boolean>>(
+            `${environment.baseUrl}/Application/Delete`,
+            {
+              params: { id: applicationId },
+              withCredentials: true
+            }
+          )
+          .pipe(
+            map((payload) =>
+              ApplicationAction.deleteApplicationSuccess({ payload })
+            ),
+            catchError((error) => {
+              return of(ApplicationAction.deleteApplicationFail({ error }));
+            })
+          )
+      )
+    )
+  );
+
+  // Create Many
+  $createManyApplications = createEffect(() =>
+    this.actions$.pipe(
+      ofType(ApplicationAction.createManyApplications),
+      switchMap(({ payload }) =>
+        this.http
+          .post<GenericResponseInterface<ApplicationListInterface[]>>(
+            `${environment.baseUrl}/Application/CreateMany`,
+            payload,
+            { withCredentials: true }
+          )
+          .pipe(
+            map((payload) =>
+              ApplicationAction.createManyApplicationsSuccess({ payload })
+            ),
+            catchError((error) => {
+              return of(ApplicationAction.createManyApplicationsFail({ error }));
+            })
+          )
+      )
+    )
+  );
+
+  // Update Many
+  $updateManyApplications = createEffect(() =>
+    this.actions$.pipe(
+      ofType(ApplicationAction.updateManyApplications),
+      switchMap(({ payload }) =>
+        this.http
+          .post<GenericResponseInterface<ApplicationListInterface[]>>(
+            `${environment.baseUrl}/Application/UpdateMany`,
+            payload,
+            { withCredentials: true }
+          )
+          .pipe(
+            map((payload) =>
+              ApplicationAction.updateManyApplicationsSuccess({ payload })
+            ),
+            catchError((error) => {
+              return of(ApplicationAction.updateManyApplicationsFail({ error }));
+            })
+          )
+      )
+    )
+  );
+
+  // Delete Many
+  $deleteManyApplications = createEffect(() =>
+    this.actions$.pipe(
+      ofType(ApplicationAction.deleteManyApplications),
+      switchMap(({ applicationIds }) =>
+        this.http
+          .delete<GenericResponseInterface<boolean>>(
+            `${environment.baseUrl}/Application/DeleteMany`,
+            {
+              params: { ids: applicationIds },
+              withCredentials: true
+            }
+          )
+          .pipe(
+            map((payload) =>
+              ApplicationAction.deleteManyApplicationsSuccess({ payload })
+            ),
+            catchError((error) => {
+              return of(ApplicationAction.deleteManyApplicationsFail({ error }));
+            })
+          )
+      )
+    )
+  );
+
+  // Loading Effects
   $applicationLoading = createEffect(
     () =>
       this.actions$.pipe(
-        ofType(ApplicationAction.createApplication, ApplicationAction.editApplication),
+        ofType(
+          ApplicationAction.createApplication,
+          ApplicationAction.updateApplication,
+          ApplicationAction.deleteApplication,
+          ApplicationAction.createManyApplications,
+          ApplicationAction.updateManyApplications,
+          ApplicationAction.deleteManyApplications
+        ),
         tap((action) => {
           this.errorLoadingFacade.globalLoadingShow(action.type);
         })
@@ -145,8 +352,16 @@ export class ApplicationEffect {
         ofType(
           ApplicationAction.createApplicationSuccess,
           ApplicationAction.createApplicationFail,
-          ApplicationAction.editApplicationSuccess,
-          ApplicationAction.editApplicationFail
+          ApplicationAction.updateApplicationSuccess,
+          ApplicationAction.updateApplicationFail,
+          ApplicationAction.deleteApplicationSuccess,
+          ApplicationAction.deleteApplicationFail,
+          ApplicationAction.createManyApplicationsSuccess,
+          ApplicationAction.createManyApplicationsFail,
+          ApplicationAction.updateManyApplicationsSuccess,
+          ApplicationAction.updateManyApplicationsFail,
+          ApplicationAction.deleteManyApplicationsSuccess,
+          ApplicationAction.deleteManyApplicationsFail
         ),
         tap(() => {
           this.errorLoadingFacade.globalLoadingHide();

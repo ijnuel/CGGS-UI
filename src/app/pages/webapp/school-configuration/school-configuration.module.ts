@@ -12,6 +12,7 @@ import { SchoolConfigurationComponent } from './school-configuration.component';
 import { SharedModule } from '../../../shared/shared.module';
 import { CreateUpdateSchoolConfigurationComponent } from './create-update-school-configuration/create-update-school-configuration.component';
 import { provideNativeDateAdapter } from '@angular/material/core';
+import { ViewSchoolConfigurationComponent } from './view-school-configuration/view-school-configuration.component';
 
 const routes: Routes = [
     {
@@ -25,13 +26,18 @@ const routes: Routes = [
     },
 
     {
-        path: 'edit/:schoolConfigurationId',
+        path: 'edit/:id',
         component: CreateUpdateSchoolConfigurationComponent,
+    },
+
+    {
+        path: 'view/:id',
+        component: ViewSchoolConfigurationComponent,
     },
 ];
 
 @NgModule({
-    declarations: [SchoolConfigurationComponent, CreateUpdateSchoolConfigurationComponent],
+    declarations: [SchoolConfigurationComponent, CreateUpdateSchoolConfigurationComponent, ViewSchoolConfigurationComponent],
     imports: [
         CommonModule,
         SharedModule,

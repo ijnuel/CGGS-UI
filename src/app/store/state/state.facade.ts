@@ -1,39 +1,111 @@
 import { Injectable } from '@angular/core';
-import { select, Store } from '@ngrx/store';
+import { Store } from '@ngrx/store';
+import { Observable } from 'rxjs';
+import {
+  StateListInterface,
+  StateFormInterface,
+  PageQueryInterface,
+  PaginatedResponseInterface,
+} from '../../types';
+import * as StateAction from './state.actions';
+import {
+  selectStateList,
+  selectStateAll,
+  selectStateByProperties,
+  selectStateById,
+  selectExists,
+  selectCount,
+  selectStateLoading,
+  selectStateError,
+  selectStateCreateSuccess,
+  selectStateUpdateSuccess,
+} from './state.selector';
+import { StateState } from './state.reducer';
 
-import * as StateActions from './state.actions';
-import * as StateSelector from './state.selector';
-import { PageQueryInterface, StateFormInterface } from '../../types';
-
-@Injectable()
+@Injectable({
+  providedIn: 'root',
+})
 export class StateFacade {
-  selectStateList$ = this.store.pipe(
-    select(StateSelector.selectStateList)
-  );
+  stateList$: Observable<PaginatedResponseInterface<StateListInterface[]> | null>;
+  stateAll$: Observable<StateListInterface[] | null>;
+  stateByProperties$: Observable<StateListInterface[] | null>;
+  stateById$: Observable<StateListInterface | null>;
+  exists$: Observable<boolean | null>;
+  count$: Observable<number | null>;
+  loading$: Observable<boolean>;
+  error$: Observable<string | null>;
+  createSuccess$: Observable<boolean>;
+  updateSuccess$: Observable<boolean>;
+  currentPageQuery: PageQueryInterface = {
+    start: 0,
+    recordsPerPage: 10,
+    pageIndex: 0,
+    searchText: ''
+  };
 
-  selectStateById$ = this.store.pipe(
-    select(StateSelector.selectStateById)
-  );
-
-  selectedLoading$ = this.store.pipe(select(StateSelector.selectLoading));
-
-  selectedError$ = this.store.pipe(select(StateSelector.selectError));
-
-  constructor(private readonly store: Store) {}
-
-  getStateList(pageQuery: PageQueryInterface) {
-    this.store.dispatch(StateActions.getStateList({ pageQuery }));
+  constructor(private store: Store<{ state: StateState }>) {
+    this.stateList$ = this.store.select(selectStateList);
+    this.stateAll$ = this.store.select(selectStateAll);
+    this.stateByProperties$ = this.store.select(selectStateByProperties);
+    this.stateById$ = this.store.select(selectStateById);
+    this.exists$ = this.store.select(selectExists);
+    this.count$ = this.store.select(selectCount);
+    this.loading$ = this.store.select(selectStateLoading);
+    this.error$ = this.store.select(selectStateError);
+    this.createSuccess$ = this.store.select(selectStateCreateSuccess);
+    this.updateSuccess$ = this.store.select(selectStateUpdateSuccess);
   }
 
-  getStateById(stateId: string) {
-    this.store.dispatch(StateActions.getStateById({ stateId }));
+  getStateList(pageQuery: PageQueryInterface): void {
+    this.currentPageQuery = pageQuery;
+    this.store.dispatch(StateAction.getStateList({ pageQuery }));
   }
 
-  createState(payload: StateFormInterface) {
-    this.store.dispatch(StateActions.createState({ payload }));
+  getCurrentPageQuery(): PageQueryInterface {
+    return this.currentPageQuery;
   }
 
-  updateState(payload: StateFormInterface) {
-    this.store.dispatch(StateActions.editState({ payload }));
+  getStateAll(): void {
+    this.store.dispatch(StateAction.getStateAll());
+  }
+
+  getStateById(stateId: string): void {
+    this.store.dispatch(StateAction.getStateById({ stateId }));
+  }
+
+  getStateByProperties(properties: Partial<StateFormInterface>): void {
+    this.store.dispatch(StateAction.getStateByProperties({ properties }));
+  }
+
+  stateExists(properties: Partial<StateFormInterface>): void {
+    this.store.dispatch(StateAction.stateExists({ properties }));
+  }
+
+  stateCount(): void {
+    this.store.dispatch(StateAction.stateCount());
+  }
+
+  createState(state: StateFormInterface): void {
+    this.store.dispatch(StateAction.createState({ payload: state }));
+  }
+
+  updateState(state: StateFormInterface): void {
+    this.store.dispatch(StateAction.updateState({ payload: state }));
+  }
+
+  deleteState(stateId: string): void {
+    this.store.dispatch(StateAction.deleteState({ stateId }));
+  }
+
+  createManyStates(states: StateFormInterface[]): void {
+    this.store.dispatch(StateAction.createManyStates({ payload: states }));
+  }
+
+  updateManyStates(states: StateFormInterface[]): void {
+    this.store.dispatch(StateAction.updateManyStates({ payload: states }));
+  }
+
+  deleteManyStates(stateIds: string[]): void {
+    this.store.dispatch(StateAction.deleteManyStates({ stateIds }));
   }
 }

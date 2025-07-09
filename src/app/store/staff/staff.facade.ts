@@ -1,39 +1,111 @@
 import { Injectable } from '@angular/core';
-import { select, Store } from '@ngrx/store';
+import { Store } from '@ngrx/store';
+import { Observable } from 'rxjs';
+import {
+  StaffListInterface,
+  StaffFormInterface,
+  PageQueryInterface,
+  PaginatedResponseInterface,
+} from '../../types';
+import * as StaffAction from './staff.actions';
+import {
+  selectStaffList,
+  selectStaffAll,
+  selectStaffByProperties,
+  selectStaffById,
+  selectExists,
+  selectCount,
+  selectStaffLoading,
+  selectStaffError,
+  selectStaffCreateSuccess,
+  selectStaffUpdateSuccess,
+} from './staff.selector';
+import { StaffState } from './staff.reducer';
 
-import * as StaffActions from './staff.actions';
-import * as StaffSelector from './staff.selector';
-import { PageQueryInterface, StaffFormInterface } from '../../types';
-
-@Injectable()
+@Injectable({
+  providedIn: 'root',
+})
 export class StaffFacade {
-  selectStaffList$ = this.store.pipe(
-    select(StaffSelector.selectStaffList)
-  );
+  staffList$: Observable<PaginatedResponseInterface<StaffListInterface[]> | null>;
+  staffAll$: Observable<StaffListInterface[] | null>;
+  staffByProperties$: Observable<StaffListInterface[] | null>;
+  staffById$: Observable<StaffListInterface | null>;
+  exists$: Observable<boolean | null>;
+  count$: Observable<number | null>;
+  loading$: Observable<boolean>;
+  error$: Observable<string | null>;
+  createSuccess$: Observable<boolean>;
+  updateSuccess$: Observable<boolean>;
+  currentPageQuery: PageQueryInterface = {
+    start: 0,
+    recordsPerPage: 10,
+    pageIndex: 0,
+    searchText: ''
+  };
 
-  selectStaffById$ = this.store.pipe(
-    select(StaffSelector.selectStaffById)
-  );
-
-  selectedLoading$ = this.store.pipe(select(StaffSelector.selectLoading));
-
-  selectedError$ = this.store.pipe(select(StaffSelector.selectError));
-
-  constructor(private readonly store: Store) {}
-
-  getStaffList(pageQuery: PageQueryInterface) {
-    this.store.dispatch(StaffActions.getStaffList({ pageQuery }));
+  constructor(private store: Store<{ staff: StaffState }>) {
+    this.staffList$ = this.store.select(selectStaffList);
+    this.staffAll$ = this.store.select(selectStaffAll);
+    this.staffByProperties$ = this.store.select(selectStaffByProperties);
+    this.staffById$ = this.store.select(selectStaffById);
+    this.exists$ = this.store.select(selectExists);
+    this.count$ = this.store.select(selectCount);
+    this.loading$ = this.store.select(selectStaffLoading);
+    this.error$ = this.store.select(selectStaffError);
+    this.createSuccess$ = this.store.select(selectStaffCreateSuccess);
+    this.updateSuccess$ = this.store.select(selectStaffUpdateSuccess);
   }
 
-  getStaffById(staffId: string) {
-    this.store.dispatch(StaffActions.getStaffById({ staffId }));
+  getStaffList(pageQuery: PageQueryInterface): void {
+    this.currentPageQuery = pageQuery;
+    this.store.dispatch(StaffAction.getStaffList({ pageQuery }));
   }
 
-  createStaff(payload: StaffFormInterface) {
-    this.store.dispatch(StaffActions.createStaff({ payload }));
+  getCurrentPageQuery(): PageQueryInterface {
+    return this.currentPageQuery;
   }
 
-  updateStaff(payload: StaffFormInterface) {
-    this.store.dispatch(StaffActions.editStaff({ payload }));
+  getStaffAll(): void {
+    this.store.dispatch(StaffAction.getStaffAll());
+  }
+
+  getStaffById(staffId: string): void {
+    this.store.dispatch(StaffAction.getStaffById({ staffId }));
+  }
+
+  getStaffByProperties(properties: Partial<StaffFormInterface>): void {
+    this.store.dispatch(StaffAction.getStaffByProperties({ properties }));
+  }
+
+  staffExists(properties: Partial<StaffFormInterface>): void {
+    this.store.dispatch(StaffAction.staffExists({ properties }));
+  }
+
+  staffCount(): void {
+    this.store.dispatch(StaffAction.staffCount());
+  }
+
+  createStaff(staff: StaffFormInterface): void {
+    this.store.dispatch(StaffAction.createStaff({ payload: staff }));
+  }
+
+  updateStaff(staff: StaffFormInterface): void {
+    this.store.dispatch(StaffAction.updateStaff({ payload: staff }));
+  }
+
+  deleteStaff(staffId: string): void {
+    this.store.dispatch(StaffAction.deleteStaff({ staffId }));
+  }
+
+  createManyStaffs(staffs: StaffFormInterface[]): void {
+    this.store.dispatch(StaffAction.createManyStaffs({ payload: staffs }));
+  }
+
+  updateManyStaffs(staffs: StaffFormInterface[]): void {
+    this.store.dispatch(StaffAction.updateManyStaffs({ payload: staffs }));
+  }
+
+  deleteManyStaffs(staffIds: string[]): void {
+    this.store.dispatch(StaffAction.deleteManyStaffs({ staffIds }));
   }
 }

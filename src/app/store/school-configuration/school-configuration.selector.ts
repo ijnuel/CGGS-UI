@@ -1,28 +1,65 @@
 import { createSelector } from '@ngrx/store';
-import * as fromSchoolConfiguration from './school-configuration.reducer';
-import * as fromApp from '../app.reducer';
+import {
+  getSchoolConfigurationList,
+  getSchoolConfigurationAll,
+  getSchoolConfigurationByProperties,
+  getSchoolConfigurationById,
+  getExists,
+  getCount,
+  getLoading,
+  getError,
+  SchoolConfigurationState,
+} from './school-configuration.reducer';
 
-export const selectSchoolConfigurationState = createSelector(
-  fromApp.selectAppState,
-  (state) => state[fromSchoolConfiguration.schoolConfigurationFeatureKey]
-);
+export const selectSchoolConfigurationState = (state: { schoolConfiguration: SchoolConfigurationState }) =>
+  state.schoolConfiguration;
 
 export const selectSchoolConfigurationList = createSelector(
-  fromSchoolConfiguration.selectSchoolConfigurationState,
-  fromSchoolConfiguration.getSchoolConfigurationList
+  selectSchoolConfigurationState,
+  getSchoolConfigurationList
+);
+
+export const selectSchoolConfigurationAll = createSelector(
+  selectSchoolConfigurationState,
+  getSchoolConfigurationAll
+);
+
+export const selectSchoolConfigurationByProperties = createSelector(
+  selectSchoolConfigurationState,
+  getSchoolConfigurationByProperties
 );
 
 export const selectSchoolConfigurationById = createSelector(
-  fromSchoolConfiguration.selectSchoolConfigurationState,
-  fromSchoolConfiguration.getSchoolConfigurationById
+  selectSchoolConfigurationState,
+  getSchoolConfigurationById
 );
 
-export const selectLoading = createSelector(
-  fromSchoolConfiguration.selectSchoolConfigurationState,
-  fromSchoolConfiguration.getLoading
+export const selectExists = createSelector(
+  selectSchoolConfigurationState,
+  getExists
 );
 
-export const selectError = createSelector(
-  fromSchoolConfiguration.selectSchoolConfigurationState,
-  fromSchoolConfiguration.getError
+export const selectCount = createSelector(
+  selectSchoolConfigurationState,
+  getCount
+);
+
+export const selectSchoolConfigurationLoading = createSelector(
+  selectSchoolConfigurationState,
+  getLoading
+);
+
+export const selectSchoolConfigurationError = createSelector(
+  selectSchoolConfigurationState,
+  getError
+);
+
+export const selectSchoolConfigurationCreateSuccess = createSelector(
+    selectSchoolConfigurationState,
+    (state) => state.createSuccess
+);
+
+export const selectSchoolConfigurationUpdateSuccess = createSelector(
+    selectSchoolConfigurationState,
+    (state) => state.updateSuccess
 );

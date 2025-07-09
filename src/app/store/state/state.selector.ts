@@ -1,28 +1,65 @@
 import { createSelector } from '@ngrx/store';
-import * as fromState from './state.reducer';
-import * as fromApp from '../app.reducer';
+import {
+  getStateList,
+  getStateAll,
+  getStateByProperties,
+  getStateById,
+  getExists,
+  getCount,
+  getLoading,
+  getError,
+  StateState,
+} from './state.reducer';
 
-export const selectStateState = createSelector(
-  fromApp.selectAppState,
-  (state) => state[fromState.stateFeatureKey]
-);
+export const selectStateState = (state: { state: StateState }) =>
+  state.state;
 
 export const selectStateList = createSelector(
-  fromState.selectStateState,
-  fromState.getStateList
+  selectStateState,
+  getStateList
+);
+
+export const selectStateAll = createSelector(
+  selectStateState,
+  getStateAll
+);
+
+export const selectStateByProperties = createSelector(
+  selectStateState,
+  getStateByProperties
 );
 
 export const selectStateById = createSelector(
-  fromState.selectStateState,
-  fromState.getStateById
+  selectStateState,
+  getStateById
 );
 
-export const selectLoading = createSelector(
-  fromState.selectStateState,
-  fromState.getLoading
+export const selectExists = createSelector(
+  selectStateState,
+  getExists
 );
 
-export const selectError = createSelector(
-  fromState.selectStateState,
-  fromState.getError
+export const selectCount = createSelector(
+  selectStateState,
+  getCount
+);
+
+export const selectStateLoading = createSelector(
+  selectStateState,
+  getLoading
+);
+
+export const selectStateError = createSelector(
+  selectStateState,
+  getError
+);
+
+export const selectStateCreateSuccess = createSelector(
+    selectStateState,
+    (state) => state.createSuccess
+);
+
+export const selectStateUpdateSuccess = createSelector(
+    selectStateState,
+    (state) => state.updateSuccess
 );

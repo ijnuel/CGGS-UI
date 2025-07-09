@@ -53,3 +53,13 @@ export const selectFamilyError = createSelector(
   selectFamilyState,
   getError
 );
+
+export const selectFamilyCreateSuccess = createSelector(
+    selectFamilyState,
+    (state) => state.createSuccess
+);
+
+export const selectFamilyUpdateSuccess = createSelector(
+    selectFamilyState,
+    (state) => state.updateSuccess
+);

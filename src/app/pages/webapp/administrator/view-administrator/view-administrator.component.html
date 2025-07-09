@@ -1,16 +1,16 @@
 <div class="p-6">
   <h3 class="text-xl font-semibold">View Administrator</h3>
   <div class="flex justify-start mb-5 mt-4">
-    <button mat-button (click)="goBack()" class="flex items-center gap-1">
+    <button mat-button routerLink="/app/administrator" class="flex items-center gap-1">
       <mat-icon>arrow_back</mat-icon>
       <span>Back</span>
     </button>
   </div>
   <div *ngIf="administrator$ | async as administrator">
-    <p><strong>Full Name:</strong> {{ administrator.fullName }}</p>
+    <p><strong>Full Name:</strong> {{ administrator.lastName }}</p>
     <p><strong>Email:</strong> {{ administrator.email }}</p>
-    <p><strong>Phone Number:</strong> {{ administrator.phone }}</p>
-    <p><strong>Role:</strong> {{ administrator.role }}</p>
+    <p><strong>Phone Number:</strong> {{ administrator.phoneNumber }}</p>
+    <p><strong>Role:</strong> {{ administrator.userId }}</p>
   </div>
   <div *ngIf="!(administrator$ | async)">
     <p>Loading...</p>

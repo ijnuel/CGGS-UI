@@ -12,6 +12,7 @@ import { StaffComponent } from './staff.component';
 import { SharedModule } from '../../../shared/shared.module';
 import { CreateUpdateStaffComponent } from './create-update-staff/create-update-staff.component';
 import { provideNativeDateAdapter } from '@angular/material/core';
+import { ViewStaffComponent } from './view-staff/view-staff.component';
 
 const routes: Routes = [
     {
@@ -25,13 +26,18 @@ const routes: Routes = [
     },
 
     {
-        path: 'edit/:staffId',
+        path: 'edit/:id',
         component: CreateUpdateStaffComponent,
+    },
+
+    {
+        path: 'view/:id',
+        component: ViewStaffComponent,
     },
 ];
 
 @NgModule({
-    declarations: [StaffComponent, CreateUpdateStaffComponent],
+    declarations: [StaffComponent, CreateUpdateStaffComponent, ViewStaffComponent],
     imports: [
         CommonModule,
         SharedModule,

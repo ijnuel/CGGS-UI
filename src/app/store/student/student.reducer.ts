@@ -18,6 +18,8 @@ export interface StudentState {
   pageQuery: PageQueryInterface | null;
   loading: boolean;
   error: string | null;
+  createSuccess: boolean;
+  updateSuccess: boolean;
 }
 
 export const initialState: StudentState = {
@@ -30,6 +32,8 @@ export const initialState: StudentState = {
   pageQuery: null,
   loading: false,
   error: null,
+  createSuccess: false,
+  updateSuccess: false,
 };
 
 export const reducer = createReducer(
@@ -142,6 +146,7 @@ export const reducer = createReducer(
     ...state,
     loading: true,
     error: null,
+    createSuccess: false,
   })),
   on(StudentAction.createStudentSuccess, (state, { payload }) => ({
     ...state,
@@ -152,11 +157,13 @@ export const reducer = createReducer(
         }
       : null,
     loading: false,
+    createSuccess: true,
   })),
   on(StudentAction.createStudentFail, (state, { error }) => ({
     ...state,
     loading: false,
     error,
+    createSuccess: false,
   })),
 
   // Update
@@ -164,6 +171,7 @@ export const reducer = createReducer(
     ...state,
     loading: true,
     error: null,
+    updateSuccess: false,
   })),
   on(StudentAction.updateStudentSuccess, (state, { payload }) => ({
     ...state,
@@ -180,11 +188,13 @@ export const reducer = createReducer(
         ? payload.entity
         : state.studentById,
     loading: false,
+    updateSuccess: true,
   })),
   on(StudentAction.updateStudentFail, (state, { error }) => ({
     ...state,
     loading: false,
     error,
+    updateSuccess: false,
   })),
 
   // Delete
@@ -288,3 +298,5 @@ export const getExists = (state: StudentState) => state.exists;
 export const getCount = (state: StudentState) => state.count;
 export const getLoading = (state: StudentState) => state.loading;
 export const getError = (state: StudentState) => state.error;
+export const getCreateSuccess = (state: StudentState) => state.createSuccess;
+export const getUpdateSuccess = (state: StudentState) => state.updateSuccess;

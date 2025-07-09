@@ -1,28 +1,65 @@
 import { createSelector } from '@ngrx/store';
-import * as fromSession from './session.reducer';
-import * as fromApp from '../app.reducer';
+import {
+  getSessionList,
+  getSessionAll,
+  getSessionByProperties,
+  getSessionById,
+  getExists,
+  getCount,
+  getLoading,
+  getError,
+  SessionState,
+} from './session.reducer';
 
-export const selectSessionState = createSelector(
-  fromApp.selectAppState,
-  (state) => state[fromSession.sessionFeatureKey]
-);
+export const selectSessionState = (state: { session: SessionState }) =>
+  state.session;
 
 export const selectSessionList = createSelector(
-  fromSession.selectSessionState,
-  fromSession.getSessionList
+  selectSessionState,
+  getSessionList
+);
+
+export const selectSessionAll = createSelector(
+  selectSessionState,
+  getSessionAll
+);
+
+export const selectSessionByProperties = createSelector(
+  selectSessionState,
+  getSessionByProperties
 );
 
 export const selectSessionById = createSelector(
-  fromSession.selectSessionState,
-  fromSession.getSessionById
+  selectSessionState,
+  getSessionById
 );
 
-export const selectLoading = createSelector(
-  fromSession.selectSessionState,
-  fromSession.getLoading
+export const selectExists = createSelector(
+  selectSessionState,
+  getExists
 );
 
-export const selectError = createSelector(
-  fromSession.selectSessionState,
-  fromSession.getError
+export const selectCount = createSelector(
+  selectSessionState,
+  getCount
+);
+
+export const selectSessionLoading = createSelector(
+  selectSessionState,
+  getLoading
+);
+
+export const selectSessionError = createSelector(
+  selectSessionState,
+  getError
+);
+
+export const selectSessionCreateSuccess = createSelector(
+    selectSessionState,
+    (state) => state.createSuccess
+);
+
+export const selectSessionUpdateSuccess = createSelector(
+    selectSessionState,
+    (state) => state.updateSuccess
 );

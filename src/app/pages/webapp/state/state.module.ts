@@ -12,6 +12,7 @@ import { StateComponent } from './state.component';
 import { SharedModule } from '../../../shared/shared.module';
 import { CreateUpdateStateComponent } from './create-update-state/create-update-state.component';
 import { provideNativeDateAdapter } from '@angular/material/core';
+import { ViewStateComponent } from './view-state/view-state.component';
 
 const routes: Routes = [
     {
@@ -25,13 +26,18 @@ const routes: Routes = [
     },
 
     {
-        path: 'edit/:stateId',
+        path: 'edit/:id',
         component: CreateUpdateStateComponent,
+    },
+
+    {
+        path: 'view/:id',
+        component: ViewStateComponent,
     },
 ];
 
 @NgModule({
-    declarations: [StateComponent, CreateUpdateStateComponent],
+    declarations: [StateComponent, CreateUpdateStateComponent, ViewStateComponent],
     imports: [
         CommonModule,
         SharedModule,

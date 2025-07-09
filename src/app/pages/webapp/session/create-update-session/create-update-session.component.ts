@@ -10,6 +10,8 @@ import {
 import { getErrorMessageHelper } from '../../../../services/helper.service';
 import { DropdownListInterface, SessionFormInterface } from '../../../../types';
 import { SharedFacade } from '../../../../store/shared/shared.facade';
+import { ActivatedRoute, Router } from '@angular/router';
+import { GlobalLoadingFacade } from '../../../../store/global-loading/global-loading.facade';
 
 @Component({
     selector: 'app-create-update-session',
@@ -18,6 +20,8 @@ import { SharedFacade } from '../../../../store/shared/shared.facade';
 })
 export class CreateUpdateSessionComponent implements OnInit, OnDestroy {
     loading$: Observable<boolean>;
+    error$: Observable<string | null>;
+    sessionById$: Observable<SessionFormInterface | null>;
     dropdownLoading$: Observable<boolean>;
 
     formGroup: FormGroup<{
@@ -28,15 +32,20 @@ export class CreateUpdateSessionComponent implements OnInit, OnDestroy {
         return this.formGroup.controls;
     }
     today = new Date();
-
+    isEditMode = false;
     unsubscribe$ = new Subject<void>();
 
     constructor(
         private sessionFacade: SessionFacade,
         private fb: FormBuilder,
-        private sharedFacade: SharedFacade
+        private sharedFacade: SharedFacade,
+        private route: ActivatedRoute,
+        private router: Router,
+        private globalLoadingFacade: GlobalLoadingFacade
     ) {
-        this.loading$ = this.sessionFacade.selectedLoading$;
+        this.loading$ = this.sessionFacade.loading$;
+        this.error$ = this.sessionFacade.error$;
+        this.sessionById$ = this.sessionFacade.sessionById$;
         this.dropdownLoading$ = this.sharedFacade.selectedLoading$;
 
         this.formGroup = this.fb.group({
@@ -45,6 +54,35 @@ export class CreateUpdateSessionComponent implements OnInit, OnDestroy {
     }
 
     ngOnInit() {
+        const sessionId = this.route.snapshot.params['id'];
+        if (sessionId) {
+            this.isEditMode = true;
+            this.sessionFacade.getSessionById(sessionId);
+            this.sessionById$.pipe(takeUntil(this.unsubscribe$)).subscribe((data) => {
+                if (data) {
+                    this.formGroup.patchValue({
+                        name: data.name
+                    });
+                }
+            });
+        }
+
+        this.sessionFacade.createSuccess$
+            .pipe(takeUntil(this.unsubscribe$))
+            .subscribe((success) => {
+                if (success && !this.isEditMode) {
+                    this.router.navigate(['/app/session']);
+                    this.globalLoadingFacade.globalSuccessShow('Session created successfully', 3000);
+                }
+            });
+        this.sessionFacade.updateSuccess$
+            .pipe(takeUntil(this.unsubscribe$))
+            .subscribe((success) => {
+                if (success && this.isEditMode) {
+                    this.router.navigate(['/app/session']);
+                    this.globalLoadingFacade.globalSuccessShow('Session updated successfully', 3000);
+                }
+            });
     }
 
     getErrorMessage(controlName: string): string | null {
@@ -57,9 +95,15 @@ export class CreateUpdateSessionComponent implements OnInit, OnDestroy {
 
         if (!this.formGroup.valid) return;
 
-        this.sessionFacade.createSession({
-            ...(this.formGroup.value as SessionFormInterface),
-        });
+        const formData = this.formGroup.value as SessionFormInterface;
+        if (this.isEditMode) {
+            this.sessionFacade.updateSession({
+                ...formData,
+                id: this.route.snapshot.params['id']
+            });
+        } else {
+            this.sessionFacade.createSession(formData);
+        }
     }
 
     ngOnDestroy(): void {

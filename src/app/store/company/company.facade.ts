@@ -1,39 +1,111 @@
 import { Injectable } from '@angular/core';
-import { select, Store } from '@ngrx/store';
+import { Store } from '@ngrx/store';
+import { Observable } from 'rxjs';
+import {
+  CompanyListInterface,
+  CompanyFormInterface,
+  PageQueryInterface,
+  PaginatedResponseInterface,
+} from '../../types';
+import * as CompanyAction from './company.actions';
+import {
+  selectCompanyList,
+  selectCompanyAll,
+  selectCompanyByProperties,
+  selectCompanyById,
+  selectExists,
+  selectCount,
+  selectCompanyLoading,
+  selectCompanyError,
+  selectCompanyCreateSuccess,
+  selectCompanyUpdateSuccess,
+} from './company.selector';
+import { CompanyState } from './company.reducer';
 
-import * as CompanyActions from './company.actions';
-import * as CompanySelector from './company.selector';
-import { PageQueryInterface, CompanyFormInterface } from '../../types';
-
-@Injectable()
+@Injectable({
+  providedIn: 'root',
+})
 export class CompanyFacade {
-  selectCompanyList$ = this.store.pipe(
-    select(CompanySelector.selectCompanyList)
-  );
+  companyList$: Observable<PaginatedResponseInterface<CompanyListInterface[]> | null>;
+  companyAll$: Observable<CompanyListInterface[] | null>;
+  companyByProperties$: Observable<CompanyListInterface[] | null>;
+  companyById$: Observable<CompanyListInterface | null>;
+  exists$: Observable<boolean | null>;
+  count$: Observable<number | null>;
+  loading$: Observable<boolean>;
+  error$: Observable<string | null>;
+  createSuccess$: Observable<boolean>;
+  updateSuccess$: Observable<boolean>;
+  currentPageQuery: PageQueryInterface = {
+    start: 0,
+    recordsPerPage: 10,
+    pageIndex: 0,
+    searchText: ''
+  };
 
-  selectCompanyById$ = this.store.pipe(
-    select(CompanySelector.selectCompanyById)
-  );
-
-  selectedLoading$ = this.store.pipe(select(CompanySelector.selectLoading));
-
-  selectedError$ = this.store.pipe(select(CompanySelector.selectError));
-
-  constructor(private readonly store: Store) {}
-
-  getCompanyList(pageQuery: PageQueryInterface) {
-    this.store.dispatch(CompanyActions.getCompanyList({ pageQuery }));
+  constructor(private store: Store<{ company: CompanyState }>) {
+    this.companyList$ = this.store.select(selectCompanyList);
+    this.companyAll$ = this.store.select(selectCompanyAll);
+    this.companyByProperties$ = this.store.select(selectCompanyByProperties);
+    this.companyById$ = this.store.select(selectCompanyById);
+    this.exists$ = this.store.select(selectExists);
+    this.count$ = this.store.select(selectCount);
+    this.loading$ = this.store.select(selectCompanyLoading);
+    this.error$ = this.store.select(selectCompanyError);
+    this.createSuccess$ = this.store.select(selectCompanyCreateSuccess);
+    this.updateSuccess$ = this.store.select(selectCompanyUpdateSuccess);
   }
 
-  getCompanyById(companyId: string) {
-    this.store.dispatch(CompanyActions.getCompanyById({ companyId }));
+  getCompanyList(pageQuery: PageQueryInterface): void {
+    this.currentPageQuery = pageQuery;
+    this.store.dispatch(CompanyAction.getCompanyList({ pageQuery }));
   }
 
-  createCompany(payload: CompanyFormInterface) {
-    this.store.dispatch(CompanyActions.createCompany({ payload }));
+  getCurrentPageQuery(): PageQueryInterface {
+    return this.currentPageQuery;
   }
 
-  updateCompany(payload: CompanyFormInterface) {
-    this.store.dispatch(CompanyActions.editCompany({ payload }));
+  getCompanyAll(): void {
+    this.store.dispatch(CompanyAction.getCompanyAll());
+  }
+
+  getCompanyById(companyId: string): void {
+    this.store.dispatch(CompanyAction.getCompanyById({ companyId }));
+  }
+
+  getCompanyByProperties(properties: Partial<CompanyFormInterface>): void {
+    this.store.dispatch(CompanyAction.getCompanyByProperties({ properties }));
+  }
+
+  companyExists(properties: Partial<CompanyFormInterface>): void {
+    this.store.dispatch(CompanyAction.companyExists({ properties }));
+  }
+
+  companyCount(): void {
+    this.store.dispatch(CompanyAction.companyCount());
+  }
+
+  createCompany(company: CompanyFormInterface): void {
+    this.store.dispatch(CompanyAction.createCompany({ payload: company }));
+  }
+
+  updateCompany(company: CompanyFormInterface): void {
+    this.store.dispatch(CompanyAction.updateCompany({ payload: company }));
+  }
+
+  deleteCompany(companyId: string): void {
+    this.store.dispatch(CompanyAction.deleteCompany({ companyId }));
+  }
+
+  createManyCompanys(companys: CompanyFormInterface[]): void {
+    this.store.dispatch(CompanyAction.createManyCompanys({ payload: companys }));
+  }
+
+  updateManyCompanys(companys: CompanyFormInterface[]): void {
+    this.store.dispatch(CompanyAction.updateManyCompanys({ payload: companys }));
+  }
+
+  deleteManyCompanys(companyIds: string[]): void {
+    this.store.dispatch(CompanyAction.deleteManyCompanys({ companyIds }));
   }
 }

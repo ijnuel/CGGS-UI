@@ -12,6 +12,7 @@ import { ApplicationComponent } from './application.component';
 import { SharedModule } from '../../../shared/shared.module';
 import { CreateUpdateApplicationComponent } from './create-update-application/create-update-application.component';
 import { provideNativeDateAdapter } from '@angular/material/core';
+import { ViewApplicationComponent } from './view-application/view-application.component';
 
 const routes: Routes = [
     {
@@ -25,13 +26,18 @@ const routes: Routes = [
     },
 
     {
-        path: 'edit/:applicationId',
+        path: 'edit/:id',
         component: CreateUpdateApplicationComponent,
+    },
+
+    {
+        path: 'view/:id',
+        component: ViewApplicationComponent,
     },
 ];
 
 @NgModule({
-    declarations: [ApplicationComponent, CreateUpdateApplicationComponent],
+    declarations: [ApplicationComponent, CreateUpdateApplicationComponent, ViewApplicationComponent],
     imports: [
         CommonModule,
         SharedModule,

@@ -1,28 +1,65 @@
 import { createSelector } from '@ngrx/store';
-import * as fromStaff from './staff.reducer';
-import * as fromApp from '../app.reducer';
+import {
+  getStaffList,
+  getStaffAll,
+  getStaffByProperties,
+  getStaffById,
+  getExists,
+  getCount,
+  getLoading,
+  getError,
+  StaffState,
+} from './staff.reducer';
 
-export const selectStaffState = createSelector(
-  fromApp.selectAppState,
-  (state) => state[fromStaff.staffFeatureKey]
-);
+export const selectStaffState = (state: { staff: StaffState }) =>
+  state.staff;
 
 export const selectStaffList = createSelector(
-  fromStaff.selectStaffState,
-  fromStaff.getStaffList
+  selectStaffState,
+  getStaffList
+);
+
+export const selectStaffAll = createSelector(
+  selectStaffState,
+  getStaffAll
+);
+
+export const selectStaffByProperties = createSelector(
+  selectStaffState,
+  getStaffByProperties
 );
 
 export const selectStaffById = createSelector(
-  fromStaff.selectStaffState,
-  fromStaff.getStaffById
+  selectStaffState,
+  getStaffById
 );
 
-export const selectLoading = createSelector(
-  fromStaff.selectStaffState,
-  fromStaff.getLoading
+export const selectExists = createSelector(
+  selectStaffState,
+  getExists
 );
 
-export const selectError = createSelector(
-  fromStaff.selectStaffState,
-  fromStaff.getError
+export const selectCount = createSelector(
+  selectStaffState,
+  getCount
+);
+
+export const selectStaffLoading = createSelector(
+  selectStaffState,
+  getLoading
+);
+
+export const selectStaffError = createSelector(
+  selectStaffState,
+  getError
+);
+
+export const selectStaffCreateSuccess = createSelector(
+    selectStaffState,
+    (state) => state.createSuccess
+);
+
+export const selectStaffUpdateSuccess = createSelector(
+    selectStaffState,
+    (state) => state.updateSuccess
 );

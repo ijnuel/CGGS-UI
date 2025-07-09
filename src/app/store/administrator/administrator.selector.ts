@@ -1,28 +1,65 @@
 import { createSelector } from '@ngrx/store';
-import * as fromAdministrator from './administrator.reducer';
-import * as fromApp from '../app.reducer';
+import {
+  getAdministratorList,
+  getAdministratorAll,
+  getAdministratorByProperties,
+  getAdministratorById,
+  getExists,
+  getCount,
+  getLoading,
+  getError,
+  AdministratorState,
+} from './administrator.reducer';
 
-export const selectAdministratorState = createSelector(
-  fromApp.selectAppState,
-  (state) => state[fromAdministrator.administratorFeatureKey]
-);
+export const selectAdministratorState = (state: { administrator: AdministratorState }) =>
+  state.administrator;
 
 export const selectAdministratorList = createSelector(
-  fromAdministrator.selectAdministratorState,
-  fromAdministrator.getAdministratorList
+  selectAdministratorState,
+  getAdministratorList
+);
+
+export const selectAdministratorAll = createSelector(
+  selectAdministratorState,
+  getAdministratorAll
+);
+
+export const selectAdministratorByProperties = createSelector(
+  selectAdministratorState,
+  getAdministratorByProperties
 );
 
 export const selectAdministratorById = createSelector(
-  fromAdministrator.selectAdministratorState,
-  fromAdministrator.getAdministratorById
+  selectAdministratorState,
+  getAdministratorById
 );
 
-export const selectLoading = createSelector(
-  fromAdministrator.selectAdministratorState,
-  fromAdministrator.getLoading
+export const selectExists = createSelector(
+  selectAdministratorState,
+  getExists
 );
 
-export const selectError = createSelector(
-  fromAdministrator.selectAdministratorState,
-  fromAdministrator.getError
+export const selectCount = createSelector(
+  selectAdministratorState,
+  getCount
+);
+
+export const selectAdministratorLoading = createSelector(
+  selectAdministratorState,
+  getLoading
+);
+
+export const selectAdministratorError = createSelector(
+  selectAdministratorState,
+  getError
+);
+
+export const selectAdministratorCreateSuccess = createSelector(
+    selectAdministratorState,
+    (state) => state.createSuccess
+);
+
+export const selectAdministratorUpdateSuccess = createSelector(
+    selectAdministratorState,
+    (state) => state.updateSuccess
 );

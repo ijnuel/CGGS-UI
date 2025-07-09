@@ -10,6 +10,8 @@ import {
 import { getErrorMessageHelper } from '../../../../services/helper.service';
 import { DropdownListInterface, CompanyFormInterface } from '../../../../types';
 import { SharedFacade } from '../../../../store/shared/shared.facade';
+import { ActivatedRoute, Router } from '@angular/router';
+import { GlobalLoadingFacade } from '../../../../store/global-loading/global-loading.facade';
 
 @Component({
     selector: 'app-create-update-company',
@@ -18,6 +20,8 @@ import { SharedFacade } from '../../../../store/shared/shared.facade';
 })
 export class CreateUpdateCompanyComponent implements OnInit, OnDestroy {
     loading$: Observable<boolean>;
+    error$: Observable<string | null>;
+    companyById$: Observable<CompanyFormInterface | null>;
     dropdownLoading$: Observable<boolean>;
 
     formGroup: FormGroup<{
@@ -28,15 +32,20 @@ export class CreateUpdateCompanyComponent implements OnInit, OnDestroy {
         return this.formGroup.controls;
     }
     today = new Date();
-
+    isEditMode = false;
     unsubscribe$ = new Subject<void>();
 
     constructor(
         private companyFacade: CompanyFacade,
         private fb: FormBuilder,
-        private sharedFacade: SharedFacade
+        private sharedFacade: SharedFacade,
+        private route: ActivatedRoute,
+        private router: Router,
+        private globalLoadingFacade: GlobalLoadingFacade
     ) {
-        this.loading$ = this.companyFacade.selectedLoading$;
+        this.loading$ = this.companyFacade.loading$;
+        this.error$ = this.companyFacade.error$;
+        this.companyById$ = this.companyFacade.companyById$;
         this.dropdownLoading$ = this.sharedFacade.selectedLoading$;
 
         this.formGroup = this.fb.group({
@@ -45,6 +54,35 @@ export class CreateUpdateCompanyComponent implements OnInit, OnDestroy {
     }
 
     ngOnInit() {
+        const companyId = this.route.snapshot.params['id'];
+        if (companyId) {
+            this.isEditMode = true;
+            this.companyFacade.getCompanyById(companyId);
+            this.companyById$.pipe(takeUntil(this.unsubscribe$)).subscribe((data) => {
+                if (data) {
+                    this.formGroup.patchValue({
+                        name: data.name
+                    });
+                }
+            });
+        }
+
+        this.companyFacade.createSuccess$
+            .pipe(takeUntil(this.unsubscribe$))
+            .subscribe((success) => {
+                if (success && !this.isEditMode) {
+                    this.router.navigate(['/app/company']);
+                    this.globalLoadingFacade.globalSuccessShow('Company created successfully', 3000);
+                }
+            });
+        this.companyFacade.updateSuccess$
+            .pipe(takeUntil(this.unsubscribe$))
+            .subscribe((success) => {
+                if (success && this.isEditMode) {
+                    this.router.navigate(['/app/company']);
+                    this.globalLoadingFacade.globalSuccessShow('Company updated successfully', 3000);
+                }
+            });
     }
 
     getErrorMessage(controlName: string): string | null {
@@ -57,9 +95,15 @@ export class CreateUpdateCompanyComponent implements OnInit, OnDestroy {
 
         if (!this.formGroup.valid) return;
 
-        this.companyFacade.createCompany({
-            ...(this.formGroup.value as CompanyFormInterface),
-        });
+        const formData = this.formGroup.value as CompanyFormInterface;
+        if (this.isEditMode) {
+            this.companyFacade.updateCompany({
+                ...formData,
+                id: this.route.snapshot.params['id']
+            });
+        } else {
+            this.companyFacade.createCompany(formData);
+        }
     }
 
     ngOnDestroy(): void {

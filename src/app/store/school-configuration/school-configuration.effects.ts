@@ -8,12 +8,36 @@ import {
   SchoolConfigurationListInterface,
   PaginatedResponseInterface,
   GenericResponseInterface,
+  SchoolConfigurationFormInterface,
 } from '../../types';
 import { HttpClient } from '@angular/common/http';
 import { GlobalLoadingFacade } from '../global-loading/global-loading.facade';
 
 @Injectable()
 export class SchoolConfigurationEffect {
+  // Get All (non-paginated)
+  $schoolConfigurationAll = createEffect(() =>
+    this.actions$.pipe(
+      ofType(SchoolConfigurationAction.getSchoolConfigurationAll),
+      switchMap(() =>
+        this.http
+          .get<GenericResponseInterface<SchoolConfigurationListInterface[]>>(
+            `${environment.baseUrl}/SchoolConfiguration/GetAll`,
+            { withCredentials: true }
+          )
+          .pipe(
+            map((payload) =>
+              SchoolConfigurationAction.getSchoolConfigurationAllSuccess({ payload })
+            ),
+            catchError((error) => {
+              return of(SchoolConfigurationAction.getSchoolConfigurationAllFail({ error }));
+            })
+          )
+      )
+    )
+  );
+
+  // Get All Paginated
   $schoolConfigurationList = createEffect(() =>
     this.actions$.pipe(
       ofType(SchoolConfigurationAction.getSchoolConfigurationList),
@@ -41,9 +65,25 @@ export class SchoolConfigurationEffect {
             }
           )
           .pipe(
-            map((payload) =>
-              SchoolConfigurationAction.getSchoolConfigurationListSuccess({ payload })
-            ),
+            map((response) => {
+              const paginatedResponse: PaginatedResponseInterface<SchoolConfigurationListInterface[]> = {
+                currentPage: response.entity.currentPage,
+                recordPerPage: response.entity.recordPerPage,
+                totalPages: response.entity.totalPages,
+                totalCount: response.entity.totalCount,
+                data: response.entity.data
+              };
+              return SchoolConfigurationAction.getSchoolConfigurationListSuccess({ 
+                payload: { 
+                  entity: paginatedResponse,
+                  error: response.error,
+                  exceptionError: response.exceptionError,
+                  message: response.message,
+                  messages: response.messages,
+                  succeeded: response.succeeded
+                } 
+              });
+            }),
             catchError((error) => {
               return of(SchoolConfigurationAction.getSchoolConfigurationListFail({ error }));
             })
@@ -52,6 +92,7 @@ export class SchoolConfigurationEffect {
     )
   );
 
+  // Get By Id
   $schoolConfigurationById = createEffect(() =>
     this.actions$.pipe(
       ofType(SchoolConfigurationAction.getSchoolConfigurationById),
@@ -60,15 +101,13 @@ export class SchoolConfigurationEffect {
           .get<GenericResponseInterface<SchoolConfigurationListInterface>>(
             `${environment.baseUrl}/SchoolConfiguration/GetById`,
             {
-              params: { schoolConfigurationId },
+              params: { id: schoolConfigurationId },
               withCredentials: true,
             }
           )
           .pipe(
             map((payload) =>
-              SchoolConfigurationAction.getSchoolConfigurationByIdSuccess({
-                payload,
-              })
+              SchoolConfigurationAction.getSchoolConfigurationByIdSuccess({ payload })
             ),
             catchError((error) => {
               return of(SchoolConfigurationAction.getSchoolConfigurationByIdFail({ error }));
@@ -78,6 +117,75 @@ export class SchoolConfigurationEffect {
     )
   );
 
+  // Get By Properties
+  $schoolConfigurationByProperties = createEffect(() =>
+    this.actions$.pipe(
+      ofType(SchoolConfigurationAction.getSchoolConfigurationByProperties),
+      switchMap(({ properties }) =>
+        this.http
+          .post<GenericResponseInterface<SchoolConfigurationListInterface[]>>(
+            `${environment.baseUrl}/SchoolConfiguration/GetByProperties`,
+            properties,
+            { withCredentials: true }
+          )
+          .pipe(
+            map((payload) =>
+              SchoolConfigurationAction.getSchoolConfigurationByPropertiesSuccess({ payload })
+            ),
+            catchError((error) => {
+              return of(SchoolConfigurationAction.getSchoolConfigurationByPropertiesFail({ error }));
+            })
+          )
+      )
+    )
+  );
+
+  // Exists
+  $schoolConfigurationExists = createEffect(() =>
+    this.actions$.pipe(
+      ofType(SchoolConfigurationAction.schoolConfigurationExists),
+      switchMap(({ properties }) =>
+        this.http
+          .post<GenericResponseInterface<boolean>>(
+            `${environment.baseUrl}/SchoolConfiguration/Exists`,
+            properties,
+            { withCredentials: true }
+          )
+          .pipe(
+            map((payload) =>
+              SchoolConfigurationAction.schoolConfigurationExistsSuccess({ payload })
+            ),
+            catchError((error) => {
+              return of(SchoolConfigurationAction.schoolConfigurationExistsFail({ error }));
+            })
+          )
+      )
+    )
+  );
+
+  // Count
+  $schoolConfigurationCount = createEffect(() =>
+    this.actions$.pipe(
+      ofType(SchoolConfigurationAction.schoolConfigurationCount),
+      switchMap(() =>
+        this.http
+          .get<GenericResponseInterface<number>>(
+            `${environment.baseUrl}/SchoolConfiguration/Count`,
+            { withCredentials: true }
+          )
+          .pipe(
+            map((payload) =>
+              SchoolConfigurationAction.schoolConfigurationCountSuccess({ payload })
+            ),
+            catchError((error) => {
+              return of(SchoolConfigurationAction.schoolConfigurationCountFail({ error }));
+            })
+          )
+      )
+    )
+  );
+
+  // Create
   $createSchoolConfiguration = createEffect(() =>
     this.actions$.pipe(
       ofType(SchoolConfigurationAction.createSchoolConfiguration),
@@ -90,10 +198,7 @@ export class SchoolConfigurationEffect {
           )
           .pipe(
             map((payload) =>
-              SchoolConfigurationAction.createSchoolConfigurationSuccess({
-                message: 'SchoolConfiguration created successfully',
-                schoolConfiguration: payload.entity,
-              })
+              SchoolConfigurationAction.createSchoolConfigurationSuccess({ payload })
             ),
             catchError((error) => {
               return of(SchoolConfigurationAction.createSchoolConfigurationFail({ error }));
@@ -103,35 +208,137 @@ export class SchoolConfigurationEffect {
     )
   );
 
+  // Update
   $updateSchoolConfiguration = createEffect(() =>
     this.actions$.pipe(
-      ofType(SchoolConfigurationAction.editSchoolConfiguration),
+      ofType(SchoolConfigurationAction.updateSchoolConfiguration),
       switchMap(({ payload }) =>
         this.http
-          .post<GenericResponseInterface<SchoolConfigurationListInterface>>(
+          .put<GenericResponseInterface<SchoolConfigurationListInterface>>(
             `${environment.baseUrl}/SchoolConfiguration/Update`,
             payload,
             { withCredentials: true }
           )
           .pipe(
             map((payload) =>
-              SchoolConfigurationAction.editSchoolConfigurationSuccess({
-                message: 'SchoolConfiguration updated successfully',
-                schoolConfiguration: payload.entity,
-              })
+              SchoolConfigurationAction.updateSchoolConfigurationSuccess({ payload })
             ),
             catchError((error) => {
-              return of(SchoolConfigurationAction.editSchoolConfigurationFail({ error }));
+              return of(SchoolConfigurationAction.updateSchoolConfigurationFail({ error }));
             })
           )
       )
     )
   );
 
+  // Delete
+  $deleteSchoolConfiguration = createEffect(() =>
+    this.actions$.pipe(
+      ofType(SchoolConfigurationAction.deleteSchoolConfiguration),
+      switchMap(({ schoolConfigurationId }) =>
+        this.http
+          .delete<GenericResponseInterface<boolean>>(
+            `${environment.baseUrl}/SchoolConfiguration/Delete`,
+            {
+              params: { id: schoolConfigurationId },
+              withCredentials: true
+            }
+          )
+          .pipe(
+            map((payload) =>
+              SchoolConfigurationAction.deleteSchoolConfigurationSuccess({ payload })
+            ),
+            catchError((error) => {
+              return of(SchoolConfigurationAction.deleteSchoolConfigurationFail({ error }));
+            })
+          )
+      )
+    )
+  );
+
+  // Create Many
+  $createManySchoolConfigurations = createEffect(() =>
+    this.actions$.pipe(
+      ofType(SchoolConfigurationAction.createManySchoolConfigurations),
+      switchMap(({ payload }) =>
+        this.http
+          .post<GenericResponseInterface<SchoolConfigurationListInterface[]>>(
+            `${environment.baseUrl}/SchoolConfiguration/CreateMany`,
+            payload,
+            { withCredentials: true }
+          )
+          .pipe(
+            map((payload) =>
+              SchoolConfigurationAction.createManySchoolConfigurationsSuccess({ payload })
+            ),
+            catchError((error) => {
+              return of(SchoolConfigurationAction.createManySchoolConfigurationsFail({ error }));
+            })
+          )
+      )
+    )
+  );
+
+  // Update Many
+  $updateManySchoolConfigurations = createEffect(() =>
+    this.actions$.pipe(
+      ofType(SchoolConfigurationAction.updateManySchoolConfigurations),
+      switchMap(({ payload }) =>
+        this.http
+          .post<GenericResponseInterface<SchoolConfigurationListInterface[]>>(
+            `${environment.baseUrl}/SchoolConfiguration/UpdateMany`,
+            payload,
+            { withCredentials: true }
+          )
+          .pipe(
+            map((payload) =>
+              SchoolConfigurationAction.updateManySchoolConfigurationsSuccess({ payload })
+            ),
+            catchError((error) => {
+              return of(SchoolConfigurationAction.updateManySchoolConfigurationsFail({ error }));
+            })
+          )
+      )
+    )
+  );
+
+  // Delete Many
+  $deleteManySchoolConfigurations = createEffect(() =>
+    this.actions$.pipe(
+      ofType(SchoolConfigurationAction.deleteManySchoolConfigurations),
+      switchMap(({ schoolConfigurationIds }) =>
+        this.http
+          .delete<GenericResponseInterface<boolean>>(
+            `${environment.baseUrl}/SchoolConfiguration/DeleteMany`,
+            {
+              params: { ids: schoolConfigurationIds },
+              withCredentials: true
+            }
+          )
+          .pipe(
+            map((payload) =>
+              SchoolConfigurationAction.deleteManySchoolConfigurationsSuccess({ payload })
+            ),
+            catchError((error) => {
+              return of(SchoolConfigurationAction.deleteManySchoolConfigurationsFail({ error }));
+            })
+          )
+      )
+    )
+  );
+
+  // Loading Effects
   $schoolConfigurationLoading = createEffect(
     () =>
       this.actions$.pipe(
-        ofType(SchoolConfigurationAction.createSchoolConfiguration, SchoolConfigurationAction.editSchoolConfiguration),
+        ofType(
+          SchoolConfigurationAction.createSchoolConfiguration,
+          SchoolConfigurationAction.updateSchoolConfiguration,
+          SchoolConfigurationAction.deleteSchoolConfiguration,
+          SchoolConfigurationAction.createManySchoolConfigurations,
+          SchoolConfigurationAction.updateManySchoolConfigurations,
+          SchoolConfigurationAction.deleteManySchoolConfigurations
+        ),
         tap((action) => {
           this.errorLoadingFacade.globalLoadingShow(action.type);
         })
@@ -145,8 +352,16 @@ export class SchoolConfigurationEffect {
         ofType(
           SchoolConfigurationAction.createSchoolConfigurationSuccess,
           SchoolConfigurationAction.createSchoolConfigurationFail,
-          SchoolConfigurationAction.editSchoolConfigurationSuccess,
-          SchoolConfigurationAction.editSchoolConfigurationFail
+          SchoolConfigurationAction.updateSchoolConfigurationSuccess,
+          SchoolConfigurationAction.updateSchoolConfigurationFail,
+          SchoolConfigurationAction.deleteSchoolConfigurationSuccess,
+          SchoolConfigurationAction.deleteSchoolConfigurationFail,
+          SchoolConfigurationAction.createManySchoolConfigurationsSuccess,
+          SchoolConfigurationAction.createManySchoolConfigurationsFail,
+          SchoolConfigurationAction.updateManySchoolConfigurationsSuccess,
+          SchoolConfigurationAction.updateManySchoolConfigurationsFail,
+          SchoolConfigurationAction.deleteManySchoolConfigurationsSuccess,
+          SchoolConfigurationAction.deleteManySchoolConfigurationsFail
         ),
         tap(() => {
           this.errorLoadingFacade.globalLoadingHide();
