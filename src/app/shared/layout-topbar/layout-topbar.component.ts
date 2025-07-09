@@ -2,7 +2,7 @@ import { Component, Output, EventEmitter, OnInit, OnDestroy } from '@angular/cor
 import { Subject, takeUntil } from 'rxjs';
 import { Router } from '@angular/router';
 import { MatSelectChange } from '@angular/material/select';
-import { CompanyListInterface } from '../../types';
+import { CompanyListInterface, CurrentUserInterface } from '../../types';
 import { AuthFacade } from '../../store/auth/auth.facade';
 
 @Component({
@@ -15,6 +15,7 @@ export class LayoutTopbarComponent implements OnInit, OnDestroy {
 
   companies: CompanyListInterface[] = [];
   currentCompanyId: string | undefined;
+  currentUser : CurrentUserInterface | null = null;
   private destroyed$ = new Subject<void>();
 
   constructor(
@@ -40,6 +41,8 @@ export class LayoutTopbarComponent implements OnInit, OnDestroy {
       .subscribe(() => {
         this.router.navigate(['app/home']);
       });
+
+      this.authFacade.selectedCurrentUser$.subscribe(x => this.currentUser = x);
   }
 
   ngOnDestroy(): void {

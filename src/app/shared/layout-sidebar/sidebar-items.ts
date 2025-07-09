@@ -28,12 +28,12 @@ export default [
     url: '/app/staff'
   },
 
-  {
-    name: 'Families',
-    icon: 'assets/icons/users-icon.svg',
-    roles: [],
-    url: '/app/family'
-  },
+  // {
+  //   name: 'Families',
+  //   icon: 'assets/icons/users-icon.svg',
+  //   roles: [],
+  //   url: '/app/family'
+  // },
 
   {
     name: 'Admin Setup',

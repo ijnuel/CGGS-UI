@@ -13,4 +13,5 @@ export interface CurrentUserInterface {
   residentialCity: string;
   residentialStateId: string;
   phoneNumber: string;
+  userTypeString: string;
 }
