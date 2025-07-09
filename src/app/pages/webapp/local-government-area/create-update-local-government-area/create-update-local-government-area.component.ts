@@ -10,6 +10,8 @@ import {
 import { getErrorMessageHelper } from '../../../../services/helper.service';
 import { DropdownListInterface, LocalGovernmentAreaFormInterface } from '../../../../types';
 import { SharedFacade } from '../../../../store/shared/shared.facade';
+import { ActivatedRoute, Router } from '@angular/router';
+import { GlobalLoadingFacade } from '../../../../store/global-loading/global-loading.facade';
 
 @Component({
     selector: 'app-create-update-local-government-area',
@@ -18,6 +20,8 @@ import { SharedFacade } from '../../../../store/shared/shared.facade';
 })
 export class CreateUpdateLocalGovernmentAreaComponent implements OnInit, OnDestroy {
     loading$: Observable<boolean>;
+    error$: Observable<string | null>;
+    localGovernmentAreaById$: Observable<LocalGovernmentAreaFormInterface | null>;
     dropdownLoading$: Observable<boolean>;
 
     formGroup: FormGroup<{
@@ -28,15 +32,20 @@ export class CreateUpdateLocalGovernmentAreaComponent implements OnInit, OnDestr
         return this.formGroup.controls;
     }
     today = new Date();
-
+    isEditMode = false;
     unsubscribe$ = new Subject<void>();
 
     constructor(
         private localGovernmentAreaFacade: LocalGovernmentAreaFacade,
         private fb: FormBuilder,
-        private sharedFacade: SharedFacade
+        private sharedFacade: SharedFacade,
+        private route: ActivatedRoute,
+        private router: Router,
+        private globalLoadingFacade: GlobalLoadingFacade
     ) {
-        this.loading$ = this.localGovernmentAreaFacade.selectedLoading$;
+        this.loading$ = this.localGovernmentAreaFacade.loading$;
+        this.error$ = this.localGovernmentAreaFacade.error$;
+        this.localGovernmentAreaById$ = this.localGovernmentAreaFacade.localGovernmentAreaById$;
         this.dropdownLoading$ = this.sharedFacade.selectedLoading$;
 
         this.formGroup = this.fb.group({
@@ -45,6 +54,35 @@ export class CreateUpdateLocalGovernmentAreaComponent implements OnInit, OnDestr
     }
 
     ngOnInit() {
+        const localGovernmentAreaId = this.route.snapshot.params['id'];
+        if (localGovernmentAreaId) {
+            this.isEditMode = true;
+            this.localGovernmentAreaFacade.getLocalGovernmentAreaById(localGovernmentAreaId);
+            this.localGovernmentAreaById$.pipe(takeUntil(this.unsubscribe$)).subscribe((data) => {
+                if (data) {
+                    this.formGroup.patchValue({
+                        name: data.name
+                    });
+                }
+            });
+        }
+
+        this.localGovernmentAreaFacade.createSuccess$
+            .pipe(takeUntil(this.unsubscribe$))
+            .subscribe((success) => {
+                if (success && !this.isEditMode) {
+                    this.router.navigate(['/app/local-government-area']);
+                    this.globalLoadingFacade.globalSuccessShow('Local Government Area created successfully', 3000);
+                }
+            });
+        this.localGovernmentAreaFacade.updateSuccess$
+            .pipe(takeUntil(this.unsubscribe$))
+            .subscribe((success) => {
+                if (success && this.isEditMode) {
+                    this.router.navigate(['/app/local-government-area']);
+                    this.globalLoadingFacade.globalSuccessShow('Local Government Area updated successfully', 3000);
+                }
+            });
     }
 
     getErrorMessage(controlName: string): string | null {
@@ -57,9 +95,15 @@ export class CreateUpdateLocalGovernmentAreaComponent implements OnInit, OnDestr
 
         if (!this.formGroup.valid) return;
 
-        this.localGovernmentAreaFacade.createLocalGovernmentArea({
-            ...(this.formGroup.value as LocalGovernmentAreaFormInterface),
-        });
+        const formData = this.formGroup.value as LocalGovernmentAreaFormInterface;
+        if (this.isEditMode) {
+            this.localGovernmentAreaFacade.updateLocalGovernmentArea({
+                ...formData,
+                id: this.route.snapshot.params['id']
+            });
+        } else {
+            this.localGovernmentAreaFacade.createLocalGovernmentArea(formData);
+        }
     }
 
     ngOnDestroy(): void {

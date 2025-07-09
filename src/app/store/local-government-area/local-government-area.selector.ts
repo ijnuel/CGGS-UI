@@ -1,28 +1,65 @@
 import { createSelector } from '@ngrx/store';
-import * as fromLocalGovernmentArea from './local-government-area.reducer';
-import * as fromApp from '../app.reducer';
+import {
+  getLocalGovernmentAreaList,
+  getLocalGovernmentAreaAll,
+  getLocalGovernmentAreaByProperties,
+  getLocalGovernmentAreaById,
+  getExists,
+  getCount,
+  getLoading,
+  getError,
+  LocalGovernmentAreaState,
+} from './local-government-area.reducer';
 
-export const selectLocalGovernmentAreaState = createSelector(
-  fromApp.selectAppState,
-  (state) => state[fromLocalGovernmentArea.localGovernmentAreaFeatureKey]
-);
+export const selectLocalGovernmentAreaState = (state: { localGovernmentArea: LocalGovernmentAreaState }) =>
+  state.localGovernmentArea;
 
 export const selectLocalGovernmentAreaList = createSelector(
-  fromLocalGovernmentArea.selectLocalGovernmentAreaState,
-  fromLocalGovernmentArea.getLocalGovernmentAreaList
+  selectLocalGovernmentAreaState,
+  getLocalGovernmentAreaList
+);
+
+export const selectLocalGovernmentAreaAll = createSelector(
+  selectLocalGovernmentAreaState,
+  getLocalGovernmentAreaAll
+);
+
+export const selectLocalGovernmentAreaByProperties = createSelector(
+  selectLocalGovernmentAreaState,
+  getLocalGovernmentAreaByProperties
 );
 
 export const selectLocalGovernmentAreaById = createSelector(
-  fromLocalGovernmentArea.selectLocalGovernmentAreaState,
-  fromLocalGovernmentArea.getLocalGovernmentAreaById
+  selectLocalGovernmentAreaState,
+  getLocalGovernmentAreaById
 );
 
-export const selectLoading = createSelector(
-  fromLocalGovernmentArea.selectLocalGovernmentAreaState,
-  fromLocalGovernmentArea.getLoading
+export const selectExists = createSelector(
+  selectLocalGovernmentAreaState,
+  getExists
 );
 
-export const selectError = createSelector(
-  fromLocalGovernmentArea.selectLocalGovernmentAreaState,
-  fromLocalGovernmentArea.getError
+export const selectCount = createSelector(
+  selectLocalGovernmentAreaState,
+  getCount
+);
+
+export const selectLocalGovernmentAreaLoading = createSelector(
+  selectLocalGovernmentAreaState,
+  getLoading
+);
+
+export const selectLocalGovernmentAreaError = createSelector(
+  selectLocalGovernmentAreaState,
+  getError
+);
+
+export const selectLocalGovernmentAreaCreateSuccess = createSelector(
+    selectLocalGovernmentAreaState,
+    (state) => state.createSuccess
+);
+
+export const selectLocalGovernmentAreaUpdateSuccess = createSelector(
+    selectLocalGovernmentAreaState,
+    (state) => state.updateSuccess
 );

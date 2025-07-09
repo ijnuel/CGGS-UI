@@ -8,12 +8,36 @@ import {
   LocalGovernmentAreaListInterface,
   PaginatedResponseInterface,
   GenericResponseInterface,
+  LocalGovernmentAreaFormInterface,
 } from '../../types';
 import { HttpClient } from '@angular/common/http';
 import { GlobalLoadingFacade } from '../global-loading/global-loading.facade';
 
 @Injectable()
 export class LocalGovernmentAreaEffect {
+  // Get All (non-paginated)
+  $localGovernmentAreaAll = createEffect(() =>
+    this.actions$.pipe(
+      ofType(LocalGovernmentAreaAction.getLocalGovernmentAreaAll),
+      switchMap(() =>
+        this.http
+          .get<GenericResponseInterface<LocalGovernmentAreaListInterface[]>>(
+            `${environment.baseUrl}/LocalGovernmentArea/GetAll`,
+            { withCredentials: true }
+          )
+          .pipe(
+            map((payload) =>
+              LocalGovernmentAreaAction.getLocalGovernmentAreaAllSuccess({ payload })
+            ),
+            catchError((error) => {
+              return of(LocalGovernmentAreaAction.getLocalGovernmentAreaAllFail({ error }));
+            })
+          )
+      )
+    )
+  );
+
+  // Get All Paginated
   $localGovernmentAreaList = createEffect(() =>
     this.actions$.pipe(
       ofType(LocalGovernmentAreaAction.getLocalGovernmentAreaList),
@@ -41,9 +65,25 @@ export class LocalGovernmentAreaEffect {
             }
           )
           .pipe(
-            map((payload) =>
-              LocalGovernmentAreaAction.getLocalGovernmentAreaListSuccess({ payload })
-            ),
+            map((response) => {
+              const paginatedResponse: PaginatedResponseInterface<LocalGovernmentAreaListInterface[]> = {
+                currentPage: response.entity.currentPage,
+                recordPerPage: response.entity.recordPerPage,
+                totalPages: response.entity.totalPages,
+                totalCount: response.entity.totalCount,
+                data: response.entity.data
+              };
+              return LocalGovernmentAreaAction.getLocalGovernmentAreaListSuccess({ 
+                payload: { 
+                  entity: paginatedResponse,
+                  error: response.error,
+                  exceptionError: response.exceptionError,
+                  message: response.message,
+                  messages: response.messages,
+                  succeeded: response.succeeded
+                } 
+              });
+            }),
             catchError((error) => {
               return of(LocalGovernmentAreaAction.getLocalGovernmentAreaListFail({ error }));
             })
@@ -52,6 +92,7 @@ export class LocalGovernmentAreaEffect {
     )
   );
 
+  // Get By Id
   $localGovernmentAreaById = createEffect(() =>
     this.actions$.pipe(
       ofType(LocalGovernmentAreaAction.getLocalGovernmentAreaById),
@@ -60,15 +101,13 @@ export class LocalGovernmentAreaEffect {
           .get<GenericResponseInterface<LocalGovernmentAreaListInterface>>(
             `${environment.baseUrl}/LocalGovernmentArea/GetById`,
             {
-              params: { localGovernmentAreaId },
+              params: { id: localGovernmentAreaId },
               withCredentials: true,
             }
           )
           .pipe(
             map((payload) =>
-              LocalGovernmentAreaAction.getLocalGovernmentAreaByIdSuccess({
-                payload,
-              })
+              LocalGovernmentAreaAction.getLocalGovernmentAreaByIdSuccess({ payload })
             ),
             catchError((error) => {
               return of(LocalGovernmentAreaAction.getLocalGovernmentAreaByIdFail({ error }));
@@ -78,6 +117,75 @@ export class LocalGovernmentAreaEffect {
     )
   );
 
+  // Get By Properties
+  $localGovernmentAreaByProperties = createEffect(() =>
+    this.actions$.pipe(
+      ofType(LocalGovernmentAreaAction.getLocalGovernmentAreaByProperties),
+      switchMap(({ properties }) =>
+        this.http
+          .post<GenericResponseInterface<LocalGovernmentAreaListInterface[]>>(
+            `${environment.baseUrl}/LocalGovernmentArea/GetByProperties`,
+            properties,
+            { withCredentials: true }
+          )
+          .pipe(
+            map((payload) =>
+              LocalGovernmentAreaAction.getLocalGovernmentAreaByPropertiesSuccess({ payload })
+            ),
+            catchError((error) => {
+              return of(LocalGovernmentAreaAction.getLocalGovernmentAreaByPropertiesFail({ error }));
+            })
+          )
+      )
+    )
+  );
+
+  // Exists
+  $localGovernmentAreaExists = createEffect(() =>
+    this.actions$.pipe(
+      ofType(LocalGovernmentAreaAction.localGovernmentAreaExists),
+      switchMap(({ properties }) =>
+        this.http
+          .post<GenericResponseInterface<boolean>>(
+            `${environment.baseUrl}/LocalGovernmentArea/Exists`,
+            properties,
+            { withCredentials: true }
+          )
+          .pipe(
+            map((payload) =>
+              LocalGovernmentAreaAction.localGovernmentAreaExistsSuccess({ payload })
+            ),
+            catchError((error) => {
+              return of(LocalGovernmentAreaAction.localGovernmentAreaExistsFail({ error }));
+            })
+          )
+      )
+    )
+  );
+
+  // Count
+  $localGovernmentAreaCount = createEffect(() =>
+    this.actions$.pipe(
+      ofType(LocalGovernmentAreaAction.localGovernmentAreaCount),
+      switchMap(() =>
+        this.http
+          .get<GenericResponseInterface<number>>(
+            `${environment.baseUrl}/LocalGovernmentArea/Count`,
+            { withCredentials: true }
+          )
+          .pipe(
+            map((payload) =>
+              LocalGovernmentAreaAction.localGovernmentAreaCountSuccess({ payload })
+            ),
+            catchError((error) => {
+              return of(LocalGovernmentAreaAction.localGovernmentAreaCountFail({ error }));
+            })
+          )
+      )
+    )
+  );
+
+  // Create
   $createLocalGovernmentArea = createEffect(() =>
     this.actions$.pipe(
       ofType(LocalGovernmentAreaAction.createLocalGovernmentArea),
@@ -90,10 +198,7 @@ export class LocalGovernmentAreaEffect {
           )
           .pipe(
             map((payload) =>
-              LocalGovernmentAreaAction.createLocalGovernmentAreaSuccess({
-                message: 'LocalGovernmentArea created successfully',
-                localGovernmentArea: payload.entity,
-              })
+              LocalGovernmentAreaAction.createLocalGovernmentAreaSuccess({ payload })
             ),
             catchError((error) => {
               return of(LocalGovernmentAreaAction.createLocalGovernmentAreaFail({ error }));
@@ -103,35 +208,137 @@ export class LocalGovernmentAreaEffect {
     )
   );
 
+  // Update
   $updateLocalGovernmentArea = createEffect(() =>
     this.actions$.pipe(
-      ofType(LocalGovernmentAreaAction.editLocalGovernmentArea),
+      ofType(LocalGovernmentAreaAction.updateLocalGovernmentArea),
       switchMap(({ payload }) =>
         this.http
-          .post<GenericResponseInterface<LocalGovernmentAreaListInterface>>(
+          .put<GenericResponseInterface<LocalGovernmentAreaListInterface>>(
             `${environment.baseUrl}/LocalGovernmentArea/Update`,
             payload,
             { withCredentials: true }
           )
           .pipe(
             map((payload) =>
-              LocalGovernmentAreaAction.editLocalGovernmentAreaSuccess({
-                message: 'LocalGovernmentArea updated successfully',
-                localGovernmentArea: payload.entity,
-              })
+              LocalGovernmentAreaAction.updateLocalGovernmentAreaSuccess({ payload })
             ),
             catchError((error) => {
-              return of(LocalGovernmentAreaAction.editLocalGovernmentAreaFail({ error }));
+              return of(LocalGovernmentAreaAction.updateLocalGovernmentAreaFail({ error }));
             })
           )
       )
     )
   );
 
+  // Delete
+  $deleteLocalGovernmentArea = createEffect(() =>
+    this.actions$.pipe(
+      ofType(LocalGovernmentAreaAction.deleteLocalGovernmentArea),
+      switchMap(({ localGovernmentAreaId }) =>
+        this.http
+          .delete<GenericResponseInterface<boolean>>(
+            `${environment.baseUrl}/LocalGovernmentArea/Delete`,
+            {
+              params: { id: localGovernmentAreaId },
+              withCredentials: true
+            }
+          )
+          .pipe(
+            map((payload) =>
+              LocalGovernmentAreaAction.deleteLocalGovernmentAreaSuccess({ payload })
+            ),
+            catchError((error) => {
+              return of(LocalGovernmentAreaAction.deleteLocalGovernmentAreaFail({ error }));
+            })
+          )
+      )
+    )
+  );
+
+  // Create Many
+  $createManyLocalGovernmentAreas = createEffect(() =>
+    this.actions$.pipe(
+      ofType(LocalGovernmentAreaAction.createManyLocalGovernmentAreas),
+      switchMap(({ payload }) =>
+        this.http
+          .post<GenericResponseInterface<LocalGovernmentAreaListInterface[]>>(
+            `${environment.baseUrl}/LocalGovernmentArea/CreateMany`,
+            payload,
+            { withCredentials: true }
+          )
+          .pipe(
+            map((payload) =>
+              LocalGovernmentAreaAction.createManyLocalGovernmentAreasSuccess({ payload })
+            ),
+            catchError((error) => {
+              return of(LocalGovernmentAreaAction.createManyLocalGovernmentAreasFail({ error }));
+            })
+          )
+      )
+    )
+  );
+
+  // Update Many
+  $updateManyLocalGovernmentAreas = createEffect(() =>
+    this.actions$.pipe(
+      ofType(LocalGovernmentAreaAction.updateManyLocalGovernmentAreas),
+      switchMap(({ payload }) =>
+        this.http
+          .post<GenericResponseInterface<LocalGovernmentAreaListInterface[]>>(
+            `${environment.baseUrl}/LocalGovernmentArea/UpdateMany`,
+            payload,
+            { withCredentials: true }
+          )
+          .pipe(
+            map((payload) =>
+              LocalGovernmentAreaAction.updateManyLocalGovernmentAreasSuccess({ payload })
+            ),
+            catchError((error) => {
+              return of(LocalGovernmentAreaAction.updateManyLocalGovernmentAreasFail({ error }));
+            })
+          )
+      )
+    )
+  );
+
+  // Delete Many
+  $deleteManyLocalGovernmentAreas = createEffect(() =>
+    this.actions$.pipe(
+      ofType(LocalGovernmentAreaAction.deleteManyLocalGovernmentAreas),
+      switchMap(({ localGovernmentAreaIds }) =>
+        this.http
+          .delete<GenericResponseInterface<boolean>>(
+            `${environment.baseUrl}/LocalGovernmentArea/DeleteMany`,
+            {
+              params: { ids: localGovernmentAreaIds },
+              withCredentials: true
+            }
+          )
+          .pipe(
+            map((payload) =>
+              LocalGovernmentAreaAction.deleteManyLocalGovernmentAreasSuccess({ payload })
+            ),
+            catchError((error) => {
+              return of(LocalGovernmentAreaAction.deleteManyLocalGovernmentAreasFail({ error }));
+            })
+          )
+      )
+    )
+  );
+
+  // Loading Effects
   $localGovernmentAreaLoading = createEffect(
     () =>
       this.actions$.pipe(
-        ofType(LocalGovernmentAreaAction.createLocalGovernmentArea, LocalGovernmentAreaAction.editLocalGovernmentArea),
+        ofType(
+          LocalGovernmentAreaAction.createLocalGovernmentArea,
+          LocalGovernmentAreaAction.updateLocalGovernmentArea,
+          LocalGovernmentAreaAction.deleteLocalGovernmentArea,
+          LocalGovernmentAreaAction.createManyLocalGovernmentAreas,
+          LocalGovernmentAreaAction.updateManyLocalGovernmentAreas,
+          LocalGovernmentAreaAction.deleteManyLocalGovernmentAreas
+        ),
         tap((action) => {
           this.errorLoadingFacade.globalLoadingShow(action.type);
         })
@@ -145,8 +352,16 @@ export class LocalGovernmentAreaEffect {
         ofType(
           LocalGovernmentAreaAction.createLocalGovernmentAreaSuccess,
           LocalGovernmentAreaAction.createLocalGovernmentAreaFail,
-          LocalGovernmentAreaAction.editLocalGovernmentAreaSuccess,
-          LocalGovernmentAreaAction.editLocalGovernmentAreaFail
+          LocalGovernmentAreaAction.updateLocalGovernmentAreaSuccess,
+          LocalGovernmentAreaAction.updateLocalGovernmentAreaFail,
+          LocalGovernmentAreaAction.deleteLocalGovernmentAreaSuccess,
+          LocalGovernmentAreaAction.deleteLocalGovernmentAreaFail,
+          LocalGovernmentAreaAction.createManyLocalGovernmentAreasSuccess,
+          LocalGovernmentAreaAction.createManyLocalGovernmentAreasFail,
+          LocalGovernmentAreaAction.updateManyLocalGovernmentAreasSuccess,
+          LocalGovernmentAreaAction.updateManyLocalGovernmentAreasFail,
+          LocalGovernmentAreaAction.deleteManyLocalGovernmentAreasSuccess,
+          LocalGovernmentAreaAction.deleteManyLocalGovernmentAreasFail
         ),
         tap(() => {
           this.errorLoadingFacade.globalLoadingHide();

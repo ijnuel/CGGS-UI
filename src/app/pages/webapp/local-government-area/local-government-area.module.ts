@@ -12,6 +12,7 @@ import { LocalGovernmentAreaComponent } from './local-government-area.component'
 import { SharedModule } from '../../../shared/shared.module';
 import { CreateUpdateLocalGovernmentAreaComponent } from './create-update-local-government-area/create-update-local-government-area.component';
 import { provideNativeDateAdapter } from '@angular/material/core';
+import { ViewLocalGovernmentAreaComponent } from './view-local-government-area/view-local-government-area.component';
 
 const routes: Routes = [
     {
@@ -25,13 +26,18 @@ const routes: Routes = [
     },
 
     {
-        path: 'edit/:localGovernmentAreaId',
+        path: 'edit/:id',
         component: CreateUpdateLocalGovernmentAreaComponent,
+    },
+
+    {
+        path: 'view/:id',
+        component: ViewLocalGovernmentAreaComponent,
     },
 ];
 
 @NgModule({
-    declarations: [LocalGovernmentAreaComponent, CreateUpdateLocalGovernmentAreaComponent],
+    declarations: [LocalGovernmentAreaComponent, CreateUpdateLocalGovernmentAreaComponent, ViewLocalGovernmentAreaComponent],
     imports: [
         CommonModule,
         SharedModule,
