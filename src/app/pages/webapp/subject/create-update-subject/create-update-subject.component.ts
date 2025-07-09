@@ -66,12 +66,6 @@ export class CreateUpdateSubjectComponent implements OnInit, OnDestroy {
                 }
             });
         }
-
-        this.error$.pipe(takeUntil(this.unsubscribe$)).subscribe((error) => {
-            if (error) {
-                this.globalLoadingFacade.globalErrorShow(error, 3000);
-            }
-        });
     }
 
     getErrorMessage(controlName: string): string | null {

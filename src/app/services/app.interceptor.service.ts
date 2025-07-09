@@ -41,8 +41,14 @@ export class AppInterceptorService implements HttpInterceptor {
           console.log('This is server side error');
           errorMsg = `${error?.error?.Message ?? 'Error happened'}`;
 
-          if (error?.error?.validationFailures) {
-            errorMsg = error?.error?.validationFailures.join(' ');
+          let obj = error?.error?.errors;
+          if (obj) {
+              const messages: string[] = [];
+              for (const key in obj) {
+                  const errs = obj[key];
+                  messages.push(...errs);
+              }
+              errorMsg = messages.join('<br>');
           }
         }
 

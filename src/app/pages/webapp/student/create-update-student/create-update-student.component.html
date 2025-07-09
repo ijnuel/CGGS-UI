@@ -9,12 +9,6 @@ error: error$ | async }; as obs ) {
     <div class="text-xl font-bold">{{ isEditMode ? 'Edit' : 'Create' }} Student</div>
   </div>
 
-  @if (obs.error) {
-  <div class="mt-4 p-4 bg-red-100 text-red-700 rounded">
-    {{ obs.error }}
-  </div>
-  }
-
   <div class="mt-8">
     <form [formGroup]="formGroup">
 

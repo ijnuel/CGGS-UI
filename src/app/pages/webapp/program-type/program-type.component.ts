@@ -18,8 +18,8 @@ import { SubjectFacade } from '../../../store/subject/subject.facade';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 
 @Component({
-  selector: 'app-program-type',
-  templateUrl: './program-type.component.html',
+    selector: 'app-program-type',
+    templateUrl: './program-type.component.html',
   styleUrls: ['./program-type.component.scss'],
 })
 export class ProgramTypeComponent implements OnInit {
