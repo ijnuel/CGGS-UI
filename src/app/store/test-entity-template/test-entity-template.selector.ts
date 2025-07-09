@@ -53,3 +53,13 @@ export const selectTestEntityTemplateError = createSelector(
   selectTestEntityTemplateState,
   getError
 );
+
+export const selectTestEntityTemplateCreateSuccess = createSelector(
+  selectTestEntityTemplateState,
+  (state) => state.createSuccess
+);
+
+export const selectTestEntityTemplateUpdateSuccess = createSelector(
+  selectTestEntityTemplateState,
+  (state) => state.updateSuccess
+);

@@ -18,6 +18,8 @@ export interface TestEntityTemplateState {
   pageQuery: PageQueryInterface | null;
   loading: boolean;
   error: string | null;
+  createSuccess: boolean;
+  updateSuccess: boolean;
 }
 
 export const initialState: TestEntityTemplateState = {
@@ -30,6 +32,8 @@ export const initialState: TestEntityTemplateState = {
   pageQuery: null,
   loading: false,
   error: null,
+  createSuccess: false,
+  updateSuccess: false,
 };
 
 export const reducer = createReducer(
@@ -142,6 +146,7 @@ export const reducer = createReducer(
     ...state,
     loading: true,
     error: null,
+    createSuccess: false,
   })),
   on(TestEntityTemplateAction.createTestEntityTemplateSuccess, (state, { payload }) => ({
     ...state,
@@ -152,11 +157,13 @@ export const reducer = createReducer(
         }
       : null,
     loading: false,
+    createSuccess: true,
   })),
   on(TestEntityTemplateAction.createTestEntityTemplateFail, (state, { error }) => ({
     ...state,
     loading: false,
     error,
+    createSuccess: false,
   })),
 
   // Update
@@ -164,6 +171,7 @@ export const reducer = createReducer(
     ...state,
     loading: true,
     error: null,
+    updateSuccess: false,
   })),
   on(TestEntityTemplateAction.updateTestEntityTemplateSuccess, (state, { payload }) => ({
     ...state,
@@ -180,11 +188,13 @@ export const reducer = createReducer(
         ? payload.entity
         : state.testEntityTemplateById,
     loading: false,
+    updateSuccess: true,
   })),
   on(TestEntityTemplateAction.updateTestEntityTemplateFail, (state, { error }) => ({
     ...state,
     loading: false,
     error,
+    updateSuccess: false,
   })),
 
   // Delete
@@ -288,3 +298,5 @@ export const getExists = (state: TestEntityTemplateState) => state.exists;
 export const getCount = (state: TestEntityTemplateState) => state.count;
 export const getLoading = (state: TestEntityTemplateState) => state.loading;
 export const getError = (state: TestEntityTemplateState) => state.error;
+export const getCreateSuccess = (state: TestEntityTemplateState) => state.createSuccess;
+export const getUpdateSuccess = (state: TestEntityTemplateState) => state.updateSuccess;

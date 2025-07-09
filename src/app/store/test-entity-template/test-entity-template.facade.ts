@@ -17,6 +17,8 @@ import {
   selectCount,
   selectTestEntityTemplateLoading,
   selectTestEntityTemplateError,
+  selectTestEntityTemplateCreateSuccess,
+  selectTestEntityTemplateUpdateSuccess,
 } from './test-entity-template.selector';
 import { TestEntityTemplateState } from './test-entity-template.reducer';
 
@@ -32,6 +34,8 @@ export class TestEntityTemplateFacade {
   count$: Observable<number | null>;
   loading$: Observable<boolean>;
   error$: Observable<string | null>;
+  createSuccess$: Observable<boolean>;
+  updateSuccess$: Observable<boolean>;
   currentPageQuery: PageQueryInterface = {
     start: 0,
     recordsPerPage: 10,
@@ -48,6 +52,8 @@ export class TestEntityTemplateFacade {
     this.count$ = this.store.select(selectCount);
     this.loading$ = this.store.select(selectTestEntityTemplateLoading);
     this.error$ = this.store.select(selectTestEntityTemplateError);
+    this.createSuccess$ = this.store.select(selectTestEntityTemplateCreateSuccess);
+    this.updateSuccess$ = this.store.select(selectTestEntityTemplateUpdateSuccess);
   }
 
   getTestEntityTemplateList(pageQuery: PageQueryInterface): void {

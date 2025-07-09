@@ -67,11 +67,22 @@ export class CreateUpdateTestEntityTemplateComponent implements OnInit, OnDestro
             });
         }
 
-        this.error$.pipe(takeUntil(this.unsubscribe$)).subscribe((error) => {
-            if (error) {
-                this.globalLoadingFacade.globalErrorShow(error, 3000);
-            }
-        });
+        this.testEntityTemplateFacade.createSuccess$
+            .pipe(takeUntil(this.unsubscribe$))
+            .subscribe((success) => {
+                if (success && !this.isEditMode) {
+                    this.router.navigate(['/app/test-entity-template']);
+                    this.globalLoadingFacade.globalSuccessShow('Test Entity Template created successfully', 3000);
+                }
+            });
+        this.testEntityTemplateFacade.updateSuccess$
+            .pipe(takeUntil(this.unsubscribe$))
+            .subscribe((success) => {
+                if (success && this.isEditMode) {
+                    this.router.navigate(['/app/test-entity-template']);
+                    this.globalLoadingFacade.globalSuccessShow('Test Entity Template updated successfully', 3000);
+                }
+            });
     }
 
     getErrorMessage(controlName: string): string | null {
@@ -91,14 +102,9 @@ export class CreateUpdateTestEntityTemplateComponent implements OnInit, OnDestro
                 ...formData,
                 id: this.route.snapshot.params['id']
             });
-            this.globalLoadingFacade.globalSuccessShow('Test Entity Template updated successfully', 3000);
         } else {
             this.testEntityTemplateFacade.createTestEntityTemplate(formData);
-            this.globalLoadingFacade.globalSuccessShow('Test Entity Template created successfully', 3000);
         }
-
-        // Navigate to the list page
-        this.router.navigate(['/app/test-entity-template']);
     }
 
     ngOnDestroy(): void {
