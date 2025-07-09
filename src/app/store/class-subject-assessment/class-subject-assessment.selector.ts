@@ -53,3 +53,13 @@ export const selectClassSubjectAssessmentError = createSelector(
   selectClassSubjectAssessmentState,
   getError
 );
+
+export const selectClassSubjectAssessmentCreateSuccess = createSelector(
+    selectClassSubjectAssessmentState,
+    (state) => state.createSuccess
+);
+
+export const selectClassSubjectAssessmentUpdateSuccess = createSelector(
+    selectClassSubjectAssessmentState,
+    (state) => state.updateSuccess
+);

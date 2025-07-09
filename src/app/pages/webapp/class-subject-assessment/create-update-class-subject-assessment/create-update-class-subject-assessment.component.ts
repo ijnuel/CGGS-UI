@@ -67,11 +67,22 @@ export class CreateUpdateClassSubjectAssessmentComponent implements OnInit, OnDe
             });
         }
 
-        this.error$.pipe(takeUntil(this.unsubscribe$)).subscribe((error) => {
-            if (error) {
-                this.globalLoadingFacade.globalErrorShow(error, 3000);
-            }
-        });
+        this.classSubjectAssessmentFacade.createSuccess$
+            .pipe(takeUntil(this.unsubscribe$))
+            .subscribe((success) => {
+                if (success && !this.isEditMode) {
+                    this.router.navigate(['/app/class-subject-assessment']);
+                    this.globalLoadingFacade.globalSuccessShow('Class Subject Assessment created successfully', 3000);
+                }
+            });
+        this.classSubjectAssessmentFacade.updateSuccess$
+            .pipe(takeUntil(this.unsubscribe$))
+            .subscribe((success) => {
+                if (success && this.isEditMode) {
+                    this.router.navigate(['/app/class-subject-assessment']);
+                    this.globalLoadingFacade.globalSuccessShow('Class Subject Assessment updated successfully', 3000);
+                }
+            });
     }
 
     getErrorMessage(controlName: string): string | null {
@@ -90,14 +101,9 @@ export class CreateUpdateClassSubjectAssessmentComponent implements OnInit, OnDe
                 ...formData,
                 id: this.route.snapshot.params['id']
             });
-            this.globalLoadingFacade.globalSuccessShow('Class Subject Assessment updated successfully', 3000);
         } else {
             this.classSubjectAssessmentFacade.createClassSubjectAssessment(formData);
-            this.globalLoadingFacade.globalSuccessShow('Class Subject Assessment created successfully', 3000);
         }
-
-        // Navigate to the list page
-        this.router.navigate(['/app/class-subject-assessment']);
     }
 
     ngOnDestroy(): void {

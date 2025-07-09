@@ -66,6 +66,23 @@ export class CreateUpdateClassSubjectComponent implements OnInit, OnDestroy {
                 }
             });
         }
+
+        this.classSubjectFacade.createSuccess$
+            .pipe(takeUntil(this.unsubscribe$))
+            .subscribe((success) => {
+                if (success && !this.isEditMode) {
+                    this.router.navigate(['/app/class-subject']);
+                    this.globalLoadingFacade.globalSuccessShow('Class Subject created successfully', 3000);
+                }
+            });
+        this.classSubjectFacade.updateSuccess$
+            .pipe(takeUntil(this.unsubscribe$))
+            .subscribe((success) => {
+                if (success && this.isEditMode) {
+                    this.router.navigate(['/app/class-subject']);
+                    this.globalLoadingFacade.globalSuccessShow('Class Subject updated successfully', 3000);
+                }
+            });
     }
 
     getErrorMessage(controlName: string): string | null {
@@ -84,14 +101,9 @@ export class CreateUpdateClassSubjectComponent implements OnInit, OnDestroy {
                 ...formData,
                 id: this.route.snapshot.params['id']
             });
-            this.globalLoadingFacade.globalSuccessShow('Class Subject updated successfully', 3000);
         } else {
             this.classSubjectFacade.createClassSubject(formData);
-            this.globalLoadingFacade.globalSuccessShow('Class Subject created successfully', 3000);
         }
-
-        // Navigate to the list page
-        this.router.navigate(['/app/class-subject']);
     }
 
     ngOnDestroy(): void {

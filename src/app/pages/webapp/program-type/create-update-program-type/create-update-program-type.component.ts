@@ -69,6 +69,23 @@ export class CreateUpdateProgramTypeComponent implements OnInit, OnDestroy {
                 }
             });
         }
+
+        this.programTypeFacade.createSuccess$
+            .pipe(takeUntil(this.unsubscribe$))
+            .subscribe((success) => {
+                if (success && !this.isEditMode) {
+                    this.router.navigate(['/app/program-type']);
+                    this.globalLoadingFacade.globalSuccessShow('Program Type created successfully', 3000);
+                }
+            });
+        this.programTypeFacade.updateSuccess$
+            .pipe(takeUntil(this.unsubscribe$))
+            .subscribe((success) => {
+                if (success && this.isEditMode) {
+                    this.router.navigate(['/app/program-type']);
+                    this.globalLoadingFacade.globalSuccessShow('Program Type updated successfully', 3000);
+                }
+            });
     }
 
     getErrorMessage(controlName: string): string | null {
@@ -87,14 +104,9 @@ export class CreateUpdateProgramTypeComponent implements OnInit, OnDestroy {
                 ...formData,
                 id: this.route.snapshot.params['id']
             });
-            this.globalLoadingFacade.globalSuccessShow('Program Type updated successfully', 3000);
         } else {
             this.programTypeFacade.createProgramType(formData);
-            this.globalLoadingFacade.globalSuccessShow('Program Type created successfully', 3000);
         }
-
-        // Navigate to the list page
-        this.router.navigate(['/app/program-type']);
     }
 
     ngOnDestroy(): void {

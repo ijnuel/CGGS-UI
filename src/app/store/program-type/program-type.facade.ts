@@ -17,6 +17,8 @@ import {
   selectCount,
   selectProgramTypeLoading,
   selectProgramTypeError,
+  selectProgramTypeCreateSuccess,
+  selectProgramTypeUpdateSuccess,
 } from './program-type.selector';
 import { ProgramTypeState } from './program-type.reducer';
 
@@ -32,6 +34,8 @@ export class ProgramTypeFacade {
   count$: Observable<number | null>;
   loading$: Observable<boolean>;
   error$: Observable<string | null>;
+  createSuccess$: Observable<boolean>;
+  updateSuccess$: Observable<boolean>;
   currentPageQuery: PageQueryInterface = {
     start: 0,
     recordsPerPage: 10,
@@ -48,6 +52,8 @@ export class ProgramTypeFacade {
     this.count$ = this.store.select(selectCount);
     this.loading$ = this.store.select(selectProgramTypeLoading);
     this.error$ = this.store.select(selectProgramTypeError);
+    this.createSuccess$ = this.store.select(selectProgramTypeCreateSuccess);
+    this.updateSuccess$ = this.store.select(selectProgramTypeUpdateSuccess);
   }
 
   getProgramTypeList(pageQuery: PageQueryInterface): void {

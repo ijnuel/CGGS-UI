@@ -66,6 +66,23 @@ export class CreateUpdateClassComponent implements OnInit, OnDestroy {
                 }
             });
         }
+
+        this.classFacade.createSuccess$
+            .pipe(takeUntil(this.unsubscribe$))
+            .subscribe((success) => {
+                if (success && !this.isEditMode) {
+                    this.router.navigate(['/app/class']);
+                    this.globalLoadingFacade.globalSuccessShow('Class created successfully', 3000);
+                }
+            });
+        this.classFacade.updateSuccess$
+            .pipe(takeUntil(this.unsubscribe$))
+            .subscribe((success) => {
+                if (success && this.isEditMode) {
+                    this.router.navigate(['/app/class']);
+                    this.globalLoadingFacade.globalSuccessShow('Class updated successfully', 3000);
+                }
+            });
     }
 
     getErrorMessage(controlName: string): string | null {
@@ -84,14 +101,9 @@ export class CreateUpdateClassComponent implements OnInit, OnDestroy {
                 ...formData,
                 id: this.route.snapshot.params['id']
             });
-            this.globalLoadingFacade.globalSuccessShow('Class updated successfully', 3000);
         } else {
             this.classFacade.createClass(formData);
-            this.globalLoadingFacade.globalSuccessShow('Class created successfully', 3000);
         }
-
-        // Navigate to the list page
-        this.router.navigate(['/app/class']);
     }
 
     ngOnDestroy(): void {

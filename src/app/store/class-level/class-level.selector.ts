@@ -53,3 +53,13 @@ export const selectClassLevelError = createSelector(
   selectClassLevelState,
   getError
 );
+
+export const selectClassLevelCreateSuccess = createSelector(
+    selectClassLevelState,
+    (state) => state.createSuccess
+);
+
+export const selectClassLevelUpdateSuccess = createSelector(
+    selectClassLevelState,
+    (state) => state.updateSuccess
+);

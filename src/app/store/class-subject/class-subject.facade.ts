@@ -17,6 +17,8 @@ import {
   selectCount,
   selectClassSubjectLoading,
   selectClassSubjectError,
+  selectClassSubjectCreateSuccess,
+  selectClassSubjectUpdateSuccess,
 } from './class-subject.selector';
 import { ClassSubjectState } from './class-subject.reducer';
 
@@ -32,6 +34,8 @@ export class ClassSubjectFacade {
   count$: Observable<number | null>;
   loading$: Observable<boolean>;
   error$: Observable<string | null>;
+  createSuccess$: Observable<boolean>;
+  updateSuccess$: Observable<boolean>;
   currentPageQuery: PageQueryInterface = {
     start: 0,
     recordsPerPage: 10,
@@ -48,6 +52,8 @@ export class ClassSubjectFacade {
     this.count$ = this.store.select(selectCount);
     this.loading$ = this.store.select(selectClassSubjectLoading);
     this.error$ = this.store.select(selectClassSubjectError);
+    this.createSuccess$ = this.store.select(selectClassSubjectCreateSuccess);
+    this.updateSuccess$ = this.store.select(selectClassSubjectUpdateSuccess);
   }
 
   getClassSubjectList(pageQuery: PageQueryInterface): void {

@@ -18,6 +18,8 @@ export interface ClassState {
   pageQuery: PageQueryInterface | null;
   loading: boolean;
   error: string | null;
+  createSuccess: boolean;
+  updateSuccess: boolean;
 }
 
 export const initialState: ClassState = {
@@ -30,6 +32,8 @@ export const initialState: ClassState = {
   pageQuery: null,
   loading: false,
   error: null,
+  createSuccess: false,
+  updateSuccess: false,
 };
 
 export const reducer = createReducer(
@@ -142,6 +146,7 @@ export const reducer = createReducer(
     ...state,
     loading: true,
     error: null,
+    createSuccess: false,
   })),
   on(ClassAction.createClassSuccess, (state, { payload }) => ({
     ...state,
@@ -152,11 +157,13 @@ export const reducer = createReducer(
         }
       : null,
     loading: false,
+    createSuccess: true,
   })),
   on(ClassAction.createClassFail, (state, { error }) => ({
     ...state,
     loading: false,
     error,
+    createSuccess: false,
   })),
 
   // Update
@@ -164,6 +171,7 @@ export const reducer = createReducer(
     ...state,
     loading: true,
     error: null,
+    updateSuccess: false,
   })),
   on(ClassAction.updateClassSuccess, (state, { payload }) => ({
     ...state,
@@ -180,11 +188,13 @@ export const reducer = createReducer(
         ? payload.entity
         : state.classById,
     loading: false,
+    updateSuccess: true,
   })),
   on(ClassAction.updateClassFail, (state, { error }) => ({
     ...state,
     loading: false,
     error,
+    updateSuccess: false,
   })),
 
   // Delete
@@ -288,3 +298,5 @@ export const getExists = (state: ClassState) => state.exists;
 export const getCount = (state: ClassState) => state.count;
 export const getLoading = (state: ClassState) => state.loading;
 export const getError = (state: ClassState) => state.error;
+export const getCreateSuccess = (state: ClassState) => state.createSuccess;
+export const getUpdateSuccess = (state: ClassState) => state.updateSuccess;

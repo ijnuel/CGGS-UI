@@ -240,7 +240,7 @@ export class ProgramTypeEffect {
           .delete<GenericResponseInterface<boolean>>(
             `${environment.baseUrl}/ProgramType/Delete`,
             {
-              params: { programTypeId },
+              params: { id: programTypeId },
               withCredentials: true
             }
           )

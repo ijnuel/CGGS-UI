@@ -17,6 +17,8 @@ import {
   selectCount,
   selectClassLevelLoading,
   selectClassLevelError,
+  selectClassLevelCreateSuccess,
+  selectClassLevelUpdateSuccess,
 } from './class-level.selector';
 import { ClassLevelState } from './class-level.reducer';
 
@@ -32,6 +34,8 @@ export class ClassLevelFacade {
   count$: Observable<number | null>;
   loading$: Observable<boolean>;
   error$: Observable<string | null>;
+  createSuccess$: Observable<boolean>;
+  updateSuccess$: Observable<boolean>;
   currentPageQuery: PageQueryInterface = {
     start: 0,
     recordsPerPage: 10,
@@ -48,6 +52,8 @@ export class ClassLevelFacade {
     this.count$ = this.store.select(selectCount);
     this.loading$ = this.store.select(selectClassLevelLoading);
     this.error$ = this.store.select(selectClassLevelError);
+    this.createSuccess$ = this.store.select(selectClassLevelCreateSuccess);
+    this.updateSuccess$ = this.store.select(selectClassLevelUpdateSuccess);
   }
 
   getClassLevelList(pageQuery: PageQueryInterface): void {

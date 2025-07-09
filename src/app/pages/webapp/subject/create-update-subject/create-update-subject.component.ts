@@ -66,6 +66,23 @@ export class CreateUpdateSubjectComponent implements OnInit, OnDestroy {
                 }
             });
         }
+
+        this.subjectFacade.createSuccess$
+            .pipe(takeUntil(this.unsubscribe$))
+            .subscribe((success) => {
+                if (success && !this.isEditMode) {
+                    this.router.navigate(['/app/subject']);
+                    this.globalLoadingFacade.globalSuccessShow('Subject created successfully', 3000);
+                }
+            });
+        this.subjectFacade.updateSuccess$
+            .pipe(takeUntil(this.unsubscribe$))
+            .subscribe((success) => {
+                if (success && this.isEditMode) {
+                    this.router.navigate(['/app/subject']);
+                    this.globalLoadingFacade.globalSuccessShow('Subject updated successfully', 3000);
+                }
+            });
     }
 
     getErrorMessage(controlName: string): string | null {
@@ -79,20 +96,14 @@ export class CreateUpdateSubjectComponent implements OnInit, OnDestroy {
         if (!this.formGroup.valid) return;
 
         const formData = this.formGroup.value as SubjectFormInterface;
-        console.log(this.isEditMode);
         if (this.isEditMode) {
             this.subjectFacade.updateSubject({
                 ...formData,
                 id: this.route.snapshot.params['id']
             });
-            this.globalLoadingFacade.globalSuccessShow('Subject updated successfully', 3000);
         } else {
             this.subjectFacade.createSubject(formData);
-            this.globalLoadingFacade.globalSuccessShow('Subject created successfully', 3000);
         }
-
-        // Navigate to the list page
-        this.router.navigate(['/app/subject']);
     }
 
     ngOnDestroy(): void {

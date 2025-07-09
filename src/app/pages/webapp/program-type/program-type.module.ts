@@ -12,7 +12,6 @@ import { ProgramTypeComponent } from './program-type.component';
 import { SharedModule } from '../../../shared/shared.module';
 import { CreateUpdateProgramTypeComponent } from './create-update-program-type/create-update-program-type.component';
 import { provideNativeDateAdapter } from '@angular/material/core';
-import { MatExpansionModule } from '@angular/material/expansion';
 import { ViewProgramTypeComponent } from './view-program-type/view-program-type.component';
 
 const routes: Routes = [
@@ -51,7 +50,6 @@ const routes: Routes = [
         MatDatepickerModule,
         MatSelectModule,
         MatRadioModule,
-        MatExpansionModule,
     ],
     providers: [provideNativeDateAdapter()],
 })

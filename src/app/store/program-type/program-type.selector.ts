@@ -53,3 +53,13 @@ export const selectProgramTypeError = createSelector(
   selectProgramTypeState,
   getError
 );
+
+export const selectProgramTypeCreateSuccess = createSelector(
+    selectProgramTypeState,
+    (state) => state.createSuccess
+);
+
+export const selectProgramTypeUpdateSuccess = createSelector(
+    selectProgramTypeState,
+    (state) => state.updateSuccess
+);

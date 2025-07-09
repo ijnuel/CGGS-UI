@@ -18,6 +18,8 @@ export interface ProgramTypeState {
   pageQuery: PageQueryInterface | null;
   loading: boolean;
   error: string | null;
+  createSuccess: boolean;
+  updateSuccess: boolean;
 }
 
 export const initialState: ProgramTypeState = {
@@ -30,6 +32,8 @@ export const initialState: ProgramTypeState = {
   pageQuery: null,
   loading: false,
   error: null,
+  createSuccess: false,
+  updateSuccess: false,
 };
 
 export const reducer = createReducer(
@@ -142,6 +146,7 @@ export const reducer = createReducer(
     ...state,
     loading: true,
     error: null,
+    createSuccess: false,
   })),
   on(ProgramTypeAction.createProgramTypeSuccess, (state, { payload }) => ({
     ...state,
@@ -152,11 +157,13 @@ export const reducer = createReducer(
         }
       : null,
     loading: false,
+    createSuccess: true,
   })),
   on(ProgramTypeAction.createProgramTypeFail, (state, { error }) => ({
     ...state,
     loading: false,
     error,
+    createSuccess: false,
   })),
 
   // Update
@@ -164,6 +171,7 @@ export const reducer = createReducer(
     ...state,
     loading: true,
     error: null,
+    updateSuccess: false,
   })),
   on(ProgramTypeAction.updateProgramTypeSuccess, (state, { payload }) => ({
     ...state,
@@ -180,11 +188,13 @@ export const reducer = createReducer(
         ? payload.entity
         : state.programTypeById,
     loading: false,
+    updateSuccess: true,
   })),
   on(ProgramTypeAction.updateProgramTypeFail, (state, { error }) => ({
     ...state,
     loading: false,
     error,
+    updateSuccess: false,
   })),
 
   // Delete
@@ -288,3 +298,5 @@ export const getExists = (state: ProgramTypeState) => state.exists;
 export const getCount = (state: ProgramTypeState) => state.count;
 export const getLoading = (state: ProgramTypeState) => state.loading;
 export const getError = (state: ProgramTypeState) => state.error;
+export const getCreateSuccess = (state: ProgramTypeState) => state.createSuccess;
+export const getUpdateSuccess = (state: ProgramTypeState) => state.updateSuccess;
