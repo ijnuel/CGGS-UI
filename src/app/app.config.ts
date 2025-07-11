@@ -27,6 +27,7 @@ import { SharedEffect } from './store/shared/shared.effects';
 import { SharedFacade } from './store/shared/shared.facade';
 import { AdministratorFacade } from './store/administrator/administrator.facade';
 import { TestEntityTemplateFacade } from './store/test-entity-template/test-entity-template.facade';
+import { ProgrammeGradeRemarkFacade } from './store/programme-grade-remark/programme-grade-remark.facade';
 import { FamilyFacade } from './store/family/family.facade';
 import { ClassSubjectAssessmentFacade } from './store/class-subject-assessment/class-subject-assessment.facade';
 import { ClassSubjectFacade } from './store/class-subject/class-subject.facade';
@@ -45,6 +46,7 @@ import { ProgramTypeFacade } from './store/program-type/program-type.facade';
 import { StaffFacade } from './store/staff/staff.facade';
 import { AdministratorEffect } from './store/administrator/administrator.effects';
 import { TestEntityTemplateEffect } from './store/test-entity-template/test-entity-template.effects';
+import { ProgrammeGradeRemarkEffect } from './store/programme-grade-remark/programme-grade-remark.effects';
 import { FamilyEffect } from './store/family/family.effects';
 import { ClassSubjectAssessmentEffect } from './store/class-subject-assessment/class-subject-assessment.effects';
 import { ClassSubjectEffect } from './store/class-subject/class-subject.effects';
@@ -73,6 +75,7 @@ export const appConfig: ApplicationConfig = {
         SharedEffect,
         AdministratorEffect,
         TestEntityTemplateEffect,
+        ProgrammeGradeRemarkEffect,
         FamilyEffect,
         ClassSubjectAssessmentEffect,
         ClassSubjectEffect,
@@ -123,6 +126,7 @@ export const appConfig: ApplicationConfig = {
     SharedFacade,
     AdministratorFacade,
     TestEntityTemplateFacade,
+    ProgrammeGradeRemarkFacade,
     FamilyFacade,
     ClassSubjectAssessmentFacade,
     ClassSubjectFacade,

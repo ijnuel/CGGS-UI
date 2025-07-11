@@ -13,18 +13,18 @@ export default [
     roles: [],
     url: '/app/subject'
   },
-  {
-    name: 'Class Levels',
-    icon: 'assets/icons/settings-icon.svg',
-    roles: [],
-    url: '/app/class-level'
-  },
-  {
-    name: 'Classes',
-    icon: 'assets/icons/settings-icon.svg',
-    roles: [],
-    url: '/app/class'
-  },
+  // {
+  //   name: 'Class Levels',
+  //   icon: 'assets/icons/settings-icon.svg',
+  //   roles: [],
+  //   url: '/app/class-level'
+  // },
+  // {
+  //   name: 'Classes',
+  //   icon: 'assets/icons/settings-icon.svg',
+  //   roles: [],
+  //   url: '/app/class'
+  // },
   {
     name: 'School Configuration',
     icon: 'assets/icons/settings-icon.svg',

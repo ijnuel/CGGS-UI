@@ -2,6 +2,8 @@
   {
     loading: loading$ | async,
     dropdownLoading: dropdownLoading$ | async,
+    termList: termList$ | async,
+    sessionList: sessionList$ | async,
     error: error$ | async
   };
   as obs
@@ -10,21 +12,63 @@
   <div class="flex item-center justify-between">
     <div class="text-xl font-bold">{{ isEditMode ? 'Edit' : 'Create' }} School Configuration</div>
   </div>
-
   <div class="mt-8">
     <form [formGroup]="formGroup">
       <div class="grid grid-cols-2 gap-x-4 mt-2">
         <div>
-          <mat-form-field class="form-input">
-            <mat-label>Name</mat-label>
-            <input
-              type="text"
-              autocomplete="off"
-              matInput
-              [formControl]="formControl.name"
-            />
+          <mat-form-field class="form-input" [appLoadingSpinner]="obs.dropdownLoading && !obs.sessionList">
+            <mat-label>Session</mat-label>
+            <mat-select [formControl]="formControl.sessionId">
+              @for (session of obs.sessionList; track $index) {
+              <mat-option [value]="session.id">
+                {{ session.name }}</mat-option>
+              }
+            </mat-select>
             <mat-error>
-              {{ getErrorMessage("name") }}
+              {{ getErrorMessage("sessionId") }}
+            </mat-error>
+          </mat-form-field>
+        </div>
+        
+        <div>
+          <mat-form-field class="form-input" [appLoadingSpinner]="obs.dropdownLoading && !obs.termList">
+            <mat-label>Term</mat-label>
+            <mat-select [formControl]="formControl.term">
+              @for (term of obs.termList; track $index) {
+              <mat-option [value]="term.value">
+                {{ term.description }}</mat-option>
+              }
+            </mat-select>
+            <mat-error>
+              {{ getErrorMessage("term") }}
+            </mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+      
+      <div class="grid grid-cols-2 gap-x-4 mt-2">
+        <div>
+          <mat-form-field class="form-input">
+            <mat-label>Term Start Date</mat-label>
+            <input matInput [matDatepicker]="termStartDate" [formControl]="formControl.termStartDate" />
+            <mat-datepicker-toggle matIconSuffix [for]="termStartDate"
+              class="small-datepicker-toggle"></mat-datepicker-toggle>
+            <mat-datepicker #termStartDate></mat-datepicker>
+            <mat-error>
+              {{ getErrorMessage("termStartDate") }}
+            </mat-error>
+          </mat-form-field>
+        </div>
+        
+        <div>
+          <mat-form-field class="form-input">
+            <mat-label>Term End Date</mat-label>
+            <input matInput [matDatepicker]="termEndDate" [formControl]="formControl.termEndDate" />
+            <mat-datepicker-toggle matIconSuffix [for]="termEndDate"
+              class="small-datepicker-toggle"></mat-datepicker-toggle>
+            <mat-datepicker #termEndDate></mat-datepicker>
+            <mat-error>
+              {{ getErrorMessage("termEndDate") }}
             </mat-error>
           </mat-form-field>
         </div>

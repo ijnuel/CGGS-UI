@@ -6,6 +6,7 @@ export const sharedFeatureKey = 'shared';
 
 export interface SharedState {
   genderList: DropdownListInterface[] | null;
+  termList: DropdownListInterface[] | null;
   religionList: DropdownListInterface[] | null;
   countryList: DropdownListInterface[] | null;
   stateList: DropdownListInterface[] | null;
@@ -16,6 +17,7 @@ export interface SharedState {
 
 export const initialState: SharedState = {
   genderList: null,
+  termList: null,
   religionList: null,
   countryList: null,
   stateList: null,
@@ -27,6 +29,12 @@ export const initialState: SharedState = {
 export const reducer = createReducer(
   initialState,
   on(SharedAction.getGenderList, (state) => {
+    return {
+      ...state,
+      loading: true,
+    };
+  }),
+  on(SharedAction.getTermList, (state) => {
     return {
       ...state,
       loading: true,
@@ -64,6 +72,20 @@ export const reducer = createReducer(
     };
   }),
   on(SharedAction.getGenderListFail, (state, action) => {
+    return {
+      ...initialState,
+      loading: false,
+      error: action.error,
+    };
+  }),
+  on(SharedAction.getTermListSuccess, (state, action) => {
+    return {
+      ...state,
+      termList: action.payload?.entity,
+      loading: false,
+    };
+  }),
+  on(SharedAction.getTermListFail, (state, action) => {
     return {
       ...initialState,
       loading: false,
@@ -129,6 +151,8 @@ export const reducer = createReducer(
 );
 
 export const getGenderList = (state: SharedState) => state.genderList;
+
+export const getTermList = (state: SharedState) => state.termList;
 
 export const getReligionList = (state: SharedState) => state.religionList;
 

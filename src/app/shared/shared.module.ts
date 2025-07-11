@@ -16,6 +16,7 @@ import { ConfirmDialogComponent } from './confirm-dialog/confirm-dialog.componen
 import { ReactiveFormsModule } from '@angular/forms';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { ProgramSetupLevelPanelComponent } from './program-setup-level-panel';
+import { MatCheckboxModule } from '@angular/material/checkbox';
 
 @NgModule({
   declarations: [
@@ -38,6 +39,7 @@ import { ProgramSetupLevelPanelComponent } from './program-setup-level-panel';
     MatPaginator,
     MatExpansionModule,
     ReactiveFormsModule,
+    MatCheckboxModule
   ],
   exports: [
     LayoutSidebarComponent,
@@ -57,6 +59,7 @@ import { ProgramSetupLevelPanelComponent } from './program-setup-level-panel';
     MatExpansionModule,
     ReactiveFormsModule,
     ProgramSetupLevelPanelComponent,
+    MatCheckboxModule,
   ],
 })
 export class SharedModule {}

@@ -3,6 +3,8 @@ import { GenericResponseInterface, DropdownListInterface } from '../../types';
 
 export const getGenderList = createAction('[Shared] Get Gender List');
 
+export const getTermList = createAction('[Shared] Get Term List');
+
 export const getGenderListSuccess = createAction(
   '[Shared/API] Get Gender List Success',
   props<{
@@ -10,8 +12,20 @@ export const getGenderListSuccess = createAction(
   }>()
 );
 
+export const getTermListSuccess = createAction(
+  '[Shared/API] Get Term List Success',
+  props<{
+    payload: GenericResponseInterface<DropdownListInterface[]>;
+  }>()
+);
+
 export const getGenderListFail = createAction(
   '[Shared/API] Get Gender List Fail',
+  props<{ error: string }>()
+);
+
+export const getTermListFail = createAction(
+  '[Shared/API] Get Term List Fail',
   props<{ error: string }>()
 );
 

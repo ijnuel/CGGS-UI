@@ -2,21 +2,33 @@ import { TableHeaderInterface } from '../../../types/table';
 
 export const tableHeader: TableHeaderInterface[] = [
   {
-    key: 'name',
+    key: 'session',
     type: 'text',
-    name: 'Name',
+    name: 'Session',
     align: 'left',
   },
   {
-    key: 'value',
+    key: 'termString',
     type: 'text',
-    name: 'Value',
+    name: 'Term',
     align: 'left',
   },
   {
-    key: 'description',
+    key: 'termStartDate',
     type: 'text',
-    name: 'Description',
+    name: 'Term Start Date',
+    align: 'left',
+  },
+  {
+    key: 'termEndDate',
+    type: 'text',
+    name: 'Term End Date',
+    align: 'left',
+  },
+  {
+    key: 'isCurrent',
+    type: 'text',
+    name: 'Is Current',
     align: 'left',
   }
 ];

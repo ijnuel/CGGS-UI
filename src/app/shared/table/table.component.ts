@@ -25,6 +25,8 @@ export class TableComponent implements OnInit, OnChanges {
   @Input() isLoading = false;
   @Input() showActionColumn = false;
   @Input() showViewIcon = true;
+  @Input() showEditIcon = true;
+  @Input() showDeleteIcon = true;
   @Input() showSearch = false;
   @Input() showPaginator = true;
   @Input() showFilters = false;

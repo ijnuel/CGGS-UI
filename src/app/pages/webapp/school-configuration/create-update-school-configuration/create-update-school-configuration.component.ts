@@ -8,10 +8,11 @@ import {
     Validators,
 } from '@angular/forms';
 import { getErrorMessageHelper } from '../../../../services/helper.service';
-import { DropdownListInterface, SchoolConfigurationFormInterface } from '../../../../types';
+import { DropdownListInterface, SchoolConfigurationFormInterface, SessionListInterface } from '../../../../types';
 import { SharedFacade } from '../../../../store/shared/shared.facade';
 import { ActivatedRoute, Router } from '@angular/router';
 import { GlobalLoadingFacade } from '../../../../store/global-loading/global-loading.facade';
+import { SessionFacade } from '../../../../store/session/session.facade';
 
 @Component({
     selector: 'app-create-update-school-configuration',
@@ -23,9 +24,14 @@ export class CreateUpdateSchoolConfigurationComponent implements OnInit, OnDestr
     error$: Observable<string | null>;
     schoolConfigurationById$: Observable<SchoolConfigurationFormInterface | null>;
     dropdownLoading$: Observable<boolean>;
+    termList$: Observable<DropdownListInterface[] | null>;
+    sessionList$: Observable<SessionListInterface[] | null>;
 
     formGroup: FormGroup<{
-        name: FormControl;
+        sessionId: FormControl;
+        term: FormControl;
+        termStartDate: FormControl;
+        termEndDate: FormControl;
     }>;
 
     get formControl() {
@@ -39,6 +45,7 @@ export class CreateUpdateSchoolConfigurationComponent implements OnInit, OnDestr
         private schoolConfigurationFacade: SchoolConfigurationFacade,
         private fb: FormBuilder,
         private sharedFacade: SharedFacade,
+        private sessionFacade: SessionFacade,
         private route: ActivatedRoute,
         private router: Router,
         private globalLoadingFacade: GlobalLoadingFacade
@@ -47,22 +54,28 @@ export class CreateUpdateSchoolConfigurationComponent implements OnInit, OnDestr
         this.error$ = this.schoolConfigurationFacade.error$;
         this.schoolConfigurationById$ = this.schoolConfigurationFacade.schoolConfigurationById$;
         this.dropdownLoading$ = this.sharedFacade.selectedLoading$;
+        this.termList$ = this.sharedFacade.selectTermList$;
+        this.sessionList$ = this.sessionFacade.sessionAll$;
 
         this.formGroup = this.fb.group({
-            name: ['', [Validators.required, Validators.maxLength(255)]],
+            sessionId: ['', [Validators.required]],
+            term: [0, [Validators.required, Validators.min(1), Validators.max(3)]],
+            termStartDate: ['', [Validators.required]],
+            termEndDate: ['', [Validators.required]]
         });
     }
 
     ngOnInit() {
+        this.sessionFacade.getSessionAll();
+        this.sharedFacade.getTermList();
+
         const schoolConfigurationId = this.route.snapshot.params['id'];
         if (schoolConfigurationId) {
             this.isEditMode = true;
             this.schoolConfigurationFacade.getSchoolConfigurationById(schoolConfigurationId);
             this.schoolConfigurationById$.pipe(takeUntil(this.unsubscribe$)).subscribe((data) => {
                 if (data) {
-                    this.formGroup.patchValue({
-                        name: data.name
-                    });
+                    this.formGroup.patchValue(data);
                 }
             });
         }

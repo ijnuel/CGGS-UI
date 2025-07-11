@@ -62,10 +62,10 @@
               <button *ngIf="showViewIcon" mat-icon-button color="primary" (click)="onView(row)" matTooltip="View">
                 <mat-icon>visibility</mat-icon>
               </button>
-              <button mat-icon-button color="accent" (click)="onEdit(row)" matTooltip="Edit">
+              <button *ngIf="showEditIcon" mat-icon-button color="accent" (click)="onEdit(row)" matTooltip="Edit">
                 <mat-icon>edit</mat-icon>
               </button>
-              <button mat-icon-button color="warn" (click)="onDelete(row)" matTooltip="Delete">
+              <button *ngIf="showDeleteIcon" mat-icon-button color="warn" (click)="onDelete(row)" matTooltip="Delete">
                 <mat-icon>delete</mat-icon>
               </button>
             </div>

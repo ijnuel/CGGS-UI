@@ -4,6 +4,7 @@ import {
   LoginResponseInterface,
 } from './auth';
 import { TestEntityTemplateFormInterface, TestEntityTemplateListInterface } from './test-entity-template';
+import { ProgrammeGradeRemarkFormInterface, ProgrammeGradeRemarkListInterface } from './programme-grade-remark';
 import { FamilyFormInterface, FamilyListInterface } from './family';
 import { StudentFormInterface, StudentListInterface } from './student';
 import { ClassSubjectAssessmentFormInterface, ClassSubjectAssessmentListInterface } from './class-subject-assessment';
@@ -71,6 +72,7 @@ export {
   AdministratorListInterface,
   AdministratorFormInterface,
   TestEntityTemplateListInterface,
+  ProgrammeGradeRemarkListInterface,
   FamilyListInterface,
   StudentListInterface,
   ClassSubjectAssessmentListInterface,
@@ -89,6 +91,7 @@ export {
   SchoolConfigurationListInterface,
   StaffListInterface,
   TestEntityTemplateFormInterface,
+  ProgrammeGradeRemarkFormInterface,
   FamilyFormInterface,
   ClassSubjectAssessmentFormInterface,
   ClassSubjectFormInterface,

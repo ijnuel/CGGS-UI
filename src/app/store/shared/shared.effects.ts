@@ -30,6 +30,27 @@ export class SharedEffect {
     )
   );
 
+  $termList = createEffect(() =>
+    this.actions$.pipe(
+      ofType(SharedAction.getTermList),
+      switchMap(() =>
+        this.http
+          .get<GenericResponseInterface<DropdownListInterface[]>>(
+            `${environment.baseUrl}/Enums/GetTerm`,
+            {
+              withCredentials: true,
+            }
+          )
+          .pipe(
+            map((payload) => SharedAction.getTermListSuccess({ payload })),
+            catchError((error) => {
+              return of(SharedAction.getTermListFail({ error }));
+            })
+          )
+      )
+    )
+  );
+
   $religionList = createEffect(() =>
     this.actions$.pipe(
       ofType(SharedAction.getReligionList),

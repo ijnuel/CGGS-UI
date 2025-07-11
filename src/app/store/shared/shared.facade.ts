@@ -8,6 +8,8 @@ import * as SharedSelector from './shared.selector';
 export class SharedFacade {
   selectGenderList$ = this.store.pipe(select(SharedSelector.selectGenderList));
 
+  selectTermList$ = this.store.pipe(select(SharedSelector.selectTermList));
+
   selectReligionList$ = this.store.pipe(
     select(SharedSelector.selectReligionList)
   );
@@ -28,6 +30,10 @@ export class SharedFacade {
 
   getGenderList() {
     this.store.dispatch(SharedActions.getGenderList());
+  }
+
+  getTermList() {
+    this.store.dispatch(SharedActions.getTermList());
   }
 
   getReligionList() {

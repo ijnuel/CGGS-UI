@@ -12,6 +12,11 @@ export const selectGenderList = createSelector(
   fromShared.getGenderList
 );
 
+export const selectTermList = createSelector(
+  fromShared.selectSharedState,
+  fromShared.getTermList
+);
+
 export const selectReligionList = createSelector(
   fromShared.selectSharedState,
   fromShared.getReligionList

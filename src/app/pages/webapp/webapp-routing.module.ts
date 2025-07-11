@@ -23,6 +23,7 @@ const routes: Routes = [
           import('./student/student.module').then((m) => m.StudentModule),
       },
       { path: 'test-entity-template', loadChildren: () => import('./test-entity-template/test-entity-template.module').then((m) => m.TestEntityTemplateModule), },
+      { path: 'programme-grade-remark', loadChildren: () => import('./programme-grade-remark/programme-grade-remark.module').then((m) => m.ProgrammeGradeRemarkModule), },
       { path: 'family', loadChildren: () => import('./family/family.module').then((m) => m.FamilyModule), },
       { path: 'class-subject-assessment', loadChildren: () => import('./class-subject-assessment/class-subject-assessment.module').then((m) => m.ClassSubjectAssessmentModule), },
       { path: 'class-subject', loadChildren: () => import('./class-subject/class-subject.module').then((m) => m.ClassSubjectModule), },
