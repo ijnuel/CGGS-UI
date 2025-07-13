@@ -46,3 +46,13 @@ export const selectError = createSelector(
   fromShared.selectSharedState,
   fromShared.getError
 );
+
+export const selectUserTypeList = createSelector(
+  fromShared.selectSharedState,
+  fromShared.getUserTypeList
+);
+
+export const selectSubjectTypeList = createSelector(
+  fromShared.selectSharedState,
+  fromShared.getSubjectTypeList
+);

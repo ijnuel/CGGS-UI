@@ -22,6 +22,9 @@ export class SharedFacade {
 
   selectLgaList$ = this.store.pipe(select(SharedSelector.selectLgaList));
 
+  selectUserTypeList$ = this.store.pipe(select(SharedSelector.selectUserTypeList));
+  selectSubjectTypeList$ = this.store.pipe(select(SharedSelector.selectSubjectTypeList));
+
   selectedLoading$ = this.store.pipe(select(SharedSelector.selectLoading));
 
   selectedError$ = this.store.pipe(select(SharedSelector.selectError));
@@ -51,5 +54,13 @@ export class SharedFacade {
 
   getLgaList(stateId: string) {
     this.store.dispatch(SharedActions.getLgaList({ stateId }));
+  }
+
+  getUserTypeList() {
+    this.store.dispatch(SharedActions.getUserTypeList());
+  }
+
+  getSubjectTypeList() {
+    this.store.dispatch(SharedActions.getSubjectTypeList());
   }
 }

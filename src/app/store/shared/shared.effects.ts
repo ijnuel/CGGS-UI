@@ -170,5 +170,47 @@ export class SharedEffect {
     )
   );
 
+  $userTypeList = createEffect(() =>
+    this.actions$.pipe(
+      ofType(SharedAction.getUserTypeList),
+      switchMap(() =>
+        this.http
+          .get<GenericResponseInterface<DropdownListInterface[]>>(
+            `${environment.baseUrl}/Enums/GetUserType`,
+            {
+              withCredentials: true,
+            }
+          )
+          .pipe(
+            map((payload) => SharedAction.getUserTypeListSuccess({ payload })),
+            catchError((error) => {
+              return of(SharedAction.getUserTypeListFail({ error }));
+            })
+          )
+      )
+    )
+  );
+
+  $subjectTypeList = createEffect(() =>
+    this.actions$.pipe(
+      ofType(SharedAction.getSubjectTypeList),
+      switchMap(() =>
+        this.http
+          .get<GenericResponseInterface<DropdownListInterface[]>>(
+            `${environment.baseUrl}/Enums/GetSubjectType`,
+            {
+              withCredentials: true,
+            }
+          )
+          .pipe(
+            map((payload) => SharedAction.getSubjectTypeListSuccess({ payload })),
+            catchError((error) => {
+              return of(SharedAction.getSubjectTypeListFail({ error }));
+            })
+          )
+      )
+    )
+  );
+
   constructor(private actions$: Actions, private http: HttpClient) {}
 }

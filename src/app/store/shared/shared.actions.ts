@@ -94,3 +94,31 @@ export const getLgaListFail = createAction(
   '[Shared/API] Get Lga List Fail',
   props<{ error: string }>()
 );
+
+export const getUserTypeList = createAction('[Shared] Get User Type List');
+
+export const getUserTypeListSuccess = createAction(
+  '[Shared/API] Get User Type List Success',
+  props<{
+    payload: GenericResponseInterface<DropdownListInterface[]>;
+  }>()
+);
+
+export const getUserTypeListFail = createAction(
+  '[Shared/API] Get User Type List Fail',
+  props<{ error: string }>()
+);
+
+export const getSubjectTypeList = createAction('[Shared] Get Subject Type List');
+
+export const getSubjectTypeListSuccess = createAction(
+  '[Shared/API] Get Subject Type List Success',
+  props<{
+    payload: GenericResponseInterface<DropdownListInterface[]>;
+  }>()
+);
+
+export const getSubjectTypeListFail = createAction(
+  '[Shared/API] Get Subject Type List Fail',
+  props<{ error: string }>()
+);

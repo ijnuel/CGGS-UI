@@ -13,6 +13,8 @@ export interface SharedState {
   lgaList: DropdownListInterface[] | null;
   loading: boolean;
   error: string | null;
+  userTypeList: DropdownListInterface[] | null;
+  subjectTypeList: DropdownListInterface[] | null;
 }
 
 export const initialState: SharedState = {
@@ -24,6 +26,8 @@ export const initialState: SharedState = {
   lgaList: null,
   loading: false,
   error: null,
+  userTypeList: null,
+  subjectTypeList: null,
 };
 
 export const reducer = createReducer(
@@ -147,6 +151,46 @@ export const reducer = createReducer(
       loading: false,
       error: action.error,
     };
+  }),
+  on(SharedAction.getUserTypeList, (state) => {
+    return {
+      ...state,
+      loading: true,
+    };
+  }),
+  on(SharedAction.getSubjectTypeList, (state) => {
+    return {
+      ...state,
+      loading: true,
+    };
+  }),
+  on(SharedAction.getUserTypeListSuccess, (state, action) => {
+    return {
+      ...state,
+      userTypeList: action.payload?.entity,
+      loading: false,
+    };
+  }),
+  on(SharedAction.getUserTypeListFail, (state, action) => {
+    return {
+      ...initialState,
+      loading: false,
+      error: action.error,
+    };
+  }),
+  on(SharedAction.getSubjectTypeListSuccess, (state, action) => {
+    return {
+      ...state,
+      subjectTypeList: action.payload?.entity,
+      loading: false,
+    };
+  }),
+  on(SharedAction.getSubjectTypeListFail, (state, action) => {
+    return {
+      ...initialState,
+      loading: false,
+      error: action.error,
+    };
   })
 );
 
@@ -165,6 +209,9 @@ export const getLgaList = (state: SharedState) => state.lgaList;
 export const getLoading = (state: SharedState) => state.loading;
 
 export const getError = (state: SharedState) => state.error;
+
+export const getUserTypeList = (state: SharedState) => state.userTypeList;
+export const getSubjectTypeList = (state: SharedState) => state.subjectTypeList;
 
 export const selectSharedState =
   createFeatureSelector<SharedState>(sharedFeatureKey);
