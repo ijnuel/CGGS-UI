@@ -20,7 +20,7 @@ import * as fromLocalGovernmentArea from './local-government-area/local-governme
 import * as fromCountry from './country/country.reducer';
 import * as fromCompany from './company/company.reducer';
 import * as fromStudentClass from './student-class/student-class.reducer';
-import * as fromSchoolConfiguration from './school-configuration/school-configuration.reducer';
+import * as fromSchoolTermSession from './school-term-session/school-term-session.reducer';
 import * as fromStaff from './staff/staff.reducer';
 import * as fromGlobalLoading from './global-loading/global-loading.reducer';
 
@@ -47,7 +47,7 @@ export interface AppState {
   [fromCountry.countryFeatureKey]: fromCountry.CountryState;
   [fromCompany.companyFeatureKey]: fromCompany.CompanyState;
   [fromStudentClass.studentClassFeatureKey]: fromStudentClass.StudentClassState;
-  [fromSchoolConfiguration.schoolConfigurationFeatureKey]: fromSchoolConfiguration.SchoolConfigurationState;
+  [fromSchoolTermSession.schoolTermSessionFeatureKey]: fromSchoolTermSession.SchoolTermSessionState;
   [fromStaff.staffFeatureKey]: fromStaff.StaffState;
   [fromGlobalLoading.globalLoadingFeatureKey]: fromGlobalLoading.GlobalLoadingState;
 }
@@ -73,7 +73,7 @@ export const reducers = {
   [fromCountry.countryFeatureKey]: fromCountry.reducer,
   [fromCompany.companyFeatureKey]: fromCompany.reducer,
   [fromStudentClass.studentClassFeatureKey]: fromStudentClass.reducer,
-  [fromSchoolConfiguration.schoolConfigurationFeatureKey]: fromSchoolConfiguration.reducer,
+  [fromSchoolTermSession.schoolTermSessionFeatureKey]: fromSchoolTermSession.reducer,
   [fromStaff.staffFeatureKey]: fromStaff.reducer,
   [fromGlobalLoading.globalLoadingFeatureKey]: fromGlobalLoading.reducer,
 };

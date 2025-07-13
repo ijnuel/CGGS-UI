@@ -26,9 +26,9 @@ export default [
   //   url: '/app/class'
   // },
   {
-    name: 'School Configuration',
+    name: 'School Term Session',
     icon: 'assets/icons/settings-icon.svg',
     roles: [],
-    url: '/app/school-configuration'
+    url: '/app/school-term-session'
   }
 ];

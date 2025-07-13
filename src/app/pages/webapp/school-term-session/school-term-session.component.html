@@ -1,6 +1,6 @@
 <div class="p-6">
   <div class="flex justify-between items-center mb-4">
-    <h3 class="text-xl font-semibold">School Configurations</h3>
+    <h3 class="text-xl font-semibold">School Term Sessions</h3>
     <div class="flex gap-2">
       <button mat-raised-button color="primary" (click)="onRefresh()" class="flex items-center">
         <mat-icon>refresh</mat-icon>
@@ -14,12 +14,12 @@
   </div>
 
   <app-table
-    [tableData]="schoolConfigurationList"
+    [tableData]="schoolTermSessionList"
     [tableHeaderData]="tableHeaderData"
     [isLoading]="(loading$ | async) ?? false"
-    [totalLength]="(schoolConfigurationList$ | async)?.totalCount ?? 0"
-    [pageSize]="(schoolConfigurationList$ | async)?.recordPerPage ?? 10"
-    [pageIndex]="(schoolConfigurationList$ | async)?.currentPage ?? 0"
+    [totalLength]="(schoolTermSessionList$ | async)?.totalCount ?? 0"
+    [pageSize]="(schoolTermSessionList$ | async)?.recordPerPage ?? 10"
+    [pageIndex]="(schoolTermSessionList$ | async)?.currentPage ?? 0"
     [showSearch]="true"
     [showFilters]="true"
     [showActionColumn]="true"

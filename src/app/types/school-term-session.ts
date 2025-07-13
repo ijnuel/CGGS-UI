@@ -1,4 +1,4 @@
-export interface SchoolConfigurationListInterface {
+export interface SchoolTermSessionListInterface {
     id: string;
     name: string;
     description: string;
@@ -12,7 +12,7 @@ export interface SchoolConfigurationListInterface {
     isCurrent : boolean;
 }
 
-export interface SchoolConfigurationFormInterface {
+export interface SchoolTermSessionFormInterface {
     id?: string;
     name: string;
     description: string;

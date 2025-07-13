@@ -38,7 +38,7 @@ const routes: Routes = [
       { path: 'country', loadChildren: () => import('./country/country.module').then((m) => m.CountryModule), },
       { path: 'company', loadChildren: () => import('./company/company.module').then((m) => m.CompanyModule), },
       { path: 'student-class', loadChildren: () => import('./student-class/student-class.module').then((m) => m.StudentClassModule), },
-      { path: 'school-configuration', loadChildren: () => import('./school-configuration/school-configuration.module').then((m) => m.SchoolConfigurationModule), },
+      { path: 'school-term-session', loadChildren: () => import('./school-term-session/school-term-session.module').then((m) => m.SchoolTermSessionModule), },
       { path: 'staff', loadChildren: () => import('./staff/staff.module').then((m) => m.StaffModule), },
       { path: 'settings', loadChildren: () => import('./settings/settings.module').then((m) => m.SettingsModule), },
       { path: 'admin-setup', loadChildren: () => import('./admin-setup/admin-setup.module').then((m) => m.AdminSetupModule), },

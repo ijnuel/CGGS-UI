@@ -20,7 +20,7 @@ import { LocalGovernmentAreaFormInterface, LocalGovernmentAreaListInterface } fr
 import { CountryFormInterface, CountryListInterface } from './country';
 import { CompanyFormInterface, CompanyListInterface } from './company';
 import { StudentClassFormInterface, StudentClassListInterface } from './student-class';
-import { SchoolConfigurationFormInterface, SchoolConfigurationListInterface } from './school-configuration';
+import { SchoolTermSessionFormInterface, SchoolTermSessionListInterface } from './school-term-session';
 import { StaffFormInterface, StaffListInterface } from './staff';
 import { AdministratorFormInterface, AdministratorListInterface } from './administrator';
 import {
@@ -88,7 +88,7 @@ export {
   CountryListInterface,
   CompanyListInterface,
   StudentClassListInterface,
-  SchoolConfigurationListInterface,
+  SchoolTermSessionListInterface,
   StaffListInterface,
   TestEntityTemplateFormInterface,
   ProgrammeGradeRemarkFormInterface,
@@ -106,6 +106,6 @@ export {
   CountryFormInterface,
   CompanyFormInterface,
   StudentClassFormInterface,
-  SchoolConfigurationFormInterface,
+  SchoolTermSessionFormInterface,
   StaffFormInterface,
 };

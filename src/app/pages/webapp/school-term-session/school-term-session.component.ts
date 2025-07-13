@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
-import { SchoolConfigurationFacade } from '../../../store/school-configuration/school-configuration.facade';
-import { SchoolConfigurationListInterface } from '../../../types/school-configuration';
+import { SchoolTermSessionFacade } from '../../../store/school-term-session/school-term-session.facade';
+import { SchoolTermSessionListInterface } from '../../../types/school-term-session';
 import { PaginatedResponseInterface, SessionListInterface } from '../../../types';
 import { PageQueryInterface } from '../../../types';
 import { TableHeaderInterface } from '../../../types/table';
@@ -13,48 +13,48 @@ import { tableHeader } from './table-header';
 import { SessionFacade } from '../../../store/session/session.facade';
 
 @Component({
-  selector: 'app-school-configuration',
-  templateUrl: './school-configuration.component.html',
-  styleUrls: ['./school-configuration.component.scss'],
+  selector: 'app-school-term-session',
+  templateUrl: './school-term-session.component.html',
+  styleUrls: ['./school-term-session.component.scss'],
 })
-export class SchoolConfigurationComponent implements OnInit {
-  schoolConfigurationList$: Observable<PaginatedResponseInterface<SchoolConfigurationListInterface[]> | null>;
+export class SchoolTermSessionComponent implements OnInit {
+  schoolTermSessionList$: Observable<PaginatedResponseInterface<SchoolTermSessionListInterface[]> | null>;
   sessionList$: Observable<SessionListInterface[] | null>;
   loading$: Observable<boolean>;
   tableHeaderData: TableHeaderInterface[] = tableHeader;
 
   sessionList: SessionListInterface[] = [];
-  schoolConfigurationList: SchoolConfigurationListInterface[] = [];
+  schoolTermSessionList: SchoolTermSessionListInterface[] = [];
 
   constructor(
     private router: Router,
     private route: ActivatedRoute,
-    private schoolConfigurationFacade: SchoolConfigurationFacade,
+    private schoolTermSessionFacade: SchoolTermSessionFacade,
     private sessionFacade: SessionFacade,
     private dialog: MatDialog,
     private toastService: ToastNotificationService
   ) {
     this.sessionList$ = this.sessionFacade.sessionAll$;
-    this.schoolConfigurationList$ = this.schoolConfigurationFacade.schoolConfigurationList$;
-    this.loading$ = this.schoolConfigurationFacade.loading$;
+    this.schoolTermSessionList$ = this.schoolTermSessionFacade.schoolTermSessionList$;
+    this.loading$ = this.schoolTermSessionFacade.loading$;
   }
 
   ngOnInit() {
     this.sessionFacade.getSessionAll();
-    this.loadSchoolConfigurations();
+    this.loadSchoolTermSessions();
 
     this.sessionList$.subscribe(x => {
       this.sessionList = x ?? [];
-      this.schoolConfigurationList = this.getTableData(this.schoolConfigurationList ?? []);
+      this.schoolTermSessionList = this.getTableData(this.schoolTermSessionList ?? []);
     });
 
-    this.schoolConfigurationList$.subscribe(x => {
-      this.schoolConfigurationList = this.getTableData(x?.data ?? []);
+    this.schoolTermSessionList$.subscribe(x => {
+      this.schoolTermSessionList = this.getTableData(x?.data ?? []);
     })
   }
 
-  loadSchoolConfigurations() {
-    this.schoolConfigurationFacade.getSchoolConfigurationList({
+  loadSchoolTermSessions() {
+    this.schoolTermSessionFacade.getSchoolTermSessionList({
       start: 0,
       recordsPerPage: 10,
       pageIndex: 0
@@ -62,11 +62,11 @@ export class SchoolConfigurationComponent implements OnInit {
   }
 
   onPageChange(event: PageQueryInterface) {
-    this.schoolConfigurationFacade.getSchoolConfigurationList(event);
+    this.schoolTermSessionFacade.getSchoolTermSessionList(event);
   }
 
   onSearch(searchText: string) {
-    this.schoolConfigurationFacade.getSchoolConfigurationList({
+    this.schoolTermSessionFacade.getSchoolTermSessionList({
       start: 0,
       recordsPerPage: 10,
       pageIndex: 0,
@@ -75,7 +75,7 @@ export class SchoolConfigurationComponent implements OnInit {
   }
 
   onFilter(filters: { name: string; value: string }[]) {
-    this.schoolConfigurationFacade.getSchoolConfigurationList({
+    this.schoolTermSessionFacade.getSchoolTermSessionList({
       start: 0,
       recordsPerPage: 10,
       pageIndex: 0,
@@ -84,22 +84,22 @@ export class SchoolConfigurationComponent implements OnInit {
   }
 
   onRefresh() {
-    this.loadSchoolConfigurations();
+    this.loadSchoolTermSessions();
   }
 
-  onView(row: SchoolConfigurationListInterface) {
+  onView(row: SchoolTermSessionListInterface) {
     this.router.navigate(['view', row.id], { relativeTo: this.route });
   }
 
-  onEdit(row: SchoolConfigurationListInterface) {
+  onEdit(row: SchoolTermSessionListInterface) {
     this.router.navigate(['edit', row.id], { relativeTo: this.route });
   }
 
-  onDelete(row: SchoolConfigurationListInterface) {
+  onDelete(row: SchoolTermSessionListInterface) {
     const dialogRef = this.dialog.open(ConfirmDialogComponent, {
       width: '400px',
       data: {
-        title: 'Delete School Configuration',
+        title: 'Delete School Term Session',
         message: `Are you sure you want to delete "${row.name}"?`,
         confirmText: 'Delete',
         cancelText: 'Cancel'
@@ -108,9 +108,9 @@ export class SchoolConfigurationComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
-        this.schoolConfigurationFacade.deleteSchoolConfiguration(row.id);
-        this.toastService.openToast('School Configuration deleted successfully', NotificationTypeEnums.SUCCESS);
-        this.loadSchoolConfigurations();
+        this.schoolTermSessionFacade.deleteSchoolTermSession(row.id);
+        this.toastService.openToast('School Term Session deleted successfully', NotificationTypeEnums.SUCCESS);
+        this.loadSchoolTermSessions();
       }
     });
   }
@@ -119,12 +119,12 @@ export class SchoolConfigurationComponent implements OnInit {
     this.router.navigate(['../'], { relativeTo: this.route });
   }
 
-  getTableData(data: SchoolConfigurationListInterface[]) : SchoolConfigurationListInterface[] {
+  getTableData(data: SchoolTermSessionListInterface[]) : SchoolTermSessionListInterface[] {
     return data.map(config => {
       return {
         ...config,
         session: this.sessionList.find(x => x.id == config.sessionId)?.name
       }
-    }) as SchoolConfigurationListInterface[];
+    }) as SchoolTermSessionListInterface[];
   }
 }

@@ -41,7 +41,7 @@ import { LocalGovernmentAreaFacade } from './store/local-government-area/local-g
 import { CountryFacade } from './store/country/country.facade';
 import { CompanyFacade } from './store/company/company.facade';
 import { StudentClassFacade } from './store/student-class/student-class.facade';
-import { SchoolConfigurationFacade } from './store/school-configuration/school-configuration.facade';
+import { SchoolTermSessionFacade } from './store/school-term-session/school-term-session.facade';
 import { ProgramTypeFacade } from './store/program-type/program-type.facade';
 import { StaffFacade } from './store/staff/staff.facade';
 import { AdministratorEffect } from './store/administrator/administrator.effects';
@@ -60,7 +60,7 @@ import { LocalGovernmentAreaEffect } from './store/local-government-area/local-g
 import { CountryEffect } from './store/country/country.effects';
 import { CompanyEffect } from './store/company/company.effects';
 import { StudentClassEffect } from './store/student-class/student-class.effects';
-import { SchoolConfigurationEffect } from './store/school-configuration/school-configuration.effects';
+import { SchoolTermSessionEffect } from './store/school-term-session/school-term-session.effects';
 import { ProgramTypeEffect } from './store/program-type/program-type.effects';
 import { StaffEffect } from './store/staff/staff.effects';
 // import { provideStoreDevtools } from '@ngrx/store-devtools';
@@ -89,7 +89,7 @@ export const appConfig: ApplicationConfig = {
         CountryEffect,
         CompanyEffect,
         StudentClassEffect,
-        SchoolConfigurationEffect,
+        SchoolTermSessionEffect,
         ProgramTypeEffect,
         StaffEffect,
       ]),
@@ -140,7 +140,7 @@ export const appConfig: ApplicationConfig = {
     CountryFacade,
     CompanyFacade,
     StudentClassFacade,
-    SchoolConfigurationFacade,
+    SchoolTermSessionFacade,
     ProgramTypeFacade,
     StaffFacade,
   ],

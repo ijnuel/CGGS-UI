@@ -8,36 +8,36 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatIconModule } from '@angular/material/icon';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatRadioModule } from '@angular/material/radio';
-import { SchoolConfigurationComponent } from './school-configuration.component';
+import { SchoolTermSessionComponent } from './school-term-session.component';
 import { SharedModule } from '../../../shared/shared.module';
-import { CreateUpdateSchoolConfigurationComponent } from './create-update-school-configuration/create-update-school-configuration.component';
+import { CreateUpdateSchoolTermSessionComponent } from './create-update-school-term-session/create-update-school-term-session.component';
 import { provideNativeDateAdapter } from '@angular/material/core';
-import { ViewSchoolConfigurationComponent } from './view-school-configuration/view-school-configuration.component';
+import { ViewSchoolTermSessionComponent } from './view-school-term-session/view-school-term-session.component';
 
 const routes: Routes = [
     {
         path: '',
-        component: SchoolConfigurationComponent,
+        component: SchoolTermSessionComponent,
     },
 
     {
         path: 'create',
-        component: CreateUpdateSchoolConfigurationComponent,
+        component: CreateUpdateSchoolTermSessionComponent,
     },
 
     {
         path: 'edit/:id',
-        component: CreateUpdateSchoolConfigurationComponent,
+        component: CreateUpdateSchoolTermSessionComponent,
     },
 
     {
         path: 'view/:id',
-        component: ViewSchoolConfigurationComponent,
+        component: ViewSchoolTermSessionComponent,
     },
 ];
 
 @NgModule({
-    declarations: [SchoolConfigurationComponent, CreateUpdateSchoolConfigurationComponent, ViewSchoolConfigurationComponent],
+    declarations: [SchoolTermSessionComponent, CreateUpdateSchoolTermSessionComponent, ViewSchoolTermSessionComponent],
     imports: [
         CommonModule,
         SharedModule,
@@ -53,4 +53,4 @@ const routes: Routes = [
     ],
     providers: [provideNativeDateAdapter()],
 })
-export class SchoolConfigurationModule { }
+export class SchoolTermSessionModule { }

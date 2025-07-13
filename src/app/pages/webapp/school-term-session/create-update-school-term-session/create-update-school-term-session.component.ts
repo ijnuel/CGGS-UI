@@ -1,6 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { BehaviorSubject, Observable, Subject, takeUntil } from 'rxjs';
-import { SchoolConfigurationFacade } from '../../../../store/school-configuration/school-configuration.facade';
+import { SchoolTermSessionFacade } from '../../../../store/school-term-session/school-term-session.facade';
 import {
     FormBuilder,
     FormControl,
@@ -8,21 +8,21 @@ import {
     Validators,
 } from '@angular/forms';
 import { getErrorMessageHelper } from '../../../../services/helper.service';
-import { DropdownListInterface, SchoolConfigurationFormInterface, SessionListInterface } from '../../../../types';
+import { DropdownListInterface, SchoolTermSessionFormInterface, SessionListInterface } from '../../../../types';
 import { SharedFacade } from '../../../../store/shared/shared.facade';
 import { ActivatedRoute, Router } from '@angular/router';
 import { GlobalLoadingFacade } from '../../../../store/global-loading/global-loading.facade';
 import { SessionFacade } from '../../../../store/session/session.facade';
 
 @Component({
-    selector: 'app-create-update-school-configuration',
-    templateUrl: './create-update-school-configuration.component.html',
-    styleUrl: './create-update-school-configuration.component.scss',
+    selector: 'app-create-update-school-term-session',
+    templateUrl: './create-update-school-term-session.component.html',
+    styleUrl: './create-update-school-term-session.component.scss',
 })
-export class CreateUpdateSchoolConfigurationComponent implements OnInit, OnDestroy {
+export class CreateUpdateSchoolTermSessionComponent implements OnInit, OnDestroy {
     loading$: Observable<boolean>;
     error$: Observable<string | null>;
-    schoolConfigurationById$: Observable<SchoolConfigurationFormInterface | null>;
+    schoolTermSessionById$: Observable<SchoolTermSessionFormInterface | null>;
     dropdownLoading$: Observable<boolean>;
     termList$: Observable<DropdownListInterface[] | null>;
     sessionList$: Observable<SessionListInterface[] | null>;
@@ -42,7 +42,7 @@ export class CreateUpdateSchoolConfigurationComponent implements OnInit, OnDestr
     unsubscribe$ = new Subject<void>();
 
     constructor(
-        private schoolConfigurationFacade: SchoolConfigurationFacade,
+        private schoolTermSessionFacade: SchoolTermSessionFacade,
         private fb: FormBuilder,
         private sharedFacade: SharedFacade,
         private sessionFacade: SessionFacade,
@@ -50,9 +50,9 @@ export class CreateUpdateSchoolConfigurationComponent implements OnInit, OnDestr
         private router: Router,
         private globalLoadingFacade: GlobalLoadingFacade
     ) {
-        this.loading$ = this.schoolConfigurationFacade.loading$;
-        this.error$ = this.schoolConfigurationFacade.error$;
-        this.schoolConfigurationById$ = this.schoolConfigurationFacade.schoolConfigurationById$;
+        this.loading$ = this.schoolTermSessionFacade.loading$;
+        this.error$ = this.schoolTermSessionFacade.error$;
+        this.schoolTermSessionById$ = this.schoolTermSessionFacade.schoolTermSessionById$;
         this.dropdownLoading$ = this.sharedFacade.selectedLoading$;
         this.termList$ = this.sharedFacade.selectTermList$;
         this.sessionList$ = this.sessionFacade.sessionAll$;
@@ -69,31 +69,31 @@ export class CreateUpdateSchoolConfigurationComponent implements OnInit, OnDestr
         this.sessionFacade.getSessionAll();
         this.sharedFacade.getTermList();
 
-        const schoolConfigurationId = this.route.snapshot.params['id'];
-        if (schoolConfigurationId) {
+        const schoolTermSessionId = this.route.snapshot.params['id'];
+        if (schoolTermSessionId) {
             this.isEditMode = true;
-            this.schoolConfigurationFacade.getSchoolConfigurationById(schoolConfigurationId);
-            this.schoolConfigurationById$.pipe(takeUntil(this.unsubscribe$)).subscribe((data) => {
+            this.schoolTermSessionFacade.getSchoolTermSessionById(schoolTermSessionId);
+            this.schoolTermSessionById$.pipe(takeUntil(this.unsubscribe$)).subscribe((data) => {
                 if (data) {
                     this.formGroup.patchValue(data);
                 }
             });
         }
 
-        this.schoolConfigurationFacade.createSuccess$
+        this.schoolTermSessionFacade.createSuccess$
             .pipe(takeUntil(this.unsubscribe$))
             .subscribe((success) => {
                 if (success && !this.isEditMode) {
-                    this.router.navigate(['/app/school-configuration']);
-                    this.globalLoadingFacade.globalSuccessShow('School Configuration created successfully', 3000);
+                    this.router.navigate(['/app/school-term-session']);
+                    this.globalLoadingFacade.globalSuccessShow('School Term Session created successfully', 3000);
                 }
             });
-        this.schoolConfigurationFacade.updateSuccess$
+        this.schoolTermSessionFacade.updateSuccess$
             .pipe(takeUntil(this.unsubscribe$))
             .subscribe((success) => {
                 if (success && this.isEditMode) {
-                    this.router.navigate(['/app/school-configuration']);
-                    this.globalLoadingFacade.globalSuccessShow('School Configuration updated successfully', 3000);
+                    this.router.navigate(['/app/school-term-session']);
+                    this.globalLoadingFacade.globalSuccessShow('School Term Session updated successfully', 3000);
                 }
             });
     }
@@ -108,14 +108,14 @@ export class CreateUpdateSchoolConfigurationComponent implements OnInit, OnDestr
 
         if (!this.formGroup.valid) return;
 
-        const formData = this.formGroup.value as SchoolConfigurationFormInterface;
+        const formData = this.formGroup.value as SchoolTermSessionFormInterface;
         if (this.isEditMode) {
-            this.schoolConfigurationFacade.updateSchoolConfiguration({
+            this.schoolTermSessionFacade.updateSchoolTermSession({
                 ...formData,
                 id: this.route.snapshot.params['id']
             });
         } else {
-            this.schoolConfigurationFacade.createSchoolConfiguration(formData);
+            this.schoolTermSessionFacade.createSchoolTermSession(formData);
         }
     }
 
