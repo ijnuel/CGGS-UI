@@ -15,8 +15,8 @@ import { MatPaginator } from '@angular/material/paginator';
 import { ConfirmDialogComponent } from './confirm-dialog/confirm-dialog.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MatExpansionModule } from '@angular/material/expansion';
-import { ProgramSetupLevelPanelComponent } from './program-setup-level-panel';
 import { MatCheckboxModule } from '@angular/material/checkbox';
+import { ProgramSetupLevelPanelComponent } from './program-setup-level-panel/program-setup-level-panel.component';
 
 @NgModule({
   declarations: [

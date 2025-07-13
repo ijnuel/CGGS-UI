@@ -5,8 +5,7 @@ export interface ClassSubjectListInterface {
     createdDate: string;
     classId: string;
     subjectId: string;
-    sessionId: string;
-    term: number;
+    schoolTermSessionId: string;
 }
 
 export interface ClassSubjectFormInterface {
@@ -15,6 +14,5 @@ export interface ClassSubjectFormInterface {
     description: string;
     classId: string;
     subjectId: string;
-    sessionId: string;
-    term: number;
+    schoolTermSessionId: string;
 }

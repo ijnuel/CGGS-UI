@@ -23,6 +23,7 @@ import { StudentClassFormInterface, StudentClassListInterface } from './student-
 import { SchoolTermSessionFormInterface, SchoolTermSessionListInterface } from './school-term-session';
 import { StaffFormInterface, StaffListInterface } from './staff';
 import { AdministratorFormInterface, AdministratorListInterface } from './administrator';
+import { ProgramSetupLevel, ProgramSetupLevelConfig } from './program-setup-level';
 import {
   CurrentUserInterface,
 } from './user';
@@ -108,4 +109,6 @@ export {
   StudentClassFormInterface,
   SchoolTermSessionFormInterface,
   StaffFormInterface,
+  ProgramSetupLevel,
+  ProgramSetupLevelConfig,
 };

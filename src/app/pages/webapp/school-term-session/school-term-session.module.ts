@@ -12,7 +12,7 @@ import { SchoolTermSessionComponent } from './school-term-session.component';
 import { SharedModule } from '../../../shared/shared.module';
 import { CreateUpdateSchoolTermSessionComponent } from './create-update-school-term-session/create-update-school-term-session.component';
 import { provideNativeDateAdapter } from '@angular/material/core';
-import { ViewSchoolTermSessionComponent } from './view-school-term-session/view-school-term-session.component';
+import { ViewSchoolTermSessionComponent } from './view-school-configuration/view-school-term-session.component';
 
 const routes: Routes = [
     {
