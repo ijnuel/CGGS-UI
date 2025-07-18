@@ -25,16 +25,18 @@ on:
       - main
 
 env:
-  WEBAPP_NAME: project-ui    # set this to your application's name
-  WEBAPP_PACKAGE_PATH: 'dist\project-ui\browser'  # path to your build
-  NODE_VERSION: '18.17.0'    # Node version
+  WEBAPP_NAME: project-ui
+  WEBAPP_PACKAGE_PATH: dist\project-ui\browser
+  NODE_VERSION: 18.17.0
 
 permissions:
   contents: read
 
 jobs:
-  build_and_deploy:
+  build:
     runs-on: windows-latest
+    outputs:
+      artifact-name: build-output
     steps:
     - uses: actions/checkout@v4
 
@@ -50,15 +52,26 @@ jobs:
     - name: npm build
       run: npm run build-prod
 
-    - name: Check build
-      run: |
-        cmd /c 'copy web.config ${{ env.WEBAPP_PACKAGE_PATH }} /y'
+    - name: Copy web.config
+      run: cmd /c 'copy web.config ${{ env.WEBAPP_PACKAGE_PATH }} /y'
 
-    # Add MSBuild to the PATH
-    - name: Setup MSBuild.exe
-      uses: microsoft/setup-msbuild@v2
+    - name: Upload build artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: build-output
+        path: ${{ env.WEBAPP_PACKAGE_PATH }}
 
-    # 🧹 Clean destination folder except `keep-folder`
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+    - name: Download build artifact
+      uses: actions/download-artifact@v4
+      with:
+        name: build-output
+        path: ${{ env.WEBAPP_PACKAGE_PATH }}
+
+    # 🧹 Clean destination folder except `.well-known`
     - name: Clean destination folder
       uses: appleboy/ssh-action@v1.0.0
       with:
@@ -66,6 +79,10 @@ jobs:
         username: ${{ secrets.SERVER_USERNAME }}
         password: ${{ secrets.SERVER_PASSWORD }}
         port: 22
+        timeout: 30s
+        command_timeout: 10m
+        proxy_port: 22
+        proxy_timeout: 30s
         script: |
           cd "C:\inetpub\wwwroot\${{ secrets.WEBSITE_NAME }}"
           Write-Output "Cleaning up destination folder except '.well-known'..."
