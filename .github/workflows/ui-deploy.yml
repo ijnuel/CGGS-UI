@@ -18,20 +18,19 @@
 # For more samples to get started with GitHub Action workflows to deploy to Azure: https://github.com/Azure/actions-workflow-samples
 
 name: Angular UI
-
 on:
   push:
     branches:
       - main
-
 env:
   WEBAPP_NAME: project-ui    # set this to your application's name
-  WEBAPP_PACKAGE_PATH: 'dist\project-ui\browser'  # path to your build
-  NODE_VERSION: '18.17.0'    # Node version
+  WEBAPP_PACKAGE_PATH: 'dist\project-ui\browser'      # set this to the path to your web app project, defaults to the repository root
+  NODE_VERSION: '18.17.0'                # set this to the node version to use
+
 
 permissions:
   contents: read
-
+ 
 jobs:
   build_and_deploy:
     runs-on: windows-latest
@@ -46,33 +45,18 @@ jobs:
 
     - name: npm install
       run: npm ci --force
-
+      
     - name: npm build
       run: npm run build-prod
-
+      
     - name: Check build
       run: |
         cmd /c 'copy web.config ${{ env.WEBAPP_PACKAGE_PATH }} /y'
-
-    # Add MSBuild to the PATH
+    
+    # Add  MSBuild to the PATH: https://github.com/microsoft/setup-msbuild
     - name: Setup MSBuild.exe
       uses: microsoft/setup-msbuild@v2
-
-    # 🧹 Clean destination folder except `keep-folder`
-    - name: Clean destination folder
-      uses: appleboy/ssh-action@v1.0.0
-      with:
-        host: ${{ secrets.SERVER_COMPUTER_NAME }}
-        username: ${{ secrets.SERVER_USERNAME }}
-        password: ${{ secrets.SERVER_PASSWORD }}
-        port: 22
-        script: |
-          cd "C:\inetpub\wwwroot\${{ secrets.WEBSITE_NAME }}"
-          Write-Output "Cleaning up destination folder except '.well-known'..."
-          Get-ChildItem -Exclude '.well-known' | Remove-Item -Recurse -Force
-          Write-Output "Cleanup complete."
-
-    # 🚀 Deploy files
+    
     - name: Deploy to Simply        
       uses: talunzhang/auto-web-deploy@v1.0.1
       with:
@@ -81,3 +65,5 @@ jobs:
         server-username: ${{ secrets.SERVER_USERNAME }}
         server-password: ${{ secrets.SERVER_PASSWORD }}
         source-path: ${{ env.WEBAPP_PACKAGE_PATH }}
+        
+        
