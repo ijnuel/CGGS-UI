@@ -51,7 +51,7 @@ jobs:
       
     - name: Check build
       run: |
-        cmd /c 'copy web.config ${{ env.WEBAPP_PACKAGE_PATH }} /y'
+        cmd /c 'copy web.config ${{ env.WEBAPP_PACKAGE_PATH }} /y' | cmd /c 'copy .well-known ${{ env.WEBAPP_PACKAGE_PATH }} /y'
     
     # Add  MSBuild to the PATH: https://github.com/microsoft/setup-msbuild
     - name: Setup MSBuild.exe
