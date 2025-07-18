@@ -49,9 +49,13 @@ jobs:
     - name: npm build
       run: npm run build-prod
       
-    - name: Check build
+    - name: Copy web config
       run: |
-        cmd /c 'copy web.config ${{ env.WEBAPP_PACKAGE_PATH }} /y' | cmd /c 'copy .well-known ${{ env.WEBAPP_PACKAGE_PATH }} /y'
+        cmd /c 'copy web.config ${{ env.WEBAPP_PACKAGE_PATH }} /y'
+      
+    - name: Copy well-known
+      run: |
+        cmd /c 'copy .well-known ${{ env.WEBAPP_PACKAGE_PATH }} /y'
     
     # Add  MSBuild to the PATH: https://github.com/microsoft/setup-msbuild
     - name: Setup MSBuild.exe
