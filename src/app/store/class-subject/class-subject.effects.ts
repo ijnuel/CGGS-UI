@@ -19,11 +19,15 @@ export class ClassSubjectEffect {
   $classSubjectAll = createEffect(() =>
     this.actions$.pipe(
       ofType(ClassSubjectAction.getClassSubjectAll),
-      switchMap(() =>
-        this.http
+      switchMap(({ queryProperties }) => {
+        const params: any = {};
+        if (queryProperties) {
+          params['queryProperties'] = queryProperties;
+        }
+        return this.http
           .get<GenericResponseInterface<ClassSubjectListInterface[]>>(
             `${environment.baseUrl}/ClassSubject/GetAll`,
-            { withCredentials: true }
+            { params, withCredentials: true }
           )
           .pipe(
             map((payload) =>
@@ -32,8 +36,8 @@ export class ClassSubjectEffect {
             catchError((error) => {
               return of(ClassSubjectAction.getClassSubjectAllFail({ error }));
             })
-          )
-      )
+          );
+      })
     )
   );
 
@@ -41,21 +45,17 @@ export class ClassSubjectEffect {
   $classSubjectList = createEffect(() =>
     this.actions$.pipe(
       ofType(ClassSubjectAction.getClassSubjectList),
-      switchMap(({ pageQuery }) => {
-        const params: { [key: string]: string | number } = {
-          start: pageQuery.start,
-          recordsPerPage: pageQuery.recordsPerPage,
-          pageIndex: pageQuery.pageIndex || 0
+      switchMap(({ start, recordsPerPage, searchText, queryProperties }) => {
+        const params: any = {
+          start,
+          recordsPerPage,
         };
-
-        if (pageQuery.searchText) {
-          params['searchText'] = pageQuery.searchText;
+        if (searchText) {
+          params['searchText'] = searchText;
         }
-
-        if (pageQuery.queryProperties && pageQuery.queryProperties.length > 0) {
-          params['queryProperties'] = JSON.stringify(pageQuery.queryProperties);
+        if (queryProperties) {
+          params['queryProperties'] = queryProperties;
         }
-
         return this.http
           .get<GenericResponseInterface<PaginatedResponseInterface<ClassSubjectListInterface[]>>>(
             `${environment.baseUrl}/ClassSubject/GetAllPaginated`,
@@ -121,12 +121,14 @@ export class ClassSubjectEffect {
   $classSubjectByProperties = createEffect(() =>
     this.actions$.pipe(
       ofType(ClassSubjectAction.getClassSubjectByProperties),
-      switchMap(({ properties }) =>
+      switchMap(({ queryPropertiesString }) =>
         this.http
-          .post<GenericResponseInterface<ClassSubjectListInterface[]>>(
+          .get<GenericResponseInterface<ClassSubjectListInterface>>(
             `${environment.baseUrl}/ClassSubject/GetByProperties`,
-            properties,
-            { withCredentials: true }
+            {
+              params: { queryPropertiesString },
+              withCredentials: true
+            }
           )
           .pipe(
             map((payload) =>
@@ -134,6 +136,50 @@ export class ClassSubjectEffect {
             ),
             catchError((error) => {
               return of(ClassSubjectAction.getClassSubjectByPropertiesFail({ error }));
+            })
+          )
+      )
+    )
+  );
+  // Add Subject To Class
+  $addSubjectToClass = createEffect(() =>
+    this.actions$.pipe(
+      ofType(ClassSubjectAction.addSubjectToClass),
+      switchMap(({ payload }) =>
+        this.http
+          .post<GenericResponseInterface<string>>(
+            `${environment.baseUrl}/ClassSubject/AddSubjectToClass`,
+            payload,
+            { withCredentials: true }
+          )
+          .pipe(
+            map((response) =>
+              ClassSubjectAction.addSubjectToClassSuccess({ payload: response })
+            ),
+            catchError((error) => {
+              return of(ClassSubjectAction.addSubjectToClassFail({ error }));
+            })
+          )
+      )
+    )
+  );
+
+  // Get Data Import Template
+  $getClassSubjectDataImportTemplate = createEffect(() =>
+    this.actions$.pipe(
+      ofType(ClassSubjectAction.getClassSubjectDataImportTemplate),
+      switchMap(() =>
+        this.http
+          .get<any>(
+            `${environment.baseUrl}/ClassSubject/GetDataImportTemplate`,
+            { withCredentials: true }
+          )
+          .pipe(
+            map((payload) =>
+              ClassSubjectAction.getClassSubjectDataImportTemplateSuccess({ payload })
+            ),
+            catchError((error) => {
+              return of(ClassSubjectAction.getClassSubjectDataImportTemplateFail({ error }));
             })
           )
       )

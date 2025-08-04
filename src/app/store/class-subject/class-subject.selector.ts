@@ -9,6 +9,7 @@ import {
   getLoading,
   getError,
   ClassSubjectState,
+  classSubjectFeatureKey,
 } from './class-subject.reducer';
 
 export const selectClassSubjectState = (state: { classSubject: ClassSubjectState }) =>
@@ -27,6 +28,15 @@ export const selectClassSubjectAll = createSelector(
 export const selectClassSubjectByProperties = createSelector(
   selectClassSubjectState,
   getClassSubjectByProperties
+);
+export const selectAddSubjectToClassResult = createSelector(
+  selectClassSubjectState,
+  (state) => state.addSubjectToClassResult
+);
+
+export const selectDataImportTemplate = createSelector(
+  selectClassSubjectState,
+  (state) => state.dataImportTemplate
 );
 
 export const selectClassSubjectById = createSelector(

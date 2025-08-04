@@ -175,7 +175,7 @@ export class ProgramTypeComponent implements OnInit {
 
     this.classSubjectFacade.createSuccess$.subscribe(data => {
       if (data) {
-        this.classSubjectFacade.getClassSubjectAll();
+        this.classSubjectFacade.getClassSubjectAll(this.getQueryProperties());
       }
     });
 
@@ -196,8 +196,9 @@ export class ProgramTypeComponent implements OnInit {
     this.schoolTermSessionAll$.subscribe(data => {
       if (data) {
         this.schoolTermSessionAllSnapShot = [...data];
-        this.schoolTermSessionId = this.schoolTermSessionAllSnapShot.find(x => x.isCurrent)?.id || this.schoolTermSessionAllSnapShot.find(x => x)?.id!;
-        this.schoolTermSessionControl.setValue(this.schoolTermSessionId);
+        if (this.schoolTermSessionId === "") {
+          this.setSessionTermControls(this.schoolTermSessionAllSnapShot.find(x => x.isCurrent)?.id || this.schoolTermSessionAllSnapShot.find(x => x)?.id!);
+        }
       }
     });
 
@@ -237,6 +238,10 @@ export class ProgramTypeComponent implements OnInit {
       }
     });
   }
+  setSessionTermControls(sessionTermId: string) {
+    this.schoolTermSessionId = sessionTermId;
+    this.schoolTermSessionControl.setValue(sessionTermId);
+  }
 
   loadProgramTypes(programSetupLevel: ProgramSetupLevel = ProgramSetupLevel.PROGRAMTYPE) {
 
@@ -253,7 +258,7 @@ export class ProgramTypeComponent implements OnInit {
       this.classFacade.getClassAll();
     }
     if (programSetupLevel == ProgramSetupLevel.CLASSSUBJECT) {
-      this.classSubjectFacade.getClassSubjectAll();
+      this.classSubjectFacade.getClassSubjectAll(this.getQueryProperties());
     }
     if (programSetupLevel == ProgramSetupLevel.CLASSSUBJECTASSESSMENT) {
       this.classSubjectAssessmentFacade.getClassSubjectAssessmentAll();
@@ -263,6 +268,10 @@ export class ProgramTypeComponent implements OnInit {
     return this.sessionAllSnapShot.find(x => x.id == sessionId)?.name!;
   }
 
+  getQueryProperties(): any {
+    return [{ Name: 'schoolTermSessionId', Value: this.schoolTermSessionId }];
+  }
+  
   onPageChange(event: PageQueryInterface) {
     this.programTypeFacade.getProgramTypeAll();
     // this.classLevelFacade.getClassLevelAll();
@@ -372,7 +381,7 @@ export class ProgramTypeComponent implements OnInit {
         }
         if (programSetupLevel == ProgramSetupLevel.CLASSSUBJECT) {
           this.classSubjectFacade.deleteClassSubject(row.id);
-          this.classSubjectFacade.getClassSubjectAll();
+          this.classSubjectFacade.getClassSubjectAll(this.getQueryProperties());
         }
         if (programSetupLevel == ProgramSetupLevel.CLASSSUBJECTASSESSMENT) {
           this.classSubjectAssessmentFacade.deleteClassSubjectAssessment(row.id);
@@ -385,6 +394,11 @@ export class ProgramTypeComponent implements OnInit {
 
   onCancel() {
     this.router.navigate(['../'], { relativeTo: this.route });
+  }
+
+  onSessionTermChange(sessionTermId: string) {
+    this.setSessionTermControls(sessionTermId);
+    this.classSubjectFacade.getClassSubjectAll(this.getQueryProperties());
   }
 
   getSubjects(): DropdownListInterface[] {
@@ -447,7 +461,7 @@ export class ProgramTypeComponent implements OnInit {
     formData.schoolTermSessionId = this.schoolTermSessionId;
     formData.id ? this.classSubjectFacade.updateClassSubject(formData) : this.classSubjectFacade.createClassSubject(formData);
     this.hideAddForm();
-    this.classSubjectFacade.getClassSubjectAll();
+    this.classSubjectFacade.getClassSubjectAll(this.getQueryProperties());
   }
 
   submitClassSubjectAssessment(classSubject: ClassSubjectListInterface) {
@@ -543,7 +557,7 @@ export class ProgramTypeComponent implements OnInit {
         this.classSubjectAssessmentFacade.getClassSubjectAssessmentAll();
         break;
       case ProgramSetupLevel.CLASSARM:
-        this.classSubjectFacade.getClassSubjectAll();
+        this.classSubjectFacade.getClassSubjectAll(this.getQueryProperties());
         break;
       case ProgramSetupLevel.CLASSLEVEL:
         this.classFacade.getClassAll();

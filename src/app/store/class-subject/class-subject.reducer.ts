@@ -11,8 +11,10 @@ export const classSubjectFeatureKey = 'classSubject';
 export interface ClassSubjectState {
   classSubjectList: PaginatedResponseInterface<ClassSubjectListInterface[]> | null;
   classSubjectAll: ClassSubjectListInterface[] | null;
-  classSubjectByProperties: ClassSubjectListInterface[] | null;
+  classSubjectByProperties: ClassSubjectListInterface | null;
   classSubjectById: ClassSubjectListInterface | null;
+  addSubjectToClassResult: string | null;
+  dataImportTemplate: any | null;
   exists: boolean | null;
   count: number | null;
   pageQuery: PageQueryInterface | null;
@@ -27,6 +29,8 @@ export const initialState: ClassSubjectState = {
   classSubjectAll: null,
   classSubjectByProperties: null,
   classSubjectById: null,
+  addSubjectToClassResult: null,
+  dataImportTemplate: null,
   exists: null,
   count: null,
   pageQuery: null,
@@ -56,9 +60,14 @@ export const reducer = createReducer(
   })),
 
   // Get List
-  on(ClassSubjectAction.getClassSubjectList, (state, { pageQuery }) => ({
+  on(ClassSubjectAction.getClassSubjectList, (state, action) => ({
     ...state,
-    pageQuery,
+    pageQuery: {
+      start: action.start !== undefined ? action.start : 0,
+      recordsPerPage: action.recordsPerPage !== undefined ? action.recordsPerPage : 0,
+      searchText: action.searchText || '',
+      pageIndex: 0
+    },
     loading: true,
     error: null,
   })),
@@ -100,6 +109,41 @@ export const reducer = createReducer(
     ...state,
     classSubjectByProperties: payload.entity,
     loading: false,
+  })),
+  // Add Subject To Class
+  on(ClassSubjectAction.addSubjectToClass, (state) => ({
+    ...state,
+    loading: true,
+    error: null,
+    addSubjectToClassResult: null,
+  })),
+  on(ClassSubjectAction.addSubjectToClassSuccess, (state, { payload }) => ({
+    ...state,
+    addSubjectToClassResult: payload.entity,
+    loading: false,
+  })),
+  on(ClassSubjectAction.addSubjectToClassFail, (state, { error }) => ({
+    ...state,
+    loading: false,
+    error,
+  })),
+
+  // Get Data Import Template
+  on(ClassSubjectAction.getClassSubjectDataImportTemplate, (state) => ({
+    ...state,
+    loading: true,
+    error: null,
+    dataImportTemplate: null,
+  })),
+  on(ClassSubjectAction.getClassSubjectDataImportTemplateSuccess, (state, { payload }) => ({
+    ...state,
+    dataImportTemplate: payload,
+    loading: false,
+  })),
+  on(ClassSubjectAction.getClassSubjectDataImportTemplateFail, (state, { error }) => ({
+    ...state,
+    loading: false,
+    error,
   })),
   on(ClassSubjectAction.getClassSubjectByPropertiesFail, (state, { error }) => ({
     ...state,

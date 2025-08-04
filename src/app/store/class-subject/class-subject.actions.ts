@@ -7,8 +7,42 @@ import {
   ClassSubjectFormInterface,
 } from '../../types';
 
+// Add Subject To Class
+export const addSubjectToClass = createAction(
+  '[ClassSubject] Add Subject To Class',
+  props<{ payload: any }>() // Replace 'any' with AddSubjectToClassDto if defined
+);
+
+export const addSubjectToClassSuccess = createAction(
+  '[ClassSubject/API] Add Subject To Class Success',
+  props<{ payload: GenericResponseInterface<string> }>()
+);
+
+export const addSubjectToClassFail = createAction(
+  '[ClassSubject/API] Add Subject To Class Fail',
+  props<{ error: string }>()
+);
+
+// Get Data Import Template
+export const getClassSubjectDataImportTemplate = createAction(
+  '[ClassSubject] Get Data Import Template'
+);
+
+export const getClassSubjectDataImportTemplateSuccess = createAction(
+  '[ClassSubject/API] Get Data Import Template Success',
+  props<{ payload: any }>() // Replace 'any' with the correct type if available
+);
+
+export const getClassSubjectDataImportTemplateFail = createAction(
+  '[ClassSubject/API] Get Data Import Template Fail',
+  props<{ error: string }>()
+);
+
 // Get All (non-paginated)
-export const getClassSubjectAll = createAction('[ClassSubject] Get All');
+export const getClassSubjectAll = createAction(
+  '[ClassSubject] Get All',
+  props<{ queryProperties?: string }>() // serialized QueryProperty[]
+);
 
 export const getClassSubjectAllSuccess = createAction(
   '[ClassSubject/API] Get All Success',
@@ -26,7 +60,10 @@ export const getClassSubjectAllFail = createAction(
 export const getClassSubjectList = createAction(
   '[ClassSubject] Get List',
   props<{
-    pageQuery: PageQueryInterface;
+    start?: number;
+    recordsPerPage?: number;
+    searchText?: string;
+    queryProperties?: string; // serialized QueryProperty[]
   }>()
 );
 
@@ -63,13 +100,13 @@ export const getClassSubjectByIdFail = createAction(
 // Get By Properties
 export const getClassSubjectByProperties = createAction(
   '[ClassSubject] Get By Properties',
-  props<{ properties: Partial<ClassSubjectFormInterface> }>()
+  props<{ queryPropertiesString: string }>() // serialized QueryProperty[]
 );
 
 export const getClassSubjectByPropertiesSuccess = createAction(
   '[ClassSubject/API] Get By Properties Success',
   props<{
-    payload: GenericResponseInterface<ClassSubjectListInterface[]>;
+    payload: GenericResponseInterface<ClassSubjectListInterface>;
   }>()
 );
 

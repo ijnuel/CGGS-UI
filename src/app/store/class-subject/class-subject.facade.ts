@@ -7,6 +7,7 @@ import {
   PageQueryInterface,
   PaginatedResponseInterface,
 } from '../../types';
+// If QueryProperty type is defined, import it here
 import * as ClassSubjectAction from './class-subject.actions';
 import {
   selectClassSubjectList,
@@ -19,6 +20,8 @@ import {
   selectClassSubjectError,
   selectClassSubjectCreateSuccess,
   selectClassSubjectUpdateSuccess,
+  selectAddSubjectToClassResult,
+  selectDataImportTemplate,
 } from './class-subject.selector';
 import { ClassSubjectState } from './class-subject.reducer';
 
@@ -28,7 +31,7 @@ import { ClassSubjectState } from './class-subject.reducer';
 export class ClassSubjectFacade {
   classSubjectList$: Observable<PaginatedResponseInterface<ClassSubjectListInterface[]> | null>;
   classSubjectAll$: Observable<ClassSubjectListInterface[] | null>;
-  classSubjectByProperties$: Observable<ClassSubjectListInterface[] | null>;
+  classSubjectByProperties$: Observable<ClassSubjectListInterface | null>;
   classSubjectById$: Observable<ClassSubjectListInterface | null>;
   exists$: Observable<boolean | null>;
   count$: Observable<number | null>;
@@ -36,12 +39,16 @@ export class ClassSubjectFacade {
   error$: Observable<string | null>;
   createSuccess$: Observable<boolean>;
   updateSuccess$: Observable<boolean>;
+  addSubjectToClassResult$: Observable<string | null>;
+  dataImportTemplate$: Observable<any | null>;
   currentPageQuery: PageQueryInterface = {
     start: 0,
     recordsPerPage: 10,
     pageIndex: 0,
     searchText: ''
   };
+
+  // Add new observables if needed for new endpoints
 
   constructor(private store: Store<{ classSubject: ClassSubjectState }>) {
     this.classSubjectList$ = this.store.select(selectClassSubjectList);
@@ -54,19 +61,31 @@ export class ClassSubjectFacade {
     this.error$ = this.store.select(selectClassSubjectError);
     this.createSuccess$ = this.store.select(selectClassSubjectCreateSuccess);
     this.updateSuccess$ = this.store.select(selectClassSubjectUpdateSuccess);
+    this.addSubjectToClassResult$ = this.store.select(selectAddSubjectToClassResult);
+    this.dataImportTemplate$ = this.store.select(selectDataImportTemplate);
   }
 
   getClassSubjectList(pageQuery: PageQueryInterface): void {
     this.currentPageQuery = pageQuery;
-    this.store.dispatch(ClassSubjectAction.getClassSubjectList({ pageQuery }));
+    const { start, recordsPerPage, searchText, queryProperties } = pageQuery as any;
+    this.store.dispatch(ClassSubjectAction.getClassSubjectList({
+      start,
+      recordsPerPage,
+      searchText,
+      queryProperties: queryProperties ? JSON.stringify(queryProperties) : undefined
+    }));
   }
 
   getCurrentPageQuery(): PageQueryInterface {
     return this.currentPageQuery;
   }
 
-  getClassSubjectAll(): void {
-    this.store.dispatch(ClassSubjectAction.getClassSubjectAll());
+  getClassSubjectAll(queryProperties?: any): void {
+    if (queryProperties) {
+      this.store.dispatch(ClassSubjectAction.getClassSubjectAll({ queryProperties: JSON.stringify(queryProperties) }));
+    } else {
+      this.store.dispatch(ClassSubjectAction.getClassSubjectAll({}));
+    }
   }
 
   getClassSubjectById(classSubjectId: string): void {
@@ -74,7 +93,10 @@ export class ClassSubjectFacade {
   }
 
   getClassSubjectByProperties(properties: Partial<ClassSubjectFormInterface>): void {
-    this.store.dispatch(ClassSubjectAction.getClassSubjectByProperties({ properties }));
+    const queryPropertiesString = JSON.stringify(
+      Object.entries(properties).map(([Name, Value]) => ({ Name, Value }))
+    );
+    this.store.dispatch(ClassSubjectAction.getClassSubjectByProperties({ queryPropertiesString }));
   }
 
   classSubjectExists(properties: Partial<ClassSubjectFormInterface>): void {
@@ -107,5 +129,14 @@ export class ClassSubjectFacade {
 
   deleteManyClassSubjects(classSubjectIds: string[]): void {
     this.store.dispatch(ClassSubjectAction.deleteManyClassSubjects({ classSubjectIds }));
+  }
+
+  // Add Subject To Class
+  addSubjectToClass(payload: any): void {
+    this.store.dispatch(ClassSubjectAction.addSubjectToClass({ payload }));
+  }
+
+  getClassSubjectDataImportTemplate(): void {
+    this.store.dispatch(ClassSubjectAction.getClassSubjectDataImportTemplate());
   }
 }
