@@ -21,7 +21,24 @@
   classSubjectAll: classSubjectAll$ | async,
   classSubjectAssessmentAll: classSubjectAssessmentAll$ | async,
   subjectAll: subjectAll$ | async,
+  schoolTermSessionAll: schoolTermSessionAll$ | async
   }; as obs ) {
+        <!-- <mat-form-field *ngIf="showSearch" appearance="outline" class="w-64">
+          <mat-label>Search</mat-label>
+          <input matInput (keyup)="onSearch($event)" placeholder="Search...">
+          <mat-icon matSuffix>search</mat-icon>
+        </mat-form-field> -->
+      <div class="flex justify-end items-center">
+          <mat-form-field [appLoadingSpinner]="obs.loading">
+            <mat-label>Session/Term</mat-label>
+            <mat-select [formControl]="schoolTermSessionControl">
+              @for (sessionTerm of obs.schoolTermSessionAll; track $index) {
+              <mat-option [value]="sessionTerm.id">
+                {{ getSessionName(sessionTerm.sessionId) }}, {{ sessionTerm.termString }} Term</mat-option>
+              }
+            </mat-select>
+          </mat-form-field>
+      </div>
   <app-program-setup-level-panel
       [items]="programTypeAllSnapShot"
       [levelType]="programTypeConfig.label"

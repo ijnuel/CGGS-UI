@@ -3,7 +3,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
 import { ProgramTypeFacade } from '../../../store/program-type/program-type.facade';
 import { ProgramTypeListInterface } from '../../../types/program-type';
-import { ClassFormInterface, ClassLevelFormInterface, ClassLevelListInterface, ClassListInterface, ClassSubjectAssessmentFormInterface, ClassSubjectAssessmentListInterface, ClassSubjectFormInterface, ClassSubjectListInterface, DropdownListInterface, PaginatedResponseInterface, ProgramSetupLevelConfig, SchoolTermSessionListInterface, SubjectListInterface } from '../../../types';
+import { ClassFormInterface, ClassLevelFormInterface, ClassLevelListInterface, ClassListInterface, ClassSubjectAssessmentFormInterface, ClassSubjectAssessmentListInterface, ClassSubjectFormInterface, ClassSubjectListInterface, DropdownListInterface, PaginatedResponseInterface, ProgramSetupLevelConfig, SchoolTermSessionListInterface, SessionListInterface, SubjectListInterface } from '../../../types';
 import { PageQueryInterface } from '../../../types';
 import { TableHeaderInterface } from '../../../types/table';
 import { MatDialog } from '@angular/material/dialog';
@@ -18,6 +18,7 @@ import { SubjectFacade } from '../../../store/subject/subject.facade';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ProgramSetupLevel } from '../../../types';
 import { SchoolTermSessionFacade } from '../../../store/school-term-session/school-term-session.facade';
+import { SessionFacade } from '../../../store/session/session.facade';
 
 @Component({
   selector: 'app-program-type',
@@ -25,6 +26,9 @@ import { SchoolTermSessionFacade } from '../../../store/school-term-session/scho
   styleUrls: ['./program-type.component.scss'],
 })
 export class ProgramTypeComponent implements OnInit {
+
+  schoolTermSessionId: string = "";
+
   ProgramSetupLevel = ProgramSetupLevel;
   programTypeList$: Observable<PaginatedResponseInterface<ProgramTypeListInterface[]> | null>;
   programTypeAll$: Observable<ProgramTypeListInterface[] | null>;
@@ -34,12 +38,13 @@ export class ProgramTypeComponent implements OnInit {
   classSubjectAssessmentAll$: Observable<ClassSubjectAssessmentListInterface[] | null>;
   subjectAll$: Observable<SubjectListInterface[] | null>;
   schoolTermSessionAll$: Observable<SchoolTermSessionListInterface[] | null>;
+  sessionAll$: Observable<SessionListInterface[] | null>;
   loading$: Observable<boolean>;
   tableHeaderData: TableHeaderInterface[] = tableHeader;
   assessmentTypeTableHeaderData: TableHeaderInterface[] = assessmentTypeTableHeader;
 
   addFormVisibleFor: string | null = null;
-
+  schoolTermSessionControl = new FormControl("");
   addClassLevelForm: FormGroup<{
     id: FormControl;
     level: FormControl;
@@ -66,6 +71,7 @@ export class ProgramTypeComponent implements OnInit {
   classSubjectAssessmentAllSnapShot: ClassSubjectAssessmentListInterface[] = [];
   subjectAllSnapShot: DropdownListInterface[] = [];
   schoolTermSessionAllSnapShot: SchoolTermSessionListInterface[] = [];
+  sessionAllSnapShot: SessionListInterface[] = [];
   programTypeConfig!: ProgramSetupLevelConfig;
 
   constructor(
@@ -79,6 +85,7 @@ export class ProgramTypeComponent implements OnInit {
     private classSubjectAssessmentFacade: ClassSubjectAssessmentFacade,
     private subjectFacade: SubjectFacade,
     private schoolTermSessionFacade: SchoolTermSessionFacade,
+    private sessionFacade: SessionFacade,
     private dialog: MatDialog,
     private toastService: ToastNotificationService
   ) {
@@ -90,6 +97,7 @@ export class ProgramTypeComponent implements OnInit {
     this.classSubjectAssessmentAll$ = this.classSubjectAssessmentFacade.classSubjectAssessmentAll$;
     this.subjectAll$ = this.subjectFacade.subjectAll$;
     this.schoolTermSessionAll$ = this.schoolTermSessionFacade.schoolTermSessionAll$;
+    this.sessionAll$ = this.sessionFacade.sessionAll$;
     this.loading$ = this.programTypeFacade.loading$;
 
     this.addClassLevelForm = this.fb.group({
@@ -188,6 +196,14 @@ export class ProgramTypeComponent implements OnInit {
     this.schoolTermSessionAll$.subscribe(data => {
       if (data) {
         this.schoolTermSessionAllSnapShot = [...data];
+        this.schoolTermSessionId = this.schoolTermSessionAllSnapShot.find(x => x.isCurrent)?.id || this.schoolTermSessionAllSnapShot.find(x => x)?.id!;
+        this.schoolTermSessionControl.setValue(this.schoolTermSessionId);
+      }
+    });
+
+    this.sessionAll$.subscribe(data => {
+      if (data) {
+        this.sessionAllSnapShot = [...data];
       }
     });
 
@@ -228,6 +244,7 @@ export class ProgramTypeComponent implements OnInit {
       this.programTypeFacade.getProgramTypeAll();
       this.subjectFacade.getSubjectAll();
       this.schoolTermSessionFacade.getSchoolTermSessionAll();
+      this.sessionFacade.getSessionAll();
     }
     if (programSetupLevel == ProgramSetupLevel.CLASSLEVEL) {
       this.classLevelFacade.getClassLevelAll();
@@ -241,6 +258,9 @@ export class ProgramTypeComponent implements OnInit {
     if (programSetupLevel == ProgramSetupLevel.CLASSSUBJECTASSESSMENT) {
       this.classSubjectAssessmentFacade.getClassSubjectAssessmentAll();
     }
+  }
+  getSessionName(sessionId: string) : string {
+    return this.sessionAllSnapShot.find(x => x.id == sessionId)?.name!;
   }
 
   onPageChange(event: PageQueryInterface) {
@@ -424,8 +444,7 @@ export class ProgramTypeComponent implements OnInit {
 
     let formData = this.addClassSubjectForm.value as ClassSubjectFormInterface;
     formData.classId = classArm.id;
-    //to be removed
-    formData.schoolTermSessionId = this.schoolTermSessionAllSnapShot.find(x => x.isCurrent)?.id || this.schoolTermSessionAllSnapShot.find(x => x)?.id!;
+    formData.schoolTermSessionId = this.schoolTermSessionId;
     formData.id ? this.classSubjectFacade.updateClassSubject(formData) : this.classSubjectFacade.createClassSubject(formData);
     this.hideAddForm();
     this.classSubjectFacade.getClassSubjectAll();
