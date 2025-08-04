@@ -1,30 +1,22 @@
 import { Injectable } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
-import {
-  TestEntityTemplateListInterface,
-  TestEntityTemplateFormInterface,
-  PageQueryInterface,
-  PaginatedResponseInterface,
-} from '../../types';
 import * as TestEntityTemplateAction from './test-entity-template.actions';
+import { TestEntityTemplateState } from './test-entity-template.reducer';
+import { TestEntityTemplateListInterface, TestEntityTemplateFormInterface, PageQueryInterface, PaginatedResponseInterface } from '../../types';
 import {
   selectTestEntityTemplateList,
   selectTestEntityTemplateAll,
   selectTestEntityTemplateByProperties,
   selectTestEntityTemplateById,
-  selectExists,
-  selectCount,
+  selectTestEntityTemplateExists,
+  selectTestEntityTemplateCount,
   selectTestEntityTemplateLoading,
   selectTestEntityTemplateError,
   selectTestEntityTemplateCreateSuccess,
-  selectTestEntityTemplateUpdateSuccess,
+  selectTestEntityTemplateUpdateSuccess
 } from './test-entity-template.selector';
-import { TestEntityTemplateState } from './test-entity-template.reducer';
-
-@Injectable({
-  providedIn: 'root',
-})
+@Injectable({ providedIn: 'root' })
 export class TestEntityTemplateFacade {
   testEntityTemplateList$: Observable<PaginatedResponseInterface<TestEntityTemplateListInterface[]> | null>;
   testEntityTemplateAll$: Observable<TestEntityTemplateListInterface[] | null>;
@@ -39,7 +31,6 @@ export class TestEntityTemplateFacade {
   currentPageQuery: PageQueryInterface = {
     start: 0,
     recordsPerPage: 10,
-    pageIndex: 0,
     searchText: ''
   };
 
@@ -48,8 +39,8 @@ export class TestEntityTemplateFacade {
     this.testEntityTemplateAll$ = this.store.select(selectTestEntityTemplateAll);
     this.testEntityTemplateByProperties$ = this.store.select(selectTestEntityTemplateByProperties);
     this.testEntityTemplateById$ = this.store.select(selectTestEntityTemplateById);
-    this.exists$ = this.store.select(selectExists);
-    this.count$ = this.store.select(selectCount);
+    this.exists$ = this.store.select(selectTestEntityTemplateExists);
+    this.count$ = this.store.select(selectTestEntityTemplateCount);
     this.loading$ = this.store.select(selectTestEntityTemplateLoading);
     this.error$ = this.store.select(selectTestEntityTemplateError);
     this.createSuccess$ = this.store.select(selectTestEntityTemplateCreateSuccess);
@@ -58,27 +49,37 @@ export class TestEntityTemplateFacade {
 
   getTestEntityTemplateList(pageQuery: PageQueryInterface): void {
     this.currentPageQuery = pageQuery;
-    this.store.dispatch(TestEntityTemplateAction.getTestEntityTemplateList({ pageQuery }));
+    const { start, recordsPerPage, searchText, queryProperties } = pageQuery;
+    this.store.dispatch(TestEntityTemplateAction.getTestEntityTemplateList({
+      start,
+      recordsPerPage,
+      searchText,
+      queryProperties: queryProperties ? JSON.stringify(queryProperties) : undefined
+    }));
   }
 
   getCurrentPageQuery(): PageQueryInterface {
     return this.currentPageQuery;
   }
 
-  getTestEntityTemplateAll(): void {
-    this.store.dispatch(TestEntityTemplateAction.getTestEntityTemplateAll());
+  getTestEntityTemplateAll(queryProperties?: any): void {
+    this.store.dispatch(TestEntityTemplateAction.getTestEntityTemplateAll({
+      queryProperties: queryProperties ? JSON.stringify(queryProperties) : undefined
+    }));
   }
 
   getTestEntityTemplateById(testEntityTemplateId: string): void {
     this.store.dispatch(TestEntityTemplateAction.getTestEntityTemplateById({ testEntityTemplateId }));
   }
 
-  getTestEntityTemplateByProperties(properties: Partial<TestEntityTemplateFormInterface>): void {
-    this.store.dispatch(TestEntityTemplateAction.getTestEntityTemplateByProperties({ properties }));
+  getTestEntityTemplateByProperties(queryProperties: any): void {
+    this.store.dispatch(TestEntityTemplateAction.getTestEntityTemplateByProperties({
+      queryPropertiesString: queryProperties ? JSON.stringify(queryProperties) : ''
+    }));
   }
 
-  testEntityTemplateExists(properties: Partial<TestEntityTemplateFormInterface>): void {
-    this.store.dispatch(TestEntityTemplateAction.testEntityTemplateExists({ properties }));
+  testEntityTemplateExists(id: string): void {
+    this.store.dispatch(TestEntityTemplateAction.testEntityTemplateExists({ id }));
   }
 
   testEntityTemplateCount(): void {
@@ -93,8 +94,8 @@ export class TestEntityTemplateFacade {
     this.store.dispatch(TestEntityTemplateAction.updateTestEntityTemplate({ payload: testEntityTemplate }));
   }
 
-  deleteTestEntityTemplate(testEntityTemplateId: string): void {
-    this.store.dispatch(TestEntityTemplateAction.deleteTestEntityTemplate({ testEntityTemplateId }));
+  deleteTestEntityTemplate(id: string): void {
+    this.store.dispatch(TestEntityTemplateAction.deleteTestEntityTemplate({ id }));
   }
 
   createManyTestEntityTemplates(testEntityTemplates: TestEntityTemplateFormInterface[]): void {
@@ -105,7 +106,15 @@ export class TestEntityTemplateFacade {
     this.store.dispatch(TestEntityTemplateAction.updateManyTestEntityTemplates({ payload: testEntityTemplates }));
   }
 
-  deleteManyTestEntityTemplates(testEntityTemplateIds: string[]): void {
-    this.store.dispatch(TestEntityTemplateAction.deleteManyTestEntityTemplates({ testEntityTemplateIds }));
+  deleteManyTestEntityTemplates(ids: string[]): void {
+    this.store.dispatch(TestEntityTemplateAction.deleteManyTestEntityTemplates({ ids }));
+  }
+
+  getTestEntityTemplateDataImportTemplate(): void {
+    this.store.dispatch(TestEntityTemplateAction.getTestEntityTemplateDataImportTemplate());
+  }
+
+  importTestEntityTemplateData(file: File): void {
+    this.store.dispatch(TestEntityTemplateAction.importTestEntityTemplateData({ file }));
   }
 }

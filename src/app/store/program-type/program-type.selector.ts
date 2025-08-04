@@ -14,6 +14,16 @@ import {
 export const selectProgramTypeState = (state: { programType: ProgramTypeState }) =>
   state.programType;
 
+export const selectProgramTypeDataImportTemplate = createSelector(
+  selectProgramTypeState,
+  (state) => state.dataImportTemplate
+);
+
+export const selectProgramTypePageQuery = createSelector(
+  selectProgramTypeState,
+  (state) => state.pageQuery
+);
+
 export const selectProgramTypeList = createSelector(
   selectProgramTypeState,
   getProgramTypeList

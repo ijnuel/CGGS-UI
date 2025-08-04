@@ -19,6 +19,8 @@ import {
   selectProgramTypeError,
   selectProgramTypeCreateSuccess,
   selectProgramTypeUpdateSuccess,
+  selectProgramTypeDataImportTemplate,
+  selectProgramTypePageQuery,
 } from './program-type.selector';
 import { ProgramTypeState } from './program-type.reducer';
 
@@ -28,7 +30,7 @@ import { ProgramTypeState } from './program-type.reducer';
 export class ProgramTypeFacade {
   programTypeList$: Observable<PaginatedResponseInterface<ProgramTypeListInterface[]> | null>;
   programTypeAll$: Observable<ProgramTypeListInterface[] | null>;
-  programTypeByProperties$: Observable<ProgramTypeListInterface[] | null>;
+  programTypeByProperties$: Observable<ProgramTypeListInterface | null>;
   programTypeById$: Observable<ProgramTypeListInterface | null>;
   exists$: Observable<boolean | null>;
   count$: Observable<number | null>;
@@ -36,12 +38,8 @@ export class ProgramTypeFacade {
   error$: Observable<string | null>;
   createSuccess$: Observable<boolean>;
   updateSuccess$: Observable<boolean>;
-  currentPageQuery: PageQueryInterface = {
-    start: 0,
-    recordsPerPage: 10,
-    pageIndex: 0,
-    searchText: ''
-  };
+  dataImportTemplate$: Observable<any | null>;
+  pageQuery$: Observable<any | null>;
 
   constructor(private store: Store<{ programType: ProgramTypeState }>) {
     this.programTypeList$ = this.store.select(selectProgramTypeList);
@@ -54,31 +52,33 @@ export class ProgramTypeFacade {
     this.error$ = this.store.select(selectProgramTypeError);
     this.createSuccess$ = this.store.select(selectProgramTypeCreateSuccess);
     this.updateSuccess$ = this.store.select(selectProgramTypeUpdateSuccess);
+    this.dataImportTemplate$ = this.store.select(selectProgramTypeDataImportTemplate);
+    this.pageQuery$ = this.store.select(selectProgramTypePageQuery);
   }
 
-  getProgramTypeList(pageQuery: PageQueryInterface): void {
-    this.currentPageQuery = pageQuery;
-    this.store.dispatch(ProgramTypeAction.getProgramTypeList({ pageQuery }));
+  getProgramTypeList(params: {
+    start?: number;
+    recordsPerPage?: number;
+    searchText?: string;
+    queryProperties?: string;
+  }): void {
+    this.store.dispatch(ProgramTypeAction.getProgramTypeList(params));
   }
 
-  getCurrentPageQuery(): PageQueryInterface {
-    return this.currentPageQuery;
-  }
-
-  getProgramTypeAll(): void {
-    this.store.dispatch(ProgramTypeAction.getProgramTypeAll());
+  getProgramTypeAll(queryProperties?: string): void {
+    this.store.dispatch(ProgramTypeAction.getProgramTypeAll({ queryProperties }));
   }
 
   getProgramTypeById(programTypeId: string): void {
     this.store.dispatch(ProgramTypeAction.getProgramTypeById({ programTypeId }));
   }
 
-  getProgramTypeByProperties(properties: Partial<ProgramTypeFormInterface>): void {
-    this.store.dispatch(ProgramTypeAction.getProgramTypeByProperties({ properties }));
+  getProgramTypeByProperties(queryPropertiesString: string): void {
+    this.store.dispatch(ProgramTypeAction.getProgramTypeByProperties({ queryPropertiesString }));
   }
 
-  programTypeExists(properties: Partial<ProgramTypeFormInterface>): void {
-    this.store.dispatch(ProgramTypeAction.programTypeExists({ properties }));
+  programTypeExists(id: string): void {
+    this.store.dispatch(ProgramTypeAction.programTypeExists({ id }));
   }
 
   programTypeCount(): void {
@@ -93,8 +93,8 @@ export class ProgramTypeFacade {
     this.store.dispatch(ProgramTypeAction.updateProgramType({ payload: programType }));
   }
 
-  deleteProgramType(programTypeId: string): void {
-    this.store.dispatch(ProgramTypeAction.deleteProgramType({ programTypeId }));
+  deleteProgramType(id: string): void {
+    this.store.dispatch(ProgramTypeAction.deleteProgramType({ id }));
   }
 
   createManyProgramTypes(programTypes: ProgramTypeFormInterface[]): void {
@@ -105,7 +105,11 @@ export class ProgramTypeFacade {
     this.store.dispatch(ProgramTypeAction.updateManyProgramTypes({ payload: programTypes }));
   }
 
-  deleteManyProgramTypes(programTypeIds: string[]): void {
-    this.store.dispatch(ProgramTypeAction.deleteManyProgramTypes({ programTypeIds }));
+  deleteManyProgramTypes(ids: string[]): void {
+    this.store.dispatch(ProgramTypeAction.deleteManyProgramTypes({ ids }));
+  }
+
+  getProgramTypeDataImportTemplate(): void {
+    this.store.dispatch(ProgramTypeAction.getProgramTypeDataImportTemplate());
   }
 }

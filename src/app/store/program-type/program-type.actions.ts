@@ -8,7 +8,10 @@ import {
 } from '../../types';
 
 // Get All (non-paginated)
-export const getProgramTypeAll = createAction('[ProgramType] Get All');
+export const getProgramTypeAll = createAction(
+  '[ProgramType] Get All',
+  props<{ queryProperties?: string }>() // serialized QueryProperty[]
+);
 
 export const getProgramTypeAllSuccess = createAction(
   '[ProgramType/API] Get All Success',
@@ -26,7 +29,10 @@ export const getProgramTypeAllFail = createAction(
 export const getProgramTypeList = createAction(
   '[ProgramType] Get List',
   props<{
-    pageQuery: PageQueryInterface;
+    start?: number;
+    recordsPerPage?: number;
+    searchText?: string;
+    queryProperties?: string; // serialized QueryProperty[]
   }>()
 );
 
@@ -63,13 +69,13 @@ export const getProgramTypeByIdFail = createAction(
 // Get By Properties
 export const getProgramTypeByProperties = createAction(
   '[ProgramType] Get By Properties',
-  props<{ properties: Partial<ProgramTypeFormInterface> }>()
+  props<{ queryPropertiesString: string }>() // serialized QueryProperty[]
 );
 
 export const getProgramTypeByPropertiesSuccess = createAction(
   '[ProgramType/API] Get By Properties Success',
   props<{
-    payload: GenericResponseInterface<ProgramTypeListInterface[]>;
+    payload: GenericResponseInterface<ProgramTypeListInterface>;
   }>()
 );
 
@@ -77,18 +83,15 @@ export const getProgramTypeByPropertiesFail = createAction(
   '[ProgramType/API] Get By Properties Fail',
   props<{ error: string }>()
 );
-
 // Exists
 export const programTypeExists = createAction(
   '[ProgramType] Exists',
-  props<{ properties: Partial<ProgramTypeFormInterface> }>()
+  props<{ id: string }>()
 );
 
 export const programTypeExistsSuccess = createAction(
   '[ProgramType/API] Exists Success',
-  props<{
-    payload: GenericResponseInterface<boolean>;
-  }>()
+  props<{ payload: GenericResponseInterface<boolean> }>()
 );
 
 export const programTypeExistsFail = createAction(
@@ -101,9 +104,7 @@ export const programTypeCount = createAction('[ProgramType] Count');
 
 export const programTypeCountSuccess = createAction(
   '[ProgramType/API] Count Success',
-  props<{
-    payload: GenericResponseInterface<number>;
-  }>()
+  props<{ payload: GenericResponseInterface<number> }>()
 );
 
 export const programTypeCountFail = createAction(
@@ -119,9 +120,7 @@ export const createProgramType = createAction(
 
 export const createProgramTypeSuccess = createAction(
   '[ProgramType/API] Create Success',
-  props<{
-    payload: GenericResponseInterface<ProgramTypeListInterface>;
-  }>()
+  props<{ payload: GenericResponseInterface<string> }>()
 );
 
 export const createProgramTypeFail = createAction(
@@ -137,9 +136,7 @@ export const updateProgramType = createAction(
 
 export const updateProgramTypeSuccess = createAction(
   '[ProgramType/API] Update Success',
-  props<{
-    payload: GenericResponseInterface<ProgramTypeListInterface>;
-  }>()
+  props<{ payload: GenericResponseInterface<string> }>()
 );
 
 export const updateProgramTypeFail = createAction(
@@ -150,14 +147,12 @@ export const updateProgramTypeFail = createAction(
 // Delete
 export const deleteProgramType = createAction(
   '[ProgramType] Delete',
-  props<{ programTypeId: string }>()
+  props<{ id: string }>()
 );
 
 export const deleteProgramTypeSuccess = createAction(
   '[ProgramType/API] Delete Success',
-  props<{
-    payload: GenericResponseInterface<boolean>;
-  }>()
+  props<{ payload: GenericResponseInterface<boolean> }>()
 );
 
 export const deleteProgramTypeFail = createAction(
@@ -173,9 +168,7 @@ export const createManyProgramTypes = createAction(
 
 export const createManyProgramTypesSuccess = createAction(
   '[ProgramType/API] Create Many Success',
-  props<{
-    payload: GenericResponseInterface<ProgramTypeListInterface[]>;
-  }>()
+  props<{ payload: GenericResponseInterface<number> }>()
 );
 
 export const createManyProgramTypesFail = createAction(
@@ -191,9 +184,7 @@ export const updateManyProgramTypes = createAction(
 
 export const updateManyProgramTypesSuccess = createAction(
   '[ProgramType/API] Update Many Success',
-  props<{
-    payload: GenericResponseInterface<ProgramTypeListInterface[]>;
-  }>()
+  props<{ payload: GenericResponseInterface<number> }>()
 );
 
 export const updateManyProgramTypesFail = createAction(
@@ -204,17 +195,32 @@ export const updateManyProgramTypesFail = createAction(
 // Delete Many
 export const deleteManyProgramTypes = createAction(
   '[ProgramType] Delete Many',
-  props<{ programTypeIds: string[] }>()
+  props<{ ids: string[] }>()
 );
 
 export const deleteManyProgramTypesSuccess = createAction(
   '[ProgramType/API] Delete Many Success',
-  props<{
-    payload: GenericResponseInterface<boolean>;
-  }>()
+  props<{ payload: GenericResponseInterface<number> }>()
 );
 
 export const deleteManyProgramTypesFail = createAction(
   '[ProgramType/API] Delete Many Fail',
   props<{ error: string }>()
 );
+
+// Get Data Import Template
+export const getProgramTypeDataImportTemplate = createAction(
+  '[ProgramType] Get Data Import Template'
+);
+
+export const getProgramTypeDataImportTemplateSuccess = createAction(
+  '[ProgramType/API] Get Data Import Template Success',
+  props<{ payload: any }>() // Replace 'any' with the correct type if available
+);
+
+export const getProgramTypeDataImportTemplateFail = createAction(
+  '[ProgramType/API] Get Data Import Template Fail',
+  props<{ error: string }>()
+);
+
+// ...existing code...

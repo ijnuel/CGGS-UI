@@ -19,11 +19,15 @@ export class ProgramTypeEffect {
   $programTypeAll = createEffect(() =>
     this.actions$.pipe(
       ofType(ProgramTypeAction.getProgramTypeAll),
-      switchMap(() =>
-        this.http
+      switchMap(({ queryProperties }) => {
+        const params: any = {};
+        if (queryProperties) {
+          params['queryProperties'] = queryProperties;
+        }
+        return this.http
           .get<GenericResponseInterface<ProgramTypeListInterface[]>>(
             `${environment.baseUrl}/ProgramType/GetAll`,
-            { withCredentials: true }
+            { params, withCredentials: true }
           )
           .pipe(
             map((payload) =>
@@ -32,8 +36,8 @@ export class ProgramTypeEffect {
             catchError((error) => {
               return of(ProgramTypeAction.getProgramTypeAllFail({ error }));
             })
-          )
-      )
+          );
+      })
     )
   );
 
@@ -41,49 +45,21 @@ export class ProgramTypeEffect {
   $programTypeList = createEffect(() =>
     this.actions$.pipe(
       ofType(ProgramTypeAction.getProgramTypeList),
-      switchMap(({ pageQuery }) => {
-        const params: { [key: string]: string | number } = {
-          start: pageQuery.start,
-          recordsPerPage: pageQuery.recordsPerPage,
-          pageIndex: pageQuery.pageIndex || 0
-        };
-
-        if (pageQuery.searchText) {
-          params['searchText'] = pageQuery.searchText;
-        }
-
-        if (pageQuery.queryProperties && pageQuery.queryProperties.length > 0) {
-          params['queryProperties'] = JSON.stringify(pageQuery.queryProperties);
-        }
-
+      switchMap(({ start, recordsPerPage, searchText, queryProperties }) => {
+        const params: any = {};
+        if (start !== undefined) params['start'] = start;
+        if (recordsPerPage !== undefined) params['recordsPerPage'] = recordsPerPage;
+        if (searchText) params['searchText'] = searchText;
+        if (queryProperties) params['queryProperties'] = queryProperties;
         return this.http
           .get<GenericResponseInterface<PaginatedResponseInterface<ProgramTypeListInterface[]>>>(
             `${environment.baseUrl}/ProgramType/GetAllPaginated`,
-            {
-              params,
-              withCredentials: true,
-            }
+            { params, withCredentials: true }
           )
           .pipe(
-            map((response) => {
-              const paginatedResponse: PaginatedResponseInterface<ProgramTypeListInterface[]> = {
-                currentPage: response.entity.currentPage,
-                recordPerPage: response.entity.recordPerPage,
-                totalPages: response.entity.totalPages,
-                totalCount: response.entity.totalCount,
-                data: response.entity.data
-              };
-              return ProgramTypeAction.getProgramTypeListSuccess({ 
-                payload: { 
-                  entity: paginatedResponse,
-                  error: response.error,
-                  exceptionError: response.exceptionError,
-                  message: response.message,
-                  messages: response.messages,
-                  succeeded: response.succeeded
-                } 
-              });
-            }),
+            map((payload) =>
+              ProgramTypeAction.getProgramTypeListSuccess({ payload })
+            ),
             catchError((error) => {
               return of(ProgramTypeAction.getProgramTypeListFail({ error }));
             })
@@ -121,11 +97,11 @@ export class ProgramTypeEffect {
   $programTypeByProperties = createEffect(() =>
     this.actions$.pipe(
       ofType(ProgramTypeAction.getProgramTypeByProperties),
-      switchMap(({ properties }) =>
+      switchMap(({ queryPropertiesString }) =>
         this.http
-          .post<GenericResponseInterface<ProgramTypeListInterface[]>>(
+          .post<GenericResponseInterface<ProgramTypeListInterface>>(
             `${environment.baseUrl}/ProgramType/GetByProperties`,
-            properties,
+            queryPropertiesString,
             { withCredentials: true }
           )
           .pipe(
@@ -139,17 +115,37 @@ export class ProgramTypeEffect {
       )
     )
   );
+  // Get Data Import Template
+  $getProgramTypeDataImportTemplate = createEffect(() =>
+    this.actions$.pipe(
+      ofType(ProgramTypeAction.getProgramTypeDataImportTemplate),
+      switchMap(() =>
+        this.http
+          .get<any>(
+            `${environment.baseUrl}/ProgramType/GetDataImportTemplate`,
+            { withCredentials: true }
+          )
+          .pipe(
+            map((payload) =>
+              ProgramTypeAction.getProgramTypeDataImportTemplateSuccess({ payload })
+            ),
+            catchError((error) => {
+              return of(ProgramTypeAction.getProgramTypeDataImportTemplateFail({ error }));
+            })
+          )
+      )
+    )
+  );
 
   // Exists
   $programTypeExists = createEffect(() =>
     this.actions$.pipe(
       ofType(ProgramTypeAction.programTypeExists),
-      switchMap(({ properties }) =>
+      switchMap(({ id }) =>
         this.http
-          .post<GenericResponseInterface<boolean>>(
+          .get<GenericResponseInterface<boolean>>(
             `${environment.baseUrl}/ProgramType/Exists`,
-            properties,
-            { withCredentials: true }
+            { params: { id }, withCredentials: true }
           )
           .pipe(
             map((payload) =>
@@ -191,7 +187,7 @@ export class ProgramTypeEffect {
       ofType(ProgramTypeAction.createProgramType),
       switchMap(({ payload }) =>
         this.http
-          .post<GenericResponseInterface<ProgramTypeListInterface>>(
+          .post<GenericResponseInterface<string>>(
             `${environment.baseUrl}/ProgramType/Create`,
             payload,
             { withCredentials: true }
@@ -214,7 +210,7 @@ export class ProgramTypeEffect {
       ofType(ProgramTypeAction.updateProgramType),
       switchMap(({ payload }) =>
         this.http
-          .put<GenericResponseInterface<ProgramTypeListInterface>>(
+          .put<GenericResponseInterface<string>>(
             `${environment.baseUrl}/ProgramType/Update`,
             payload,
             { withCredentials: true }
@@ -235,14 +231,11 @@ export class ProgramTypeEffect {
   $deleteProgramType = createEffect(() =>
     this.actions$.pipe(
       ofType(ProgramTypeAction.deleteProgramType),
-      switchMap(({ programTypeId }) =>
+      switchMap(({ id }) =>
         this.http
           .delete<GenericResponseInterface<boolean>>(
             `${environment.baseUrl}/ProgramType/Delete`,
-            {
-              params: { id: programTypeId },
-              withCredentials: true
-            }
+            { params: { id }, withCredentials: true }
           )
           .pipe(
             map((payload) =>
@@ -262,7 +255,7 @@ export class ProgramTypeEffect {
       ofType(ProgramTypeAction.createManyProgramTypes),
       switchMap(({ payload }) =>
         this.http
-          .post<GenericResponseInterface<ProgramTypeListInterface[]>>(
+          .post<GenericResponseInterface<number>>(
             `${environment.baseUrl}/ProgramType/CreateMany`,
             payload,
             { withCredentials: true }
@@ -285,7 +278,7 @@ export class ProgramTypeEffect {
       ofType(ProgramTypeAction.updateManyProgramTypes),
       switchMap(({ payload }) =>
         this.http
-          .post<GenericResponseInterface<ProgramTypeListInterface[]>>(
+          .post<GenericResponseInterface<number>>(
             `${environment.baseUrl}/ProgramType/UpdateMany`,
             payload,
             { withCredentials: true }
@@ -306,14 +299,11 @@ export class ProgramTypeEffect {
   $deleteManyProgramTypes = createEffect(() =>
     this.actions$.pipe(
       ofType(ProgramTypeAction.deleteManyProgramTypes),
-      switchMap(({ programTypeIds }) =>
+      switchMap(({ ids }) =>
         this.http
-          .delete<GenericResponseInterface<boolean>>(
+          .delete<GenericResponseInterface<number>>(
             `${environment.baseUrl}/ProgramType/DeleteMany`,
-            {
-              params: { ids: programTypeIds },
-              withCredentials: true
-            }
+            { params: { ids }, withCredentials: true }
           )
           .pipe(
             map((payload) =>

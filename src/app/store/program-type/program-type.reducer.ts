@@ -9,13 +9,19 @@ import {
 export const programTypeFeatureKey = 'programType';
 
 export interface ProgramTypeState {
+  dataImportTemplate: any | null;
   programTypeList: PaginatedResponseInterface<ProgramTypeListInterface[]> | null;
   programTypeAll: ProgramTypeListInterface[] | null;
-  programTypeByProperties: ProgramTypeListInterface[] | null;
+  programTypeByProperties: ProgramTypeListInterface | null;
   programTypeById: ProgramTypeListInterface | null;
   exists: boolean | null;
   count: number | null;
-  pageQuery: PageQueryInterface | null;
+  pageQuery: {
+    start?: number;
+    recordsPerPage?: number;
+    searchText?: string;
+    queryProperties?: string;
+  } | null;
   loading: boolean;
   error: string | null;
   createSuccess: boolean;
@@ -23,6 +29,7 @@ export interface ProgramTypeState {
 }
 
 export const initialState: ProgramTypeState = {
+  dataImportTemplate: null,
   programTypeList: null,
   programTypeAll: null,
   programTypeByProperties: null,
@@ -56,9 +63,14 @@ export const reducer = createReducer(
   })),
 
   // Get List
-  on(ProgramTypeAction.getProgramTypeList, (state, { pageQuery }) => ({
+  on(ProgramTypeAction.getProgramTypeList, (state, action) => ({
     ...state,
-    pageQuery,
+    pageQuery: {
+      start: action.start,
+      recordsPerPage: action.recordsPerPage,
+      searchText: action.searchText,
+      queryProperties: action.queryProperties,
+    },
     loading: true,
     error: null,
   })),
@@ -150,12 +162,6 @@ export const reducer = createReducer(
   })),
   on(ProgramTypeAction.createProgramTypeSuccess, (state, { payload }) => ({
     ...state,
-    programTypeList: state.programTypeList
-      ? {
-          ...state.programTypeList,
-          data: [...state.programTypeList.data, payload.entity],
-        }
-      : null,
     loading: false,
     createSuccess: true,
   })),
@@ -175,18 +181,6 @@ export const reducer = createReducer(
   })),
   on(ProgramTypeAction.updateProgramTypeSuccess, (state, { payload }) => ({
     ...state,
-    programTypeList: state.programTypeList
-      ? {
-          ...state.programTypeList,
-          data: state.programTypeList.data.map((item: ProgramTypeListInterface) =>
-            item.id === payload.entity.id ? payload.entity : item
-          ),
-        }
-      : null,
-    programTypeById:
-      state.programTypeById?.id === payload.entity.id
-        ? payload.entity
-        : state.programTypeById,
     loading: false,
     updateSuccess: true,
   })),
@@ -205,13 +199,6 @@ export const reducer = createReducer(
   })),
   on(ProgramTypeAction.deleteProgramTypeSuccess, (state) => ({
     ...state,
-    programTypeById: null,
-    programTypeList: state.programTypeList
-      ? {
-          ...state.programTypeList,
-          data: state.programTypeList.data.filter((item) => item.id !== state.programTypeById?.id),
-        }
-      : null,
     loading: false,
   })),
   on(ProgramTypeAction.deleteProgramTypeFail, (state, { error }) => ({
@@ -228,12 +215,6 @@ export const reducer = createReducer(
   })),
   on(ProgramTypeAction.createManyProgramTypesSuccess, (state, { payload }) => ({
     ...state,
-    programTypeList: state.programTypeList
-      ? {
-          ...state.programTypeList,
-          data: [...state.programTypeList.data, ...payload.entity],
-        }
-      : null,
     loading: false,
   })),
   on(ProgramTypeAction.createManyProgramTypesFail, (state, { error }) => ({
@@ -250,15 +231,6 @@ export const reducer = createReducer(
   })),
   on(ProgramTypeAction.updateManyProgramTypesSuccess, (state, { payload }) => ({
     ...state,
-    programTypeList: state.programTypeList
-      ? {
-          ...state.programTypeList,
-          data: state.programTypeList.data.map((item: ProgramTypeListInterface) => {
-            const updatedItem = payload.entity.find((updated) => updated.id === item.id);
-            return updatedItem || item;
-          }),
-        }
-      : null,
     loading: false,
   })),
   on(ProgramTypeAction.updateManyProgramTypesFail, (state, { error }) => ({
@@ -275,7 +247,6 @@ export const reducer = createReducer(
   })),
   on(ProgramTypeAction.deleteManyProgramTypesSuccess, (state) => ({
     ...state,
-    programTypeList: null,
     loading: false,
   })),
   on(ProgramTypeAction.deleteManyProgramTypesFail, (state, { error }) => ({
@@ -283,6 +254,24 @@ export const reducer = createReducer(
     loading: false,
     error,
   }))
+
+  // Get Data Import Template
+  ,
+  on(ProgramTypeAction.getProgramTypeDataImportTemplate, (state) => ({
+    ...state,
+    loading: true,
+    error: null,
+  })),
+  on(ProgramTypeAction.getProgramTypeDataImportTemplateSuccess, (state, { payload }) => ({
+    ...state,
+    dataImportTemplate: payload,
+    loading: false,
+  })),
+  on(ProgramTypeAction.getProgramTypeDataImportTemplateFail, (state, { error }) => ({
+    ...state,
+    loading: false,
+    error,
+  })),
 );
 
 export const selectProgramTypeState = createFeatureSelector<ProgramTypeState>(

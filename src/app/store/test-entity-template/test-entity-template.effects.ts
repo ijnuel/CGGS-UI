@@ -2,14 +2,37 @@ import { Injectable } from '@angular/core';
 import { createEffect, ofType, Actions } from '@ngrx/effects';
 import { of } from 'rxjs';
 import { catchError, map, switchMap, tap } from 'rxjs/operators';
-import * as TestEntityTemplateAction from './test-entity-template.actions';
 import { environment } from '../../../environments/environment';
-import {
-  TestEntityTemplateListInterface,
-  PaginatedResponseInterface,
-  GenericResponseInterface,
-  TestEntityTemplateFormInterface,
-} from '../../types';
+import * as TestEntityTemplateAction from './test-entity-template.actions';
+import { TestEntityTemplateListInterface, PaginatedResponseInterface, GenericResponseInterface, TestEntityTemplateFormInterface } from '../../types';
+
+// Add new actions for import/export endpoints
+import { createAction, props } from '@ngrx/store';
+
+export const getTestEntityTemplateDataImportTemplate = createAction(
+  '[TestEntityTemplate] Get Data Import Template'
+);
+export const getTestEntityTemplateDataImportTemplateSuccess = createAction(
+  '[TestEntityTemplate/API] Get Data Import Template Success',
+  props<{ payload: any }>()
+);
+export const getTestEntityTemplateDataImportTemplateFail = createAction(
+  '[TestEntityTemplate/API] Get Data Import Template Fail',
+  props<{ error: string }>()
+);
+
+export const importTestEntityTemplateData = createAction(
+  '[TestEntityTemplate] Import Data',
+  props<{ file: File }>()
+);
+export const importTestEntityTemplateDataSuccess = createAction(
+  '[TestEntityTemplate/API] Import Data Success',
+  props<{ payload: any }>()
+);
+export const importTestEntityTemplateDataFail = createAction(
+  '[TestEntityTemplate/API] Import Data Fail',
+  props<{ error: string }>()
+);
 import { HttpClient } from '@angular/common/http';
 import { GlobalLoadingFacade } from '../global-loading/global-loading.facade';
 
@@ -19,11 +42,15 @@ export class TestEntityTemplateEffect {
   $testEntityTemplateAll = createEffect(() =>
     this.actions$.pipe(
       ofType(TestEntityTemplateAction.getTestEntityTemplateAll),
-      switchMap(() =>
-        this.http
+      switchMap(({ queryProperties }) => {
+        const params: any = {};
+        if (queryProperties) {
+          params['queryProperties'] = queryProperties;
+        }
+        return this.http
           .get<GenericResponseInterface<TestEntityTemplateListInterface[]>>(
             `${environment.baseUrl}/TestEntityTemplate/GetAll`,
-            { withCredentials: true }
+            { params, withCredentials: true }
           )
           .pipe(
             map((payload) =>
@@ -32,8 +59,8 @@ export class TestEntityTemplateEffect {
             catchError((error) => {
               return of(TestEntityTemplateAction.getTestEntityTemplateAllFail({ error }));
             })
-          )
-      )
+          );
+      })
     )
   );
 
@@ -41,49 +68,21 @@ export class TestEntityTemplateEffect {
   $testEntityTemplateList = createEffect(() =>
     this.actions$.pipe(
       ofType(TestEntityTemplateAction.getTestEntityTemplateList),
-      switchMap(({ pageQuery }) => {
-        const params: { [key: string]: string | number } = {
-          start: pageQuery.start,
-          recordsPerPage: pageQuery.recordsPerPage,
-          pageIndex: pageQuery.pageIndex || 0
-        };
-
-        if (pageQuery.searchText) {
-          params['searchText'] = pageQuery.searchText;
-        }
-
-        if (pageQuery.queryProperties && pageQuery.queryProperties.length > 0) {
-          params['queryProperties'] = JSON.stringify(pageQuery.queryProperties);
-        }
-
+      switchMap(({ start, recordsPerPage, searchText, queryProperties }) => {
+        const params: any = {};
+        if (start !== undefined) params['start'] = start;
+        if (recordsPerPage !== undefined) params['recordsPerPage'] = recordsPerPage;
+        if (searchText) params['searchText'] = searchText;
+        if (queryProperties) params['queryProperties'] = queryProperties;
         return this.http
           .get<GenericResponseInterface<PaginatedResponseInterface<TestEntityTemplateListInterface[]>>>(
             `${environment.baseUrl}/TestEntityTemplate/GetAllPaginated`,
-            {
-              params,
-              withCredentials: true,
-            }
+            { params, withCredentials: true }
           )
           .pipe(
-            map((response) => {
-              const paginatedResponse: PaginatedResponseInterface<TestEntityTemplateListInterface[]> = {
-                currentPage: response.entity.currentPage,
-                recordPerPage: response.entity.recordPerPage,
-                totalPages: response.entity.totalPages,
-                totalCount: response.entity.totalCount,
-                data: response.entity.data
-              };
-              return TestEntityTemplateAction.getTestEntityTemplateListSuccess({ 
-                payload: { 
-                  entity: paginatedResponse,
-                  error: response.error,
-                  exceptionError: response.exceptionError,
-                  message: response.message,
-                  messages: response.messages,
-                  succeeded: response.succeeded
-                } 
-              });
-            }),
+            map((payload) =>
+              TestEntityTemplateAction.getTestEntityTemplateListSuccess({ payload })
+            ),
             catchError((error) => {
               return of(TestEntityTemplateAction.getTestEntityTemplateListFail({ error }));
             })
@@ -121,11 +120,11 @@ export class TestEntityTemplateEffect {
   $testEntityTemplateByProperties = createEffect(() =>
     this.actions$.pipe(
       ofType(TestEntityTemplateAction.getTestEntityTemplateByProperties),
-      switchMap(({ properties }) =>
+      switchMap(({ queryPropertiesString }) =>
         this.http
           .post<GenericResponseInterface<TestEntityTemplateListInterface[]>>(
             `${environment.baseUrl}/TestEntityTemplate/GetByProperties`,
-            properties,
+            queryPropertiesString,
             { withCredentials: true }
           )
           .pipe(
@@ -144,12 +143,11 @@ export class TestEntityTemplateEffect {
   $testEntityTemplateExists = createEffect(() =>
     this.actions$.pipe(
       ofType(TestEntityTemplateAction.testEntityTemplateExists),
-      switchMap(({ properties }) =>
+      switchMap(({ id }) =>
         this.http
-          .post<GenericResponseInterface<boolean>>(
+          .get<GenericResponseInterface<boolean>>(
             `${environment.baseUrl}/TestEntityTemplate/Exists`,
-            properties,
-            { withCredentials: true }
+            { params: { id }, withCredentials: true }
           )
           .pipe(
             map((payload) =>
@@ -235,14 +233,11 @@ export class TestEntityTemplateEffect {
   $deleteTestEntityTemplate = createEffect(() =>
     this.actions$.pipe(
       ofType(TestEntityTemplateAction.deleteTestEntityTemplate),
-      switchMap(({ testEntityTemplateId }) =>
+      switchMap(({ id }) =>
         this.http
           .delete<GenericResponseInterface<boolean>>(
             `${environment.baseUrl}/TestEntityTemplate/Delete`,
-            {
-              params: { testEntityTemplateId },
-              withCredentials: true
-            }
+            { params: { id }, withCredentials: true }
           )
           .pipe(
             map((payload) =>
@@ -306,14 +301,11 @@ export class TestEntityTemplateEffect {
   $deleteManyTestEntityTemplates = createEffect(() =>
     this.actions$.pipe(
       ofType(TestEntityTemplateAction.deleteManyTestEntityTemplates),
-      switchMap(({ testEntityTemplateIds }) =>
+      switchMap(({ ids }) =>
         this.http
           .delete<GenericResponseInterface<boolean>>(
             `${environment.baseUrl}/TestEntityTemplate/DeleteMany`,
-            {
-              params: { ids: testEntityTemplateIds },
-              withCredentials: true
-            }
+            { params: { ids }, withCredentials: true }
           )
           .pipe(
             map((payload) =>
@@ -368,6 +360,38 @@ export class TestEntityTemplateEffect {
         })
       ),
     { dispatch: false }
+  );
+
+  // Get Data Import Template
+  $getDataImportTemplate = createEffect(() =>
+    this.actions$.pipe(
+      ofType(getTestEntityTemplateDataImportTemplate),
+      switchMap(() =>
+        this.http
+          .get<any>(`${environment.baseUrl}/TestEntityTemplate/GetDataImportTemplate`, { withCredentials: true })
+          .pipe(
+            map((payload) => getTestEntityTemplateDataImportTemplateSuccess({ payload })),
+            catchError((error) => of(getTestEntityTemplateDataImportTemplateFail({ error })))
+          )
+      )
+    )
+  );
+
+  // Import Data
+  $importData = createEffect(() =>
+    this.actions$.pipe(
+      ofType(importTestEntityTemplateData),
+      switchMap(({ file }) => {
+        const formData = new FormData();
+        formData.append('file', file);
+        return this.http
+          .post<any>(`${environment.baseUrl}/TestEntityTemplate/ImportData`, formData, { withCredentials: true })
+          .pipe(
+            map((payload) => importTestEntityTemplateDataSuccess({ payload })),
+            catchError((error) => of(importTestEntityTemplateDataFail({ error })))
+          );
+      })
+    )
   );
 
   constructor(

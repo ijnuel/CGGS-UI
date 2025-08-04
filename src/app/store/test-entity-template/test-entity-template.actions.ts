@@ -8,7 +8,10 @@ import {
 } from '../../types';
 
 // Get All (non-paginated)
-export const getTestEntityTemplateAll = createAction('[TestEntityTemplate] Get All');
+export const getTestEntityTemplateAll = createAction(
+  '[TestEntityTemplate] Get All',
+  props<{ queryProperties?: string }>() // serialized QueryProperty[]
+);
 
 export const getTestEntityTemplateAllSuccess = createAction(
   '[TestEntityTemplate/API] Get All Success',
@@ -26,7 +29,10 @@ export const getTestEntityTemplateAllFail = createAction(
 export const getTestEntityTemplateList = createAction(
   '[TestEntityTemplate] Get List',
   props<{
-    pageQuery: PageQueryInterface;
+    start?: number;
+    recordsPerPage?: number;
+    searchText?: string;
+    queryProperties?: string; // serialized QueryProperty[]
   }>()
 );
 
@@ -63,7 +69,7 @@ export const getTestEntityTemplateByIdFail = createAction(
 // Get By Properties
 export const getTestEntityTemplateByProperties = createAction(
   '[TestEntityTemplate] Get By Properties',
-  props<{ properties: Partial<TestEntityTemplateFormInterface> }>()
+  props<{ queryPropertiesString: string }>() // serialized QueryProperty[]
 );
 
 export const getTestEntityTemplateByPropertiesSuccess = createAction(
@@ -81,7 +87,7 @@ export const getTestEntityTemplateByPropertiesFail = createAction(
 // Exists
 export const testEntityTemplateExists = createAction(
   '[TestEntityTemplate] Exists',
-  props<{ properties: Partial<TestEntityTemplateFormInterface> }>()
+  props<{ id: string }>()
 );
 
 export const testEntityTemplateExistsSuccess = createAction(
@@ -150,7 +156,7 @@ export const updateTestEntityTemplateFail = createAction(
 // Delete
 export const deleteTestEntityTemplate = createAction(
   '[TestEntityTemplate] Delete',
-  props<{ testEntityTemplateId: string }>()
+  props<{ id: string }>()
 );
 
 export const deleteTestEntityTemplateSuccess = createAction(
@@ -204,7 +210,7 @@ export const updateManyTestEntityTemplatesFail = createAction(
 // Delete Many
 export const deleteManyTestEntityTemplates = createAction(
   '[TestEntityTemplate] Delete Many',
-  props<{ testEntityTemplateIds: string[] }>()
+  props<{ ids: string[] }>()
 );
 
 export const deleteManyTestEntityTemplatesSuccess = createAction(
@@ -216,5 +222,31 @@ export const deleteManyTestEntityTemplatesSuccess = createAction(
 
 export const deleteManyTestEntityTemplatesFail = createAction(
   '[TestEntityTemplate/API] Delete Many Fail',
+  props<{ error: string }>()
+);
+
+// Import/Export Endpoints
+export const getTestEntityTemplateDataImportTemplate = createAction(
+  '[TestEntityTemplate] Get Data Import Template'
+);
+export const getTestEntityTemplateDataImportTemplateSuccess = createAction(
+  '[TestEntityTemplate/API] Get Data Import Template Success',
+  props<{ payload: any }>()
+);
+export const getTestEntityTemplateDataImportTemplateFail = createAction(
+  '[TestEntityTemplate/API] Get Data Import Template Fail',
+  props<{ error: string }>()
+);
+
+export const importTestEntityTemplateData = createAction(
+  '[TestEntityTemplate] Import Data',
+  props<{ file: File }>()
+);
+export const importTestEntityTemplateDataSuccess = createAction(
+  '[TestEntityTemplate/API] Import Data Success',
+  props<{ payload: any }>()
+);
+export const importTestEntityTemplateDataFail = createAction(
+  '[TestEntityTemplate/API] Import Data Fail',
   props<{ error: string }>()
 );

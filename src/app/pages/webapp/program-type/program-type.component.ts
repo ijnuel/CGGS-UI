@@ -279,14 +279,19 @@ export class ProgramTypeComponent implements OnInit {
     // this.classSubjectFacade.getClassSubjectAll();
     // this.classSubjectAssessmentFacade.getClassSubjectAssessmentAll();
 
-    this.programTypeFacade.getProgramTypeList(event);
+    const { start, recordsPerPage, searchText, queryProperties } = event;
+    this.programTypeFacade.getProgramTypeList({
+      start,
+      recordsPerPage,
+      searchText,
+      queryProperties: queryProperties ? JSON.stringify(queryProperties) : undefined
+    });
   }
 
   onSearch(searchText: string) {
     this.programTypeFacade.getProgramTypeList({
       start: 0,
       recordsPerPage: 10,
-      pageIndex: 0,
       searchText
     });
   }
@@ -295,8 +300,7 @@ export class ProgramTypeComponent implements OnInit {
     this.programTypeFacade.getProgramTypeList({
       start: 0,
       recordsPerPage: 10,
-      pageIndex: 0,
-      queryProperties: filters
+      queryProperties: JSON.stringify(filters)
     });
   }
 

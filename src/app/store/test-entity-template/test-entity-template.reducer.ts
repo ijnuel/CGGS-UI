@@ -1,10 +1,6 @@
 import { createFeatureSelector, createReducer, on } from '@ngrx/store';
 import * as TestEntityTemplateAction from './test-entity-template.actions';
-import {
-  PageQueryInterface,
-  PaginatedResponseInterface,
-  TestEntityTemplateListInterface,
-} from '../../types';
+import { PaginatedResponseInterface, TestEntityTemplateListInterface } from '../../types';
 
 export const testEntityTemplateFeatureKey = 'testEntityTemplate';
 
@@ -15,12 +11,20 @@ export interface TestEntityTemplateState {
   testEntityTemplateById: TestEntityTemplateListInterface | null;
   exists: boolean | null;
   count: number | null;
-  pageQuery: PageQueryInterface | null;
+  pageQuery: {
+    start?: number;
+    recordsPerPage?: number;
+    searchText?: string;
+    queryProperties?: string;
+  } | null;
   loading: boolean;
   error: string | null;
   createSuccess: boolean;
   updateSuccess: boolean;
+  dataImportTemplate: any | null;
+  importDataResult: any | null;
 }
+
 
 export const initialState: TestEntityTemplateState = {
   testEntityTemplateList: null,
@@ -34,6 +38,8 @@ export const initialState: TestEntityTemplateState = {
   error: null,
   createSuccess: false,
   updateSuccess: false,
+  dataImportTemplate: null,
+  importDataResult: null
 };
 
 export const reducer = createReducer(
@@ -56,9 +62,14 @@ export const reducer = createReducer(
   })),
 
   // Get List
-  on(TestEntityTemplateAction.getTestEntityTemplateList, (state, { pageQuery }) => ({
+  on(TestEntityTemplateAction.getTestEntityTemplateList, (state, action) => ({
     ...state,
-    pageQuery,
+    pageQuery: {
+      start: action.start,
+      recordsPerPage: action.recordsPerPage,
+      searchText: action.searchText,
+      queryProperties: action.queryProperties,
+    },
     loading: true,
     error: null,
   })),
@@ -209,7 +220,7 @@ export const reducer = createReducer(
     testEntityTemplateList: state.testEntityTemplateList
       ? {
           ...state.testEntityTemplateList,
-          data: state.testEntityTemplateList.data.filter((item) => item.id !== state.testEntityTemplateById?.id),
+          data: state.testEntityTemplateList.data.filter((item: TestEntityTemplateListInterface) => item.id !== state.testEntityTemplateById?.id),
         }
       : null,
     loading: false,
@@ -279,6 +290,42 @@ export const reducer = createReducer(
     loading: false,
   })),
   on(TestEntityTemplateAction.deleteManyTestEntityTemplatesFail, (state, { error }) => ({
+    ...state,
+    loading: false,
+    error,
+  })),
+
+  // Get Data Import Template
+  on(TestEntityTemplateAction.getTestEntityTemplateDataImportTemplate, (state) => ({
+    ...state,
+    loading: true,
+    error: null,
+    dataImportTemplate: null,
+  })),
+  on(TestEntityTemplateAction.getTestEntityTemplateDataImportTemplateSuccess, (state, { payload }) => ({
+    ...state,
+    dataImportTemplate: payload,
+    loading: false,
+  })),
+  on(TestEntityTemplateAction.getTestEntityTemplateDataImportTemplateFail, (state, { error }) => ({
+    ...state,
+    loading: false,
+    error,
+  })),
+
+  // Import Data
+  on(TestEntityTemplateAction.importTestEntityTemplateData, (state) => ({
+    ...state,
+    loading: true,
+    error: null,
+    importDataResult: null,
+  })),
+  on(TestEntityTemplateAction.importTestEntityTemplateDataSuccess, (state, { payload }) => ({
+    ...state,
+    importDataResult: payload,
+    loading: false,
+  })),
+  on(TestEntityTemplateAction.importTestEntityTemplateDataFail, (state, { error }) => ({
     ...state,
     loading: false,
     error,
