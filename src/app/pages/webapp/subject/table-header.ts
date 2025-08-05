@@ -14,5 +14,12 @@ export const tableHeader: TableHeaderInterface[] = [
     filterable: true,
     type: 'text',
     align: 'left'
+  },
+  {
+    name: 'Subject Type',
+    key: 'subjectType',
+    filterable: true,
+    type: 'text',
+    align: 'left'
   }
 ];

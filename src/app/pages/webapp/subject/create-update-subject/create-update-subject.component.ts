@@ -26,7 +26,9 @@ export class CreateUpdateSubjectComponent implements OnInit, OnDestroy {
 
     formGroup: FormGroup<{
         name: FormControl;
+        subjectType: FormControl;
     }>;
+    subjectTypes$: Observable<DropdownListInterface[] | null>;
 
     get formControl() {
         return this.formGroup.controls;
@@ -47,10 +49,14 @@ export class CreateUpdateSubjectComponent implements OnInit, OnDestroy {
         this.error$ = this.subjectFacade.error$;
         this.subjectById$ = this.subjectFacade.subjectById$;
         this.dropdownLoading$ = this.sharedFacade.selectedLoading$;
+        this.subjectTypes$ = this.sharedFacade.selectSubjectTypeList$;
 
         this.formGroup = this.fb.group({
             name: ['', [Validators.required, Validators.maxLength(255)]],
+            subjectType: [0, [Validators.required, Validators.min(1), Validators.max(3)]],
         });
+
+        this.sharedFacade.getSubjectTypeList();
     }
 
     ngOnInit() {
@@ -61,7 +67,8 @@ export class CreateUpdateSubjectComponent implements OnInit, OnDestroy {
             this.subjectById$.pipe(takeUntil(this.unsubscribe$)).subscribe((data) => {
                 if (data) {
                     this.formGroup.patchValue({
-                        name: data.name
+                        name: data.name,
+                        subjectType: data.subjectType
                     });
                 }
             });

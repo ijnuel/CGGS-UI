@@ -3,10 +3,12 @@ export interface SubjectListInterface {
     name: string;
     description: string;
     createdDate: string;
+    subjectType: string;
 }
 
 export interface SubjectFormInterface {
     id?: string;
     name: string;
     description: string;
+    subjectType: string;
 }

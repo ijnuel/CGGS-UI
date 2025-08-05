@@ -14,27 +14,16 @@
       </span>
     </mat-expansion-panel-header>
 
-    <!-- Child Panel Recursion -->
-    <ng-container *ngIf="config.childConfig">
-      <app-program-setup-level-panel [items]="config.childItemsFn(getId(item))" [levelType]="config.childConfig.label"
-        [config]="config.childConfig" [addFormVisibleFor]="addFormVisibleFor" [loading]="loading"
-        (edit)="edit.emit($event)" (delete)="delete.emit($event)" (add)="add.emit($event)" (refresh)="onRefresh($event)"
-        (showAddForm)="showAddForm.emit($event)" (hideAddForm)="hideAddForm.emit($event)"
-        (submit)="submit.emit($event)">
-      </app-program-setup-level-panel>
-    </ng-container>
-
-    <!-- Table (if needed) -->
-    <ng-container *ngIf="config.showTable && config.getTableData">
-      <app-table [tableData]="config.getTableData(getId(item))" [tableHeaderData]="config.tableHeaderData!"
-        [showActionColumn]="true" [showViewIcon]="false" (edit)="edit.emit({ item: $event, level: levelType })"
-        (delete)="delete.emit({ item: $event, level: levelType })" [isLoading]="loading"
-        [showPaginator]="false"></app-table>
-    </ng-container>
+    <div class="flex justify-end items-center">
+      <button *ngIf="addFormVisibleFor !== getId(item) && config?.showAddButton(item)" mat-raised-button color="accent"
+        (click)="showAddForm.emit({ id: getId(item), level: levelType })">
+        <mat-icon>add</mat-icon>
+      </button>
+    </div>
 
     <!-- Add/Edit Form -->
     <div *ngIf="addFormVisibleFor === getId(item)" class="p-3 border rounded">
-      <form [formGroup]="config.formGroup">
+      <form [formGroup]="config.formGroup!">
         @if (levelType === ProgramSetupLevel.PROGRAMTYPE) {
         <mat-form-field appearance="outline" class="w-full">
           <mat-label>Level (e.g 1, 2, 3...)</mat-label>
@@ -51,8 +40,8 @@
         <mat-form-field appearance="outline" class="w-full">
           <mat-label>Subject</mat-label>
           <mat-select formControlName="subjectId">
-            @for (subject of getDropDownOptions("subjects"); track $index) {
-            <mat-option [value]="subject.id"> {{ subject.name }}</mat-option>
+            @for (subject of getDropDownOptions("subjects", item); track $index) {
+            <mat-option [value]="subject.value"> {{ subject.name }}</mat-option>
             }
           </mat-select>
         </mat-form-field>
@@ -75,20 +64,33 @@
         <button mat-button class="cancel-btn" type="button"
           (click)="hideAddForm.emit({ level: levelType })">Cancel</button>
         <button mat-raised-button class="sec-btn" (click)="submit.emit({ item, level: levelType, config })"
-          color="primary" type="button" [disabled]="config.formGroup.invalid">
+          color="primary" type="button" [disabled]="config.formGroup?.invalid">
           Save
         </button>
       </div>
     </div>
+    <!-- Child Panel Recursion -->
+    <ng-container *ngIf="config.childConfig">
+      <app-program-setup-level-panel [items]="config.childItemsFn(getId(item))" [levelType]="config.childConfig.label"
+        [config]="config.childConfig" [addFormVisibleFor]="addFormVisibleFor" [loading]="loading"
+        (edit)="edit.emit($event)" (delete)="delete.emit($event)" (add)="add.emit($event)" (refresh)="onRefresh($event)"
+        (showAddForm)="showAddForm.emit($event)" (hideAddForm)="hideAddForm.emit($event)"
+        (submit)="submit.emit($event)">
+      </app-program-setup-level-panel>
+    </ng-container>
+
+    <!-- Table (if needed) -->
+    <ng-container *ngIf="config?.showTable(item) == true && config.getTableData">
+      <app-table [tableData]="config.getTableData(getId(item))" [tableHeaderData]="config.tableHeaderData!"
+        [showActionColumn]="true" [showViewIcon]="false" (edit)="edit.emit({ item: $event, level: config.childConfig?.label! })"
+        (delete)="delete.emit({ item: $event, level: config.childConfig?.label! })" [isLoading]="loading"
+        [showPaginator]="false"></app-table>
+    </ng-container>
 
     <!-- Add/Refresh Buttons -->
     <!-- <button *ngIf="addFormVisibleFor !== getId(item) && config.showAddButton" mat-raised-button color="primary"
       (click)="refresh.emit({ item, level: levelType })">
       <mat-icon>refresh</mat-icon>
     </button> -->
-    <button *ngIf="addFormVisibleFor !== getId(item) && config.showAddButton" mat-raised-button color="accent"
-      (click)="showAddForm.emit({ id: getId(item), level: levelType })">
-      <mat-icon>add</mat-icon>
-    </button>
   </mat-expansion-panel>
 </mat-accordion>

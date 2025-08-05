@@ -41,8 +41,8 @@ export class ProgramSetupLevelPanelComponent {
       this.refresh.emit({ item: event.item, level: this.levelType });
     }
   }
-  getDropDownOptions(key: string): DropdownListInterface[] {
-    return this.config.dropDownOptions?.find(x => x.key == key)?.dropDownListFn() ?? [];
+  getDropDownOptions(key: string, item: any): DropdownListInterface[] {
+    return this.config.dropDownOptions?.(this.getId(item)).find(x => x.key == key)?.dropDownListFn() ?? [];
   }
 
   onPanelToggle(isExpanded: boolean) {

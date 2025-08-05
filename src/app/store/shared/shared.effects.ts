@@ -89,7 +89,7 @@ export class SharedEffect {
               modifiedPayload.entity = payload.entity.map((item) => {
                 return {
                   ...item,
-                  value: item.id,
+                  value: item.value,
                 };
               });
               return SharedAction.getCountryListSuccess({
@@ -121,7 +121,7 @@ export class SharedEffect {
               modifiedPayload.entity = payload.entity.map((item) => {
                 return {
                   ...item,
-                  value: item.id,
+                  value: item.value,
                 };
               });
 
@@ -154,7 +154,7 @@ export class SharedEffect {
               modifiedPayload.entity = payload.entity.map((item) => {
                 return {
                   ...item,
-                  value: item.id,
+                  value: item.value,
                 };
               });
 

@@ -3,13 +3,14 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
 import { SubjectFacade } from '../../../store/subject/subject.facade';
 import { SubjectListInterface } from '../../../types/subject';
-import { PaginatedResponseInterface } from '../../../types';
+import { DropdownListInterface, PaginatedResponseInterface } from '../../../types';
 import { PageQueryInterface } from '../../../types';
 import { TableHeaderInterface } from '../../../types/table';
 import { MatDialog } from '@angular/material/dialog';
 import { ConfirmDialogComponent } from '../../../shared/confirm-dialog/confirm-dialog.component';
 import { ToastNotificationService, NotificationTypeEnums } from '../../../services/toast-notification.service';
 import { tableHeader } from './table-header';
+import { SharedFacade } from '../../../store/shared/shared.facade';
 
 @Component({
   selector: 'app-subject',
@@ -18,22 +19,41 @@ import { tableHeader } from './table-header';
 })
 export class SubjectComponent implements OnInit {
   subjectList$: Observable<PaginatedResponseInterface<SubjectListInterface[]> | null>;
+  subjectTypeList$: Observable<DropdownListInterface[] | null>;
   loading$: Observable<boolean>;
   tableHeaderData: TableHeaderInterface[] = tableHeader;
+
+  subjectTypeList: DropdownListInterface[] = [];
+  subjectList: SubjectListInterface[] = [];
 
   constructor(
     private router: Router,
     private route: ActivatedRoute,
     private subjectFacade: SubjectFacade,
+    private sharedFacade: SharedFacade,
     private dialog: MatDialog,
     private toastService: ToastNotificationService
   ) {
     this.subjectList$ = this.subjectFacade.subjectList$;
+    this.subjectTypeList$ = this.sharedFacade.selectSubjectTypeList$;
     this.loading$ = this.subjectFacade.loading$;
   }
 
   ngOnInit() {
+    this.sharedFacade.getSubjectTypeList();
     this.loadSubjects();
+    
+    this.subjectList$.subscribe(x => {
+      this.subjectList = this.getTableData(x?.data ?? []);
+      console.log('Subject List:', this.subjectList);
+    });
+
+    this.subjectTypeList$.subscribe(x => {
+      this.subjectTypeList = x! ?? [];
+      console.log('Subject Type List:', this.subjectTypeList);
+      this.subjectList = this.getTableData(this.subjectList);
+      console.log('Subject List:', this.subjectList);
+    })
   }
 
   loadSubjects() {
@@ -101,4 +121,13 @@ export class SubjectComponent implements OnInit {
   onCancel() {
     this.router.navigate(['../'], { relativeTo: this.route });
   }
+  
+    getTableData(data: SubjectListInterface[]) : SubjectListInterface[] {
+      return data.map(config => {
+        return {
+          ...config,
+          subjectType: this.subjectTypeList.find(x => x.value == config.subjectType)?.description
+        }
+      }) as SubjectListInterface[];
+    }
 }

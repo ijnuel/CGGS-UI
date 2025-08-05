@@ -2,7 +2,8 @@
   {
     loading: loading$ | async,
     dropdownLoading: dropdownLoading$ | async,
-    error: error$ | async
+    error: error$ | async,
+    subjectTypes: subjectTypes$ | async
   };
   as obs
 ) {
@@ -25,6 +26,19 @@
             />
             <mat-error>
               {{ getErrorMessage("name") }}
+            </mat-error>
+          </mat-form-field>
+        </div>
+        <div>
+          <mat-form-field class="form-input">
+            <mat-label>Subject Type</mat-label>
+            <mat-select [formControl]="formControl.subjectType">
+              <mat-option *ngFor="let type of obs.subjectTypes" [value]="type.value">
+                {{ type.description }}
+              </mat-option>
+            </mat-select>
+            <mat-error>
+              {{ getErrorMessage("subjectType") }}
             </mat-error>
           </mat-form-field>
         </div>

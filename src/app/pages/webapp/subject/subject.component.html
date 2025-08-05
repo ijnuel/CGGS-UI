@@ -14,7 +14,7 @@
   </div>
 
   <app-table
-    [tableData]="(subjectList$ | async)?.data ?? []"
+    [tableData]="subjectList"
     [tableHeaderData]="tableHeaderData"
     [isLoading]="(loading$ | async) ?? false"
     [totalLength]="(subjectList$ | async)?.totalCount ?? 0"

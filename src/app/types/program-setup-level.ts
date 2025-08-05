@@ -11,15 +11,15 @@ export enum ProgramSetupLevel {
 
 export interface ProgramSetupLevelConfig {
   label: ProgramSetupLevel;
-  formGroup: FormGroup;
+  formGroup?: FormGroup;
   submitHandler: (parent: any) => void;
   childItemsFn: (id: string) => any[];
   childConfig?: ProgramSetupLevelConfig;
   getName?: (item: any) => string;
   getId?: (item: any) => string;
-  showTable?: boolean;
+  showTable?: (item: any) => boolean;
   tableHeaderData?: any[];
   getTableData?: (id: string) => any[];
-  showAddButton?: boolean;
-  dropDownOptions?: { key: string, dropDownListFn:() => DropdownListInterface[] }[]
+  showAddButton?: (item: any) => boolean;
+  dropDownOptions?: (id: string) => { key: string, dropDownListFn:() => DropdownListInterface[] }[]
 }

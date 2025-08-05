@@ -57,7 +57,6 @@ interface DropdownListInterface {
   name: string;
   description: string;
   value: string | number;
-  id: string | number;
 }
 
 export {
