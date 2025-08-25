@@ -14,33 +14,25 @@ error: error$ | async }; as obs ) {
 
       <div class="grid grid-cols-2 gap-x-4 mt-2">
         <div>
-          <mat-form-field class="form-input" [appLoadingSpinner]="obs.dropdownLoading && !obs.familyList">
-            <mat-label>Family</mat-label>
-            <mat-select [formControl]="formControl.familyId">
-              @for (family of obs.familyList; track $index) {
-              <mat-option [value]="family.id">
-                {{ family.lastName }} ({{ family.familyNo }})</mat-option>
-              }
-            </mat-select>
-            <mat-error>
-              {{ getErrorMessage("familyId") }}
-            </mat-error>
-          </mat-form-field>
+          <app-searchable-mat-select
+            [options]="obs.familyList!"
+            label="Family"
+            placeholder="Select family"
+            [required]="true"
+            [formControl]="formControl.familyId"
+            [error]="getErrorMessage('familyId')"
+          ></app-searchable-mat-select>
         </div>
-        
+
         <div>
-          <mat-form-field class="form-input" [appLoadingSpinner]="obs.dropdownLoading && !obs.classList">
-            <mat-label>Class</mat-label>
-            <mat-select [formControl]="formControl.classId">
-              @for (class of obs.classList; track $index) {
-              <mat-option [value]="class.id">
-                {{ class.description }}</mat-option>
-              }
-            </mat-select>
-            <mat-error>
-              {{ getErrorMessage("classId") }}
-            </mat-error>
-          </mat-form-field>
+          <app-searchable-mat-select
+            [options]="obs.classList!"
+            label="Class"
+            placeholder="Select class"
+            [required]="true"
+            [formControl]="formControl.classId"
+            [error]="getErrorMessage('classId')"
+          ></app-searchable-mat-select>
         </div>
       </div>
 
@@ -115,85 +107,65 @@ error: error$ | async }; as obs ) {
 
       <div class="grid grid-cols-2 gap-x-4 mt-2">
         <div>
-          <mat-form-field class="form-input" [appLoadingSpinner]="obs.dropdownLoading && !obs.religionList">
-            <mat-label>Religion</mat-label>
-            <mat-select [formControl]="formControl.religion">
-              @for (religion of obs.religionList; track $index) {
-              <mat-option [value]="religion.value">
-                {{ religion.name }}</mat-option>
-              }
-            </mat-select>
-            <mat-error>
-              {{ getErrorMessage("religion") }}
-            </mat-error>
-          </mat-form-field>
+          <app-searchable-mat-select
+            [options]="obs.religionList!"
+            label="Religion"
+            placeholder="Select religion"
+            [formControl]="formControl.religion"
+            [error]="getErrorMessage('religion')"
+          ></app-searchable-mat-select>
         </div>
 
         <div>
-          <mat-form-field class="form-input" [appLoadingSpinner]="obs.dropdownLoading && !obs.genderList">
-            <mat-label>Gender</mat-label>
-            <mat-select [formControl]="formControl.gender">
-              @for (gender of obs.genderList; track $index) {
-              <mat-option [value]="gender.value"> {{ gender.name }}</mat-option>
-              }
-            </mat-select>
-            <mat-error>
-              {{ getErrorMessage("gender") }}
-            </mat-error>
-          </mat-form-field>
+          <app-searchable-mat-select
+            [options]="obs.genderList!"
+            label="Gender"
+            placeholder="Select gender"
+            [formControl]="formControl.gender"
+            [error]="getErrorMessage('gender')"
+          ></app-searchable-mat-select>
         </div>
       </div>
 
       <div class="grid grid-cols-2 gap-x-4 mt-2">
         <div>
-          <mat-form-field class="form-input" [appLoadingSpinner]="obs.dropdownLoading && !obs.countryList">
-            <mat-label>Nationality</mat-label>
-            <mat-select [formControl]="formControl.nationalityId">
-              @for (country of obs.countryList; track $index) {
-              <mat-option [value]="country.value">
-                {{ country.name }}</mat-option>
-              }
-            </mat-select>
-            <mat-error>
-              {{ getErrorMessage("nationalityId") }}
-            </mat-error>
-          </mat-form-field>
+          <app-searchable-mat-select
+            [options]="obs.countryList!"
+            label="Nationality"
+            placeholder="Select nationality"
+            [labelKey]="'name'"
+            [valueKey]="'id'"
+            [formControl]="formControl.nationalityId"
+            [error]="getErrorMessage('nationalityId')"
+          ></app-searchable-mat-select>
         </div>
 
         <div>
-          <mat-form-field class="form-input" [appLoadingSpinner]="
-              obs.dropdownLoading && !obs.selectedCountryStateList
-            ">
-            <mat-label>State of Origin</mat-label>
-            <mat-select [formControl]="formControl.stateOfOriginId">
-              @for (state of obs.selectedCountryStateList; track $index) {
-              <mat-option [value]="state.value"> {{ state.name }}</mat-option>
-              }
-            </mat-select>
-            <mat-error>
-              {{ getErrorMessage("stateOfOriginId") }}
-            </mat-error>
-          </mat-form-field>
+          <app-searchable-mat-select
+            [options]="obs.selectedCountryStateList!"
+            label="State of Origin"
+            placeholder="Select state of origin"
+            [labelKey]="'name'"
+            [valueKey]="'id'"
+            [formControl]="formControl.stateOfOriginId"
+            [error]="getErrorMessage('stateOfOriginId')"
+          ></app-searchable-mat-select>
         </div>
       </div>
 
       <div class="grid grid-cols-2 gap-x-4 mt-2">
         <div>
-          <mat-form-field class="form-input" [appLoadingSpinner]="
-              obs.dropdownLoading && !obs.selectedStateLgaList
-            ">
-            <mat-label>Local Government</mat-label>
-            <mat-select [formControl]="formControl.originLGAId">
-              @for (lga of obs.selectedStateLgaList; track $index) {
-              <mat-option [value]="lga.value"> {{ lga.name }}</mat-option>
-              }
-            </mat-select>
-            <mat-error>
-              {{ getErrorMessage("originLGAId") }}
-            </mat-error>
-          </mat-form-field>
+          <app-searchable-mat-select
+            [options]="obs.selectedStateLgaList!"
+            label="Local Government"
+            placeholder="Select local government"
+            [labelKey]="'name'"
+            [valueKey]="'id'"
+            [formControl]="formControl.originLGAId"
+            [error]="getErrorMessage('originLGAId')"
+          ></app-searchable-mat-select>
         </div>
-
+        
         <div>
           <mat-form-field class="form-input">
             <mat-label>Home Address</mat-label>
@@ -207,19 +179,16 @@ error: error$ | async }; as obs ) {
 
       <div class="grid grid-cols-2 gap-x-4 mt-2">
         <div>
-          <mat-form-field class="form-input" [appLoadingSpinner]="
-              obs.dropdownLoading && !obs.selectedCountryStateList
-            ">
-            <mat-label>Residential State</mat-label>
-            <mat-select [formControl]="formControl.residentialStateId">
-              @for (state of obs.selectedCountryStateList; track $index) {
-              <mat-option [value]="state.value"> {{ state.name }}</mat-option>
-              }
-            </mat-select>
-            <mat-error>
-              {{ getErrorMessage("residentialStateId") }}
-            </mat-error>
-          </mat-form-field>
+          <app-searchable-mat-select
+            [loading]="obs.dropdownLoading && !obs.selectedCountryStateList"
+            [options]="obs.selectedCountryStateList!"
+            label="Residential State"
+            placeholder="Select residential state"
+            [labelKey]="'name'"
+            [valueKey]="'id'"
+            [formControl]="formControl.residentialStateId"
+            [error]="getErrorMessage('residentialStateId')"
+          ></app-searchable-mat-select>
         </div>
 
         <div>

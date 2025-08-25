@@ -1,5 +1,5 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
-import { FormGroup } from '@angular/forms';
+import { FormControl, FormGroup } from '@angular/forms';
 import { DropdownListInterface, ProgramSetupLevel, ProgramSetupLevelConfig } from '../../types';
 
 @Component({
@@ -47,6 +47,10 @@ export class ProgramSetupLevelPanelComponent {
 
   onPanelToggle(isExpanded: boolean) {
       this.showIcons = !isExpanded;
+  }
+
+  getFormControl(key: string): FormControl {
+    return this.config.formGroup?.get(key) as FormControl;
   }
 
 } 

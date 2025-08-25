@@ -37,14 +37,13 @@
         </mat-form-field>
         }
         @else if (levelType === ProgramSetupLevel.CLASSARM) {
-        <mat-form-field appearance="outline" class="w-full">
-          <mat-label>Subject</mat-label>
-          <mat-select formControlName="subjectId">
-            @for (subject of getDropDownOptions("subjects", item); track $index) {
-            <mat-option [value]="subject.value"> {{ subject.name }}</mat-option>
-            }
-          </mat-select>
-        </mat-form-field>
+          <app-searchable-mat-select
+            [options]="getDropDownOptions('subjects', item)"
+            label="Subject"
+            placeholder="Select subject"
+            [labelKey]="'name'"
+            [formControl]="getFormControl('subjectId')"
+          ></app-searchable-mat-select>
         }
         @else if (levelType === ProgramSetupLevel.CLASSSUBJECT) {
         <mat-form-field appearance="outline" class="w-full">

@@ -30,17 +30,14 @@
           </mat-form-field>
         </div>
         <div>
-          <mat-form-field class="form-input">
-            <mat-label>Subject Type</mat-label>
-            <mat-select [formControl]="formControl.subjectType">
-              <mat-option *ngFor="let type of obs.subjectTypes" [value]="type.value">
-                {{ type.description }}
-              </mat-option>
-            </mat-select>
-            <mat-error>
-              {{ getErrorMessage("subjectType") }}
-            </mat-error>
-          </mat-form-field>
+          <app-searchable-mat-select
+            [options]="obs.subjectTypes!"
+            label="Subject Type"
+            placeholder="Select subject type"
+            [required]="true"
+            [formControl]="formControl.subjectType"
+            [error]="getErrorMessage('subjectType')"
+          ></app-searchable-mat-select>
         </div>
       </div>
     </form>

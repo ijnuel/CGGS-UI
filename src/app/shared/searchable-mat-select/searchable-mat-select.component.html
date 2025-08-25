@@ -1,0 +1,18 @@
+<mat-form-field [class]="formInputClass" appearance="fill" [appLoadingSpinner]="loading">
+    <mat-label>{{ label }}</mat-label>
+    <mat-select 
+    [formControl]="formControl"
+    [placeholder]="placeholder" [value]="value" (selectionChange)="setValue($event.value)"
+        (openedChange)="onDropdownOpened($event)">
+        <mat-option>
+            <input #searchInput matInput type="text" [(ngModel)]="searchText" (ngModelChange)="filterOptions()"
+                placeholder="Search..." autocomplete="off" (click)="$event.stopPropagation()" />
+        </mat-option>
+        <mat-option *ngFor="let option of filteredOptions" [value]="option[valueKey]">
+            {{ option[labelKey] }}
+        </mat-option>
+    </mat-select>
+    <mat-error>
+        {{ error }}
+    </mat-error>
+</mat-form-field>

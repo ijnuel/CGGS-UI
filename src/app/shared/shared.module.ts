@@ -17,6 +17,11 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { ProgramSetupLevelPanelComponent } from './program-setup-level-panel/program-setup-level-panel.component';
+import { SearchableMatSelectComponent } from './searchable-mat-select/searchable-mat-select.component';
+import { FormsModule } from '@angular/forms';
+import { MatSelectModule } from '@angular/material/select';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
 
 @NgModule({
   declarations: [
@@ -30,6 +35,7 @@ import { ProgramSetupLevelPanelComponent } from './program-setup-level-panel/pro
     LoadingSpinnerDirective,
     ConfirmDialogComponent,
     ProgramSetupLevelPanelComponent,
+    SearchableMatSelectComponent
   ],
   imports: [
     RouterModule,
@@ -39,7 +45,11 @@ import { ProgramSetupLevelPanelComponent } from './program-setup-level-panel/pro
     MatPaginator,
     MatExpansionModule,
     ReactiveFormsModule,
-    MatCheckboxModule
+    MatCheckboxModule,
+    FormsModule,
+    MatSelectModule,
+    MatFormFieldModule,
+    MatInputModule
   ],
   exports: [
     LayoutSidebarComponent,
@@ -60,6 +70,7 @@ import { ProgramSetupLevelPanelComponent } from './program-setup-level-panel/pro
     ReactiveFormsModule,
     ProgramSetupLevelPanelComponent,
     MatCheckboxModule,
+    SearchableMatSelectComponent
   ],
 })
 export class SharedModule {}
