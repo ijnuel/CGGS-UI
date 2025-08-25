@@ -24,6 +24,7 @@ import { SchoolTermSessionFormInterface, SchoolTermSessionListInterface } from '
 import { StaffFormInterface, StaffListInterface } from './staff';
 import { AdministratorFormInterface, AdministratorListInterface } from './administrator';
 import { ProgramSetupLevel, ProgramSetupLevelConfig } from './program-setup-level';
+import { ResultMarkSheetInterface, ResultMarkSheetFormInterface } from './result';
 import {
   CurrentUserInterface,
 } from './user';
@@ -90,6 +91,8 @@ export {
   StudentClassListInterface,
   SchoolTermSessionListInterface,
   StaffListInterface,
+  ResultMarkSheetInterface,
+  ResultMarkSheetFormInterface,
   TestEntityTemplateFormInterface,
   ProgrammeGradeRemarkFormInterface,
   FamilyFormInterface,

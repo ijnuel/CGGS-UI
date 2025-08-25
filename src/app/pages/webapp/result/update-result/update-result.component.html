@@ -1,0 +1,124 @@
+<div class="p-6">
+  <div class="flex items-center justify-between mb-6">
+    <h2 class="text-2xl font-bold text-gray-800">Update Results</h2>
+  </div>
+
+     <!-- Form Section -->
+   <div class="bg-white rounded-lg shadow-md p-6 mb-6">
+     <div class="flex items-center justify-between mb-4">
+       <h3 class="text-lg font-semibold">Select Criteria</h3>
+       <button 
+         mat-raised-button 
+         color="primary" 
+         (click)="getMarksheet()"
+         [disabled]="updateResultForm.invalid || (loading$ | async)"
+         class="px-6 py-2">
+         <mat-icon *ngIf="loading$ | async" class="animate-spin mr-2">refresh</mat-icon>
+         {{ (loading$ | async) ? 'Loading...' : 'Get Marksheet' }}
+       </button>
+     </div>
+     
+     <form [formGroup]="updateResultForm" class="space-y-4">
+       <!-- School Term Session Dropdown -->
+       <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <mat-form-field>
+          <mat-label>School Term Session</mat-label>
+          <mat-select 
+            formControlName="schoolTermSessionId" 
+            (selectionChange)="onSchoolTermSessionChange()"
+            required>
+                         <mat-option *ngFor="let session of schoolTermSessions$ | async" [value]="session.id">
+               {{ session.session }}, {{session.termString}} Term
+             </mat-option>
+          </mat-select>
+          <mat-error *ngIf="updateResultForm.get('schoolTermSessionId')?.hasError('required')">
+            School Term Session is required
+          </mat-error>
+        </mat-form-field>
+
+                 <!-- Class Dropdown -->
+         <app-searchable-mat-select
+           [options]="(classes$ | async) ?? []"
+           label="Class"
+           placeholder="Select Class"
+           valueKey="id"
+           labelKey="description"
+           [formControl]="formControl.classId"
+           (selectionChange)="onClassChange()">
+         </app-searchable-mat-select>
+
+         <!-- Subject Dropdown -->
+         <app-searchable-mat-select
+           [options]="(subjects$ | async) ?? []"
+           label="Subject"
+           placeholder="Select Subject"
+           valueKey="id"
+           labelKey="name"
+           [formControl]="formControl.subjectId">
+         </app-searchable-mat-select>
+             </div>
+     </form>
+  </div>
+
+  <!-- Error Display -->
+  <div *ngIf="error$ | async as error" class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-6">
+    <strong>Error:</strong> {{ error }}
+  </div>
+
+     <!-- Marksheet Display -->
+   <div *ngIf="resultMarkSheet$ | async as marksheet" class="bg-white rounded-lg shadow-md p-6">
+     <h3 class="text-lg font-semibold mb-4">Student Results</h3>
+     
+     <div class="overflow-x-auto">
+       <table class="min-w-full divide-y divide-gray-200">
+         <thead class="bg-gray-50">
+           <tr>
+             <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+               Student Name
+             </th>
+             <th *ngFor="let assessment of assessmentColumns" 
+                 class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+               {{ assessment.name }}
+               <div class="text-xs text-gray-400">({{ assessment.scoreWeight }}%)</div>
+             </th>
+             <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+               Actions
+             </th>
+           </tr>
+         </thead>
+         <tbody class="bg-white divide-y divide-gray-200">
+           <tr *ngFor="let student of studentRows">
+             <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+               {{ student.studentName }}
+             </td>
+             <td *ngFor="let assessment of assessmentColumns" 
+                 class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+               {{ student.assessmentScores[assessment.id] || 'N/A' }}
+             </td>
+             <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+               <button 
+                 mat-icon-button 
+                 color="primary" 
+                 matTooltip="Edit Result"
+                 class="mr-2">
+                 <mat-icon>edit</mat-icon>
+               </button>
+             </td>
+           </tr>
+         </tbody>
+       </table>
+     </div>
+
+     <!-- No Results Message -->
+     <div *ngIf="studentRows.length === 0" class="text-center py-8 text-gray-500">
+       <mat-icon class="text-4xl mb-2">assignment</mat-icon>
+       <p>No student results found for the selected criteria.</p>
+     </div>
+   </div>
+
+  <!-- Loading State -->
+  <div *ngIf="loading$ | async" class="flex justify-center items-center py-8">
+    <mat-spinner diameter="40"></mat-spinner>
+    <span class="ml-3 text-gray-600">Loading marksheet...</span>
+  </div>
+</div> 

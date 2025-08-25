@@ -29,7 +29,7 @@
       <mat-select [formControl]="schoolTermSessionControl" (selectionChange)="onSessionTermChange($event.value)">
         @for (sessionTerm of obs.schoolTermSessionAll; track $index) {
         <mat-option [value]="sessionTerm.id">
-          {{ getSessionName(sessionTerm.sessionId) }}, {{ sessionTerm.termString }} Term</mat-option>
+          {{ sessionTerm.session }}, {{ sessionTerm.termString }} Term</mat-option>
         }
       </mat-select>
     </mat-form-field>

@@ -36,6 +36,12 @@ export default [
   // },
 
   {
+    name: 'Result',
+    icon: 'assets/icons/settings-icon.svg',
+    roles: [UserRolesEnum.SuperAdmin, UserRolesEnum.Admin],
+    url: '/app/result'
+  },
+  {
     name: 'Admin Setup',
     icon: 'assets/icons/settings-icon.svg',
     roles: [UserRolesEnum.SuperAdmin, UserRolesEnum.Admin],

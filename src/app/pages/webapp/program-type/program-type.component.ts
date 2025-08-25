@@ -262,9 +262,6 @@ export class ProgramTypeComponent implements OnInit {
       this.classSubjectAssessmentFacade.getClassSubjectAssessmentAll();
     }
   }
-  getSessionName(sessionId: string) : string {
-    return this.sessionAllSnapShot.find(x => x.id == sessionId)?.name!;
-  }
 
   getQueryProperties(): any {
     return [{ Name: 'schoolTermSessionId', Value: this.schoolTermSessionId }];

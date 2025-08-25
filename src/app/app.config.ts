@@ -44,6 +44,7 @@ import { StudentClassFacade } from './store/student-class/student-class.facade';
 import { SchoolTermSessionFacade } from './store/school-term-session/school-term-session.facade';
 import { ProgramTypeFacade } from './store/program-type/program-type.facade';
 import { StaffFacade } from './store/staff/staff.facade';
+import { ResultFacade } from './store/result/result.facade';
 import { AdministratorEffect } from './store/administrator/administrator.effects';
 import { TestEntityTemplateEffect } from './store/test-entity-template/test-entity-template.effects';
 import { ProgrammeGradeRemarkEffect } from './store/programme-grade-remark/programme-grade-remark.effects';
@@ -63,6 +64,7 @@ import { StudentClassEffect } from './store/student-class/student-class.effects'
 import { SchoolTermSessionEffect } from './store/school-term-session/school-term-session.effects';
 import { ProgramTypeEffect } from './store/program-type/program-type.effects';
 import { StaffEffect } from './store/staff/staff.effects';
+import { ResultEffects } from './store/result/result.effects';
 // import { provideStoreDevtools } from '@ngrx/store-devtools';
 
 export const appConfig: ApplicationConfig = {
@@ -92,6 +94,7 @@ export const appConfig: ApplicationConfig = {
         SchoolTermSessionEffect,
         ProgramTypeEffect,
         StaffEffect,
+        ResultEffects,
       ]),
       HttpClientModule
     ),
@@ -143,5 +146,6 @@ export const appConfig: ApplicationConfig = {
     SchoolTermSessionFacade,
     ProgramTypeFacade,
     StaffFacade,
+    ResultFacade,
   ],
 };

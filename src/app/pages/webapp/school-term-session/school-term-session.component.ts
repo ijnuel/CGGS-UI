@@ -40,17 +40,7 @@ export class SchoolTermSessionComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.sessionFacade.getSessionAll();
     this.loadSchoolTermSessions();
-
-    this.sessionList$.subscribe(x => {
-      this.sessionList = x ?? [];
-      this.schoolTermSessionList = this.getTableData(this.schoolTermSessionList ?? []);
-    });
-
-    this.schoolTermSessionList$.subscribe(x => {
-      this.schoolTermSessionList = this.getTableData(x?.data ?? []);
-    })
   }
 
   loadSchoolTermSessions() {
@@ -117,14 +107,5 @@ export class SchoolTermSessionComponent implements OnInit {
 
   onCancel() {
     this.router.navigate(['../'], { relativeTo: this.route });
-  }
-
-  getTableData(data: SchoolTermSessionListInterface[]) : SchoolTermSessionListInterface[] {
-    return data.map(config => {
-      return {
-        ...config,
-        session: this.sessionList.find(x => x.id == config.sessionId)?.name
-      }
-    }) as SchoolTermSessionListInterface[];
   }
 }

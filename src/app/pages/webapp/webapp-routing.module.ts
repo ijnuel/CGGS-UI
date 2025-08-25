@@ -42,6 +42,7 @@ const routes: Routes = [
       { path: 'staff', loadChildren: () => import('./staff/staff.module').then((m) => m.StaffModule), },
       { path: 'settings', loadChildren: () => import('./settings/settings.module').then((m) => m.SettingsModule), },
       { path: 'admin-setup', loadChildren: () => import('./admin-setup/admin-setup.module').then((m) => m.AdminSetupModule), },
+      { path: 'result', loadChildren: () => import('./result/result.module').then((m) => m.ResultModule), },
       { path: 'administrator', loadChildren: () => import('./administrator/administrator.module').then((m) => m.AdministratorModule), },
     ],
   },
