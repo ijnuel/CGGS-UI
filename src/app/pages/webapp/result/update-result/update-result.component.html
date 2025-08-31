@@ -65,9 +65,46 @@
     <strong>Error:</strong> {{ error }}
   </div>
 
-     <!-- Marksheet Display -->
-   <div *ngIf="resultMarkSheet$ | async as marksheet" class="bg-white rounded-lg shadow-md p-6">
-     <h3 class="text-lg font-semibold mb-4">Student Results</h3>
+           <!-- Marksheet Display -->
+    <div *ngIf="resultMarkSheet$ | async as marksheet" class="bg-white rounded-lg shadow-md p-6">
+      <div class="flex items-center justify-between mb-4">
+        <h3 class="text-lg font-semibold">Student Results ({{ marksheet.length }} records)</h3>
+        
+        <!-- Edit Controls -->
+        <div class="flex gap-2">
+          <button 
+            *ngIf="!isEditMode" 
+            mat-raised-button 
+            color="primary" 
+            (click)="startEdit()"
+            class="px-4 py-2">
+            <mat-icon class="mr-2">edit</mat-icon>
+            Edit Scores
+          </button>
+          
+          <button 
+            *ngIf="isEditMode" 
+            mat-raised-button 
+            color="warn" 
+            (click)="cancelEdit()"
+            class="px-4 py-2">
+            <mat-icon class="mr-2">cancel</mat-icon>
+            Discard
+          </button>
+          
+          <button 
+            *ngIf="isEditMode" 
+            mat-raised-button 
+            color="accent" 
+            (click)="saveChanges()"
+            [disabled]="invalidScores.size > 0"
+            [class]="'px-4 py-2 ' + (invalidScores.size > 0 ? 'opacity-50 cursor-not-allowed' : '')"
+            [title]="invalidScores.size > 0 ? 'Cannot save: Some scores exceed their weight limits' : 'Save changes'">
+            <mat-icon class="mr-2">save</mat-icon>
+            Save
+          </button>
+        </div>
+      </div>
      
      <div class="overflow-x-auto">
        <table class="min-w-full divide-y divide-gray-200">
@@ -76,13 +113,13 @@
              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                Student Name
              </th>
-             <th *ngFor="let assessment of assessmentColumns" 
-                 class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-               {{ assessment.name }}
-               <div class="text-xs text-gray-400">({{ assessment.scoreWeight }}%)</div>
-             </th>
              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-               Actions
+               Student No
+             </th>
+             <th *ngFor="let assessment of assessmentColumns" 
+                 class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
+               {{ assessment.name }}
+               <div class="text-xs text-gray-400">({{ assessment.scoreWeight }})</div>
              </th>
            </tr>
          </thead>
@@ -91,18 +128,37 @@
              <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
                {{ student.studentName }}
              </td>
-             <td *ngFor="let assessment of assessmentColumns" 
-                 class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-               {{ student.assessmentScores[assessment.id] || 'N/A' }}
+             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+               {{ student.studentNo }}
              </td>
-             <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
-               <button 
-                 mat-icon-button 
-                 color="primary" 
-                 matTooltip="Edit Result"
-                 class="mr-2">
-                 <mat-icon>edit</mat-icon>
-               </button>
+             <td *ngFor="let assessment of assessmentColumns" 
+                 class="px-6 py-4 whitespace-nowrap text-center text-sm text-gray-500">
+               <ng-container *ngIf="!isEditMode; else editMode">
+                 {{ student.assessmentScores[assessment.id] || '-' }}
+               </ng-container>
+                               <ng-template #editMode>
+                  <div class="relative">
+                    <input 
+                      type="number" 
+                      [value]="student.assessmentScores[assessment.id] || ''"
+                      (input)="updateScore(student.studentId, assessment.id, $any($event.target).value ? +$any($event.target).value : null)"
+                      (blur)="validateScore($event, assessment.id)"
+                      [class]="'w-16 px-2 py-1 text-center border rounded focus:outline-none focus:ring-2 ' + 
+                               (isScoreInvalid(student.studentId, assessment.id) ? 
+                                'border-red-500 focus:ring-red-500 bg-red-50' : 
+                                'border-gray-300 focus:ring-blue-500')"
+                      min="0"
+                      [max]="getMaxScore(assessment.id)"
+                      [placeholder]="'0-' + getMaxScore(assessment.id)"
+                      [title]="'Max score: ' + getMaxScore(assessment.id)">
+                    
+                    <!-- Error indicator -->
+                    <div *ngIf="isScoreInvalid(student.studentId, assessment.id)" 
+                         class="absolute -top-6 left-0 right-0 text-xs text-red-600 bg-red-100 px-1 py-0.5 rounded border border-red-300 z-10">
+                      {{ getScoreErrorMessage(student.studentId, assessment.id) }}
+                    </div>
+                  </div>
+                </ng-template>
              </td>
            </tr>
          </tbody>

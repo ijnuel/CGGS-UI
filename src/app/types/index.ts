@@ -24,7 +24,8 @@ import { SchoolTermSessionFormInterface, SchoolTermSessionListInterface } from '
 import { StaffFormInterface, StaffListInterface } from './staff';
 import { AdministratorFormInterface, AdministratorListInterface } from './administrator';
 import { ProgramSetupLevel, ProgramSetupLevelConfig } from './program-setup-level';
-import { ResultMarkSheetInterface, ResultMarkSheetFormInterface } from './result';
+import { ResultMarkSheetInterface, ResultMarkSheetFormInterface, StudentAssessmentScoreInterface, AssessmentColumnInterface, StudentAssessmentRowInterface } from './result';
+import { StudentClassSubjectAssessmentScoreListInterface, StudentClassSubjectAssessmentScoreFormInterface } from './student-class-subject-assessment-score';
 import {
   CurrentUserInterface,
 } from './user';
@@ -93,6 +94,11 @@ export {
   StaffListInterface,
   ResultMarkSheetInterface,
   ResultMarkSheetFormInterface,
+  StudentAssessmentScoreInterface,
+  AssessmentColumnInterface,
+  StudentAssessmentRowInterface,
+  StudentClassSubjectAssessmentScoreListInterface,
+  StudentClassSubjectAssessmentScoreFormInterface,
   TestEntityTemplateFormInterface,
   ProgrammeGradeRemarkFormInterface,
   FamilyFormInterface,

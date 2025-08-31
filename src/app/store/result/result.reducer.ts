@@ -1,11 +1,11 @@
 import { createReducer, on } from '@ngrx/store';
-import { ResultMarkSheetInterface } from '../../types/result';
+import { StudentAssessmentScoreInterface } from '../../types/result';
 import * as ResultActions from './result.actions';
 
 export const resultFeatureKey = 'result';
 
 export interface ResultState {
-  resultMarkSheet: ResultMarkSheetInterface | null;
+  resultMarkSheet: StudentAssessmentScoreInterface[] | null;
   loading: boolean;
   error: string | null;
 }

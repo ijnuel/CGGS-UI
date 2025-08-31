@@ -4,7 +4,7 @@ import { of } from 'rxjs';
 import { map, mergeMap, catchError, switchMap } from 'rxjs/operators';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { environment } from '../../../environments/environment';
-import { ResultMarkSheetInterface } from '../../types/result';
+import { StudentAssessmentScoreInterface } from '../../types/result';
 import { GenericResponseInterface } from '../../types';
 import * as ResultActions from './result.actions';
 
@@ -25,7 +25,7 @@ export class ResultEffects {
           .set('subjectId', subjectId);
 
         return this.http
-          .get<GenericResponseInterface<ResultMarkSheetInterface>>(
+          .get<GenericResponseInterface<StudentAssessmentScoreInterface[]>>(
             `${environment.baseUrl}/Result/GetResultMarkSheet`,
             { params, withCredentials: true }
           )
@@ -42,7 +42,7 @@ export class ResultEffects {
       ofType(ResultActions.updateResultMarkSheet),
       mergeMap(({ payload }) =>
         this.http
-          .put<GenericResponseInterface<ResultMarkSheetInterface>>(
+          .put<GenericResponseInterface<StudentAssessmentScoreInterface[]>>(
             `${environment.baseUrl}/Result/UpdateResultMarkSheet`,
             payload,
             { withCredentials: true }

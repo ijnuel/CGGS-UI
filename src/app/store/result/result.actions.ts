@@ -1,5 +1,5 @@
 import { createAction, props } from '@ngrx/store';
-import { ResultMarkSheetInterface, ResultMarkSheetFormInterface } from '../../types/result';
+import { StudentAssessmentScoreInterface, ResultMarkSheetFormInterface } from '../../types/result';
 import { GenericResponseInterface } from '../../types';
 
 // Get Result MarkSheet
@@ -14,7 +14,7 @@ export const getResultMarkSheet = createAction(
 
 export const getResultMarkSheetSuccess = createAction(
   '[Result/API] Get MarkSheet Success',
-  props<{ payload: GenericResponseInterface<ResultMarkSheetInterface> }>()
+  props<{ payload: GenericResponseInterface<StudentAssessmentScoreInterface[]> }>()
 );
 
 export const getResultMarkSheetFail = createAction(
@@ -25,12 +25,12 @@ export const getResultMarkSheetFail = createAction(
 // Update Result MarkSheet
 export const updateResultMarkSheet = createAction(
   '[Result] Update MarkSheet',
-  props<{ payload: ResultMarkSheetInterface }>()
+  props<{ payload: StudentAssessmentScoreInterface[] }>()
 );
 
 export const updateResultMarkSheetSuccess = createAction(
   '[Result/API] Update MarkSheet Success',
-  props<{ payload: GenericResponseInterface<ResultMarkSheetInterface> }>()
+  props<{ payload: GenericResponseInterface<StudentAssessmentScoreInterface[]> }>()
 );
 
 export const updateResultMarkSheetFail = createAction(

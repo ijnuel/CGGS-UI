@@ -23,6 +23,7 @@ import * as fromStudentClass from './student-class/student-class.reducer';
 import * as fromSchoolTermSession from './school-term-session/school-term-session.reducer';
 import * as fromStaff from './staff/staff.reducer';
 import * as fromResult from './result/result.reducer';
+import * as fromStudentClassSubjectAssessmentScore from './student-class-subject-assessment-score/student-class-subject-assessment-score.reducer';
 import * as fromGlobalLoading from './global-loading/global-loading.reducer';
 
 export const appFeatureKey = 'appFeatureKey';
@@ -51,6 +52,7 @@ export interface AppState {
   [fromSchoolTermSession.schoolTermSessionFeatureKey]: fromSchoolTermSession.SchoolTermSessionState;
   [fromStaff.staffFeatureKey]: fromStaff.StaffState;
   [fromResult.resultFeatureKey]: fromResult.ResultState;
+  [fromStudentClassSubjectAssessmentScore.studentClassSubjectAssessmentScoreFeatureKey]: fromStudentClassSubjectAssessmentScore.StudentClassSubjectAssessmentScoreState;
   [fromGlobalLoading.globalLoadingFeatureKey]: fromGlobalLoading.GlobalLoadingState;
 }
 
@@ -78,6 +80,7 @@ export const reducers = {
   [fromSchoolTermSession.schoolTermSessionFeatureKey]: fromSchoolTermSession.reducer,
   [fromStaff.staffFeatureKey]: fromStaff.reducer,
   [fromResult.resultFeatureKey]: fromResult.resultReducer,
+  [fromStudentClassSubjectAssessmentScore.studentClassSubjectAssessmentScoreFeatureKey]: fromStudentClassSubjectAssessmentScore.studentClassSubjectAssessmentScoreReducer,
   [fromGlobalLoading.globalLoadingFeatureKey]: fromGlobalLoading.reducer,
 };
 

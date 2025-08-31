@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
-import { ResultMarkSheetInterface } from '../../types/result';
+import { StudentAssessmentScoreInterface } from '../../types/result';
 import { ResultState } from './result.reducer';
 import * as ResultActions from './result.actions';
 import * as ResultSelectors from './result.selector';
@@ -13,7 +13,7 @@ export class ResultFacade {
   constructor(private store: Store<{ result: ResultState }>) {}
 
   // Selectors
-  get resultMarkSheet$(): Observable<ResultMarkSheetInterface | null> {
+  get resultMarkSheet$(): Observable<StudentAssessmentScoreInterface[] | null> {
     return this.store.select(ResultSelectors.selectResultMarkSheet);
   }
 
@@ -30,7 +30,7 @@ export class ResultFacade {
     this.store.dispatch(ResultActions.getResultMarkSheet({ schoolTermSessionId, classId, subjectId }));
   }
 
-  updateResultMarkSheet(payload: ResultMarkSheetInterface): void {
+  updateResultMarkSheet(payload: StudentAssessmentScoreInterface[]): void {
     this.store.dispatch(ResultActions.updateResultMarkSheet({ payload }));
   }
 } 
