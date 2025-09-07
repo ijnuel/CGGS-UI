@@ -54,7 +54,8 @@
            placeholder="Select Subject"
            valueKey="id"
            labelKey="name"
-           [formControl]="formControl.subjectId">
+           [formControl]="formControl.subjectId"
+           (selectionChange)="onSubjectChange()">
          </app-searchable-mat-select>
              </div>
      </form>
@@ -97,9 +98,9 @@
             mat-raised-button 
             color="accent" 
             (click)="saveChanges()"
-            [disabled]="invalidScores.size > 0"
-            [class]="'px-4 py-2 ' + (invalidScores.size > 0 ? 'opacity-50 cursor-not-allowed' : '')"
-            [title]="invalidScores.size > 0 ? 'Cannot save: Some scores exceed their weight limits' : 'Save changes'">
+            [disabled]="isNumericSubjectType() && invalidScores.size > 0"
+            [class]="'px-4 py-2 ' + (isNumericSubjectType() && invalidScores.size > 0 ? 'opacity-50 cursor-not-allowed' : '')"
+            [title]="isNumericSubjectType() && invalidScores.size > 0 ? 'Cannot save: Some scores exceed their weight limits' : 'Save changes'">
             <mat-icon class="mr-2">save</mat-icon>
             Save
           </button>
@@ -134,31 +135,59 @@
              <td *ngFor="let assessment of assessmentColumns" 
                  class="px-6 py-4 whitespace-nowrap text-center text-sm text-gray-500">
                <ng-container *ngIf="!isEditMode; else editMode">
-                 {{ student.assessmentScores[assessment.id] || '-' }}
+                 <!-- Display mode -->
+                 <ng-container *ngIf="isNumericSubjectType(); else gradeDisplay">
+                   {{ student.assessmentScores[assessment.id] || '-' }}
+                 </ng-container>
+                 <ng-template #gradeDisplay>
+                   {{ getSkillGradeLabel(student.skillGrades[assessment.id]) || '-' }}
+                 </ng-template>
                </ng-container>
-                               <ng-template #editMode>
-                  <div class="relative">
-                    <input 
-                      type="number" 
-                      [value]="student.assessmentScores[assessment.id] || ''"
-                      (input)="updateScore(student.studentId, assessment.id, $any($event.target).value ? +$any($event.target).value : null)"
-                      (blur)="validateScore($event, assessment.id)"
-                      [class]="'w-16 px-2 py-1 text-center border rounded focus:outline-none focus:ring-2 ' + 
-                               (isScoreInvalid(student.studentId, assessment.id) ? 
-                                'border-red-500 focus:ring-red-500 bg-red-50' : 
-                                'border-gray-300 focus:ring-blue-500')"
-                      min="0"
-                      [max]="getMaxScore(assessment.id)"
-                      [placeholder]="'0-' + getMaxScore(assessment.id)"
-                      [title]="'Max score: ' + getMaxScore(assessment.id)">
-                    
-                    <!-- Error indicator -->
-                    <div *ngIf="isScoreInvalid(student.studentId, assessment.id)" 
-                         class="absolute -top-6 left-0 right-0 text-xs text-red-600 bg-red-100 px-1 py-0.5 rounded border border-red-300 z-10">
-                      {{ getScoreErrorMessage(student.studentId, assessment.id) }}
-                    </div>
-                  </div>
-                </ng-template>
+               
+               <ng-template #editMode>
+                 <!-- Edit mode -->
+                 <ng-container *ngIf="isNumericSubjectType(); else gradeEdit">
+                   <!-- Numeric input for subject type 1 -->
+                   <div class="relative">
+                     <input 
+                       type="number" 
+                       [value]="student.assessmentScores[assessment.id] || ''"
+                       (input)="updateScore(student.studentId, assessment.id, $any($event.target).value ? +$any($event.target).value : null)"
+                       (blur)="validateScore($event, assessment.id)"
+                       [class]="'w-16 px-2 py-1 text-center border rounded focus:outline-none focus:ring-2 ' + 
+                                (isScoreInvalid(student.studentId, assessment.id) ? 
+                                 'border-red-500 focus:ring-red-500 bg-red-50' : 
+                                 'border-gray-300 focus:ring-blue-500')"
+                       min="0"
+                       [max]="getMaxScore(assessment.id)"
+                       [placeholder]="'0-' + getMaxScore(assessment.id)"
+                       [title]="'Max score: ' + getMaxScore(assessment.id)">
+                     
+                     <!-- Error indicator -->
+                     <div *ngIf="isScoreInvalid(student.studentId, assessment.id)" 
+                          class="absolute -top-6 left-0 right-0 text-xs text-red-600 bg-red-100 px-1 py-0.5 rounded border border-red-300 z-10">
+                       {{ getScoreErrorMessage(student.studentId, assessment.id) }}
+                     </div>
+                   </div>
+                 </ng-container>
+                 
+                 <ng-template #gradeEdit>
+                   <!-- Radio buttons for skill grades from API for non-type-1 subjects -->
+                   <div class="flex flex-wrap gap-2 justify-center">
+                     <div *ngFor="let grade of skillGrades$ | async" 
+                          class="flex flex-col items-center cursor-pointer">
+                       <input 
+                         type="radio" 
+                         [name]="'grade_' + student.studentId + '_' + assessment.id"
+                         [value]="grade.value"
+                         [checked]="student.skillGrades[assessment.id] === grade.value"
+                         (change)="updateSkillGrade(student.studentId, assessment.id, grade.value)"
+                         class="text-blue-600 focus:ring-blue-500 mb-1">
+                       <span class="text-xs text-center">{{ grade.name }}</span>
+                     </div>
+                   </div>
+                 </ng-template>
+               </ng-template>
              </td>
            </tr>
          </tbody>

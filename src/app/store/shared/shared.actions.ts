@@ -122,3 +122,17 @@ export const getSubjectTypeListFail = createAction(
   '[Shared/API] Get Subject Type List Fail',
   props<{ error: string }>()
 );
+
+export const getSkillGradeList = createAction('[Shared] Get Skill Grade List');
+
+export const getSkillGradeListSuccess = createAction(
+  '[Shared/API] Get Skill Grade List Success',
+  props<{
+    payload: GenericResponseInterface<DropdownListInterface[]>;
+  }>()
+);
+
+export const getSkillGradeListFail = createAction(
+  '[Shared/API] Get Skill Grade List Fail',
+  props<{ error: string }>()
+);

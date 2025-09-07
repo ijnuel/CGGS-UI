@@ -56,3 +56,8 @@ export const selectSubjectTypeList = createSelector(
   fromShared.selectSharedState,
   fromShared.getSubjectTypeList
 );
+
+export const selectSkillGradeList = createSelector(
+  fromShared.selectSharedState,
+  fromShared.getSkillGradeList
+);

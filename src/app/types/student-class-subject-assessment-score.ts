@@ -13,5 +13,5 @@ export interface StudentClassSubjectAssessmentScoreFormInterface {
   studentId: string;
   classSubjectAssessmentId: string;
   score: number;
-  skillGrade?: string | null;
+  skillGrade?: number | null;
 }

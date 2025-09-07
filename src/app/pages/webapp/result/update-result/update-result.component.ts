@@ -1,16 +1,17 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FormBuilder, FormGroup, FormControl, Validators } from '@angular/forms';
 import { Observable, Subject } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
+import { takeUntil, map } from 'rxjs/operators';
 import { Router, ActivatedRoute } from '@angular/router';
 import { ResultFacade } from '../../../../store/result/result.facade';
 import { StudentClassSubjectAssessmentScoreFacade } from '../../../../store/student-class-subject-assessment-score/student-class-subject-assessment-score.facade';
 import { SchoolTermSessionFacade } from '../../../../store/school-term-session/school-term-session.facade';
 import { ClassFacade } from '../../../../store/class/class.facade';
 import { SubjectFacade } from '../../../../store/subject/subject.facade';
+import { SharedFacade } from '../../../../store/shared/shared.facade';
 import { StudentAssessmentScoreInterface, AssessmentColumnInterface, StudentAssessmentRowInterface } from '../../../../types/result';
 import { StudentClassSubjectAssessmentScoreFormInterface } from '../../../../types/student-class-subject-assessment-score';
-import { SchoolTermSessionListInterface, ClassListInterface, SubjectListInterface, PaginatedResponseInterface } from '../../../../types';
+import { SchoolTermSessionListInterface, ClassListInterface, SubjectListInterface, PaginatedResponseInterface, DropdownListInterface } from '../../../../types';
 
 @Component({
   selector: 'app-update-result',
@@ -28,6 +29,7 @@ export class UpdateResultComponent implements OnInit, OnDestroy {
   schoolTermSessions$: Observable<SchoolTermSessionListInterface[] | null>;
   classes$: Observable<ClassListInterface[] | null>;
   subjects$: Observable<SubjectListInterface[] | null>;
+  skillGrades$: Observable<DropdownListInterface[] | null>;
   
   // Result data
   resultMarkSheet$: Observable<StudentAssessmentScoreInterface[] | null>;
@@ -43,6 +45,10 @@ export class UpdateResultComponent implements OnInit, OnDestroy {
   originalStudentRows: StudentAssessmentRowInterface[] = [];
   invalidScores: Set<string> = new Set(); // Track invalid scores
 
+  // Subject type handling
+  selectedSubjectType: string = '1'; // Default to type 1
+  skillGradesList: DropdownListInterface[] = [];
+
   private destroy$ = new Subject<void>();
 
   constructor(
@@ -52,6 +58,7 @@ export class UpdateResultComponent implements OnInit, OnDestroy {
     private schoolTermSessionFacade: SchoolTermSessionFacade,
     private classFacade: ClassFacade,
     private subjectFacade: SubjectFacade,
+    private sharedFacade: SharedFacade,
     private router: Router,
     private route: ActivatedRoute
   ) {
@@ -65,6 +72,9 @@ export class UpdateResultComponent implements OnInit, OnDestroy {
     this.schoolTermSessions$ = this.schoolTermSessionFacade.schoolTermSessionAll$;
     this.classes$ = this.classFacade.classAll$;
     this.subjects$ = this.subjectFacade.subjectAll$;
+    this.skillGrades$ = this.sharedFacade.selectSkillGradeList$.pipe(
+      map(skillGrades => this.sortSkillGradesByValue(skillGrades))
+    );
     this.resultMarkSheet$ = this.resultFacade.resultMarkSheet$;
     this.loading$ = this.resultFacade.loading$;
     this.error$ = this.resultFacade.error$;
@@ -77,11 +87,19 @@ export class UpdateResultComponent implements OnInit, OnDestroy {
     // Check for query parameters and load data if available
     this.checkQueryParamsAndLoadData();
 
+    // Subscribe to skill grades to populate the local list
+    this.skillGrades$
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(skillGrades => {
+        if (skillGrades) {
+          this.skillGradesList = skillGrades;
+        }
+      });
+
     // Subscribe to marksheet changes to process data
     this.resultMarkSheet$
       .pipe(takeUntil(this.destroy$))
       .subscribe(marksheet => {
-        console.log(marksheet);
         if (marksheet) {
           this.processMarksheetData(marksheet);
         } else {
@@ -105,6 +123,9 @@ export class UpdateResultComponent implements OnInit, OnDestroy {
 
     // Load subjects
     this.subjectFacade.getSubjectAll();
+
+    // Load skill grades
+    this.sharedFacade.getSkillGradeList();
   }
 
   getMarksheet(): void {
@@ -139,6 +160,9 @@ export class UpdateResultComponent implements OnInit, OnDestroy {
           subjectId
         });
 
+        // Update subject type when loading from URL
+        this.updateSelectedSubjectType(subjectId);
+
         // Get marksheet data
         this.resultFacade.getResultMarkSheet(schoolTermSessionId, classId, subjectId);
       }
@@ -151,12 +175,42 @@ export class UpdateResultComponent implements OnInit, OnDestroy {
       classId: '',
       subjectId: ''
     });
+    this.selectedSubjectType = '1'; // Reset to default
+    
+    // Auto-fetch marksheet if all fields are selected
+    this.autoFetchMarksheetIfReady();
   }
 
   onClassChange(): void {
     // Reset subject when class changes
     this.updateResultForm.patchValue({
       subjectId: ''
+    });
+    this.selectedSubjectType = '1'; // Reset to default
+    
+    // Auto-fetch marksheet if all fields are selected
+    this.autoFetchMarksheetIfReady();
+  }
+
+  onSubjectChange(): void {
+    // Update selected subject type when subject changes
+    const subjectId = this.updateResultForm.get('subjectId')?.value;
+    if (subjectId) {
+      this.updateSelectedSubjectType(subjectId);
+    }
+    
+    // Auto-fetch marksheet if all fields are selected
+    this.autoFetchMarksheetIfReady();
+  }
+
+  private updateSelectedSubjectType(subjectId: string): void {
+    this.subjects$.pipe(takeUntil(this.destroy$)).subscribe(subjects => {
+      if (subjects) {
+        const selectedSubject = subjects.find(s => s.id === subjectId);
+        if (selectedSubject) {
+          this.selectedSubjectType = selectedSubject.subjectType;
+        }
+      }
     });
   }
 
@@ -167,7 +221,6 @@ export class UpdateResultComponent implements OnInit, OnDestroy {
 
   // Process marksheet data for grouped display
   processMarksheetData(marksheet: StudentAssessmentScoreInterface[]): void {
-    console.log(marksheet);
     if (!marksheet || marksheet.length === 0) {
       this.assessmentColumns = [];
       this.studentRows = [];
@@ -201,7 +254,8 @@ export class UpdateResultComponent implements OnInit, OnDestroy {
           studentNo: student.studentNo,
           studentId: student.id,
           studentName: `${student.firstName} ${student.lastName}`,
-          assessmentScores: {}
+          assessmentScores: {},
+          skillGrades: {}
         });
       }
       
@@ -209,6 +263,7 @@ export class UpdateResultComponent implements OnInit, OnDestroy {
       const assessment = result.classSubjectAssessment;
       if (assessment) {
         studentRow.assessmentScores[assessment.id] = result.score;
+        studentRow.skillGrades[assessment.id] = result.skillGrade;
       }
     });
 
@@ -228,8 +283,8 @@ export class UpdateResultComponent implements OnInit, OnDestroy {
   }
 
   saveChanges(): void {
-    // Check if there are any invalid scores
-    if (this.invalidScores.size > 0) {
+    // Check if there are any invalid scores (only for subject type 1)
+    if (this.selectedSubjectType === '1' && this.invalidScores.size > 0) {
       // Don't save if there are invalid scores
       return;
     }
@@ -240,12 +295,28 @@ export class UpdateResultComponent implements OnInit, OnDestroy {
     this.studentRows.forEach(student => {
       Object.keys(student.assessmentScores).forEach(assessmentId => {
         const score = student.assessmentScores[assessmentId];
-        if (score !== null && score !== undefined) {
-          updatePayload.push({
-            studentId: student.studentId,
-            classSubjectAssessmentId: assessmentId,
-            score: score
-          });
+        const skillGrade = student.skillGrades[assessmentId];
+        
+        if (this.selectedSubjectType === '1') {
+          // For subject type 1, use numeric scores
+          if (score !== null && score !== undefined) {
+            updatePayload.push({
+              studentId: student.studentId,
+              classSubjectAssessmentId: assessmentId,
+              score: score,
+              skillGrade: null
+            });
+          }
+        } else {
+          // For other subject types, use skill grades
+          if (skillGrade !== null && skillGrade !== undefined) {
+            updatePayload.push({
+              studentId: student.studentId,
+              classSubjectAssessmentId: assessmentId,
+              score: 0, // Default score for non-type-1 subjects
+              skillGrade: skillGrade
+            });
+          }
         }
       });
     });
@@ -279,6 +350,14 @@ export class UpdateResultComponent implements OnInit, OnDestroy {
     }
   }
 
+  // Method to update a specific skill grade
+  updateSkillGrade(studentId: string, assessmentId: string, newGrade: number | string | null): void {
+    const student = this.studentRows.find(s => s.studentId === studentId);
+    if (student) {
+      student.skillGrades[assessmentId] = newGrade as number | null;
+    }
+  }
+
   // Method to get max score for an assessment
   getMaxScore(assessmentId: string): number {
     const assessment = this.assessmentColumns.find(a => a.id === assessmentId);
@@ -308,5 +387,60 @@ export class UpdateResultComponent implements OnInit, OnDestroy {
   getScoreErrorMessage(studentId: string, assessmentId: string): string {
     const maxScore = this.getMaxScore(assessmentId);
     return `Score cannot exceed ${maxScore}`;
+  }
+
+  // Method to check if subject type is 1 (numeric scores)
+  isNumericSubjectType(): boolean {
+    return this.selectedSubjectType == '1';
+  }
+
+  // Method to sort skill grades by value in descending order (largest first)
+  private sortSkillGradesByValue(skillGrades: DropdownListInterface[] | null): DropdownListInterface[] | null {
+    if (!skillGrades) {
+      return null;
+    }
+    
+    return [...skillGrades].sort((a, b) => {
+      // Convert values to numbers for proper numeric sorting
+      const valueA = typeof a.value === 'string' ? parseFloat(a.value) : a.value;
+      const valueB = typeof b.value === 'string' ? parseFloat(b.value) : b.value;
+      
+      // Sort in descending order (largest first)
+      return valueB - valueA;
+    });
+  }
+
+  // Method to get skill grade label by value
+  getSkillGradeLabel(gradeValue: number | string | null): string | null {
+    if (gradeValue === null || gradeValue === undefined) {
+      return null;
+    }
+
+    const matchingGrade = this.skillGradesList.find(grade => 
+      grade.value === gradeValue || grade.value.toString() === gradeValue.toString()
+    );
+
+    return matchingGrade ? matchingGrade.name : null;
+  }
+
+  // Method to automatically fetch marksheet when all required fields are selected
+  private autoFetchMarksheetIfReady(): void {
+    const { schoolTermSessionId, classId, subjectId } = this.updateResultForm.value;
+    
+    if (schoolTermSessionId && classId && subjectId) {
+      // Update URL with query parameters
+      this.router.navigate([], {
+        relativeTo: this.route,
+        queryParams: {
+          schoolTermSessionId,
+          classId,
+          subjectId
+        },
+        queryParamsHandling: 'merge'
+      });
+
+      // Get marksheet data
+      this.resultFacade.getResultMarkSheet(schoolTermSessionId, classId, subjectId);
+    }
   }
 } 

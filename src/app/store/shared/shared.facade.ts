@@ -24,6 +24,7 @@ export class SharedFacade {
 
   selectUserTypeList$ = this.store.pipe(select(SharedSelector.selectUserTypeList));
   selectSubjectTypeList$ = this.store.pipe(select(SharedSelector.selectSubjectTypeList));
+  selectSkillGradeList$ = this.store.pipe(select(SharedSelector.selectSkillGradeList));
 
   selectedLoading$ = this.store.pipe(select(SharedSelector.selectLoading));
 
@@ -62,5 +63,9 @@ export class SharedFacade {
 
   getSubjectTypeList() {
     this.store.dispatch(SharedActions.getSubjectTypeList());
+  }
+
+  getSkillGradeList() {
+    this.store.dispatch(SharedActions.getSkillGradeList());
   }
 }

@@ -15,6 +15,7 @@ export interface SharedState {
   error: string | null;
   userTypeList: DropdownListInterface[] | null;
   subjectTypeList: DropdownListInterface[] | null;
+  skillGradeList: DropdownListInterface[] | null;
 }
 
 export const initialState: SharedState = {
@@ -28,6 +29,7 @@ export const initialState: SharedState = {
   error: null,
   userTypeList: null,
   subjectTypeList: null,
+  skillGradeList: null,
 };
 
 export const reducer = createReducer(
@@ -164,6 +166,12 @@ export const reducer = createReducer(
       loading: true,
     };
   }),
+  on(SharedAction.getSkillGradeList, (state) => {
+    return {
+      ...state,
+      loading: true,
+    };
+  }),
   on(SharedAction.getUserTypeListSuccess, (state, action) => {
     return {
       ...state,
@@ -191,6 +199,20 @@ export const reducer = createReducer(
       loading: false,
       error: action.error,
     };
+  }),
+  on(SharedAction.getSkillGradeListSuccess, (state, action) => {
+    return {
+      ...state,
+      skillGradeList: action.payload?.entity,
+      loading: false,
+    };
+  }),
+  on(SharedAction.getSkillGradeListFail, (state, action) => {
+    return {
+      ...initialState,
+      loading: false,
+      error: action.error,
+    };
   })
 );
 
@@ -212,6 +234,7 @@ export const getError = (state: SharedState) => state.error;
 
 export const getUserTypeList = (state: SharedState) => state.userTypeList;
 export const getSubjectTypeList = (state: SharedState) => state.subjectTypeList;
+export const getSkillGradeList = (state: SharedState) => state.skillGradeList;
 
 export const selectSharedState =
   createFeatureSelector<SharedState>(sharedFeatureKey);

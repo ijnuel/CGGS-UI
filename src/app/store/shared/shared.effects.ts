@@ -212,5 +212,26 @@ export class SharedEffect {
     )
   );
 
+  $skillGradeList = createEffect(() =>
+    this.actions$.pipe(
+      ofType(SharedAction.getSkillGradeList),
+      switchMap(() =>
+        this.http
+          .get<GenericResponseInterface<DropdownListInterface[]>>(
+            `${environment.baseUrl}/Enums/GetSkillGrade`,
+            {
+              withCredentials: true,
+            }
+          )
+          .pipe(
+            map((payload) => SharedAction.getSkillGradeListSuccess({ payload })),
+            catchError((error) => {
+              return of(SharedAction.getSkillGradeListFail({ error }));
+            })
+          )
+      )
+    )
+  );
+
   constructor(private actions$: Actions, private http: HttpClient) {}
 }
