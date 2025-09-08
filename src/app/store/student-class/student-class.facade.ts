@@ -7,17 +7,21 @@ import { PageQueryInterface, StudentClassFormInterface } from '../../types';
 
 @Injectable()
 export class StudentClassFacade {
-  selectStudentClassList$ = this.store.pipe(
+  studentClassList$ = this.store.pipe(
     select(StudentClassSelector.selectStudentClassList)
   );
 
-  selectStudentClassById$ = this.store.pipe(
+  studentClassById$ = this.store.pipe(
     select(StudentClassSelector.selectStudentClassById)
   );
 
-  selectedLoading$ = this.store.pipe(select(StudentClassSelector.selectLoading));
+  loading$ = this.store.pipe(select(StudentClassSelector.selectLoading));
 
-  selectedError$ = this.store.pipe(select(StudentClassSelector.selectError));
+  error$ = this.store.pipe(select(StudentClassSelector.selectError));
+
+  createSuccess$ = this.store.pipe(select(StudentClassSelector.selectCreateSuccess));
+
+  updateSuccess$ = this.store.pipe(select(StudentClassSelector.selectUpdateSuccess));
 
   constructor(private readonly store: Store) {}
 

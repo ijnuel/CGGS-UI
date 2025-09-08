@@ -27,8 +27,8 @@ export class StudentClassComponent implements OnInit {
   loading$: Observable<boolean>;
 
   constructor(private studentClassFacade: StudentClassFacade) {
-    this.studentClassList$ = this.studentClassFacade.selectStudentClassList$;
-    this.loading$ = this.studentClassFacade.selectedLoading$;
+    this.studentClassList$ = this.studentClassFacade.studentClassList$;
+    this.loading$ = this.studentClassFacade.loading$;
   }
 
   ngOnInit() {

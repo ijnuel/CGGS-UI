@@ -284,7 +284,8 @@ export class UpdateResultComponent implements OnInit, OnDestroy {
 
   saveChanges(): void {
     // Check if there are any invalid scores (only for subject type 1)
-    if (this.selectedSubjectType === '1' && this.invalidScores.size > 0) {
+    console.log(this.invalidScores);
+    if (this.selectedSubjectType == '1' && this.invalidScores.size > 0) {
       // Don't save if there are invalid scores
       return;
     }
@@ -297,7 +298,7 @@ export class UpdateResultComponent implements OnInit, OnDestroy {
         const score = student.assessmentScores[assessmentId];
         const skillGrade = student.skillGrades[assessmentId];
         
-        if (this.selectedSubjectType === '1') {
+        if (this.selectedSubjectType == '1') {
           // For subject type 1, use numeric scores
           if (score !== null && score !== undefined) {
             updatePayload.push({

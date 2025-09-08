@@ -14,6 +14,8 @@ export interface StudentClassState {
   studentClassById: StudentClassListInterface | null;
   loading: boolean;
   error: string | null;
+  createSuccess: boolean;
+  updateSuccess: boolean;
 }
 
 export const initialState: StudentClassState = {
@@ -22,6 +24,8 @@ export const initialState: StudentClassState = {
   studentClassById: null,
   loading: false,
   error: null,
+  createSuccess: false,
+  updateSuccess: false,
 };
 
 export const reducer = createReducer(
@@ -46,6 +50,50 @@ export const reducer = createReducer(
       loading: false,
       error: action.error,
     };
+  }),
+  on(StudentClassAction.createStudentClass, (state) => {
+    return {
+      ...state,
+      loading: true,
+      createSuccess: false,
+    };
+  }),
+  on(StudentClassAction.createStudentClassSuccess, (state) => {
+    return {
+      ...state,
+      loading: false,
+      createSuccess: true,
+    };
+  }),
+  on(StudentClassAction.createStudentClassFail, (state, action) => {
+    return {
+      ...state,
+      loading: false,
+      createSuccess: false,
+      error: action.error,
+    };
+  }),
+  on(StudentClassAction.editStudentClass, (state) => {
+    return {
+      ...state,
+      loading: true,
+      updateSuccess: false,
+    };
+  }),
+  on(StudentClassAction.editStudentClassSuccess, (state) => {
+    return {
+      ...state,
+      loading: false,
+      updateSuccess: true,
+    };
+  }),
+  on(StudentClassAction.editStudentClassFail, (state, action) => {
+    return {
+      ...state,
+      loading: false,
+      updateSuccess: false,
+      error: action.error,
+    };
   })
 );
 
@@ -56,6 +104,10 @@ export const getStudentClassById = (state: StudentClassState) => state.studentCl
 export const getLoading = (state: StudentClassState) => state.loading;
 
 export const getError = (state: StudentClassState) => state.error;
+
+export const getCreateSuccess = (state: StudentClassState) => state.createSuccess;
+
+export const getUpdateSuccess = (state: StudentClassState) => state.updateSuccess;
 
 export const selectStudentClassState =
   createFeatureSelector<StudentClassState>(studentClassFeatureKey);

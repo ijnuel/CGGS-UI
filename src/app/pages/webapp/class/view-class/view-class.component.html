@@ -1,16 +1,127 @@
 <div class="p-6">
-  <h3 class="text-xl font-semibold">View Class</h3>
-  <div class="flex justify-start mb-5 mt-4">
+  <div class="flex items-center justify-between mb-6">
+    <h2 class="text-2xl font-bold text-gray-800">Class Students</h2>
+  </div>
+
+  <!-- Back Button -->
+  <div class="flex justify-start mb-5">
     <button mat-button routerLink="/app/class" class="flex items-center gap-1">
       <mat-icon>arrow_back</mat-icon>
       <span>Back</span>
     </button>
   </div>
-  <div *ngIf="class$ | async as class">
-    <p><strong>Name:</strong> {{ class.name }}</p>
-    <!-- Add more fields as needed -->
+
+  <!-- Class Information and Session Selection -->
+  <div *ngIf="class$ | async as class" class="bg-white rounded-lg shadow-md p-6 mb-6">
+    <div class="flex items-center justify-between">
+      <div>
+        <h3 class="text-lg font-semibold mb-2">Class Information</h3>
+        <p><strong>Class:</strong> {{ class.description }}</p>
+      </div>
+      <div class="max-w-md">
+        <app-searchable-mat-select
+          [options]="(sessions$ | async) ?? []"
+          label="Session"
+          placeholder="Select Session"
+          valueKey="id"
+          labelKey="name"
+          [formControl]="sessionForm.controls.sessionId"
+          (selectionChange)="onSessionChange($event)"
+          class="w-full">
+        </app-searchable-mat-select>
+      </div>
+    </div>
   </div>
-  <div *ngIf="!(class$ | async)">
-    <p>Loading...</p>
+
+  <!-- Students Table -->
+  <div *ngIf="selectedSessionId" class="bg-white rounded-lg shadow-md p-6">
+    <div class="flex items-center justify-between mb-4">
+      <h3 class="text-lg font-semibold">Students in Class</h3>
+      <div class="flex gap-2">
+        <button 
+          mat-raised-button 
+          color="primary" 
+          (click)="showAddStudent()"
+          class="px-4 py-2">
+          <mat-icon class="mr-2">person_add</mat-icon>
+          Add Students
+        </button>
+        <button 
+          mat-raised-button 
+          color="accent" 
+          (click)="onRefresh()"
+          [disabled]="loading$ | async"
+          class="px-4 py-2">
+          <mat-icon class="mr-2">refresh</mat-icon>
+          Refresh
+        </button>
+      </div>
+    </div>
+
+    <!-- Table Component -->
+    <app-table
+      [tableHeaderData]="tableHeaderData"
+      [tableData]="(studentClassList$ | async)?.data ?? []"
+      [totalLength]="(studentClassList$ | async)?.totalCount ?? 0"
+      [pageSize]="(studentClassList$ | async)?.recordPerPage ?? 10"
+      [isLoading]="(loading$ | async) ?? false"
+      [showActionColumn]="true"
+      (pageChange)="onPageChange($event)"
+      (search)="onSearch($event)"
+      (filter)="onFilter($event)"
+      (view)="onView($event)"
+      (edit)="onEdit($event)"
+      (delete)="onDelete($event)">
+    </app-table>
+
+    <!-- No Students Message -->
+    <div *ngIf="(studentClassList$ | async)?.data?.length === 0" class="text-center py-8 text-gray-500">
+      <mat-icon class="text-4xl mb-2">school</mat-icon>
+      <p>No students found for the selected session.</p>
+    </div>
+  </div>
+
+  <!-- Add Student Dialog -->
+  <div *ngIf="showAddStudentDialog" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+    <div class="bg-white rounded-lg p-6 w-full max-w-md mx-4">
+      <h3 class="text-lg font-semibold mb-4">Add Student to Class</h3>
+      
+      <div class="mb-4">
+        <app-searchable-mat-select
+          [options]="(allStudents$ | async) ?? []"
+          label="Select Student"
+          placeholder="Choose a student"
+          valueKey="id"
+          labelKey="firstName"
+          [formControl]="studentForm.controls.studentId"
+          (selectionChange)="onStudentSelect($event)"
+          class="w-full">
+        </app-searchable-mat-select>
+      </div>
+
+      <div class="flex justify-end gap-2">
+        <button 
+          mat-button 
+          (click)="hideAddStudent()"
+          class="px-4 py-2">
+          Cancel
+        </button>
+        <button 
+          mat-raised-button 
+          color="primary" 
+          (click)="addStudentToClass()"
+          [disabled]="!selectedStudentId || (studentClassLoading$ | async)"
+          class="px-4 py-2">
+          <mat-icon class="mr-2">add</mat-icon>
+          Add Student
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Loading State -->
+  <div *ngIf="loading$ | async" class="flex justify-center items-center py-8">
+    <mat-spinner diameter="40"></mat-spinner>
+    <span class="ml-3 text-gray-600">Loading students...</span>
   </div>
 </div> 

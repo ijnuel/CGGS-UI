@@ -5,5 +5,8 @@ export interface StudentClassListInterface {
 
 export interface StudentClassFormInterface {
     id?: string;
+    studentId?: string;
+    sessionId?: string;
+    classId?: string;
     name?: string;
 }

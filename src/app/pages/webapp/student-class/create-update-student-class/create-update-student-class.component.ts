@@ -36,7 +36,7 @@ export class CreateUpdateStudentClassComponent implements OnInit, OnDestroy {
         private fb: FormBuilder,
         private sharedFacade: SharedFacade
     ) {
-        this.loading$ = this.studentClassFacade.selectedLoading$;
+        this.loading$ = this.studentClassFacade.loading$;
         this.dropdownLoading$ = this.sharedFacade.selectedLoading$;
 
         this.formGroup = this.fb.group({

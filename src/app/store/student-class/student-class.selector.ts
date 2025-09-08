@@ -26,3 +26,13 @@ export const selectError = createSelector(
   fromStudentClass.selectStudentClassState,
   fromStudentClass.getError
 );
+
+export const selectCreateSuccess = createSelector(
+  fromStudentClass.selectStudentClassState,
+  fromStudentClass.getCreateSuccess
+);
+
+export const selectUpdateSuccess = createSelector(
+  fromStudentClass.selectStudentClassState,
+  fromStudentClass.getUpdateSuccess
+);
