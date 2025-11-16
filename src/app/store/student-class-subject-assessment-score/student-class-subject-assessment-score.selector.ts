@@ -32,3 +32,8 @@ export const selectStudentClassSubjectAssessmentScoreError = createSelector(
   selectStudentClassSubjectAssessmentScoreState,
   (state) => state.error
 );
+
+export const selectUpdateManySuccess = createSelector(
+  selectStudentClassSubjectAssessmentScoreState,
+  (state) => state.updateManySuccess
+);

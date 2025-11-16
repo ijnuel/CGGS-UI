@@ -6,6 +6,7 @@ export interface StudentListInterface {
     firstName: string;
     lastName: string;
     middleName: string;
+    fullName: string;
     gender: number;
     religion: number;
     dateOfBirth: Date;

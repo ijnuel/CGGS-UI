@@ -36522,6 +36522,105 @@
         }
       }
     },
+    "/api/Student/GetStudentsWithoutClass": {
+      "get": {
+        "tags": [
+          "Student"
+        ],
+        "parameters": [
+          {
+            "name": "sessionId",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/StudentResponseDtoListResult"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StudentResponseDtoListResult"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StudentResponseDtoListResult"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/Student/GetAll": {
       "get": {
         "tags": [
@@ -48629,9 +48728,6 @@
             "type": "string",
             "format": "uuid"
           },
-          "term": {
-            "$ref": "#/components/schemas/Term"
-          },
           "sessionId": {
             "type": "string",
             "format": "uuid"
@@ -48649,9 +48745,6 @@
           "classId": {
             "type": "string",
             "format": "uuid"
-          },
-          "term": {
-            "$ref": "#/components/schemas/Term"
           },
           "sessionId": {
             "type": "string",
@@ -48938,9 +49031,6 @@
             "type": "string",
             "format": "uuid"
           },
-          "term": {
-            "$ref": "#/components/schemas/Term"
-          },
           "sessionId": {
             "type": "string",
             "format": "uuid"
@@ -49009,10 +49099,6 @@
             "type": "string",
             "format": "uuid",
             "nullable": true
-          },
-          "classId": {
-            "type": "string",
-            "format": "uuid"
           },
           "studentNo": {
             "type": "string",
@@ -49083,10 +49169,6 @@
             "nullable": true
           },
           "familyId": {
-            "type": "string",
-            "format": "uuid"
-          },
-          "classId": {
             "type": "string",
             "format": "uuid"
           },
@@ -49256,10 +49338,6 @@
             "nullable": true
           },
           "familyId": {
-            "type": "string",
-            "format": "uuid"
-          },
-          "classId": {
             "type": "string",
             "format": "uuid"
           },

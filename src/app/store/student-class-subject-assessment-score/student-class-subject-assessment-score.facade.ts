@@ -38,6 +38,10 @@ export class StudentClassSubjectAssessmentScoreFacade {
     return this.store.select(StudentClassSubjectAssessmentScoreSelectors.selectStudentClassSubjectAssessmentScoreError);
   }
 
+  get updateManySuccess$(): Observable<boolean> {
+    return this.store.select(StudentClassSubjectAssessmentScoreSelectors.selectUpdateManySuccess);
+  }
+
   // Actions
   getStudentClassSubjectAssessmentScoreAll(): void {
     this.store.dispatch(StudentClassSubjectAssessmentScoreActions.getStudentClassSubjectAssessmentScoreAll());

@@ -16,6 +16,7 @@ export interface StudentClassState {
   error: string | null;
   createSuccess: boolean;
   updateSuccess: boolean;
+  deleteSuccess: boolean;
 }
 
 export const initialState: StudentClassState = {
@@ -26,6 +27,7 @@ export const initialState: StudentClassState = {
   error: null,
   createSuccess: false,
   updateSuccess: false,
+  deleteSuccess: false,
 };
 
 export const reducer = createReducer(
@@ -94,6 +96,28 @@ export const reducer = createReducer(
       updateSuccess: false,
       error: action.error,
     };
+  }),
+  on(StudentClassAction.deleteStudentClass, (state) => {
+    return {
+      ...state,
+      loading: true,
+      deleteSuccess: false,
+    };
+  }),
+  on(StudentClassAction.deleteStudentClassSuccess, (state) => {
+    return {
+      ...state,
+      loading: false,
+      deleteSuccess: true,
+    };
+  }),
+  on(StudentClassAction.deleteStudentClassFail, (state, action) => {
+    return {
+      ...state,
+      loading: false,
+      deleteSuccess: false,
+      error: action.error,
+    };
   })
 );
 
@@ -108,6 +132,8 @@ export const getError = (state: StudentClassState) => state.error;
 export const getCreateSuccess = (state: StudentClassState) => state.createSuccess;
 
 export const getUpdateSuccess = (state: StudentClassState) => state.updateSuccess;
+
+export const getDeleteSuccess = (state: StudentClassState) => state.deleteSuccess;
 
 export const selectStudentClassState =
   createFeatureSelector<StudentClassState>(studentClassFeatureKey);

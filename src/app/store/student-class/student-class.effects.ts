@@ -128,10 +128,38 @@ export class StudentClassEffect {
     )
   );
 
+  $deleteStudentClass = createEffect(() =>
+    this.actions$.pipe(
+      ofType(StudentClassAction.deleteStudentClass),
+      switchMap(({ id }) =>
+        this.http
+          .delete<GenericResponseInterface<boolean>>(
+            `${environment.baseUrl}/StudentClass/Delete`,
+            {
+              params: { id },
+              withCredentials: true
+            }
+          )
+          .pipe(
+            map((payload) =>
+              StudentClassAction.deleteStudentClassSuccess({ payload })
+            ),
+            catchError((error) => {
+              return of(StudentClassAction.deleteStudentClassFail({ error }));
+            })
+          )
+      )
+    )
+  );
+
   $studentClassLoading = createEffect(
     () =>
       this.actions$.pipe(
-        ofType(StudentClassAction.createStudentClass, StudentClassAction.editStudentClass),
+        ofType(
+          StudentClassAction.createStudentClass,
+          StudentClassAction.editStudentClass,
+          StudentClassAction.deleteStudentClass
+        ),
         tap((action) => {
           this.errorLoadingFacade.globalLoadingShow(action.type);
         })
@@ -146,7 +174,9 @@ export class StudentClassEffect {
           StudentClassAction.createStudentClassSuccess,
           StudentClassAction.createStudentClassFail,
           StudentClassAction.editStudentClassSuccess,
-          StudentClassAction.editStudentClassFail
+          StudentClassAction.editStudentClassFail,
+          StudentClassAction.deleteStudentClassSuccess,
+          StudentClassAction.deleteStudentClassFail
         ),
         tap(() => {
           this.errorLoadingFacade.globalLoadingHide();

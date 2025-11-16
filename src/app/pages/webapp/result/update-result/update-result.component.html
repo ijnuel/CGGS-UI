@@ -67,7 +67,7 @@
   </div>
 
            <!-- Marksheet Display -->
-    <div *ngIf="resultMarkSheet$ | async as marksheet" class="bg-white rounded-lg shadow-md p-6">
+    <div *ngIf="!(loading$ | async) && (resultMarkSheet$ | async) as marksheet" class="bg-white rounded-lg shadow-md p-6">
       <div class="flex items-center justify-between mb-4">
         <h3 class="text-lg font-semibold">Student Results ({{ marksheet.length }} records)</h3>
         
@@ -88,7 +88,9 @@
             mat-raised-button 
             color="warn" 
             (click)="cancelEdit()"
-            class="px-4 py-2">
+            [disabled]="saving$ | async"
+            [class]="'px-4 py-2 ' + ((saving$ | async) ? 'opacity-50 cursor-not-allowed' : '')"
+            [title]="(saving$ | async) ? 'Cannot discard while saving' : 'Discard changes'">
             <mat-icon class="mr-2">cancel</mat-icon>
             Discard
           </button>
@@ -98,11 +100,12 @@
             mat-raised-button 
             color="accent" 
             (click)="saveChanges()"
-            [disabled]="isNumericSubjectType() && invalidScores.size > 0"
-            [class]="'px-4 py-2 ' + (isNumericSubjectType() && invalidScores.size > 0 ? 'opacity-50 cursor-not-allowed' : '')"
+            [disabled]="(isNumericSubjectType() && invalidScores.size > 0) || (saving$ | async)"
+            [class]="'px-4 py-2 ' + ((isNumericSubjectType() && invalidScores.size > 0) || (saving$ | async) ? 'opacity-50 cursor-not-allowed' : '')"
             [title]="isNumericSubjectType() && invalidScores.size > 0 ? 'Cannot save: Some scores exceed their weight limits' : 'Save changes'">
-            <mat-icon class="mr-2">save</mat-icon>
-            Save
+            <mat-spinner *ngIf="saving$ | async" diameter="20" class="inline-block mr-2"></mat-spinner>
+            <mat-icon *ngIf="!(saving$ | async)" class="mr-2">save</mat-icon>
+            {{ (saving$ | async) ? '' : 'Save' }}
           </button>
         </div>
       </div>

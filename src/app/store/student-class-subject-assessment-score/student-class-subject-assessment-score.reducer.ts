@@ -12,6 +12,7 @@ export interface StudentClassSubjectAssessmentScoreState {
   studentClassSubjectAssessmentScoreById: StudentClassSubjectAssessmentScoreListInterface | null;
   loading: boolean;
   error: string | null;
+  updateManySuccess: boolean;
 }
 
 export const initialState: StudentClassSubjectAssessmentScoreState = {
@@ -21,6 +22,7 @@ export const initialState: StudentClassSubjectAssessmentScoreState = {
   studentClassSubjectAssessmentScoreById: null,
   loading: false,
   error: null,
+  updateManySuccess: false,
 };
 
 export const studentClassSubjectAssessmentScoreReducer = createReducer(
@@ -243,6 +245,7 @@ export const studentClassSubjectAssessmentScoreReducer = createReducer(
     ...state,
     loading: true,
     error: null,
+    updateManySuccess: false,
   })),
   
   on(StudentClassSubjectAssessmentScoreActions.updateManyStudentClassSubjectAssessmentScoresSuccess, (state, { payload }) => ({
@@ -256,12 +259,14 @@ export const studentClassSubjectAssessmentScoreReducer = createReducer(
     } : null,
     loading: false,
     error: null,
+    updateManySuccess: true,
   })),
   
   on(StudentClassSubjectAssessmentScoreActions.updateManyStudentClassSubjectAssessmentScoresFail, (state, { error }) => ({
     ...state,
     loading: false,
     error,
+    updateManySuccess: false,
   })),
   
   // Delete Many

@@ -11,6 +11,7 @@ import * as StudentAction from './student.actions';
 import {
   selectStudentList,
   selectStudentAll,
+  selectStudentsWithoutClass,
   selectStudentByProperties,
   selectStudentById,
   selectExists,
@@ -28,6 +29,7 @@ import { StudentState } from './student.reducer';
 export class StudentFacade {
   studentList$: Observable<PaginatedResponseInterface<StudentListInterface[]> | null>;
   studentAll$: Observable<StudentListInterface[] | null>;
+  studentsWithoutClass$: Observable<StudentListInterface[] | null>;
   studentByProperties$: Observable<StudentListInterface[] | null>;
   studentById$: Observable<StudentListInterface | null>;
   exists$: Observable<boolean | null>;
@@ -46,6 +48,7 @@ export class StudentFacade {
   constructor(private store: Store<{ student: StudentState }>) {
     this.studentList$ = this.store.select(selectStudentList);
     this.studentAll$ = this.store.select(selectStudentAll);
+    this.studentsWithoutClass$ = this.store.select(selectStudentsWithoutClass);
     this.studentByProperties$ = this.store.select(selectStudentByProperties);
     this.studentById$ = this.store.select(selectStudentById);
     this.exists$ = this.store.select(selectExists);
@@ -67,6 +70,10 @@ export class StudentFacade {
 
   getStudentAll(): void {
     this.store.dispatch(StudentAction.getStudentAll());
+  }
+
+  getStudentsWithoutClass(sessionId: string): void {
+    this.store.dispatch(StudentAction.getStudentsWithoutClass({ sessionId }));
   }
 
   getStudentById(studentId: string): void {

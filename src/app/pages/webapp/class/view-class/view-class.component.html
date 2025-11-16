@@ -71,7 +71,9 @@
       (filter)="onFilter($event)"
       (view)="onView($event)"
       (edit)="onEdit($event)"
-      (delete)="onDelete($event)">
+      (delete)="onDelete($event)"
+      [showViewIcon]="false"
+      [showEditIcon]="false">
     </app-table>
 
     <!-- No Students Message -->
@@ -92,7 +94,7 @@
           label="Select Student"
           placeholder="Choose a student"
           valueKey="id"
-          labelKey="firstName"
+          labelKey="fullName"
           [formControl]="studentForm.controls.studentId"
           (selectionChange)="onStudentSelect($event)"
           class="w-full">

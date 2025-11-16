@@ -12,6 +12,7 @@ import {
 } from '../../types';
 import { HttpClient } from '@angular/common/http';
 import { GlobalLoadingFacade } from '../global-loading/global-loading.facade';
+import { computeStudentFullName, computeStudentsFullName } from '../../utils/student.utils';
 
 @Injectable()
 export class StudentEffect {
@@ -26,11 +27,42 @@ export class StudentEffect {
             { withCredentials: true }
           )
           .pipe(
-            map((payload) =>
-              StudentAction.getStudentAllSuccess({ payload })
-            ),
+            map((payload) => {
+              const studentsWithFullName = payload.entity ? computeStudentsFullName(payload.entity) : [];
+              return StudentAction.getStudentAllSuccess({ 
+                payload: { ...payload, entity: studentsWithFullName }
+              });
+            }),
             catchError((error) => {
               return of(StudentAction.getStudentAllFail({ error }));
+            })
+          )
+      )
+    )
+  );
+
+  // Get Students Without Class
+  $studentsWithoutClass = createEffect(() =>
+    this.actions$.pipe(
+      ofType(StudentAction.getStudentsWithoutClass),
+      switchMap(({ sessionId }) =>
+        this.http
+          .get<GenericResponseInterface<StudentListInterface[]>>(
+            `${environment.baseUrl}/Student/GetStudentsWithoutClass`,
+            {
+              params: { sessionId },
+              withCredentials: true,
+            }
+          )
+          .pipe(
+            map((payload) => {
+              const studentsWithFullName = payload.entity ? computeStudentsFullName(payload.entity) : [];
+              return StudentAction.getStudentsWithoutClassSuccess({ 
+                payload: { ...payload, entity: studentsWithFullName }
+              });
+            }),
+            catchError((error) => {
+              return of(StudentAction.getStudentsWithoutClassFail({ error }));
             })
           )
       )
@@ -66,12 +98,13 @@ export class StudentEffect {
           )
           .pipe(
             map((response) => {
+              const studentsWithFullName = response.entity.data ? computeStudentsFullName(response.entity.data) : [];
               const paginatedResponse: PaginatedResponseInterface<StudentListInterface[]> = {
                 currentPage: response.entity.currentPage,
                 recordPerPage: response.entity.recordPerPage,
                 totalPages: response.entity.totalPages,
                 totalCount: response.entity.totalCount,
-                data: response.entity.data
+                data: studentsWithFullName
               };
               return StudentAction.getStudentListSuccess({ 
                 payload: { 
@@ -106,9 +139,12 @@ export class StudentEffect {
             }
           )
           .pipe(
-            map((payload) =>
-              StudentAction.getStudentByIdSuccess({ payload })
-            ),
+            map((payload) => {
+              const studentWithFullName = payload.entity ? computeStudentFullName(payload.entity) : payload.entity;
+              return StudentAction.getStudentByIdSuccess({ 
+                payload: { ...payload, entity: studentWithFullName }
+              });
+            }),
             catchError((error) => {
               return of(StudentAction.getStudentByIdFail({ error }));
             })
@@ -129,9 +165,12 @@ export class StudentEffect {
             { withCredentials: true }
           )
           .pipe(
-            map((payload) =>
-              StudentAction.getStudentByPropertiesSuccess({ payload })
-            ),
+            map((payload) => {
+              const studentsWithFullName = payload.entity ? computeStudentsFullName(payload.entity) : [];
+              return StudentAction.getStudentByPropertiesSuccess({ 
+                payload: { ...payload, entity: studentsWithFullName }
+              });
+            }),
             catchError((error) => {
               return of(StudentAction.getStudentByPropertiesFail({ error }));
             })
@@ -197,9 +236,12 @@ export class StudentEffect {
             { withCredentials: true }
           )
           .pipe(
-            map((payload) =>
-              StudentAction.createStudentSuccess({ payload })
-            ),
+            map((payload) => {
+              const studentWithFullName = payload.entity ? computeStudentFullName(payload.entity) : payload.entity;
+              return StudentAction.createStudentSuccess({ 
+                payload: { ...payload, entity: studentWithFullName }
+              });
+            }),
             catchError((error) => {
               return of(StudentAction.createStudentFail({ error }));
             })
@@ -220,9 +262,12 @@ export class StudentEffect {
             { withCredentials: true }
           )
           .pipe(
-            map((payload) =>
-              StudentAction.updateStudentSuccess({ payload })
-            ),
+            map((payload) => {
+              const studentWithFullName = payload.entity ? computeStudentFullName(payload.entity) : payload.entity;
+              return StudentAction.updateStudentSuccess({ 
+                payload: { ...payload, entity: studentWithFullName }
+              });
+            }),
             catchError((error) => {
               return of(StudentAction.updateStudentFail({ error }));
             })
@@ -268,9 +313,12 @@ export class StudentEffect {
             { withCredentials: true }
           )
           .pipe(
-            map((payload) =>
-              StudentAction.createManyStudentsSuccess({ payload })
-            ),
+            map((payload) => {
+              const studentsWithFullName = payload.entity ? computeStudentsFullName(payload.entity) : [];
+              return StudentAction.createManyStudentsSuccess({ 
+                payload: { ...payload, entity: studentsWithFullName }
+              });
+            }),
             catchError((error) => {
               return of(StudentAction.createManyStudentsFail({ error }));
             })
@@ -291,9 +339,12 @@ export class StudentEffect {
             { withCredentials: true }
           )
           .pipe(
-            map((payload) =>
-              StudentAction.updateManyStudentsSuccess({ payload })
-            ),
+            map((payload) => {
+              const studentsWithFullName = payload.entity ? computeStudentsFullName(payload.entity) : [];
+              return StudentAction.updateManyStudentsSuccess({ 
+                payload: { ...payload, entity: studentsWithFullName }
+              });
+            }),
             catchError((error) => {
               return of(StudentAction.updateManyStudentsFail({ error }));
             })

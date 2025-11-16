@@ -1,7 +1,7 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Observable, Subject } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
+import { takeUntil, first, filter } from 'rxjs/operators';
 import { FormBuilder, FormGroup, FormControl } from '@angular/forms';
 import { ClassFacade } from '../../../../store/class/class.facade';
 import { SessionFacade } from '../../../../store/session/session.facade';
@@ -36,22 +36,8 @@ export class ViewClassComponent implements OnInit, OnDestroy {
       align: 'left'
     },
     {
-      name: 'First Name',
-      key: 'firstName',
-      filterable: true,
-      type: 'text',
-      align: 'left'
-    },
-    {
-      name: 'Last Name',
-      key: 'lastName',
-      filterable: true,
-      type: 'text',
-      align: 'left'
-    },
-    {
-      name: 'Email',
-      key: 'email',
+      name: 'Name',
+      key: 'studentFullName',
       filterable: true,
       type: 'text',
       align: 'left'
@@ -93,7 +79,7 @@ export class ViewClassComponent implements OnInit, OnDestroy {
     this.class$ = this.classFacade.classById$;
     this.sessions$ = this.sessionFacade.sessionAll$;
     this.studentClassList$ = this.studentClassFacade.studentClassList$;
-    this.allStudents$ = this.studentFacade.studentAll$;
+    this.allStudents$ = this.studentFacade.studentsWithoutClass$;
     this.loading$ = this.studentClassFacade.loading$;
     this.studentClassLoading$ = this.studentClassFacade.loading$;
 
@@ -202,10 +188,20 @@ export class ViewClassComponent implements OnInit, OnDestroy {
     });
 
     dialogRef.afterClosed().subscribe(result => {
-      if (result) {
-        // Implement remove student from class logic
-        this.toastService.openToast('Student removed from class successfully', NotificationTypeEnums.SUCCESS);
-        this.loadStudentsInClass();
+      if (result && row.id) {
+        this.studentClassFacade.deleteStudentClass(row.id);
+        
+        // Subscribe to success - only handle the first success event
+        this.studentClassFacade.deleteSuccess$
+          .pipe(
+            filter(success => success === true),
+            first(),
+            takeUntil(this.destroy$)
+          )
+          .subscribe(() => {
+            this.toastService.openToast('Student removed from class successfully', NotificationTypeEnums.SUCCESS);
+            this.loadStudentsInClass();
+          });
       }
     });
   }
@@ -213,7 +209,7 @@ export class ViewClassComponent implements OnInit, OnDestroy {
   showAddStudent() {
     this.showAddStudentDialog = true;
     // Load all students to show in dropdown
-    this.studentFacade.getStudentAll();
+    this.studentFacade.getStudentsWithoutClass(this.selectedSessionId);
   }
 
   hideAddStudent() {
@@ -241,6 +237,9 @@ export class ViewClassComponent implements OnInit, OnDestroy {
         .subscribe(success => {
           if (success) {
             this.toastService.openToast('Student added to class successfully', NotificationTypeEnums.SUCCESS);
+            // Reset the form
+            this.studentForm.reset();
+            this.selectedStudentId = '';
             this.hideAddStudent();
             this.loadStudentsInClass();
           }

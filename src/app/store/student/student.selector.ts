@@ -2,6 +2,7 @@ import { createSelector } from '@ngrx/store';
 import {
   getStudentList,
   getStudentAll,
+  getStudentsWithoutClass,
   getStudentByProperties,
   getStudentById,
   getExists,
@@ -22,6 +23,11 @@ export const selectStudentList = createSelector(
 export const selectStudentAll = createSelector(
   selectStudentState,
   getStudentAll
+);
+
+export const selectStudentsWithoutClass = createSelector(
+  selectStudentState,
+  getStudentsWithoutClass
 );
 
 export const selectStudentByProperties = createSelector(

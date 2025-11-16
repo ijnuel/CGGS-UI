@@ -23,6 +23,8 @@ export class StudentClassFacade {
 
   updateSuccess$ = this.store.pipe(select(StudentClassSelector.selectUpdateSuccess));
 
+  deleteSuccess$ = this.store.pipe(select(StudentClassSelector.selectDeleteSuccess));
+
   constructor(private readonly store: Store) {}
 
   getStudentClassList(pageQuery: PageQueryInterface) {
@@ -39,5 +41,9 @@ export class StudentClassFacade {
 
   updateStudentClass(payload: StudentClassFormInterface) {
     this.store.dispatch(StudentClassActions.editStudentClass({ payload }));
+  }
+
+  deleteStudentClass(id: string) {
+    this.store.dispatch(StudentClassActions.deleteStudentClass({ id }));
   }
 }

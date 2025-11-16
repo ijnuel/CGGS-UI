@@ -22,6 +22,24 @@ export const getStudentAllFail = createAction(
   props<{ error: string }>()
 );
 
+// Get Students Without Class
+export const getStudentsWithoutClass = createAction(
+  '[Student] Get Students Without Class',
+  props<{ sessionId: string }>()
+);
+
+export const getStudentsWithoutClassSuccess = createAction(
+  '[Student/API] Get Students Without Class Success',
+  props<{
+    payload: GenericResponseInterface<StudentListInterface[]>;
+  }>()
+);
+
+export const getStudentsWithoutClassFail = createAction(
+  '[Student/API] Get Students Without Class Fail',
+  props<{ error: string }>()
+);
+
 // Get All Paginated
 export const getStudentList = createAction(
   '[Student] Get List',

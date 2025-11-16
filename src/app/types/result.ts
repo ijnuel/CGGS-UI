@@ -71,6 +71,7 @@ export interface StudentAssessmentRowInterface {
   studentName: string;
   assessmentScores: { [assessmentId: string]: number | null };
   skillGrades: { [assessmentId: string]: number | null };
+  assessmentEntryIds?: { [assessmentId: string]: string | null };
 }
 
 export interface ResultMarkSheetFormInterface {

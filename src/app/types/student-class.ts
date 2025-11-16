@@ -1,6 +1,8 @@
 export interface StudentClassListInterface {
     id: string;
     name: string;
+    studentNo: string;
+    studentFullName: string;
 }
 
 export interface StudentClassFormInterface {

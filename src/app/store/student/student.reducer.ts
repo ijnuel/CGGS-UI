@@ -11,6 +11,7 @@ export const studentFeatureKey = 'student';
 export interface StudentState {
   studentList: PaginatedResponseInterface<StudentListInterface[]> | null;
   studentAll: StudentListInterface[] | null;
+  studentsWithoutClass: StudentListInterface[] | null;
   studentByProperties: StudentListInterface[] | null;
   studentById: StudentListInterface | null;
   exists: boolean | null;
@@ -25,6 +26,7 @@ export interface StudentState {
 export const initialState: StudentState = {
   studentList: null,
   studentAll: null,
+  studentsWithoutClass: null,
   studentByProperties: null,
   studentById: null,
   exists: null,
@@ -50,6 +52,23 @@ export const reducer = createReducer(
     loading: false,
   })),
   on(StudentAction.getStudentAllFail, (state, { error }) => ({
+    ...state,
+    loading: false,
+    error,
+  })),
+
+  // Get Students Without Class
+  on(StudentAction.getStudentsWithoutClass, (state) => ({
+    ...state,
+    loading: true,
+    error: null,
+  })),
+  on(StudentAction.getStudentsWithoutClassSuccess, (state, { payload }) => ({
+    ...state,
+    studentsWithoutClass: payload.entity,
+    loading: false,
+  })),
+  on(StudentAction.getStudentsWithoutClassFail, (state, { error }) => ({
     ...state,
     loading: false,
     error,
@@ -291,6 +310,7 @@ export const selectStudentState = createFeatureSelector<StudentState>(
 
 export const getStudentList = (state: StudentState) => state.studentList;
 export const getStudentAll = (state: StudentState) => state.studentAll;
+export const getStudentsWithoutClass = (state: StudentState) => state.studentsWithoutClass;
 export const getStudentByProperties = (state: StudentState) =>
   state.studentByProperties;
 export const getStudentById = (state: StudentState) => state.studentById;

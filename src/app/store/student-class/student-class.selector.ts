@@ -36,3 +36,8 @@ export const selectUpdateSuccess = createSelector(
   fromStudentClass.selectStudentClassState,
   fromStudentClass.getUpdateSuccess
 );
+
+export const selectDeleteSuccess = createSelector(
+  fromStudentClass.selectStudentClassState,
+  fromStudentClass.getDeleteSuccess
+);

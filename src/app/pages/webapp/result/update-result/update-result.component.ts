@@ -1,7 +1,7 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FormBuilder, FormGroup, FormControl, Validators } from '@angular/forms';
 import { Observable, Subject } from 'rxjs';
-import { takeUntil, map } from 'rxjs/operators';
+import { takeUntil, map, filter, first, distinctUntilChanged, withLatestFrom } from 'rxjs/operators';
 import { Router, ActivatedRoute } from '@angular/router';
 import { ResultFacade } from '../../../../store/result/result.facade';
 import { StudentClassSubjectAssessmentScoreFacade } from '../../../../store/student-class-subject-assessment-score/student-class-subject-assessment-score.facade';
@@ -12,6 +12,7 @@ import { SharedFacade } from '../../../../store/shared/shared.facade';
 import { StudentAssessmentScoreInterface, AssessmentColumnInterface, StudentAssessmentRowInterface } from '../../../../types/result';
 import { StudentClassSubjectAssessmentScoreFormInterface } from '../../../../types/student-class-subject-assessment-score';
 import { SchoolTermSessionListInterface, ClassListInterface, SubjectListInterface, PaginatedResponseInterface, DropdownListInterface } from '../../../../types';
+import { ToastNotificationService, NotificationTypeEnums } from '../../../../services/toast-notification.service';
 
 @Component({
   selector: 'app-update-result',
@@ -35,6 +36,7 @@ export class UpdateResultComponent implements OnInit, OnDestroy {
   resultMarkSheet$: Observable<StudentAssessmentScoreInterface[] | null>;
   loading$: Observable<boolean>;
   error$: Observable<string | null>;
+  saving$: Observable<boolean>;
 
   // Processed data for display
   assessmentColumns: AssessmentColumnInterface[] = [];
@@ -60,7 +62,8 @@ export class UpdateResultComponent implements OnInit, OnDestroy {
     private subjectFacade: SubjectFacade,
     private sharedFacade: SharedFacade,
     private router: Router,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private toastService: ToastNotificationService
   ) {
     this.updateResultForm = this.fb.group({
       schoolTermSessionId: ['', Validators.required],
@@ -78,6 +81,7 @@ export class UpdateResultComponent implements OnInit, OnDestroy {
     this.resultMarkSheet$ = this.resultFacade.resultMarkSheet$;
     this.loading$ = this.resultFacade.loading$;
     this.error$ = this.resultFacade.error$;
+    this.saving$ = this.studentClassSubjectAssessmentScoreFacade.loading$;
   }
 
   ngOnInit(): void {
@@ -106,6 +110,36 @@ export class UpdateResultComponent implements OnInit, OnDestroy {
           this.assessmentColumns = [];
           this.studentRows = [];
         }
+      });
+
+    // Subscribe to update success - show toast when save succeeds
+    this.studentClassSubjectAssessmentScoreFacade.updateManySuccess$
+      .pipe(
+        filter(success => success === true),
+        takeUntil(this.destroy$)
+      )
+      .subscribe(() => {
+        this.toastService.openToast('Results saved successfully', NotificationTypeEnums.SUCCESS);
+        // Exit edit mode and update backup only after successful save
+        this.isEditMode = false;
+        this.originalStudentRows = JSON.parse(JSON.stringify(this.studentRows)); // Update backup
+        this.invalidScores.clear(); // Clear invalid scores
+      });
+
+    // Subscribe to update errors - show toast when save fails
+    // Use withLatestFrom to check if we just finished saving (loading went from true to false)
+    this.studentClassSubjectAssessmentScoreFacade.error$
+      .pipe(
+        filter(error => error !== null && error !== ''),
+        distinctUntilChanged(),
+        withLatestFrom(this.saving$),
+        filter(([error, isSaving]) => !isSaving), // Only show error if not currently saving
+        takeUntil(this.destroy$)
+      )
+      .subscribe(([error]) => {
+        this.toastService.openToast(`Failed to save results: ${error}`, NotificationTypeEnums.ERROR);
+        // Keep edit mode active on error so user can retry or manually cancel
+        // Don't exit edit mode - let user decide whether to retry or discard
       });
   }
 
@@ -255,7 +289,8 @@ export class UpdateResultComponent implements OnInit, OnDestroy {
           studentId: student.id,
           studentName: `${student.firstName} ${student.lastName}`,
           assessmentScores: {},
-          skillGrades: {}
+          skillGrades: {},
+          assessmentEntryIds: {}
         });
       }
       
@@ -264,6 +299,7 @@ export class UpdateResultComponent implements OnInit, OnDestroy {
       if (assessment) {
         studentRow.assessmentScores[assessment.id] = result.score;
         studentRow.skillGrades[assessment.id] = result.skillGrade;
+        studentRow.assessmentEntryIds![assessment.id] = result.id;
       }
     });
 
@@ -302,6 +338,7 @@ export class UpdateResultComponent implements OnInit, OnDestroy {
           // For subject type 1, use numeric scores
           if (score !== null && score !== undefined) {
             updatePayload.push({
+              id: student.assessmentEntryIds ? student.assessmentEntryIds[assessmentId] || undefined : undefined,
               studentId: student.studentId,
               classSubjectAssessmentId: assessmentId,
               score: score,
@@ -312,6 +349,7 @@ export class UpdateResultComponent implements OnInit, OnDestroy {
           // For other subject types, use skill grades
           if (skillGrade !== null && skillGrade !== undefined) {
             updatePayload.push({
+              id: student.assessmentEntryIds ? student.assessmentEntryIds[assessmentId] || undefined : undefined,
               studentId: student.studentId,
               classSubjectAssessmentId: assessmentId,
               score: 0, // Default score for non-type-1 subjects
@@ -324,9 +362,7 @@ export class UpdateResultComponent implements OnInit, OnDestroy {
 
     if (updatePayload.length > 0) {
       this.studentClassSubjectAssessmentScoreFacade.updateManyStudentClassSubjectAssessmentScores(updatePayload);
-      this.isEditMode = false;
-      this.originalStudentRows = JSON.parse(JSON.stringify(this.studentRows)); // Update backup
-      this.invalidScores.clear(); // Clear invalid scores
+      // Don't exit edit mode yet - wait for save to complete
     }
   }
 

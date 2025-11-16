@@ -74,3 +74,20 @@ export const editStudentClassFail = createAction(
   '[StudentClass/API] Edit StudentClass Fail',
   props<{ error: string }>()
 );
+
+export const deleteStudentClass = createAction(
+  '[StudentClass] Delete StudentClass',
+  props<{ id: string }>()
+);
+
+export const deleteStudentClassSuccess = createAction(
+  '[StudentClass/API] Delete StudentClass Success',
+  props<{
+    payload: GenericResponseInterface<boolean>;
+  }>()
+);
+
+export const deleteStudentClassFail = createAction(
+  '[StudentClass/API] Delete StudentClass Fail',
+  props<{ error: string }>()
+);
