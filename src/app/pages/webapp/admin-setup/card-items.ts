@@ -3,19 +3,19 @@ import { UserRolesEnum } from '../../../types/auth';
 export default [
   {
     name: 'Program Types',
-    icon: 'assets/icons/settings-icon.svg',
+    icon: 'assets/icons/admin-setup-icon.svg',
     roles: [],
     url: '/app/program-type'
   },
   {
     name: 'Grade Remarks',
-    icon: 'assets/icons/settings-icon.svg',
+    icon: 'assets/icons/admin-setup-icon.svg',
     roles: [],
     url: '/app/programme-grade-remark'
   },
   {
     name: 'Subjects',
-    icon: 'assets/icons/settings-icon.svg',
+    icon: 'assets/icons/admin-setup-icon.svg',
     roles: [],
     url: '/app/subject'
   },
@@ -33,7 +33,7 @@ export default [
   // },
   {
     name: 'School Term Session',
-    icon: 'assets/icons/settings-icon.svg',
+    icon: 'assets/icons/admin-setup-icon.svg',
     roles: [],
     url: '/app/school-term-session'
   }

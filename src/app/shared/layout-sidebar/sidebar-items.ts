@@ -10,7 +10,7 @@ export default [
   },
   {
     name: 'Students',
-    icon: 'assets/icons/users-icon.svg',
+    icon: 'assets/icons/student-icon.svg',
     roles: [],
     url: '/app/student'
   },
@@ -24,33 +24,33 @@ export default [
 
   {
     name: 'Classes',
-    icon: 'assets/icons/users-icon.svg',
+    icon: 'assets/icons/class-icon.svg',
     roles: [],
     url: '/app/class'
   },
 
   {
     name: 'Result',
-    icon: 'assets/icons/settings-icon.svg',
+    icon: 'assets/icons/result-icon.svg',
     roles: [UserRolesEnum.SuperAdmin, UserRolesEnum.Admin],
     url: '/app/result'
   },
 
   {
     name: 'Staff',
-    icon: 'assets/icons/users-icon.svg',
+    icon: 'assets/icons/staff-icon.svg',
     roles: [],
     url: '/app/staff'
   },
   {
     name: 'Administrators',
-    icon: 'assets/icons/users-icon.svg',
+    icon: 'assets/icons/admin-icon.svg',
     roles: [],
     url: '/app/administrator'
   },
   {
     name: 'Admin Setup',
-    icon: 'assets/icons/settings-icon.svg',
+    icon: 'assets/icons/admin-setup-icon.svg',
     roles: [UserRolesEnum.SuperAdmin, UserRolesEnum.Admin],
     url: '/app/admin-setup'
   },
