@@ -1,33 +1,74 @@
-<div class="p-6">
-  <div class="flex justify-between items-center mb-4">
-    <h3 class="text-xl font-semibold">Programme Grade Remarks</h3>
-    <div class="flex gap-2">
-      <button mat-raised-button color="primary" (click)="onRefresh()" class="flex items-center">
-        <mat-icon>refresh</mat-icon>
-        <span>Refresh</span>
-      </button>
-      <button mat-raised-button color="accent" routerLink="create" class="flex items-center">
-        <mat-icon>add</mat-icon>
-        <span>Create New</span>
-      </button>
+<div class="p-6 grade-remark-page">
+  <div class="flex flex-col gap-4">
+    <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-3">
+      <div>
+        <h3 class="text-2xl font-semibold text-gray-800">Programme Grade Remarks</h3>
+        <p class="text-sm text-gray-500">Manage grade boundaries for each program type</p>
+      </div>
+      <div class="flex gap-2">
+        <button
+          mat-raised-button
+          color="primary"
+          class="flex items-center gap-2"
+          (click)="onRefresh()"
+          [disabled]="!selectedProgramTypeId || !!(loading$ | async)"
+        >
+          <mat-icon>refresh</mat-icon>
+          <span>Refresh</span>
+        </button>
+        <button
+          mat-raised-button
+          color="accent"
+          class="flex items-center gap-2"
+          (click)="openGradeRemarkDialog()"
+          [disabled]="!selectedProgramTypeId"
+        >
+          <mat-icon>add</mat-icon>
+          <span>Add Grade Remark</span>
+        </button>
+      </div>
     </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <app-searchable-mat-select
+        [options]="(programTypes$ | async) ?? []"
+        label="Program Type"
+        placeholder="Select Program Type"
+        labelKey="name"
+        valueKey="id"
+        [formControl]="filterForm.controls.programTypeId"
+        (selectionChange)="onProgramTypeChange($event)"
+      ></app-searchable-mat-select>
+    </div>
+
+    <ng-container *ngIf="selectedProgramTypeId; else selectProgramTypePrompt">
+      <ng-container *ngIf="programmeGradeRemarkList$ | async as gradeRemarks">
+        <app-table
+          [tableData]="gradeRemarks.data"
+          [tableHeaderData]="tableHeaderData"
+          [isLoading]="!!(loading$ | async)"
+          [totalLength]="gradeRemarks.totalCount"
+          [pageSize]="gradeRemarks.recordPerPage"
+          [pageIndex]="gradeRemarks.currentPage"
+          [showSearch]="false"
+          [showFilters]="false"
+          [showActionColumn]="true"
+          [showViewIcon]="false"
+          (pageChange)="onPageChange($event)"
+          (edit)="onEdit($event)"
+          (delete)="onDelete($event)"
+        ></app-table>
+      </ng-container>
+    </ng-container>
   </div>
 
-  <app-table
-    [tableData]="(programmeGradeRemarkList$ | async)?.data ?? []"
-    [tableHeaderData]="tableHeaderData"
-    [isLoading]="(loading$ | async) ?? false"
-    [totalLength]="(programmeGradeRemarkList$ | async)?.totalCount ?? 0"
-    [pageSize]="(programmeGradeRemarkList$ | async)?.recordPerPage ?? 10"
-    [pageIndex]="(programmeGradeRemarkList$ | async)?.currentPage ?? 0"
-    [showSearch]="true"
-    [showFilters]="true"
-    [showActionColumn]="true"
-    (pageChange)="onPageChange($event)"
-    (search)="onSearch($event)"
-    (filter)="onFilter($event)"
-    (view)="onView($event)"
-    (edit)="onEdit($event)"
-    (delete)="onDelete($event)"
-  ></app-table>
+  <ng-template #selectProgramTypePrompt>
+    <div class="select-program-type-placeholder">
+      <mat-icon>info</mat-icon>
+      <div>
+        <p class="font-medium text-gray-700">Select a program type to view grade remarks.</p>
+        <p class="text-sm text-gray-500">The table will load automatically once a program type is selected.</p>
+      </div>
+    </div>
+  </ng-template>
 </div>

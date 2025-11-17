@@ -8,6 +8,12 @@ export default [
     url: '/app/program-type'
   },
   {
+    name: 'Grade Remarks',
+    icon: 'assets/icons/settings-icon.svg',
+    roles: [],
+    url: '/app/programme-grade-remark'
+  },
+  {
     name: 'Subjects',
     icon: 'assets/icons/settings-icon.svg',
     roles: [],

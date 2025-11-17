@@ -1,12 +1,17 @@
 export interface ProgrammeGradeRemarkListInterface {
-    id: string;
-    name: string;
-    description: string;
-    createdDate: string;
+  id: string;
+  programTypeId: string;
+  minimumScore: number;
+  maximumScore: number;
+  grade: string;
+  remark: string;
 }
 
 export interface ProgrammeGradeRemarkFormInterface {
-    id?: string;
-    name: string;
-    description: string;
+  id?: string;
+  programTypeId: string;
+  minimumScore: number;
+  maximumScore: number;
+  grade: string;
+  remark: string;
 }

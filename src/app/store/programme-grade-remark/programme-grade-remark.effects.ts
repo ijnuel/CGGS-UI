@@ -246,7 +246,10 @@ export class ProgrammeGradeRemarkEffect {
           )
           .pipe(
             map((payload) =>
-              ProgrammeGradeRemarkAction.deleteProgrammeGradeRemarkSuccess({ payload })
+              ProgrammeGradeRemarkAction.deleteProgrammeGradeRemarkSuccess({
+                payload,
+                programmeGradeRemarkId,
+              })
             ),
             catchError((error) => {
               return of(ProgrammeGradeRemarkAction.deleteProgrammeGradeRemarkFail({ error }));

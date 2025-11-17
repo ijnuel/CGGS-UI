@@ -2,17 +2,29 @@ import { TableHeaderInterface } from '../../../types/table';
 
 export const tableHeader: TableHeaderInterface[] = [
   {
-    name: 'Id',
-    key: 'id',
-    filterable: true,
+    name: 'Grade',
+    key: 'grade',
     type: 'text',
-    align: 'left'
+    align: 'left',
   },
   {
-    name: 'Name',
-    key: 'name',
-    filterable: true,
+    name: 'Minimum Score',
+    key: 'minimumScore',
+    type: 'number',
+    align: 'center',
+    format: (value: number) => Number(value ?? 0).toFixed(2),
+  },
+  {
+    name: 'Maximum Score',
+    key: 'maximumScore',
+    type: 'number',
+    align: 'center',
+    format: (value: number) => Number(value ?? 0).toFixed(2),
+  },
+  {
+    name: 'Remark',
+    key: 'remark',
     type: 'text',
-    align: 'left'
-  }
+    align: 'left',
+  },
 ];

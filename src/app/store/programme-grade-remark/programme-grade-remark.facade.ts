@@ -19,6 +19,7 @@ import {
   selectProgrammeGradeRemarkError,
   selectProgrammeGradeRemarkCreateSuccess,
   selectProgrammeGradeRemarkUpdateSuccess,
+  selectProgrammeGradeRemarkDeleteSuccess,
 } from './programme-grade-remark.selector';
 import { ProgrammeGradeRemarkState } from './programme-grade-remark.reducer';
 
@@ -36,6 +37,7 @@ export class ProgrammeGradeRemarkFacade {
   error$: Observable<string | null>;
   createSuccess$: Observable<boolean>;
   updateSuccess$: Observable<boolean>;
+  deleteSuccess$: Observable<boolean>;
   currentPageQuery: PageQueryInterface = {
     start: 0,
     recordsPerPage: 10,
@@ -54,6 +56,7 @@ export class ProgrammeGradeRemarkFacade {
     this.error$ = this.store.select(selectProgrammeGradeRemarkError);
     this.createSuccess$ = this.store.select(selectProgrammeGradeRemarkCreateSuccess);
     this.updateSuccess$ = this.store.select(selectProgrammeGradeRemarkUpdateSuccess);
+    this.deleteSuccess$ = this.store.select(selectProgrammeGradeRemarkDeleteSuccess);
   }
 
   getProgrammeGradeRemarkList(pageQuery: PageQueryInterface): void {

@@ -157,6 +157,7 @@ export const deleteProgrammeGradeRemarkSuccess = createAction(
   '[ProgrammeGradeRemark/API] Delete Success',
   props<{
     payload: GenericResponseInterface<boolean>;
+    programmeGradeRemarkId: string;
   }>()
 );
 

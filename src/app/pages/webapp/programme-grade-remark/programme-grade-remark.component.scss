@@ -1,0 +1,21 @@
+:host {
+  display: block;
+}
+
+.grade-remark-page {
+  .select-program-type-placeholder {
+    margin-top: 2rem;
+    padding: 1.5rem;
+    border: 1px dashed #cbd5f5;
+    border-radius: 0.75rem;
+    background-color: #f8fafc;
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+
+    mat-icon {
+      color: #2563eb;
+    }
+  }
+}
+

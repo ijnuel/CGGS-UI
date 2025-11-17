@@ -9,6 +9,7 @@ import {
   getLoading,
   getError,
   ProgrammeGradeRemarkState,
+  getDeleteSuccess,
 } from './programme-grade-remark.reducer';
 
 export const selectProgrammeGradeRemarkState = (state: { programmeGradeRemark: ProgrammeGradeRemarkState }) =>
@@ -62,4 +63,9 @@ export const selectProgrammeGradeRemarkCreateSuccess = createSelector(
 export const selectProgrammeGradeRemarkUpdateSuccess = createSelector(
     selectProgrammeGradeRemarkState,
     (state) => state.updateSuccess
+);
+
+export const selectProgrammeGradeRemarkDeleteSuccess = createSelector(
+  selectProgrammeGradeRemarkState,
+  getDeleteSuccess
 );

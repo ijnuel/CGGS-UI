@@ -10,47 +10,31 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatRadioModule } from '@angular/material/radio';
 import { ProgrammeGradeRemarkComponent } from './programme-grade-remark.component';
 import { SharedModule } from '../../../shared/shared.module';
-import { CreateUpdateProgrammeGradeRemarkComponent } from './create-update-programme-grade-remark/create-update-programme-grade-remark.component';
 import { provideNativeDateAdapter } from '@angular/material/core';
-import { ViewProgrammeGradeRemarkComponent } from './view-programme-grade-remark/view-programme-grade-remark.component';
+import { GradeRemarkDialogComponent } from './grade-remark-dialog/grade-remark-dialog.component';
 
 const routes: Routes = [
-    {
-        path: '',
-        component: ProgrammeGradeRemarkComponent,
-    },
-
-    {
-        path: 'create',
-        component: CreateUpdateProgrammeGradeRemarkComponent,
-    },
-
-    {
-        path: 'edit/:id',
-        component: CreateUpdateProgrammeGradeRemarkComponent,
-    },
-
-    {
-        path: 'view/:id',
-        component: ViewProgrammeGradeRemarkComponent,
-    },
+  {
+    path: '',
+    component: ProgrammeGradeRemarkComponent,
+  },
 ];
 
 @NgModule({
-    declarations: [ProgrammeGradeRemarkComponent, CreateUpdateProgrammeGradeRemarkComponent, ViewProgrammeGradeRemarkComponent],
-    imports: [
-        CommonModule,
-        SharedModule,
-        RouterModule.forChild(routes),
-        FormsModule,
-        MatFormFieldModule,
-        MatInputModule,
-        MatIconModule,
-        ReactiveFormsModule,
-        MatDatepickerModule,
-        MatSelectModule,
-        MatRadioModule,
-    ],
-    providers: [provideNativeDateAdapter()],
+  declarations: [ProgrammeGradeRemarkComponent, GradeRemarkDialogComponent],
+  imports: [
+    CommonModule,
+    SharedModule,
+    RouterModule.forChild(routes),
+    FormsModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatIconModule,
+    ReactiveFormsModule,
+    MatDatepickerModule,
+    MatSelectModule,
+    MatRadioModule,
+  ],
+  providers: [provideNativeDateAdapter()],
 })
-export class ProgrammeGradeRemarkModule { }
+export class ProgrammeGradeRemarkModule {}

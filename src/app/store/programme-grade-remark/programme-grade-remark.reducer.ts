@@ -20,6 +20,7 @@ export interface ProgrammeGradeRemarkState {
   error: string | null;
   createSuccess: boolean;
   updateSuccess: boolean;
+  deleteSuccess: boolean;
 }
 
 export const initialState: ProgrammeGradeRemarkState = {
@@ -34,6 +35,7 @@ export const initialState: ProgrammeGradeRemarkState = {
   error: null,
   createSuccess: false,
   updateSuccess: false,
+  deleteSuccess: false,
 };
 
 export const reducer = createReducer(
@@ -202,22 +204,26 @@ export const reducer = createReducer(
     ...state,
     loading: true,
     error: null,
+    deleteSuccess: false,
   })),
-  on(ProgrammeGradeRemarkAction.deleteProgrammeGradeRemarkSuccess, (state) => ({
+  on(ProgrammeGradeRemarkAction.deleteProgrammeGradeRemarkSuccess, (state, { programmeGradeRemarkId }) => ({
     ...state,
-    programmeGradeRemarkById: null,
+    programmeGradeRemarkById:
+      state.programmeGradeRemarkById?.id === programmeGradeRemarkId ? null : state.programmeGradeRemarkById,
     programmeGradeRemarkList: state.programmeGradeRemarkList
       ? {
           ...state.programmeGradeRemarkList,
-          data: state.programmeGradeRemarkList.data.filter((item) => item.id !== state.programmeGradeRemarkById?.id),
+          data: state.programmeGradeRemarkList.data.filter((item) => item.id !== programmeGradeRemarkId),
         }
       : null,
     loading: false,
+    deleteSuccess: true,
   })),
   on(ProgrammeGradeRemarkAction.deleteProgrammeGradeRemarkFail, (state, { error }) => ({
     ...state,
     loading: false,
     error,
+    deleteSuccess: false,
   })),
 
   // Create Many
@@ -300,3 +306,4 @@ export const getLoading = (state: ProgrammeGradeRemarkState) => state.loading;
 export const getError = (state: ProgrammeGradeRemarkState) => state.error;
 export const getCreateSuccess = (state: ProgrammeGradeRemarkState) => state.createSuccess;
 export const getUpdateSuccess = (state: ProgrammeGradeRemarkState) => state.updateSuccess;
+export const getDeleteSuccess = (state: ProgrammeGradeRemarkState) => state.deleteSuccess;
