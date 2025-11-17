@@ -37,3 +37,49 @@ export const updateResultMarkSheetFail = createAction(
   '[Result/API] Update MarkSheet Fail',
   props<{ error: string }>()
 ); 
+
+// Generate Student Result
+export const generateStudentResult = createAction(
+  '[Result] Generate Student Result',
+  props<{
+    schoolTermSessionId: string;
+    classId: string;
+  }>()
+);
+
+export const generateStudentResultSuccess = createAction(
+  '[Result/API] Generate Student Result Success',
+  props<{ payload: Blob }>()
+);
+
+export const generateStudentResultFail = createAction(
+  '[Result/API] Generate Student Result Fail',
+  props<{ error: string }>()
+);
+
+export const clearGeneratedStudentResult = createAction(
+  '[Result] Clear Generated Student Result'
+);
+
+// Generate Class Result
+export const generateClassResult = createAction(
+  '[Result] Generate Class Result',
+  props<{
+    schoolTermSessionId: string;
+    classId: string;
+  }>()
+);
+
+export const generateClassResultSuccess = createAction(
+  '[Result/API] Generate Class Result Success',
+  props<{ payload: Blob }>()
+);
+
+export const generateClassResultFail = createAction(
+  '[Result/API] Generate Class Result Fail',
+  props<{ error: string }>()
+);
+
+export const clearGeneratedClassResult = createAction(
+  '[Result] Clear Generated Class Result'
+);

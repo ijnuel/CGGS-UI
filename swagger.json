@@ -48753,6 +48753,14 @@
           "id": {
             "type": "string",
             "format": "uuid"
+          },
+          "studentFullName": {
+            "type": "string",
+            "nullable": true
+          },
+          "studentNo": {
+            "type": "string",
+            "nullable": true
           }
         },
         "additionalProperties": false

@@ -10,6 +10,7 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatRadioModule } from '@angular/material/radio';
 import { ResultComponent } from './result.component';
 import { UpdateResultComponent } from './update-result/update-result.component';
+import { ViewResultComponent } from './view-result/view-result.component';
 import { SharedModule } from '../../../shared/shared.module';
 import { provideNativeDateAdapter } from '@angular/material/core';
 
@@ -19,13 +20,17 @@ const routes: Routes = [
         component: ResultComponent,
     },
     {
+        path: 'view',
+        component: ViewResultComponent,
+    },
+    {
         path: 'update',
         component: UpdateResultComponent,
     }
 ];
 
 @NgModule({
-    declarations: [ResultComponent, UpdateResultComponent],
+    declarations: [ResultComponent, UpdateResultComponent, ViewResultComponent],
     imports: [
         CommonModule,
         SharedModule,

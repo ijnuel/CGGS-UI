@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { of } from 'rxjs';
-import { map, mergeMap, catchError, switchMap } from 'rxjs/operators';
+import { map, mergeMap, catchError } from 'rxjs/operators';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { environment } from '../../../environments/environment';
 import { StudentAssessmentScoreInterface } from '../../types/result';
@@ -52,6 +52,54 @@ export class ResultEffects {
             catchError((error) => of(ResultActions.updateResultMarkSheetFail({ error: error.message })))
           )
       )
+    )
+  );
+
+  generateStudentResult$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(ResultActions.generateStudentResult),
+      mergeMap(({ schoolTermSessionId, classId }) => {
+        const params = new HttpParams()
+          .set('schoolTermSessionId', schoolTermSessionId)
+          .set('classId', classId);
+
+        return this.http
+          .get(`${environment.baseUrl}/Result/GenerateStudentResult`, {
+            params,
+            responseType: 'blob',
+            withCredentials: true,
+          })
+          .pipe(
+            map((blob) => ResultActions.generateStudentResultSuccess({ payload: blob })),
+            catchError((error) =>
+              of(ResultActions.generateStudentResultFail({ error: error.message }))
+            )
+          );
+      })
+    )
+  );
+
+  generateClassResult$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(ResultActions.generateClassResult),
+      mergeMap(({ schoolTermSessionId, classId }) => {
+        const params = new HttpParams()
+          .set('schoolTermSessionId', schoolTermSessionId)
+          .set('classId', classId);
+
+        return this.http
+          .get(`${environment.baseUrl}/Result/GenerateClassResult`, {
+            params,
+            responseType: 'blob',
+            withCredentials: true,
+          })
+          .pipe(
+            map((blob) => ResultActions.generateClassResultSuccess({ payload: blob })),
+            catchError((error) =>
+              of(ResultActions.generateClassResultFail({ error: error.message }))
+            )
+          );
+      })
     )
   );
 } 

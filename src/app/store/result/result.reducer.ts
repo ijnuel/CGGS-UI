@@ -8,12 +8,24 @@ export interface ResultState {
   resultMarkSheet: StudentAssessmentScoreInterface[] | null;
   loading: boolean;
   error: string | null;
+  generatingStudentResult: boolean;
+  generatedStudentResult: Blob | null;
+  generateStudentResultError: string | null;
+  generatingClassResult: boolean;
+  generatedClassResult: Blob | null;
+  generateClassResultError: string | null;
 }
 
 export const initialState: ResultState = {
   resultMarkSheet: null,
   loading: false,
   error: null,
+  generatingStudentResult: false,
+  generatedStudentResult: null,
+  generateStudentResultError: null,
+  generatingClassResult: false,
+  generatedClassResult: null,
+  generateClassResultError: null,
 };
 
 export const resultReducer = createReducer(
@@ -57,5 +69,55 @@ export const resultReducer = createReducer(
     ...state,
     loading: false,
     error,
+  })),
+
+  // Generate Student Result
+  on(ResultActions.generateStudentResult, (state) => ({
+    ...state,
+    generatingStudentResult: true,
+    generateStudentResultError: null,
+  })),
+
+  on(ResultActions.generateStudentResultSuccess, (state, { payload }) => ({
+    ...state,
+    generatingStudentResult: false,
+    generatedStudentResult: payload,
+    generateStudentResultError: null,
+  })),
+
+  on(ResultActions.generateStudentResultFail, (state, { error }) => ({
+    ...state,
+    generatingStudentResult: false,
+    generateStudentResultError: error,
+  })),
+
+  on(ResultActions.clearGeneratedStudentResult, (state) => ({
+    ...state,
+    generatedStudentResult: null,
+  })),
+
+  // Generate Class Result
+  on(ResultActions.generateClassResult, (state) => ({
+    ...state,
+    generatingClassResult: true,
+    generateClassResultError: null,
+  })),
+
+  on(ResultActions.generateClassResultSuccess, (state, { payload }) => ({
+    ...state,
+    generatingClassResult: false,
+    generatedClassResult: payload,
+    generateClassResultError: null,
+  })),
+
+  on(ResultActions.generateClassResultFail, (state, { error }) => ({
+    ...state,
+    generatingClassResult: false,
+    generateClassResultError: error,
+  })),
+
+  on(ResultActions.clearGeneratedClassResult, (state) => ({
+    ...state,
+    generatedClassResult: null,
   }))
 ); 

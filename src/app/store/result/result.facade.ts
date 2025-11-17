@@ -25,6 +25,30 @@ export class ResultFacade {
     return this.store.select(ResultSelectors.selectResultError);
   }
 
+  get generatingStudentResult$(): Observable<boolean> {
+    return this.store.select(ResultSelectors.selectGeneratingStudentResult);
+  }
+
+  get generatedStudentResult$(): Observable<Blob | null> {
+    return this.store.select(ResultSelectors.selectGeneratedStudentResult);
+  }
+
+  get generateStudentResultError$(): Observable<string | null> {
+    return this.store.select(ResultSelectors.selectGenerateStudentResultError);
+  }
+
+  get generatingClassResult$(): Observable<boolean> {
+    return this.store.select(ResultSelectors.selectGeneratingClassResult);
+  }
+
+  get generatedClassResult$(): Observable<Blob | null> {
+    return this.store.select(ResultSelectors.selectGeneratedClassResult);
+  }
+
+  get generateClassResultError$(): Observable<string | null> {
+    return this.store.select(ResultSelectors.selectGenerateClassResultError);
+  }
+
   // Actions
   getResultMarkSheet(schoolTermSessionId: string, classId: string, subjectId: string): void {
     this.store.dispatch(ResultActions.getResultMarkSheet({ schoolTermSessionId, classId, subjectId }));
@@ -32,5 +56,21 @@ export class ResultFacade {
 
   updateResultMarkSheet(payload: StudentAssessmentScoreInterface[]): void {
     this.store.dispatch(ResultActions.updateResultMarkSheet({ payload }));
+  }
+
+  generateStudentResult(schoolTermSessionId: string, classId: string): void {
+    this.store.dispatch(ResultActions.generateStudentResult({ schoolTermSessionId, classId }));
+  }
+
+  clearGeneratedStudentResult(): void {
+    this.store.dispatch(ResultActions.clearGeneratedStudentResult());
+  }
+
+  generateClassResult(schoolTermSessionId: string, classId: string): void {
+    this.store.dispatch(ResultActions.generateClassResult({ schoolTermSessionId, classId }));
+  }
+
+  clearGeneratedClassResult(): void {
+    this.store.dispatch(ResultActions.clearGeneratedClassResult());
   }
 } 

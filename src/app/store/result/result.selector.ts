@@ -17,3 +17,33 @@ export const selectResultError = createSelector(
   selectResultState,
   (state) => state.error
 ); 
+
+export const selectGeneratingStudentResult = createSelector(
+  selectResultState,
+  (state) => state.generatingStudentResult
+);
+
+export const selectGeneratedStudentResult = createSelector(
+  selectResultState,
+  (state) => state.generatedStudentResult
+);
+
+export const selectGenerateStudentResultError = createSelector(
+  selectResultState,
+  (state) => state.generateStudentResultError
+);
+
+export const selectGeneratingClassResult = createSelector(
+  selectResultState,
+  (state) => state.generatingClassResult
+);
+
+export const selectGeneratedClassResult = createSelector(
+  selectResultState,
+  (state) => state.generatedClassResult
+);
+
+export const selectGenerateClassResultError = createSelector(
+  selectResultState,
+  (state) => state.generateClassResultError
+);

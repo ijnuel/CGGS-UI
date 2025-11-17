@@ -11,6 +11,6 @@ export default [
     name: 'View Results',
     icon: 'assets/icons/settings-icon.svg',
     roles: [],
-    url: '/app/result'
+    url: '/app/result/view'
   },
 ];
