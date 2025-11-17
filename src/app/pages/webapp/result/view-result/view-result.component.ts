@@ -31,6 +31,7 @@ export class ViewResultComponent implements OnInit, OnDestroy {
   generateError$ = this.resultFacade.generateClassResultError$;
 
   private destroy$ = new Subject<void>();
+  private hasAutoSelectedSchoolTermSession = false;
 
   constructor(
     private fb: FormBuilder,
@@ -51,6 +52,19 @@ export class ViewResultComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.schoolTermSessionFacade.getSchoolTermSessionAll();
     this.classFacade.getClassAll();
+
+    this.schoolTermSessions$
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((sessions) => {
+        if (this.hasAutoSelectedSchoolTermSession || !sessions || sessions.length === 0) {
+          return;
+        }
+        const defaultSession = sessions.find((session) => session.isCurrent) ?? sessions[0];
+        if (defaultSession && !this.formControl.schoolTermSessionId.value) {
+          this.formControl.schoolTermSessionId.setValue(defaultSession.id);
+          this.hasAutoSelectedSchoolTermSession = true;
+        }
+      });
 
     this.resultFacade.generatedClassResult$
       .pipe(

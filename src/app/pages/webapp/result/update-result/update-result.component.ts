@@ -52,6 +52,7 @@ export class UpdateResultComponent implements OnInit, OnDestroy {
   skillGradesList: DropdownListInterface[] = [];
 
   private destroy$ = new Subject<void>();
+  private schoolTermSessionsLoaded = false;
 
   constructor(
     private fb: FormBuilder,
@@ -90,6 +91,21 @@ export class UpdateResultComponent implements OnInit, OnDestroy {
 
     // Check for query parameters and load data if available
     this.checkQueryParamsAndLoadData();
+
+    // Default school term session selection
+    this.schoolTermSessions$
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((sessions) => {
+        if (!sessions || sessions.length === 0 || this.schoolTermSessionsLoaded) {
+          return;
+        }
+        const defaultSession = sessions.find((session) => session.isCurrent) ?? sessions[0];
+        if (defaultSession && !this.formControl.schoolTermSessionId.value) {
+          this.formControl.schoolTermSessionId.setValue(defaultSession.id);
+          this.onSchoolTermSessionChange();
+          this.schoolTermSessionsLoaded = true;
+        }
+      });
 
     // Subscribe to skill grades to populate the local list
     this.skillGrades$
