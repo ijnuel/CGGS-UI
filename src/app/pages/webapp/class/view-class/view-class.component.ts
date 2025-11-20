@@ -102,6 +102,19 @@ export class ViewClassComponent implements OnInit, OnDestroy {
 
     // Load sessions
     this.sessionFacade.getSessionAll();
+
+    this.sessions$.pipe(takeUntil(this.destroy$)).subscribe((sessions) => {
+      if (sessions) {
+        const currentSession = sessions.find(session => session.isCurrent);
+        if (currentSession) {
+          this.sessionForm.patchValue({
+            sessionId: currentSession.id
+          });
+          this.selectedSessionId = currentSession.id;
+          this.loadStudentsInClass();
+        }
+      }
+    });
   }
 
   ngOnDestroy() {

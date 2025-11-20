@@ -27,7 +27,7 @@ export const tableHeader: TableHeaderInterface[] = [
   },
   {
     key: 'isCurrent',
-    type: 'text',
+    type: 'boolean',
     name: 'Is Current',
     align: 'left',
   }

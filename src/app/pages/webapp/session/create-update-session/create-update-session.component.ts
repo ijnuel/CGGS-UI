@@ -26,6 +26,7 @@ export class CreateUpdateSessionComponent implements OnInit, OnDestroy {
 
     formGroup: FormGroup<{
         name: FormControl;
+        isCurrent: FormControl;
     }>;
 
     get formControl() {
@@ -50,6 +51,7 @@ export class CreateUpdateSessionComponent implements OnInit, OnDestroy {
 
         this.formGroup = this.fb.group({
             name: ['', [Validators.required, Validators.maxLength(255)]],
+            isCurrent: [false, [Validators.required]],
         });
     }
 
@@ -61,7 +63,8 @@ export class CreateUpdateSessionComponent implements OnInit, OnDestroy {
             this.sessionById$.pipe(takeUntil(this.unsubscribe$)).subscribe((data) => {
                 if (data) {
                     this.formGroup.patchValue({
-                        name: data.name
+                        name: data.name,
+                        isCurrent: data.isCurrent
                     });
                 }
             });

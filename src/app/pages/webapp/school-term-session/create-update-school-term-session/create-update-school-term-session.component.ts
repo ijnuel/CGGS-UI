@@ -32,6 +32,7 @@ export class CreateUpdateSchoolTermSessionComponent implements OnInit, OnDestroy
         term: FormControl;
         termStartDate: FormControl;
         termEndDate: FormControl;
+        isCurrent: FormControl;
     }>;
 
     get formControl() {
@@ -61,7 +62,8 @@ export class CreateUpdateSchoolTermSessionComponent implements OnInit, OnDestroy
             sessionId: ['', [Validators.required]],
             term: [0, [Validators.required, Validators.min(1), Validators.max(3)]],
             termStartDate: ['', [Validators.required]],
-            termEndDate: ['', [Validators.required]]
+            termEndDate: ['', [Validators.required]],
+            isCurrent: [false, [Validators.required]]
         });
     }
 

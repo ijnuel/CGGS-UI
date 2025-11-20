@@ -28,6 +28,12 @@
             </mat-error>
           </mat-form-field>
         </div>
+        <div>
+          <mat-checkbox [formControl]="formControl.isCurrent">Is Current</mat-checkbox>
+          <mat-error>
+            {{ getErrorMessage("isCurrent") }}
+          </mat-error>
+        </div>
       </div>
     </form>
 

@@ -45,11 +45,20 @@
             {{ header.name }}
           </th>
           <td mat-cell *matCellDef="let row" [ngClass]="header.align || 'left'">
-            <ng-container *ngIf="header.format">
+            <ng-container *ngIf="header.format && header.type !== 'boolean'">
               {{ header.format(row[header.key]) }}
             </ng-container>
-            <ng-container *ngIf="!header.format">
+            <ng-container *ngIf="!header.format && header.type !== 'boolean'">
               {{ row[header.key] }}
+            </ng-container>
+            <ng-container *ngIf="header.type === 'boolean'">
+              <mat-icon [color]="row[header.key] ? 'primary' : 'warn'">{{ row[header.key] ? 'check' : 'close' }}</mat-icon>
+            </ng-container>
+            <ng-container *ngIf="header.type === 'date'">
+              {{ row[header.key] | date:'dd/MM/yyyy' }}
+            </ng-container>
+            <ng-container *ngIf="header.type === 'number'">
+              {{ row[header.key] | number:'1.2-2' }}
             </ng-container>
           </td>
         </ng-container>
