@@ -24,7 +24,7 @@
           label="Session"
           placeholder="Select Session"
           valueKey="id"
-          labelKey="name"
+          [labelKeys]="['name']"
           [formControl]="sessionForm.controls.sessionId"
           (selectionChange)="onSessionChange($event)"
           class="w-full">
@@ -94,7 +94,7 @@
           label="Select Student"
           placeholder="Choose a student"
           valueKey="id"
-          labelKey="fullName"
+          [labelKeys]="['firstName', 'lastName', 'middleName']"
           [formControl]="studentForm.controls.studentId"
           (selectionChange)="onStudentSelect($event)"
           class="w-full">

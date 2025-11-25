@@ -21,7 +21,7 @@
             [loading]="obs.loading && !obs.sessionList"
             label="Session"
             placeholder="Select session"
-            [labelKey]="'name'"
+            [labelKeys]="['name']"
             [valueKey]="'id'"
             [formControl]="formControl.sessionId"
             [error]="getErrorMessage('sessionId')"

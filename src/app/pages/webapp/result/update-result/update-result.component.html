@@ -42,7 +42,7 @@
            label="Class"
            placeholder="Select Class"
            valueKey="id"
-           labelKey="description"
+           [labelKeys]="['description']"
            [formControl]="formControl.classId"
            (selectionChange)="onClassChange()">
          </app-searchable-mat-select>
@@ -53,7 +53,7 @@
            label="Subject"
            placeholder="Select Subject"
            valueKey="id"
-           labelKey="name"
+           [labelKeys]="['name']"
            [formControl]="formControl.subjectId"
            (selectionChange)="onSubjectChange()">
          </app-searchable-mat-select>

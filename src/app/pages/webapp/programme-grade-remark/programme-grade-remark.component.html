@@ -34,7 +34,7 @@
         [options]="(programTypes$ | async) ?? []"
         label="Program Type"
         placeholder="Select Program Type"
-        labelKey="name"
+        [labelKeys]="['name']"
         valueKey="id"
         [formControl]="filterForm.controls.programTypeId"
         (selectionChange)="onProgramTypeChange($event)"

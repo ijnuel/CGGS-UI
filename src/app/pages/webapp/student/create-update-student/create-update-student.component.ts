@@ -46,7 +46,6 @@ export class CreateUpdateStudentComponent implements OnInit, OnDestroy {
     studentNo: FormControl;
     email: FormControl;
     familyId: FormControl;
-    classId: FormControl;
   }>;
 
   get formControl() {
@@ -92,10 +91,9 @@ export class CreateUpdateStudentComponent implements OnInit, OnDestroy {
       firstName: ['', [Validators.required, Validators.maxLength(255)]],
       lastName: ['', [Validators.required, Validators.maxLength(255)]],
       middleName: ['', [Validators.maxLength(255)]],
-      dateOfBirth: null,
+      dateOfBirth: ['', [Validators.required]],
       phoneNumber: null,
       email: null,
-      classId: ['', [Validators.required]],
       religion: ['', [Validators.required]],
       gender: ['', [Validators.required]],
       nationalityId: null,
@@ -136,7 +134,6 @@ export class CreateUpdateStudentComponent implements OnInit, OnDestroy {
             residentialCity: data.residentialCity,
             studentNo: data.studentNo,
             familyId: data.familyId,
-            classId: data.classId,
           });
         }
       });

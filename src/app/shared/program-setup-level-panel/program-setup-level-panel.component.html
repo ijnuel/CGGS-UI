@@ -41,7 +41,7 @@
             [options]="getDropDownOptions('subjects', item)"
             label="Subject"
             placeholder="Select subject"
-            [labelKey]="'name'"
+            [labelKeys]="['name']"
             [formControl]="getFormControl('subjectId')"
           ></app-searchable-mat-select>
         }

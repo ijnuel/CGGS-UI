@@ -9,7 +9,7 @@
                 placeholder="Search..." autocomplete="off" (click)="$event.stopPropagation()" />
         </mat-option>
         <mat-option *ngFor="let option of filteredOptions" [value]="option[valueKey]">
-            {{ option[labelKey] }}
+            {{ getLabel(option) }}
         </mat-option>
     </mat-select>
     <mat-error>

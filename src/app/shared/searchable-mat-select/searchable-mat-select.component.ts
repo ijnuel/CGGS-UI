@@ -16,7 +16,8 @@ import { DropdownListInterface } from '../../types';
 })
 export class SearchableMatSelectComponent implements ControlValueAccessor {
   @Input() options: any[] = [];
-  @Input() labelKey: string = 'description';
+  @Input() labelSeparator: string = ' ';
+  @Input() labelKeys: string[] = ['description'];
   @Input() valueKey: string = 'value';
   @Input() placeholder: string = '';
   @Input() label: string = '';
@@ -49,8 +50,8 @@ export class SearchableMatSelectComponent implements ControlValueAccessor {
       this.filteredOptions = this.options;
     } else {
       const search = this.searchText.toLowerCase();
-      this.filteredOptions = this.options.filter(opt =>
-        (opt[this.labelKey] || '').toLowerCase().includes(search)
+      this.filteredOptions = this.options.filter(option =>
+        this.labelKeys.some(key => (option[key] || '').toLowerCase().includes(search))
       );
     }
   }
@@ -77,5 +78,8 @@ export class SearchableMatSelectComponent implements ControlValueAccessor {
         this.searchInput?.nativeElement.focus();
       });
     }
+  }
+  getLabel(option: any) {
+    return this.labelKeys.map(key => option[key] ?? '').join(this.labelSeparator);
   }
 }

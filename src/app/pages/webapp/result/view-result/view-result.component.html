@@ -22,7 +22,7 @@
           [options]="(classes$ | async) ?? []"
           label="Class"
           placeholder="Select Class"
-          labelKey="description"
+          [labelKeys]="['description']"
           valueKey="id"
           [formControl]="formControl.classId">
         </app-searchable-mat-select>
