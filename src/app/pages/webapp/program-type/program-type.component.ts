@@ -479,7 +479,7 @@ export class ProgramTypeComponent implements OnInit {
       submitHandler: (programType: any) => this.submitClassLevel(programType),
       childItemsFn: (programTypeId: string) => this.getClassLevels(programTypeId),
       showTable: (item: any) => false,
-      getName: (item: any) => `${item.level}. ${item.name}`,
+      getName: (item: any) => `${item.level}) ${item.name}`,
       showAddButton: (item: any) => true,
       childConfig: {
         label: ProgramSetupLevel.CLASSLEVEL,

@@ -73,7 +73,7 @@ export class CreateUpdateProgramTypeComponent implements OnInit, OnDestroy {
         this.programTypeFacade.createSuccess$
             .pipe(takeUntil(this.unsubscribe$))
             .subscribe((success) => {
-                if (success && !this.isEditMode) {
+                if (success && !this.isEditMode && this.formGroup.touched) {
                     this.router.navigate(['/app/program-type']);
                     this.globalLoadingFacade.globalSuccessShow('Program Type created successfully', 3000);
                 }
@@ -81,7 +81,7 @@ export class CreateUpdateProgramTypeComponent implements OnInit, OnDestroy {
         this.programTypeFacade.updateSuccess$
             .pipe(takeUntil(this.unsubscribe$))
             .subscribe((success) => {
-                if (success && this.isEditMode) {
+                if (success && this.isEditMode && this.formGroup.touched) {
                     this.router.navigate(['/app/program-type']);
                     this.globalLoadingFacade.globalSuccessShow('Program Type updated successfully', 3000);
                 }
