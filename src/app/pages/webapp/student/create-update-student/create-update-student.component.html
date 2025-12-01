@@ -26,6 +26,19 @@ error: error$ | async }; as obs ) {
           ></app-searchable-mat-select>
         </div>
 
+        <div>
+          <app-searchable-mat-select
+            [options]="obs.classList!"
+            label="Class"
+            placeholder="Select class"
+            [required]="true"
+            [valueKey]="'id'"
+            [formControl]="formControl.classId"
+            [error]="getErrorMessage('classId')"
+            [disabled]="isEditMode"
+          ></app-searchable-mat-select>
+        </div>
+
       </div>
 
       <div class="grid grid-cols-2 gap-x-4 mt-2">
