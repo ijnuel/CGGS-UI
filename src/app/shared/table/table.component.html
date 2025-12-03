@@ -57,9 +57,6 @@
             <ng-container *ngIf="header.type === 'date'">
               {{ row[header.key] | date:'dd/MM/yyyy' }}
             </ng-container>
-            <ng-container *ngIf="header.type === 'number'">
-              {{ row[header.key] | number:'1.2-2' }}
-            </ng-container>
           </td>
         </ng-container>
 
