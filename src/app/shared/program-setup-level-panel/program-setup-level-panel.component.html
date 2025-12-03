@@ -1,5 +1,5 @@
 <mat-accordion>
-  <mat-expansion-panel *ngFor="let item of items" (opened)="refresh.emit({ item, level: this.levelType })" (expandedChange)="onPanelToggle($event)">
+  <mat-expansion-panel *ngFor="let item of items" (opened)="refresh.emit({ item, level: this.levelType })" (expandedChange)="onPanelToggle(item, $event)">
     <mat-expansion-panel-header>
       <mat-panel-title>
         {{ getName(item) }}
@@ -15,7 +15,7 @@
     </mat-expansion-panel-header>
 
     <div class="flex justify-end items-center">
-      <button *ngIf="addFormVisibleFor !== getId(item) && config?.showAddButton(item)" mat-raised-button color="accent"
+      <button *ngIf="addFormVisibleFor !== getId(item) && config?.showAddButton(item) && !hasExpandedChildPanel(item)" mat-raised-button color="accent"
         (click)="showAddForm.emit({ id: getId(item), level: levelType })">
         <mat-icon>add</mat-icon>
       </button>
@@ -70,11 +70,12 @@
     </div>
     <!-- Child Panel Recursion -->
     <ng-container *ngIf="config.childConfig">
-      <app-program-setup-level-panel [items]="config.childItemsFn(getId(item))" [levelType]="config.childConfig.label"
-        [config]="config.childConfig" [addFormVisibleFor]="addFormVisibleFor" [loading]="loading"
+      <app-program-setup-level-panel #childPanel [items]="config.childItemsFn(getId(item))" [levelType]="config.childConfig.label"
+        [config]="config.childConfig" [addFormVisibleFor]="addFormVisibleFor" [loading]="loading" [parentItemId]="getId(item)"
         (edit)="edit.emit($event)" (delete)="delete.emit($event)" (add)="add.emit($event)" (refresh)="onRefresh($event)"
         (showAddForm)="showAddForm.emit($event)" (hideAddForm)="hideAddForm.emit($event)"
-        (submit)="submit.emit($event)">
+        (submit)="submit.emit($event)" 
+        (childPanelToggle)="onChildPanelToggle(getId(item), $event.isExpanded)">
       </app-program-setup-level-panel>
     </ng-container>
 

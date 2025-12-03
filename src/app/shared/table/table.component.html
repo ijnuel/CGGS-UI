@@ -45,10 +45,10 @@
             {{ header.name }}
           </th>
           <td mat-cell *matCellDef="let row" [ngClass]="header.align || 'left'">
-            <ng-container *ngIf="header.format && header.type !== 'boolean'">
+            <ng-container *ngIf="header.format && header.type !== 'boolean' && header.type !== 'date'">
               {{ header.format(row[header.key]) }}
             </ng-container>
-            <ng-container *ngIf="!header.format && header.type !== 'boolean'">
+            <ng-container *ngIf="!header.format && header.type !== 'boolean' && header.type !== 'date'">
               {{ row[header.key] }}
             </ng-container>
             <ng-container *ngIf="header.type === 'boolean'">

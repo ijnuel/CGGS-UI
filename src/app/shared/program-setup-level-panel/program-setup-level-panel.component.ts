@@ -10,12 +10,15 @@ import { DropdownListInterface, ProgramSetupLevel, ProgramSetupLevelConfig } fro
 export class ProgramSetupLevelPanelComponent {
   ProgramSetupLevel = ProgramSetupLevel;
   showIcons: boolean = true;
+  expandedChildPanels: Set<string> = new Set();
+  expandedPanels: Set<string> = new Set();
 
   @Input() items: any[] = [];
   @Input() levelType!: ProgramSetupLevel;
   @Input() config!: ProgramSetupLevelConfig;
   @Input() addFormVisibleFor: string | null = null;
   @Input() loading: boolean = false;
+  @Input() parentItemId?: string;
 
   @Output() edit = new EventEmitter<{ item: any, level: ProgramSetupLevel }>();
   @Output() delete = new EventEmitter<{ item: any, level: ProgramSetupLevel }>();
@@ -24,6 +27,7 @@ export class ProgramSetupLevelPanelComponent {
   @Output() showAddForm = new EventEmitter<{ id: string, level: ProgramSetupLevel }>();
   @Output() hideAddForm = new EventEmitter<{ level: ProgramSetupLevel }>();
   @Output() submit = new EventEmitter<{ item: any, level: ProgramSetupLevel, config: ProgramSetupLevelConfig }>();
+  @Output() childPanelToggle = new EventEmitter<{ parentItemId: string, isExpanded: boolean }>();
 
   getId(item: any): string {
     return this.config.getId ? this.config.getId(item) : item.id;
@@ -45,8 +49,58 @@ export class ProgramSetupLevelPanelComponent {
     return this.config.dropDownOptions?.(this.getId(item)).find(x => x.key == key)?.dropDownListFn() ?? [];
   }
 
-  onPanelToggle(isExpanded: boolean) {
-      this.showIcons = !isExpanded;
+  onPanelToggle(item: any, isExpanded: boolean) {
+    this.showIcons = !isExpanded;
+    
+    const itemId = this.getId(item);
+    const hadExpandedPanels = this.expandedPanels.size > 0;
+    
+    if (isExpanded) {
+      this.expandedPanels.add(itemId);
+    } else {
+      this.expandedPanels.delete(itemId);
+    }
+    
+    const hasExpandedPanels = this.expandedPanels.size > 0;
+    
+    // If expansion state changed and we have a parent, notify parent
+    if (this.parentItemId && hadExpandedPanels !== hasExpandedPanels) {
+      this.childPanelToggle.emit({ parentItemId: this.parentItemId, isExpanded: hasExpandedPanels });
+    }
+  }
+
+  onChildPanelToggle(parentItemId: string, isExpanded: boolean) {
+    // Track the state before updating
+    const hadThisChildExpanded = this.expandedChildPanels.has(parentItemId);
+    const hadAnyExpandedChildPanels = this.expandedChildPanels.size > 0;
+    
+    // Only update if the state actually changed (prevents duplicate processing)
+    if (hadThisChildExpanded === isExpanded) {
+      return; // No change, nothing to do
+    }
+    
+    // Update the tracking for this specific child
+    if (isExpanded) {
+      this.expandedChildPanels.add(parentItemId);
+    } else {
+      this.expandedChildPanels.delete(parentItemId);
+    }
+    
+    // Check the state after updating
+    const hasAnyExpandedChildPanels = this.expandedChildPanels.size > 0;
+    
+    // Only notify our immediate parent if our overall child expansion state changed
+    // This means we went from having some expanded children to having none, or vice versa
+    // We don't emit if a child collapsed but we still have other expanded children
+    // This prevents chain reactions where all grandparents get updated unnecessarily
+    if (this.parentItemId && hadAnyExpandedChildPanels !== hasAnyExpandedChildPanels) {
+      this.childPanelToggle.emit({ parentItemId: this.parentItemId, isExpanded: hasAnyExpandedChildPanels });
+    }
+  }
+  
+  hasExpandedChildPanel(item: any): boolean {
+    const itemId = this.getId(item);
+    return this.expandedChildPanels.has(itemId);
   }
 
   getFormControl(key: string): FormControl {
