@@ -34,8 +34,8 @@
             [options]="obs.subjectTypes!"
             label="Subject Type"
             placeholder="Select subject type"
-            [labelKeys]="['name']"
-            [valueKey]="'id'"
+            [labelKeys]="['description']"
+            [valueKey]="'value'"
             [formControl]="formControl.subjectType"
             [error]="getErrorMessage('subjectType')"
           ></app-searchable-mat-select>
