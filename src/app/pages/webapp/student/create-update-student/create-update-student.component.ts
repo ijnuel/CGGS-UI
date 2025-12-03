@@ -145,7 +145,7 @@ export class CreateUpdateStudentComponent implements OnInit, OnDestroy {
     this.studentFacade.createSuccess$
       .pipe(takeUntil(this.unsubscribe$))
       .subscribe((success) => {
-        if (success && !this.isEditMode) {
+        if (success && !this.isEditMode && this.formGroup.touched) {
           this.router.navigate(['/app/student']);
           this.globalLoadingFacade.globalSuccessShow('Student created successfully', 3000);
         }
@@ -153,7 +153,7 @@ export class CreateUpdateStudentComponent implements OnInit, OnDestroy {
     this.studentFacade.updateSuccess$
       .pipe(takeUntil(this.unsubscribe$))
       .subscribe((success) => {
-        if (success && this.isEditMode) {
+        if (success && this.isEditMode && this.formGroup.touched) {
           this.router.navigate(['/app/student']);
           this.globalLoadingFacade.globalSuccessShow('Student updated successfully', 3000);
         }
