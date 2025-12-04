@@ -77,7 +77,7 @@ export class CreateUpdateSubjectComponent implements OnInit, OnDestroy {
         this.subjectFacade.createSuccess$
             .pipe(takeUntil(this.unsubscribe$))
             .subscribe((success) => {
-                if (success && !this.isEditMode) {
+                if (success && !this.isEditMode && this.formGroup.touched) {
                     this.router.navigate(['/app/subject']);
                     this.globalLoadingFacade.globalSuccessShow('Subject created successfully', 3000);
                 }
@@ -85,7 +85,7 @@ export class CreateUpdateSubjectComponent implements OnInit, OnDestroy {
         this.subjectFacade.updateSuccess$
             .pipe(takeUntil(this.unsubscribe$))
             .subscribe((success) => {
-                if (success && this.isEditMode) {
+                if (success && this.isEditMode && this.formGroup.touched) {
                     this.router.navigate(['/app/subject']);
                     this.globalLoadingFacade.globalSuccessShow('Subject updated successfully', 3000);
                 }

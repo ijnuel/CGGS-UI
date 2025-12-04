@@ -70,7 +70,7 @@ export class CreateUpdateClassSubjectAssessmentComponent implements OnInit, OnDe
         this.classSubjectAssessmentFacade.createSuccess$
             .pipe(takeUntil(this.unsubscribe$))
             .subscribe((success) => {
-                if (success && !this.isEditMode) {
+                if (success && !this.isEditMode && this.formGroup.touched) {
                     this.router.navigate(['/app/class-subject-assessment']);
                     this.globalLoadingFacade.globalSuccessShow('Class Subject Assessment created successfully', 3000);
                 }
@@ -78,7 +78,7 @@ export class CreateUpdateClassSubjectAssessmentComponent implements OnInit, OnDe
         this.classSubjectAssessmentFacade.updateSuccess$
             .pipe(takeUntil(this.unsubscribe$))
             .subscribe((success) => {
-                if (success && this.isEditMode) {
+                if (success && this.isEditMode && this.formGroup.touched) {
                     this.router.navigate(['/app/class-subject-assessment']);
                     this.globalLoadingFacade.globalSuccessShow('Class Subject Assessment updated successfully', 3000);
                 }

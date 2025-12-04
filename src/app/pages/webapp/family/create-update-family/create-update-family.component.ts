@@ -70,7 +70,7 @@ export class CreateUpdateFamilyComponent implements OnInit, OnDestroy {
         this.familyFacade.createSuccess$
             .pipe(takeUntil(this.unsubscribe$))
             .subscribe((success) => {
-                if (success && !this.isEditMode) {
+                if (success && !this.isEditMode && this.formGroup.touched) {
                     this.router.navigate(['/app/family']);
                     this.globalLoadingFacade.globalSuccessShow('Family created successfully', 3000);
                 }
@@ -78,7 +78,7 @@ export class CreateUpdateFamilyComponent implements OnInit, OnDestroy {
         this.familyFacade.updateSuccess$
             .pipe(takeUntil(this.unsubscribe$))
             .subscribe((success) => {
-                if (success && this.isEditMode) {
+                if (success && this.isEditMode && this.formGroup.touched) {
                     this.router.navigate(['/app/family']);
                     this.globalLoadingFacade.globalSuccessShow('Family updated successfully', 3000);
                 }

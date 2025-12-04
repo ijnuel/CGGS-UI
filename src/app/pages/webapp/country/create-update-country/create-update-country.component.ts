@@ -70,7 +70,7 @@ export class CreateUpdateCountryComponent implements OnInit, OnDestroy {
         this.countryFacade.createSuccess$
             .pipe(takeUntil(this.unsubscribe$))
             .subscribe((success) => {
-                if (success && !this.isEditMode) {
+                if (success && !this.isEditMode && this.formGroup.touched) {
                     this.router.navigate(['/app/country']);
                     this.globalLoadingFacade.globalSuccessShow('Country created successfully', 3000);
                 }
@@ -78,7 +78,7 @@ export class CreateUpdateCountryComponent implements OnInit, OnDestroy {
         this.countryFacade.updateSuccess$
             .pipe(takeUntil(this.unsubscribe$))
             .subscribe((success) => {
-                if (success && this.isEditMode) {
+                if (success && this.isEditMode && this.formGroup.touched) {
                     this.router.navigate(['/app/country']);
                     this.globalLoadingFacade.globalSuccessShow('Country updated successfully', 3000);
                 }

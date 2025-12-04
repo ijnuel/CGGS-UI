@@ -70,7 +70,7 @@ export class CreateUpdateLocalGovernmentAreaComponent implements OnInit, OnDestr
         this.localGovernmentAreaFacade.createSuccess$
             .pipe(takeUntil(this.unsubscribe$))
             .subscribe((success) => {
-                if (success && !this.isEditMode) {
+                if (success && !this.isEditMode && this.formGroup.touched) {
                     this.router.navigate(['/app/local-government-area']);
                     this.globalLoadingFacade.globalSuccessShow('Local Government Area created successfully', 3000);
                 }
@@ -78,7 +78,7 @@ export class CreateUpdateLocalGovernmentAreaComponent implements OnInit, OnDestr
         this.localGovernmentAreaFacade.updateSuccess$
             .pipe(takeUntil(this.unsubscribe$))
             .subscribe((success) => {
-                if (success && this.isEditMode) {
+                if (success && this.isEditMode && this.formGroup.touched) {
                     this.router.navigate(['/app/local-government-area']);
                     this.globalLoadingFacade.globalSuccessShow('Local Government Area updated successfully', 3000);
                 }

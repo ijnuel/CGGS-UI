@@ -85,7 +85,7 @@ export class CreateUpdateSchoolTermSessionComponent implements OnInit, OnDestroy
         this.schoolTermSessionFacade.createSuccess$
             .pipe(takeUntil(this.unsubscribe$))
             .subscribe((success) => {
-                if (success && !this.isEditMode) {
+                if (success && !this.isEditMode && this.formGroup.touched) {
                     this.router.navigate(['/app/school-term-session']);
                     this.globalLoadingFacade.globalSuccessShow('School Term Session created successfully', 3000);
                 }
@@ -93,7 +93,7 @@ export class CreateUpdateSchoolTermSessionComponent implements OnInit, OnDestroy
         this.schoolTermSessionFacade.updateSuccess$
             .pipe(takeUntil(this.unsubscribe$))
             .subscribe((success) => {
-                if (success && this.isEditMode) {
+                if (success && this.isEditMode && this.formGroup.touched) {
                     this.router.navigate(['/app/school-term-session']);
                     this.globalLoadingFacade.globalSuccessShow('School Term Session updated successfully', 3000);
                 }

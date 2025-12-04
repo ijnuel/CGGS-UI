@@ -112,7 +112,7 @@ export class CreateUpdateAdministratorComponent implements OnInit, OnDestroy {
         this.administratorFacade.createSuccess$
             .pipe(takeUntil(this.unsubscribe$))
             .subscribe((success) => {
-                if (success && !this.isEditMode) {
+                if (success && !this.isEditMode && this.formGroup.touched) {
                     this.router.navigate(['/app/administrator']);
                     this.globalLoadingFacade.globalSuccessShow('Administrator created successfully', 3000);
                 }
@@ -120,7 +120,7 @@ export class CreateUpdateAdministratorComponent implements OnInit, OnDestroy {
         this.administratorFacade.updateSuccess$
             .pipe(takeUntil(this.unsubscribe$))
             .subscribe((success) => {
-                if (success && this.isEditMode) {
+                if (success && this.isEditMode && this.formGroup.touched) {
                     this.router.navigate(['/app/administrator']);
                     this.globalLoadingFacade.globalSuccessShow('Administrator updated successfully', 3000);
                 }

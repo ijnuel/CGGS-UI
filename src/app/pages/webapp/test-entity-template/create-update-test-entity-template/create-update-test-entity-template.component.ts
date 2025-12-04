@@ -70,7 +70,7 @@ export class CreateUpdateTestEntityTemplateComponent implements OnInit, OnDestro
         this.testEntityTemplateFacade.createSuccess$
             .pipe(takeUntil(this.unsubscribe$))
             .subscribe((success) => {
-                if (success && !this.isEditMode) {
+                if (success && !this.isEditMode && this.formGroup.touched) {
                     this.router.navigate(['/app/test-entity-template']);
                     this.globalLoadingFacade.globalSuccessShow('Test Entity Template created successfully', 3000);
                 }
@@ -78,7 +78,7 @@ export class CreateUpdateTestEntityTemplateComponent implements OnInit, OnDestro
         this.testEntityTemplateFacade.updateSuccess$
             .pipe(takeUntil(this.unsubscribe$))
             .subscribe((success) => {
-                if (success && this.isEditMode) {
+                if (success && this.isEditMode && this.formGroup.touched) {
                     this.router.navigate(['/app/test-entity-template']);
                     this.globalLoadingFacade.globalSuccessShow('Test Entity Template updated successfully', 3000);
                 }

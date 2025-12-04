@@ -70,7 +70,7 @@ export class CreateUpdateStaffComponent implements OnInit, OnDestroy {
         this.staffFacade.createSuccess$
             .pipe(takeUntil(this.unsubscribe$))
             .subscribe((success) => {
-                if (success && !this.isEditMode) {
+                if (success && !this.isEditMode && this.formGroup.touched) {
                     this.router.navigate(['/app/staff']);
                     this.globalLoadingFacade.globalSuccessShow('Staff created successfully', 3000);
                 }
@@ -78,7 +78,7 @@ export class CreateUpdateStaffComponent implements OnInit, OnDestroy {
         this.staffFacade.updateSuccess$
             .pipe(takeUntil(this.unsubscribe$))
             .subscribe((success) => {
-                if (success && this.isEditMode) {
+                if (success && this.isEditMode && this.formGroup.touched) {
                     this.router.navigate(['/app/staff']);
                     this.globalLoadingFacade.globalSuccessShow('Staff updated successfully', 3000);
                 }

@@ -70,7 +70,7 @@ export class CreateUpdateProgrammeGradeRemarkComponent implements OnInit, OnDest
         this.programmeGradeRemarkFacade.createSuccess$
             .pipe(takeUntil(this.unsubscribe$))
             .subscribe((success) => {
-                if (success && !this.isEditMode) {
+                if (success && !this.isEditMode && this.formGroup.touched) {
                     this.router.navigate(['/app/programme-grade-remark']);
                     this.globalLoadingFacade.globalSuccessShow('Programme Grade Remark created successfully', 3000);
                 }
@@ -78,7 +78,7 @@ export class CreateUpdateProgrammeGradeRemarkComponent implements OnInit, OnDest
         this.programmeGradeRemarkFacade.updateSuccess$
             .pipe(takeUntil(this.unsubscribe$))
             .subscribe((success) => {
-                if (success && this.isEditMode) {
+                if (success && this.isEditMode && this.formGroup.touched) {
                     this.router.navigate(['/app/programme-grade-remark']);
                     this.globalLoadingFacade.globalSuccessShow('Programme Grade Remark updated successfully', 3000);
                 }

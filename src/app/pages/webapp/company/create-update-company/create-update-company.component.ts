@@ -70,7 +70,7 @@ export class CreateUpdateCompanyComponent implements OnInit, OnDestroy {
         this.companyFacade.createSuccess$
             .pipe(takeUntil(this.unsubscribe$))
             .subscribe((success) => {
-                if (success && !this.isEditMode) {
+                if (success && !this.isEditMode && this.formGroup.touched) {
                     this.router.navigate(['/app/company']);
                     this.globalLoadingFacade.globalSuccessShow('Company created successfully', 3000);
                 }
@@ -78,7 +78,7 @@ export class CreateUpdateCompanyComponent implements OnInit, OnDestroy {
         this.companyFacade.updateSuccess$
             .pipe(takeUntil(this.unsubscribe$))
             .subscribe((success) => {
-                if (success && this.isEditMode) {
+                if (success && this.isEditMode && this.formGroup.touched) {
                     this.router.navigate(['/app/company']);
                     this.globalLoadingFacade.globalSuccessShow('Company updated successfully', 3000);
                 }

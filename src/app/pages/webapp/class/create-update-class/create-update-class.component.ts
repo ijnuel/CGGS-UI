@@ -70,7 +70,7 @@ export class CreateUpdateClassComponent implements OnInit, OnDestroy {
         this.classFacade.createSuccess$
             .pipe(takeUntil(this.unsubscribe$))
             .subscribe((success) => {
-                if (success && !this.isEditMode) {
+                if (success && !this.isEditMode && this.formGroup.touched) {
                     this.router.navigate(['/app/class']);
                     this.globalLoadingFacade.globalSuccessShow('Class created successfully', 3000);
                 }
@@ -78,7 +78,7 @@ export class CreateUpdateClassComponent implements OnInit, OnDestroy {
         this.classFacade.updateSuccess$
             .pipe(takeUntil(this.unsubscribe$))
             .subscribe((success) => {
-                if (success && this.isEditMode) {
+                if (success && this.isEditMode && this.formGroup.touched) {
                     this.router.navigate(['/app/class']);
                     this.globalLoadingFacade.globalSuccessShow('Class updated successfully', 3000);
                 }

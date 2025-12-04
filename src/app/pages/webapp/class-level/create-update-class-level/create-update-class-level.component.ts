@@ -70,7 +70,7 @@ export class CreateUpdateClassLevelComponent implements OnInit, OnDestroy {
         this.classLevelFacade.createSuccess$
             .pipe(takeUntil(this.unsubscribe$))
             .subscribe((success) => {
-                if (success && !this.isEditMode) {
+                if (success && !this.isEditMode && this.formGroup.touched) {
                     this.router.navigate(['/app/class-level']);
                     this.globalLoadingFacade.globalSuccessShow('Class Level created successfully', 3000);
                 }
@@ -78,7 +78,7 @@ export class CreateUpdateClassLevelComponent implements OnInit, OnDestroy {
         this.classLevelFacade.updateSuccess$
             .pipe(takeUntil(this.unsubscribe$))
             .subscribe((success) => {
-                if (success && this.isEditMode) {
+                if (success && this.isEditMode && this.formGroup.touched) {
                     this.router.navigate(['/app/class-level']);
                     this.globalLoadingFacade.globalSuccessShow('Class Level updated successfully', 3000);
                 }
