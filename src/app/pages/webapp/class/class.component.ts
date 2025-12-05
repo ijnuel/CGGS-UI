@@ -39,7 +39,7 @@ export class ClassComponent implements OnInit {
   loadClasss() {
     this.classFacade.getClassList({
       start: 0,
-      recordsPerPage: 10,
+      recordsPerPage: 100,
       pageIndex: 0
     });
   }
@@ -51,7 +51,7 @@ export class ClassComponent implements OnInit {
   onSearch(searchText: string) {
     this.classFacade.getClassList({
       start: 0,
-      recordsPerPage: 10,
+      recordsPerPage: 100,
       pageIndex: 0,
       searchText
     });
@@ -60,7 +60,7 @@ export class ClassComponent implements OnInit {
   onFilter(filters: { name: string; value: string }[]) {
     this.classFacade.getClassList({
       start: 0,
-      recordsPerPage: 10,
+      recordsPerPage: 100,
       pageIndex: 0,
       queryProperties: filters
     });
