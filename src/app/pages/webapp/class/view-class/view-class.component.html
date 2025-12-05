@@ -64,6 +64,7 @@
       [tableData]="(studentClassList$ | async)?.data ?? []"
       [totalLength]="(studentClassList$ | async)?.totalCount ?? 0"
       [pageSize]="(studentClassList$ | async)?.recordPerPage ?? 10"
+      [pageIndex]="(studentClassList$ | async)?.currentPage ?? 0"
       [isLoading]="(loading$ | async) ?? false"
       [showActionColumn]="true"
       (pageChange)="onPageChange($event)"
