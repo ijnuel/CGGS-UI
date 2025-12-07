@@ -43,6 +43,8 @@ export const reducer = createReducer(
     ...state,
     loading: true,
     error: null,
+    createSuccess: false,
+    updateSuccess: false,
   })),
   on(CompanyAction.getCompanyAllSuccess, (state, { payload }) => ({
     ...state,
@@ -61,6 +63,8 @@ export const reducer = createReducer(
     pageQuery,
     loading: true,
     error: null,
+    createSuccess: false,
+    updateSuccess: false,
   })),
   on(CompanyAction.getCompanyListSuccess, (state, { payload }) => ({
     ...state,
@@ -78,6 +82,8 @@ export const reducer = createReducer(
     ...state,
     loading: true,
     error: null,
+    createSuccess: false,
+    updateSuccess: false,
   })),
   on(CompanyAction.getCompanyByIdSuccess, (state, { payload }) => ({
     ...state,
@@ -95,6 +101,8 @@ export const reducer = createReducer(
     ...state,
     loading: true,
     error: null,
+    createSuccess: false,
+    updateSuccess: false,
   })),
   on(CompanyAction.getCompanyByPropertiesSuccess, (state, { payload }) => ({
     ...state,

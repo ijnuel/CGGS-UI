@@ -50,6 +50,8 @@ export const reducer = createReducer(
     ...state,
     loading: true,
     error: null,
+    createSuccess: false,
+    updateSuccess: false,
   })),
   on(ProgramTypeAction.getProgramTypeAllSuccess, (state, { payload }) => ({
     ...state,
@@ -73,6 +75,8 @@ export const reducer = createReducer(
     },
     loading: true,
     error: null,
+    createSuccess: false,
+    updateSuccess: false,
   })),
   on(ProgramTypeAction.getProgramTypeListSuccess, (state, { payload }) => ({
     ...state,
@@ -90,6 +94,8 @@ export const reducer = createReducer(
     ...state,
     loading: true,
     error: null,
+    createSuccess: false,
+    updateSuccess: false,
   })),
   on(ProgramTypeAction.getProgramTypeByIdSuccess, (state, { payload }) => ({
     ...state,
@@ -107,6 +113,8 @@ export const reducer = createReducer(
     ...state,
     loading: true,
     error: null,
+    createSuccess: false,
+    updateSuccess: false,
   })),
   on(ProgramTypeAction.getProgramTypeByPropertiesSuccess, (state, { payload }) => ({
     ...state,

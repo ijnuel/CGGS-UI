@@ -33,6 +33,7 @@ export const studentClassSubjectAssessmentScoreReducer = createReducer(
     ...state,
     loading: true,
     error: null,
+    updateManySuccess: false,
   })),
   
   on(StudentClassSubjectAssessmentScoreActions.getStudentClassSubjectAssessmentScoreAllSuccess, (state, { payload }) => ({
@@ -53,6 +54,7 @@ export const studentClassSubjectAssessmentScoreReducer = createReducer(
     ...state,
     loading: true,
     error: null,
+    updateManySuccess: false,
   })),
   
   on(StudentClassSubjectAssessmentScoreActions.getStudentClassSubjectAssessmentScoreListSuccess, (state, { payload }) => ({
@@ -73,6 +75,7 @@ export const studentClassSubjectAssessmentScoreReducer = createReducer(
     ...state,
     loading: true,
     error: null,
+    updateManySuccess: false,
   })),
   
   on(StudentClassSubjectAssessmentScoreActions.getStudentClassSubjectAssessmentScoreByIdSuccess, (state, { payload }) => ({
@@ -93,6 +96,7 @@ export const studentClassSubjectAssessmentScoreReducer = createReducer(
     ...state,
     loading: true,
     error: null,
+    updateManySuccess: false,
   })),
   
   on(StudentClassSubjectAssessmentScoreActions.getStudentClassSubjectAssessmentScoreByPropertiesSuccess, (state, { payload }) => ({

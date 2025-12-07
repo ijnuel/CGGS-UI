@@ -37,6 +37,9 @@ export const reducer = createReducer(
       ...state,
       pageQuery,
       loading: true,
+      createSuccess: false,
+      updateSuccess: false,
+      deleteSuccess: false,
     };
   }),
   on(StudentClassAction.getStudentClassListSuccess, (state, action) => {

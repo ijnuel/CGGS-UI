@@ -45,6 +45,9 @@ export const reducer = createReducer(
     ...state,
     loading: true,
     error: null,
+    createSuccess: false,
+    updateSuccess: false,
+    deleteSuccess: false,
   })),
   on(PrincipalRemarkAction.getPrincipalRemarkAllSuccess, (state, { payload }) => ({
     ...state,
@@ -63,6 +66,9 @@ export const reducer = createReducer(
     pageQuery,
     loading: true,
     error: null,
+    createSuccess: false,
+    updateSuccess: false,
+    deleteSuccess: false,
   })),
   on(PrincipalRemarkAction.getPrincipalRemarkListSuccess, (state, { payload }) => ({
     ...state,
@@ -80,6 +86,9 @@ export const reducer = createReducer(
     ...state,
     loading: true,
     error: null,
+    createSuccess: false,
+    updateSuccess: false,
+    deleteSuccess: false,
   })),
   on(PrincipalRemarkAction.getPrincipalRemarkByIdSuccess, (state, { payload }) => ({
     ...state,
@@ -97,6 +106,9 @@ export const reducer = createReducer(
     ...state,
     loading: true,
     error: null,
+    createSuccess: false,
+    updateSuccess: false,
+    deleteSuccess: false,
   })),
   on(PrincipalRemarkAction.getPrincipalRemarkByPropertiesSuccess, (state, { payload }) => ({
     ...state,

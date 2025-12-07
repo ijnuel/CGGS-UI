@@ -45,6 +45,8 @@ export const reducer = createReducer(
     ...state,
     loading: true,
     error: null,
+    createSuccess: false,
+    updateSuccess: false,
   })),
   on(StudentAction.getStudentAllSuccess, (state, { payload }) => ({
     ...state,
@@ -62,6 +64,8 @@ export const reducer = createReducer(
     ...state,
     loading: true,
     error: null,
+    createSuccess: false,
+    updateSuccess: false,
   })),
   on(StudentAction.getStudentsWithoutClassSuccess, (state, { payload }) => ({
     ...state,
@@ -80,6 +84,8 @@ export const reducer = createReducer(
     pageQuery,
     loading: true,
     error: null,
+    createSuccess: false,
+    updateSuccess: false,
   })),
   on(StudentAction.getStudentListSuccess, (state, { payload }) => ({
     ...state,
@@ -97,6 +103,8 @@ export const reducer = createReducer(
     ...state,
     loading: true,
     error: null,
+    createSuccess: false,
+    updateSuccess: false,
   })),
   on(StudentAction.getStudentByIdSuccess, (state, { payload }) => ({
     ...state,
@@ -114,6 +122,8 @@ export const reducer = createReducer(
     ...state,
     loading: true,
     error: null,
+    createSuccess: false,
+    updateSuccess: false,
   })),
   on(StudentAction.getStudentByPropertiesSuccess, (state, { payload }) => ({
     ...state,

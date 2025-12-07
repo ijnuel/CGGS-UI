@@ -47,6 +47,8 @@ export const reducer = createReducer(
     ...state,
     loading: true,
     error: null,
+    createSuccess: false,
+    updateSuccess: false,
   })),
   on(ClassSubjectAction.getClassSubjectAllSuccess, (state, { payload }) => ({
     ...state,
@@ -70,6 +72,8 @@ export const reducer = createReducer(
     },
     loading: true,
     error: null,
+    createSuccess: false,
+    updateSuccess: false,
   })),
   on(ClassSubjectAction.getClassSubjectListSuccess, (state, { payload }) => ({
     ...state,
@@ -87,6 +91,8 @@ export const reducer = createReducer(
     ...state,
     loading: true,
     error: null,
+    createSuccess: false,
+    updateSuccess: false,
   })),
   on(ClassSubjectAction.getClassSubjectByIdSuccess, (state, { payload }) => ({
     ...state,
@@ -104,6 +110,8 @@ export const reducer = createReducer(
     ...state,
     loading: true,
     error: null,
+    createSuccess: false,
+    updateSuccess: false,
   })),
   on(ClassSubjectAction.getClassSubjectByPropertiesSuccess, (state, { payload }) => ({
     ...state,

@@ -49,6 +49,8 @@ export const reducer = createReducer(
     ...state,
     loading: true,
     error: null,
+    createSuccess: false,
+    updateSuccess: false,
   })),
   on(TestEntityTemplateAction.getTestEntityTemplateAllSuccess, (state, { payload }) => ({
     ...state,
@@ -72,6 +74,8 @@ export const reducer = createReducer(
     },
     loading: true,
     error: null,
+    createSuccess: false,
+    updateSuccess: false,
   })),
   on(TestEntityTemplateAction.getTestEntityTemplateListSuccess, (state, { payload }) => ({
     ...state,
@@ -89,6 +93,8 @@ export const reducer = createReducer(
     ...state,
     loading: true,
     error: null,
+    createSuccess: false,
+    updateSuccess: false,
   })),
   on(TestEntityTemplateAction.getTestEntityTemplateByIdSuccess, (state, { payload }) => ({
     ...state,
@@ -106,6 +112,8 @@ export const reducer = createReducer(
     ...state,
     loading: true,
     error: null,
+    createSuccess: false,
+    updateSuccess: false,
   })),
   on(TestEntityTemplateAction.getTestEntityTemplateByPropertiesSuccess, (state, { payload }) => ({
     ...state,
