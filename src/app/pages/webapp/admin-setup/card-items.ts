@@ -8,6 +8,12 @@ export default [
     url: '/app/program-type'
   },
   {
+    name: 'Principal Remarks',
+    icon: 'assets/icons/admin-setup-icon.svg',
+    roles: [],
+    url: '/app/principal-remark'
+  },
+  {
     name: 'Grade Remarks',
     icon: 'assets/icons/admin-setup-icon.svg',
     roles: [],

@@ -27,6 +27,7 @@ import { SharedEffect } from './store/shared/shared.effects';
 import { SharedFacade } from './store/shared/shared.facade';
 import { AdministratorFacade } from './store/administrator/administrator.facade';
 import { TestEntityTemplateFacade } from './store/test-entity-template/test-entity-template.facade';
+import { PrincipalRemarkFacade } from './store/principal-remark/principal-remark.facade';
 import { ProgrammeGradeRemarkFacade } from './store/programme-grade-remark/programme-grade-remark.facade';
 import { FamilyFacade } from './store/family/family.facade';
 import { ClassSubjectAssessmentFacade } from './store/class-subject-assessment/class-subject-assessment.facade';
@@ -48,6 +49,7 @@ import { ResultFacade } from './store/result/result.facade';
 import { StudentClassSubjectAssessmentScoreFacade } from './store/student-class-subject-assessment-score/student-class-subject-assessment-score.facade';
 import { AdministratorEffect } from './store/administrator/administrator.effects';
 import { TestEntityTemplateEffect } from './store/test-entity-template/test-entity-template.effects';
+import { PrincipalRemarkEffect } from './store/principal-remark/principal-remark.effects';
 import { ProgrammeGradeRemarkEffect } from './store/programme-grade-remark/programme-grade-remark.effects';
 import { FamilyEffect } from './store/family/family.effects';
 import { ClassSubjectAssessmentEffect } from './store/class-subject-assessment/class-subject-assessment.effects';
@@ -79,6 +81,7 @@ export const appConfig: ApplicationConfig = {
         SharedEffect,
         AdministratorEffect,
         TestEntityTemplateEffect,
+        PrincipalRemarkEffect,
         ProgrammeGradeRemarkEffect,
         FamilyEffect,
         ClassSubjectAssessmentEffect,
@@ -132,6 +135,7 @@ export const appConfig: ApplicationConfig = {
     SharedFacade,
     AdministratorFacade,
     TestEntityTemplateFacade,
+    PrincipalRemarkFacade,
     ProgrammeGradeRemarkFacade,
     FamilyFacade,
     ClassSubjectAssessmentFacade,

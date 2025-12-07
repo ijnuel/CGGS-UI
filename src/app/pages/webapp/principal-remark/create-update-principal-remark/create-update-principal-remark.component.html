@@ -1,0 +1,85 @@
+@if (
+  {
+    loading: loading$ | async,
+    dropdownLoading: dropdownLoading$ | async,
+    error: error$ | async
+  };
+  as obs
+) {
+<div class="pl-8 pr-9 pt-6">
+  <div class="flex item-center justify-between">
+    <div class="text-xl font-bold">{{ isEditMode ? 'Edit' : 'Create' }} Principal Remark</div>
+  </div>
+
+  <div class="mt-8">
+    <form [formGroup]="formGroup">
+      <div class="grid grid-cols-1 gap-x-4 mt-2">
+        <div>
+          <mat-form-field class="form-input">
+            <mat-label>Remark</mat-label>
+            <textarea
+              matInput
+              rows="3"
+              [formControl]="formControl.remark"
+            ></textarea>
+            <mat-error>
+              {{ getErrorMessage("remark") }}
+            </mat-error>
+          </mat-form-field>
+        </div>
+        <div class="grid grid-cols-2 gap-x-4">
+          <mat-form-field class="form-input">
+            <mat-label>Minimum Score</mat-label>
+            <input
+              type="number"
+              step="0.01"
+              min="0"
+              autocomplete="off"
+              matInput
+              [formControl]="formControl.minimumScore"
+            />
+            <mat-error>
+              {{ getErrorMessage("minimumScore") }}
+            </mat-error>
+          </mat-form-field>
+          <mat-form-field class="form-input">
+            <mat-label>Maximum Score</mat-label>
+            <input
+              type="number"
+              step="0.01"
+              min="0"
+              autocomplete="off"
+              matInput
+              [formControl]="formControl.maximumScore"
+            />
+            <mat-error>
+              {{ getErrorMessage("maximumScore") }}
+            </mat-error>
+          </mat-form-field>
+        </div>
+        <div>
+          <mat-form-field class="form-input">
+            <mat-label>Program Type ID</mat-label>
+            <input
+              type="text"
+              autocomplete="off"
+              matInput
+              [formControl]="formControl.programTypeId"
+            />
+            <mat-error>
+              {{ getErrorMessage("programTypeId") }}
+            </mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+    </form>
+
+    <div class="actions-btn flex justify-end mt-10 gap-5 form-container mx-auto px-3">
+      <button class="cancel-btn" routerLink="/app/principal-remark">Cancel</button>
+      <button class="sec-btn" (click)="submit()" [disabled]="obs.loading">
+        {{ isEditMode ? 'Update' : 'Submit' }}
+      </button>
+    </div>
+  </div>
+</div>
+}

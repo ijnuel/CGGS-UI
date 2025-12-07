@@ -5,6 +5,7 @@ import * as fromStudent from './student/student.reducer';
 import * as fromShared from './shared/shared.reducer';
 import * as fromAdministrator from './administrator/administrator.reducer';
 import * as fromTestEntityTemplate from './test-entity-template/test-entity-template.reducer';
+import * as fromPrincipalRemark from './principal-remark/principal-remark.reducer';
 import * as fromProgrammeGradeRemark from './programme-grade-remark/programme-grade-remark.reducer';
 import * as fromFamily from './family/family.reducer';
 import * as fromClassSubjectAssessment from './class-subject-assessment/class-subject-assessment.reducer';
@@ -33,6 +34,7 @@ export interface AppState {
   [fromShared.sharedFeatureKey]: fromShared.SharedState;
   [fromAdministrator.administratorFeatureKey]: fromAdministrator.AdministratorState;
   [fromTestEntityTemplate.testEntityTemplateFeatureKey]: fromTestEntityTemplate.TestEntityTemplateState;
+  [fromPrincipalRemark.principalRemarkFeatureKey]: fromPrincipalRemark.PrincipalRemarkState;
   [fromProgrammeGradeRemark.programmeGradeRemarkFeatureKey]: fromProgrammeGradeRemark.ProgrammeGradeRemarkState;
   [fromFamily.familyFeatureKey]: fromFamily.FamilyState;
   [fromStudent.studentFeatureKey]: fromStudent.StudentState;
@@ -61,6 +63,7 @@ export const reducers = {
   [fromShared.sharedFeatureKey]: fromShared.reducer,
   [fromAdministrator.administratorFeatureKey]: fromAdministrator.reducer,
   [fromTestEntityTemplate.testEntityTemplateFeatureKey]: fromTestEntityTemplate.reducer,
+  [fromPrincipalRemark.principalRemarkFeatureKey]: fromPrincipalRemark.reducer,
   [fromProgrammeGradeRemark.programmeGradeRemarkFeatureKey]: fromProgrammeGradeRemark.reducer,
   [fromFamily.familyFeatureKey]: fromFamily.reducer,
   [fromStudent.studentFeatureKey]: fromStudent.reducer,

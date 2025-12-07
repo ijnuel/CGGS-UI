@@ -1,0 +1,66 @@
+<h2 mat-dialog-title>{{ isEditMode ? 'Edit Principal Remark' : 'Add Principal Remark' }}</h2>
+
+<mat-dialog-content [formGroup]="form" class="dialog-content">
+  <div class="grid grid-cols-1 gap-4">
+    <mat-form-field appearance="outline">
+      <mat-label>Remark</mat-label>
+      <textarea matInput formControlName="remark" rows="2" maxlength="255"></textarea>
+      <mat-error *ngIf="formControl.remark.hasError('required')">
+        Remark is required
+      </mat-error>
+      <mat-error *ngIf="formControl.remark.hasError('maxlength')">
+        Remark cannot exceed 255 characters
+      </mat-error>
+    </mat-form-field>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <mat-form-field appearance="outline">
+        <mat-label>Minimum Score</mat-label>
+        <input
+          matInput
+          type="number"
+          step="0.01"
+          min="0"
+          formControlName="minimumScore"
+        />
+        <mat-error *ngIf="formControl.minimumScore.hasError('required')">
+          Minimum score is required
+        </mat-error>
+        <mat-error *ngIf="formControl.minimumScore.hasError('min')">
+          Minimum score must be at least 0
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Maximum Score</mat-label>
+        <input
+          matInput
+          type="number"
+          step="0.01"
+          min="0"
+          formControlName="maximumScore"
+        />
+        <mat-error *ngIf="formControl.maximumScore.hasError('required')">
+          Maximum score is required
+        </mat-error>
+        <mat-error *ngIf="formControl.maximumScore.hasError('min')">
+          Maximum score must be at least 0
+        </mat-error>
+      </mat-form-field>
+    </div>
+
+    <div *ngIf="overlapError" class="error-banner">
+      <mat-icon>warning</mat-icon>
+      <span>{{ overlapError }}</span>
+    </div>
+  </div>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button (click)="close()" [disabled]="(loading$ | async) ?? false">Cancel</button>
+  <button mat-raised-button color="primary" (click)="submit()" [disabled]="form.invalid || (loading$ | async) ?? false">
+    <mat-spinner *ngIf="loading$ | async" diameter="20"></mat-spinner>
+    <span *ngIf="!(loading$ | async)">{{ isEditMode ? 'Save Changes' : 'Add Principal Remark' }}</span>
+  </button>
+</mat-dialog-actions>
+
