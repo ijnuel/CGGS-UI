@@ -14,7 +14,7 @@ import {
   imports: [CommonModule, WebappRoutingModule, SharedModule, MatMomentDateModule],
   providers: [
     { provide: MAT_DATE_LOCALE, useValue: 'en-GB' },
-    { provide: MAT_MOMENT_DATE_ADAPTER_OPTIONS, useValue: { useUtc: false } }
+    { provide: MAT_MOMENT_DATE_ADAPTER_OPTIONS, useValue: { useUtc: true } }
   ],
 })
 export class WebappModule {}
