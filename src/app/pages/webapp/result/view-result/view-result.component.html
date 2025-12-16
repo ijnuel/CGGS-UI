@@ -26,6 +26,11 @@
           valueKey="id"
           [formControl]="formControl.classId">
         </app-searchable-mat-select>
+
+        <mat-checkbox formControlName="hideOverallPosition">Hide Overall Position</mat-checkbox>
+        <mat-error *ngIf="formControl.hideOverallPosition?.hasError('required')">
+          Hide overall position is required
+        </mat-error>
       </div>
     </form>
 

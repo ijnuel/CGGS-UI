@@ -58,10 +58,11 @@ export class ResultEffects {
   generateStudentResult$ = createEffect(() =>
     this.actions$.pipe(
       ofType(ResultActions.generateStudentResult),
-      mergeMap(({ schoolTermSessionId, classId }) => {
+      mergeMap(({ schoolTermSessionId, studentId, hideOverallPosition }) => {
         const params = new HttpParams()
           .set('schoolTermSessionId', schoolTermSessionId)
-          .set('classId', classId);
+          .set('studentId', studentId)
+          .set('hideOverallPosition', hideOverallPosition.toString());
 
         return this.http
           .get(`${environment.baseUrl}/Result/GenerateStudentResult`, {
@@ -82,10 +83,11 @@ export class ResultEffects {
   generateClassResult$ = createEffect(() =>
     this.actions$.pipe(
       ofType(ResultActions.generateClassResult),
-      mergeMap(({ schoolTermSessionId, classId }) => {
+      mergeMap(({ schoolTermSessionId, classId, hideOverallPosition }) => {
         const params = new HttpParams()
           .set('schoolTermSessionId', schoolTermSessionId)
-          .set('classId', classId);
+          .set('classId', classId)
+          .set('hideOverallPosition', hideOverallPosition.toString());
 
         return this.http
           .get(`${environment.baseUrl}/Result/GenerateClassResult`, {

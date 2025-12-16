@@ -23,6 +23,7 @@ export class ViewResultComponent implements OnInit, OnDestroy {
   viewResultForm: FormGroup<{
     schoolTermSessionId: FormControl<string | null>;
     classId: FormControl<string | null>;
+    hideOverallPosition: FormControl<boolean | null>;
   }>;
 
   schoolTermSessions$: Observable<SchoolTermSessionListInterface[] | null>;
@@ -43,6 +44,7 @@ export class ViewResultComponent implements OnInit, OnDestroy {
     this.viewResultForm = this.fb.group({
       schoolTermSessionId: ['', Validators.required],
       classId: ['', Validators.required],
+      hideOverallPosition: [false, Validators.required],
     });
 
     this.schoolTermSessions$ = this.schoolTermSessionFacade.schoolTermSessionAll$;
@@ -105,9 +107,9 @@ export class ViewResultComponent implements OnInit, OnDestroy {
       return;
     }
 
-    const { schoolTermSessionId, classId } = this.viewResultForm.value;
+    const { schoolTermSessionId, classId, hideOverallPosition } = this.viewResultForm.value;
     if (schoolTermSessionId && classId) {
-      this.resultFacade.generateClassResult(schoolTermSessionId, classId);
+      this.resultFacade.generateClassResult(schoolTermSessionId, classId, hideOverallPosition ?? false);
     }
   }
 }

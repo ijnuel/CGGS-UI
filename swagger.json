@@ -31434,6 +31434,13 @@
               "type": "string",
               "format": "uuid"
             }
+          },
+          {
+            "name": "hideOverallPosition",
+            "in": "query",
+            "schema": {
+              "type": "boolean"
+            }
           }
         ],
         "responses": {
@@ -31523,6 +31530,13 @@
             "schema": {
               "type": "string",
               "format": "uuid"
+            }
+          },
+          {
+            "name": "hideOverallPosition",
+            "in": "query",
+            "schema": {
+              "type": "boolean"
             }
           }
         ],

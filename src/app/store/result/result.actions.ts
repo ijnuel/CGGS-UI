@@ -43,7 +43,8 @@ export const generateStudentResult = createAction(
   '[Result] Generate Student Result',
   props<{
     schoolTermSessionId: string;
-    classId: string;
+    studentId: string;
+    hideOverallPosition: boolean;
   }>()
 );
 
@@ -67,6 +68,7 @@ export const generateClassResult = createAction(
   props<{
     schoolTermSessionId: string;
     classId: string;
+    hideOverallPosition: boolean;
   }>()
 );
 

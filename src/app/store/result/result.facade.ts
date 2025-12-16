@@ -58,16 +58,16 @@ export class ResultFacade {
     this.store.dispatch(ResultActions.updateResultMarkSheet({ payload }));
   }
 
-  generateStudentResult(schoolTermSessionId: string, classId: string): void {
-    this.store.dispatch(ResultActions.generateStudentResult({ schoolTermSessionId, classId }));
+  generateStudentResult(schoolTermSessionId: string, studentId: string, hideOverallPosition: boolean): void {
+    this.store.dispatch(ResultActions.generateStudentResult({ schoolTermSessionId, studentId, hideOverallPosition }));
   }
 
   clearGeneratedStudentResult(): void {
     this.store.dispatch(ResultActions.clearGeneratedStudentResult());
   }
 
-  generateClassResult(schoolTermSessionId: string, classId: string): void {
-    this.store.dispatch(ResultActions.generateClassResult({ schoolTermSessionId, classId }));
+  generateClassResult(schoolTermSessionId: string, classId: string, hideOverallPosition: boolean): void {
+    this.store.dispatch(ResultActions.generateClassResult({ schoolTermSessionId, classId, hideOverallPosition }));
   }
 
   clearGeneratedClassResult(): void {
