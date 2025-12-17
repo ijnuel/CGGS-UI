@@ -11,6 +11,9 @@ export interface ResultState {
   generatingStudentResult: boolean;
   generatedStudentResult: Blob | null;
   generateStudentResultError: string | null;
+  generatingBroadSheet: boolean;
+  generatedBroadSheet: Blob | null;
+  generateBroadSheetError: string | null;
   generatingClassResult: boolean;
   generatedClassResult: Blob | null;
   generateClassResultError: string | null;
@@ -23,6 +26,9 @@ export const initialState: ResultState = {
   generatingStudentResult: false,
   generatedStudentResult: null,
   generateStudentResultError: null,
+  generatingBroadSheet: false,
+  generatedBroadSheet: null,
+  generateBroadSheetError: null,
   generatingClassResult: false,
   generatedClassResult: null,
   generateClassResultError: null,
@@ -94,6 +100,31 @@ export const resultReducer = createReducer(
   on(ResultActions.clearGeneratedStudentResult, (state) => ({
     ...state,
     generatedStudentResult: null,
+  })),
+
+  // Generate Broad Sheet
+  on(ResultActions.generateBroadSheet, (state) => ({
+    ...state,
+    generatingBroadSheet: true,
+    generateBroadSheetError: null,
+  })),
+
+  on(ResultActions.generateBroadSheetSuccess, (state, { payload }) => ({
+    ...state,
+    generatingBroadSheet: false,
+    generatedBroadSheet: payload,
+    generateBroadSheetError: null,
+  })),
+
+  on(ResultActions.generateBroadSheetFail, (state, { error }) => ({
+    ...state,
+    generatingBroadSheet: false,
+    generateBroadSheetError: error,
+  })),
+
+  on(ResultActions.clearGeneratedBroadSheet, (state) => ({
+    ...state,
+    generatedBroadSheet: null,
   })),
 
   // Generate Class Result

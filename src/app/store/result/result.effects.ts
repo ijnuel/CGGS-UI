@@ -104,4 +104,28 @@ export class ResultEffects {
       })
     )
   );
+
+  generateBroadSheet$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(ResultActions.generateBroadSheet),
+      mergeMap(({ schoolTermSessionId, classId }) => {
+        const params = new HttpParams()
+          .set('schoolTermSessionId', schoolTermSessionId)
+          .set('classId', classId)
+
+        return this.http
+          .get(`${environment.baseUrl}/Result/GenerateBroadSheet`, {
+            params,
+            responseType: 'blob',
+            withCredentials: true,
+          })
+          .pipe(
+            map((blob) => ResultActions.generateBroadSheetSuccess({ payload: blob })),
+            catchError((error) =>
+              of(ResultActions.generateBroadSheetFail({ error: error.message }))
+            )
+          );
+      })
+    )
+  );
 } 

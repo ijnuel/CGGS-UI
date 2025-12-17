@@ -1,6 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-import { Observable, Subject } from 'rxjs';
+import { async, Observable, Subject } from 'rxjs';
 import { filter, takeUntil } from 'rxjs/operators';
 import { ResultFacade } from '../../../../store/result/result.facade';
 import { SchoolTermSessionFacade } from '../../../../store/school-term-session/school-term-session.facade';
@@ -28,8 +28,10 @@ export class ViewResultComponent implements OnInit, OnDestroy {
 
   schoolTermSessions$: Observable<SchoolTermSessionListInterface[] | null>;
   classes$: Observable<ClassListInterface[] | null>;
-  generating$ = this.resultFacade.generatingClassResult$;
-  generateError$ = this.resultFacade.generateClassResultError$;
+  generatingClassResult$ = this.resultFacade.generatingClassResult$;
+  generatingBroadSheet$ = this.resultFacade.generatingBroadSheet$;
+  generateClassResultError$ = this.resultFacade.generateClassResultError$;
+  generateBroadSheetError$ = this.resultFacade.generateBroadSheetError$;
 
   private destroy$ = new Subject<void>();
   private hasAutoSelectedSchoolTermSession = false;
@@ -81,8 +83,30 @@ export class ViewResultComponent implements OnInit, OnDestroy {
 
         setTimeout(() => URL.revokeObjectURL(fileURL), 5000);
       });
+    this.resultFacade.generatedBroadSheet$
+      .pipe(
+        filter((blob): blob is Blob => !!blob),
+        takeUntil(this.destroy$)
+      )
+      .subscribe((blob) => {
+        console.log('blob', blob);
+        const fileURL = URL.createObjectURL(blob);
+        window.open(fileURL, '_blank');
+        this.toastService.openToast('Broad sheet generated successfully', NotificationTypeEnums.SUCCESS);
+        this.resultFacade.clearGeneratedBroadSheet();
+      setTimeout(() => URL.revokeObjectURL(fileURL), 5000);
+      });
 
-    this.generateError$
+    this.generateClassResultError$
+      .pipe(
+        filter((error): error is string => !!error),
+        takeUntil(this.destroy$)
+      )
+      .subscribe((error) => {
+        this.toastService.openToast(error, NotificationTypeEnums.ERROR);
+      });
+
+    this.generateBroadSheetError$
       .pipe(
         filter((error): error is string => !!error),
         takeUntil(this.destroy$)
@@ -101,15 +125,26 @@ export class ViewResultComponent implements OnInit, OnDestroy {
     return this.viewResultForm.controls;
   }
 
-  generateResult(): void {
+  async generateResult(): Promise<void> {
     if (this.viewResultForm.invalid) {
       this.viewResultForm.markAllAsTouched();
       return;
     }
-
     const { schoolTermSessionId, classId, hideOverallPosition } = this.viewResultForm.value;
     if (schoolTermSessionId && classId) {
       this.resultFacade.generateClassResult(schoolTermSessionId, classId, hideOverallPosition ?? false);
+      this.resultFacade.clearGeneratedBroadSheet();
+    }
+  }
+  async generateBroadSheet(): Promise<void> {
+    if (this.viewResultForm.invalid) {
+      this.viewResultForm.markAllAsTouched();
+      return;
+    }
+    const { schoolTermSessionId, classId } = this.viewResultForm.value;
+    if (schoolTermSessionId && classId) {
+      this.resultFacade.generateBroadSheet(schoolTermSessionId, classId);
+      this.resultFacade.clearGeneratedClassResult();
     }
   }
 }

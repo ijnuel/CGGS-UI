@@ -37,6 +37,18 @@ export class ResultFacade {
     return this.store.select(ResultSelectors.selectGenerateStudentResultError);
   }
 
+  get generatingBroadSheet$(): Observable<boolean> {
+    return this.store.select(ResultSelectors.selectGeneratingBroadSheet);
+  }
+
+  get generatedBroadSheet$(): Observable<Blob | null> {
+    return this.store.select(ResultSelectors.selectGeneratedBroadSheet);
+  }
+
+  get generateBroadSheetError$(): Observable<string | null> {
+    return this.store.select(ResultSelectors.selectGenerateBroadSheetError);
+  }
+
   get generatingClassResult$(): Observable<boolean> {
     return this.store.select(ResultSelectors.selectGeneratingClassResult);
   }
@@ -72,5 +84,13 @@ export class ResultFacade {
 
   clearGeneratedClassResult(): void {
     this.store.dispatch(ResultActions.clearGeneratedClassResult());
+  }
+
+  generateBroadSheet(schoolTermSessionId: string, classId: string): void {
+    this.store.dispatch(ResultActions.generateBroadSheet({ schoolTermSessionId, classId }));
+  }
+
+  clearGeneratedBroadSheet(): void {
+    this.store.dispatch(ResultActions.clearGeneratedBroadSheet());
   }
 } 

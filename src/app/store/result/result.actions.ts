@@ -62,6 +62,29 @@ export const clearGeneratedStudentResult = createAction(
   '[Result] Clear Generated Student Result'
 );
 
+// Generate Broad Sheet
+export const generateBroadSheet = createAction(
+  '[Result] Generate Broad Sheet',
+  props<{
+    schoolTermSessionId: string;
+    classId: string;
+  }>()
+);
+
+export const generateBroadSheetSuccess = createAction(
+  '[Result/API] Generate Broad Sheet Success',
+  props<{ payload: Blob }>()
+);
+
+export const generateBroadSheetFail = createAction(
+  '[Result/API] Generate Broad Sheet Fail',
+  props<{ error: string }>()
+);
+
+export const clearGeneratedBroadSheet = createAction(
+  '[Result] Clear Generated Broad Sheet'
+);
+
 // Generate Class Result
 export const generateClassResult = createAction(
   '[Result] Generate Class Result',

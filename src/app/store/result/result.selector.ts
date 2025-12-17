@@ -33,6 +33,21 @@ export const selectGenerateStudentResultError = createSelector(
   (state) => state.generateStudentResultError
 );
 
+export const selectGeneratingBroadSheet = createSelector(
+  selectResultState,
+  (state) => state.generatingBroadSheet
+);
+
+export const selectGeneratedBroadSheet = createSelector(
+  selectResultState,
+  (state) => state.generatedBroadSheet
+);
+
+export const selectGenerateBroadSheetError = createSelector(
+  selectResultState,
+  (state) => state.generateBroadSheetError
+);
+
 export const selectGeneratingClassResult = createSelector(
   selectResultState,
   (state) => state.generatingClassResult

@@ -34,16 +34,26 @@
       </div>
     </form>
 
-    <div class="flex items-center justify-end mt-6">
+    <div class="flex items-center justify-end mt-6 gap-2">
       <button
         mat-raised-button
         color="primary"
         class="px-6 py-2 flex items-center"
         (click)="generateResult()"
-        [disabled]="viewResultForm.invalid || (generating$ | async)">
-        <mat-spinner *ngIf="generating$ | async" diameter="20" class="mr-2"></mat-spinner>
-        <mat-icon *ngIf="!(generating$ | async)" class="mr-2">picture_as_pdf</mat-icon>
-        {{ (generating$ | async) ? '' : 'Generate Result' }}
+        [disabled]="viewResultForm.invalid || (generatingClassResult$ | async)">
+        <mat-spinner *ngIf="generatingClassResult$ | async" diameter="20" class="mr-2"></mat-spinner>
+        <mat-icon *ngIf="!(generatingClassResult$ | async)" class="mr-2">picture_as_pdf</mat-icon>
+        {{ (generatingClassResult$ | async) ? '' : 'Generate Result' }}
+      </button>
+      <button
+        mat-raised-button
+        color="primary"
+        class="px-6 py-2 flex items-center"
+        (click)="generateBroadSheet()"
+        [disabled]="viewResultForm.invalid || (generatingBroadSheet$ | async)">
+        <mat-spinner *ngIf="generatingBroadSheet$ | async" diameter="20" class="mr-2"></mat-spinner>
+        <mat-icon *ngIf="!(generatingBroadSheet$ | async)" class="mr-2">article</mat-icon>
+        {{ (generatingBroadSheet$ | async) ? '' : 'Generate Broad Sheet' }}
       </button>
     </div>
   </div>
