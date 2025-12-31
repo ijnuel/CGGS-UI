@@ -21,8 +21,9 @@ export class SchoolTermSessionEffect {
       ofType(SchoolTermSessionAction.getSchoolTermSessionAll),
       switchMap(() =>
         this.http
-          .get<GenericResponseInterface<SchoolTermSessionListInterface[]>>(
+          .post<GenericResponseInterface<SchoolTermSessionListInterface[]>>(
             `${environment.baseUrl}/SchoolTermSession/GetAll`,
+            {},
             { withCredentials: true }
           )
           .pipe(
@@ -42,27 +43,13 @@ export class SchoolTermSessionEffect {
     this.actions$.pipe(
       ofType(SchoolTermSessionAction.getSchoolTermSessionList),
       switchMap(({ pageQuery }) => {
-        const params: { [key: string]: string | number } = {
-          start: pageQuery.start,
-          recordsPerPage: pageQuery.recordsPerPage,
-          pageIndex: pageQuery.pageIndex || 0
-        };
-
-        if (pageQuery.searchText) {
-          params['searchText'] = pageQuery.searchText;
-        }
-
-        if (pageQuery.queryProperties && pageQuery.queryProperties.length > 0) {
-          params['queryProperties'] = JSON.stringify(pageQuery.queryProperties);
-        }
+        
 
         return this.http
-          .get<GenericResponseInterface<PaginatedResponseInterface<SchoolTermSessionListInterface[]>>>(
+          .post<GenericResponseInterface<PaginatedResponseInterface<SchoolTermSessionListInterface[]>>>(
             `${environment.baseUrl}/SchoolTermSession/GetAllPaginated`,
-            {
-              params,
-              withCredentials: true,
-            }
+            pageQuery,
+            { withCredentials: true }
           )
           .pipe(
             map((response) => {

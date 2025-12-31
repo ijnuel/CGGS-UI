@@ -75,7 +75,7 @@ export class TestEntityTemplateEffect {
         if (searchText) params['searchText'] = searchText;
         if (queryProperties) params['queryProperties'] = queryProperties;
         return this.http
-          .get<GenericResponseInterface<PaginatedResponseInterface<TestEntityTemplateListInterface[]>>>(
+          .post<GenericResponseInterface<PaginatedResponseInterface<TestEntityTemplateListInterface[]>>>(
             `${environment.baseUrl}/TestEntityTemplate/GetAllPaginated`,
             { params, withCredentials: true }
           )

@@ -21,8 +21,9 @@ export class ClassSubjectAssessmentEffect {
       ofType(ClassSubjectAssessmentAction.getClassSubjectAssessmentAll),
       switchMap(() =>
         this.http
-          .get<GenericResponseInterface<ClassSubjectAssessmentListInterface[]>>(
+          .post<GenericResponseInterface<ClassSubjectAssessmentListInterface[]>>(
             `${environment.baseUrl}/ClassSubjectAssessment/GetAll`,
+            {},
             { withCredentials: true }
           )
           .pipe(
@@ -42,27 +43,11 @@ export class ClassSubjectAssessmentEffect {
     this.actions$.pipe(
       ofType(ClassSubjectAssessmentAction.getClassSubjectAssessmentList),
       switchMap(({ pageQuery }) => {
-        const params: { [key: string]: string | number } = {
-          start: pageQuery.start,
-          recordsPerPage: pageQuery.recordsPerPage,
-          pageIndex: pageQuery.pageIndex || 0
-        };
-
-        if (pageQuery.searchText) {
-          params['searchText'] = pageQuery.searchText;
-        }
-
-        if (pageQuery.queryProperties && pageQuery.queryProperties.length > 0) {
-          params['queryProperties'] = JSON.stringify(pageQuery.queryProperties);
-        }
-
         return this.http
-          .get<GenericResponseInterface<PaginatedResponseInterface<ClassSubjectAssessmentListInterface[]>>>(
+          .post<GenericResponseInterface<PaginatedResponseInterface<ClassSubjectAssessmentListInterface[]>>>(
             `${environment.baseUrl}/ClassSubjectAssessment/GetAllPaginated`,
-            {
-              params,
-              withCredentials: true,
-            }
+            pageQuery,
+            { withCredentials: true }
           )
           .pipe(
             map((response) => {

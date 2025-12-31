@@ -21,8 +21,9 @@ export class LocalGovernmentAreaEffect {
       ofType(LocalGovernmentAreaAction.getLocalGovernmentAreaAll),
       switchMap(() =>
         this.http
-          .get<GenericResponseInterface<LocalGovernmentAreaListInterface[]>>(
+          .post<GenericResponseInterface<LocalGovernmentAreaListInterface[]>>(
             `${environment.baseUrl}/LocalGovernmentArea/GetAll`,
+            {},
             { withCredentials: true }
           )
           .pipe(
@@ -42,27 +43,13 @@ export class LocalGovernmentAreaEffect {
     this.actions$.pipe(
       ofType(LocalGovernmentAreaAction.getLocalGovernmentAreaList),
       switchMap(({ pageQuery }) => {
-        const params: { [key: string]: string | number } = {
-          start: pageQuery.start,
-          recordsPerPage: pageQuery.recordsPerPage,
-          pageIndex: pageQuery.pageIndex || 0
-        };
-
-        if (pageQuery.searchText) {
-          params['searchText'] = pageQuery.searchText;
-        }
-
-        if (pageQuery.queryProperties && pageQuery.queryProperties.length > 0) {
-          params['queryProperties'] = JSON.stringify(pageQuery.queryProperties);
-        }
+        
 
         return this.http
-          .get<GenericResponseInterface<PaginatedResponseInterface<LocalGovernmentAreaListInterface[]>>>(
+          .post<GenericResponseInterface<PaginatedResponseInterface<LocalGovernmentAreaListInterface[]>>>(
             `${environment.baseUrl}/LocalGovernmentArea/GetAllPaginated`,
-            {
-              params,
-              withCredentials: true,
-            }
+            pageQuery,
+            { withCredentials: true }
           )
           .pipe(
             map((response) => {

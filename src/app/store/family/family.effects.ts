@@ -21,8 +21,9 @@ export class FamilyEffect {
       ofType(FamilyAction.getFamilyAll),
       switchMap(() =>
         this.http
-          .get<GenericResponseInterface<FamilyListInterface[]>>(
+          .post<GenericResponseInterface<FamilyListInterface[]>>(
             `${environment.baseUrl}/Family/GetAll`,
+            {},
             { withCredentials: true }
           )
           .pipe(
@@ -42,27 +43,13 @@ export class FamilyEffect {
     this.actions$.pipe(
       ofType(FamilyAction.getFamilyList),
       switchMap(({ pageQuery }) => {
-        const params: { [key: string]: string | number } = {
-          start: pageQuery.start,
-          recordsPerPage: pageQuery.recordsPerPage,
-          pageIndex: pageQuery.pageIndex || 0
-        };
-
-        if (pageQuery.searchText) {
-          params['searchText'] = pageQuery.searchText;
-        }
-
-        if (pageQuery.queryProperties && pageQuery.queryProperties.length > 0) {
-          params['queryProperties'] = JSON.stringify(pageQuery.queryProperties);
-        }
+        
 
         return this.http
-          .get<GenericResponseInterface<PaginatedResponseInterface<FamilyListInterface[]>>>(
+          .post<GenericResponseInterface<PaginatedResponseInterface<FamilyListInterface[]>>>(
             `${environment.baseUrl}/Family/GetAllPaginated`,
-            {
-              params,
-              withCredentials: true,
-            }
+            pageQuery,
+            { withCredentials: true }
           )
           .pipe(
             map((response) => {

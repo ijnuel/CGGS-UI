@@ -20,14 +20,11 @@ export class ProgramTypeEffect {
     this.actions$.pipe(
       ofType(ProgramTypeAction.getProgramTypeAll),
       switchMap(({ queryProperties }) => {
-        const params: any = {};
-        if (queryProperties) {
-          params['queryProperties'] = queryProperties;
-        }
         return this.http
-          .get<GenericResponseInterface<ProgramTypeListInterface[]>>(
+          .post<GenericResponseInterface<ProgramTypeListInterface[]>>(
             `${environment.baseUrl}/ProgramType/GetAll`,
-            { params, withCredentials: true }
+            queryProperties,
+            { withCredentials: true }
           )
           .pipe(
             map((payload) =>
@@ -52,7 +49,7 @@ export class ProgramTypeEffect {
         if (searchText) params['searchText'] = searchText;
         if (queryProperties) params['queryProperties'] = queryProperties;
         return this.http
-          .get<GenericResponseInterface<PaginatedResponseInterface<ProgramTypeListInterface[]>>>(
+          .post<GenericResponseInterface<PaginatedResponseInterface<ProgramTypeListInterface[]>>>(
             `${environment.baseUrl}/ProgramType/GetAllPaginated`,
             { params, withCredentials: true }
           )

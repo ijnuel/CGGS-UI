@@ -21,8 +21,9 @@ export class CompanyEffect {
       ofType(CompanyAction.getCompanyAll),
       switchMap(() =>
         this.http
-          .get<GenericResponseInterface<CompanyListInterface[]>>(
+          .post<GenericResponseInterface<CompanyListInterface[]>>(
             `${environment.baseUrl}/Company/GetAll`,
+            {},
             { withCredentials: true }
           )
           .pipe(
@@ -42,27 +43,13 @@ export class CompanyEffect {
     this.actions$.pipe(
       ofType(CompanyAction.getCompanyList),
       switchMap(({ pageQuery }) => {
-        const params: { [key: string]: string | number } = {
-          start: pageQuery.start,
-          recordsPerPage: pageQuery.recordsPerPage,
-          pageIndex: pageQuery.pageIndex || 0
-        };
-
-        if (pageQuery.searchText) {
-          params['searchText'] = pageQuery.searchText;
-        }
-
-        if (pageQuery.queryProperties && pageQuery.queryProperties.length > 0) {
-          params['queryProperties'] = JSON.stringify(pageQuery.queryProperties);
-        }
+        
 
         return this.http
-          .get<GenericResponseInterface<PaginatedResponseInterface<CompanyListInterface[]>>>(
+          .post<GenericResponseInterface<PaginatedResponseInterface<CompanyListInterface[]>>>(
             `${environment.baseUrl}/Company/GetAllPaginated`,
-            {
-              params,
-              withCredentials: true,
-            }
+            pageQuery,
+            { withCredentials: true }
           )
           .pipe(
             map((response) => {

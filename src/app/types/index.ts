@@ -53,12 +53,12 @@ interface PageQueryInterface {
   recordsPerPage: number;
   pageIndex?: number;
   searchText?: string;
-  queryProperties?: { name: string; value: string }[];
+  queryProperties?: NameValueInterface[];
 }
 
-interface DropdownListInterface {
+interface NameValueInterface {
   name: string;
-  description: string;
+  description?: string;
   value: string | number;
 }
 
@@ -71,7 +71,7 @@ export {
   CurrentUserInterface,
   PageQueryInterface,
   StudentFormInterface,
-  DropdownListInterface,
+  NameValueInterface as DropdownListInterface,
   AdministratorListInterface,
   AdministratorFormInterface,
   TestEntityTemplateListInterface,

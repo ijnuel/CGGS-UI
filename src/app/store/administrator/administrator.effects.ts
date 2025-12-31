@@ -21,8 +21,9 @@ export class AdministratorEffect {
       ofType(AdministratorAction.getAdministratorAll),
       switchMap(() =>
         this.http
-          .get<GenericResponseInterface<AdministratorListInterface[]>>(
+          .post<GenericResponseInterface<AdministratorListInterface[]>>(
             `${environment.baseUrl}/Administrator/GetAll`,
+            {},
             { withCredentials: true }
           )
           .pipe(
@@ -42,27 +43,11 @@ export class AdministratorEffect {
     this.actions$.pipe(
       ofType(AdministratorAction.getAdministratorList),
       switchMap(({ pageQuery }) => {
-        const params: { [key: string]: string | number } = {
-          start: pageQuery.start,
-          recordsPerPage: pageQuery.recordsPerPage,
-          pageIndex: pageQuery.pageIndex || 0
-        };
-
-        if (pageQuery.searchText) {
-          params['searchText'] = pageQuery.searchText;
-        }
-
-        if (pageQuery.queryProperties && pageQuery.queryProperties.length > 0) {
-          params['queryProperties'] = JSON.stringify(pageQuery.queryProperties);
-        }
-
         return this.http
-          .get<GenericResponseInterface<PaginatedResponseInterface<AdministratorListInterface[]>>>(
+          .post<GenericResponseInterface<PaginatedResponseInterface<AdministratorListInterface[]>>>(
             `${environment.baseUrl}/Administrator/GetAllPaginated`,
-            {
-              params,
-              withCredentials: true,
-            }
+            pageQuery,
+            { withCredentials: true }
           )
           .pipe(
             map((response) => {

@@ -21,8 +21,9 @@ export class ClassLevelEffect {
       ofType(ClassLevelAction.getClassLevelAll),
       switchMap(() =>
         this.http
-          .get<GenericResponseInterface<ClassLevelListInterface[]>>(
+          .post<GenericResponseInterface<ClassLevelListInterface[]>>(
             `${environment.baseUrl}/ClassLevel/GetAll`,
+            {},
             { withCredentials: true }
           )
           .pipe(
@@ -42,27 +43,11 @@ export class ClassLevelEffect {
     this.actions$.pipe(
       ofType(ClassLevelAction.getClassLevelList),
       switchMap(({ pageQuery }) => {
-        const params: { [key: string]: string | number } = {
-          start: pageQuery.start,
-          recordsPerPage: pageQuery.recordsPerPage,
-          pageIndex: pageQuery.pageIndex || 0
-        };
-
-        if (pageQuery.searchText) {
-          params['searchText'] = pageQuery.searchText;
-        }
-
-        if (pageQuery.queryProperties && pageQuery.queryProperties.length > 0) {
-          params['queryProperties'] = JSON.stringify(pageQuery.queryProperties);
-        }
-
         return this.http
-          .get<GenericResponseInterface<PaginatedResponseInterface<ClassLevelListInterface[]>>>(
+          .post<GenericResponseInterface<PaginatedResponseInterface<ClassLevelListInterface[]>>>(
             `${environment.baseUrl}/ClassLevel/GetAllPaginated`,
-            {
-              params,
-              withCredentials: true,
-            }
+            pageQuery,
+            { withCredentials: true }
           )
           .pipe(
             map((response) => {
