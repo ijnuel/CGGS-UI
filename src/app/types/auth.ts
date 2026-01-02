@@ -18,9 +18,10 @@ export interface LoggedUserInterface {
 }
 
 export enum UserRolesEnum {
-  SuperAdmin = 'superadmin',
-  Admin = 'admin',
-  Staff = 'staff',
-  Student = 'student',
-  Family = 'family'
+  SuperAdmin,
+  Admin,
+  Staff,
+  Student,
+  Family,
+  Guest
 }

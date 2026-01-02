@@ -1,3 +1,5 @@
+import { UserRolesEnum } from "./auth";
+
 export interface CurrentUserInterface {
   userId: string;
   firstName: string;
@@ -13,5 +15,6 @@ export interface CurrentUserInterface {
   residentialCity: string;
   residentialStateId: string;
   phoneNumber: string;
+  userType: UserRolesEnum;
   userTypeString: string;
 }

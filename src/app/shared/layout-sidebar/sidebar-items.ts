@@ -45,7 +45,7 @@ export default [
   {
     name: 'Administrators',
     icon: 'assets/icons/admin-icon.svg',
-    roles: [],
+    roles: [UserRolesEnum.SuperAdmin],
     url: '/app/administrator'
   },
   {
