@@ -23,7 +23,7 @@ export class CountryEffect {
         this.http
           .post<GenericResponseInterface<CountryListInterface[]>>(
             `${environment.baseUrl}/Country/GetAll`,
-            {},
+            [],
             { withCredentials: true }
           )
           .pipe(

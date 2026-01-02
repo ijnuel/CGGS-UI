@@ -23,7 +23,7 @@ export class SubjectEffect {
         this.http
           .post<GenericResponseInterface<SubjectListInterface[]>>(
             `${environment.baseUrl}/Subject/GetAll`,
-            {},
+            [],
             { withCredentials: true }
           )
           .pipe(

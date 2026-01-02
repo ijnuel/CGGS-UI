@@ -279,7 +279,7 @@ export class ProgramTypeComponent implements OnInit {
     this.programTypeFacade.getProgramTypeList({
       start: 0,
       recordsPerPage: 10,
-      queryProperties: JSON.stringify(filters)
+      queryProperties: filters
     });
   }
 

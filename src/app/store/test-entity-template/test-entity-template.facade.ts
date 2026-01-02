@@ -49,13 +49,7 @@ export class TestEntityTemplateFacade {
 
   getTestEntityTemplateList(pageQuery: PageQueryInterface): void {
     this.currentPageQuery = pageQuery;
-    const { start, recordsPerPage, searchText, queryProperties } = pageQuery;
-    this.store.dispatch(TestEntityTemplateAction.getTestEntityTemplateList({
-      start,
-      recordsPerPage,
-      searchText,
-      queryProperties: queryProperties ? JSON.stringify(queryProperties) : undefined
-    }));
+    this.store.dispatch(TestEntityTemplateAction.getTestEntityTemplateList({pageQuery}));
   }
 
   getCurrentPageQuery(): PageQueryInterface {

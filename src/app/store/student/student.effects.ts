@@ -24,7 +24,7 @@ export class StudentEffect {
         this.http
           .post<GenericResponseInterface<StudentListInterface[]>>(
             `${environment.baseUrl}/Student/GetAll`,
-            {},
+            [],
             { withCredentials: true }
           )
           .pipe(

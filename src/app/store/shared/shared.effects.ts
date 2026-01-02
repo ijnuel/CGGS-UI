@@ -77,8 +77,9 @@ export class SharedEffect {
       ofType(SharedAction.getCountryList),
       switchMap(() =>
         this.http
-          .get<GenericResponseInterface<DropdownListInterface[]>>(
+          .post<GenericResponseInterface<DropdownListInterface[]>>(
             `${environment.baseUrl}/Country/GetAll`,
+            [],
             {
               withCredentials: true,
             }

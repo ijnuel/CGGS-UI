@@ -42,16 +42,12 @@ export class ProgramTypeEffect {
   $programTypeList = createEffect(() =>
     this.actions$.pipe(
       ofType(ProgramTypeAction.getProgramTypeList),
-      switchMap(({ start, recordsPerPage, searchText, queryProperties }) => {
-        const params: any = {};
-        if (start !== undefined) params['start'] = start;
-        if (recordsPerPage !== undefined) params['recordsPerPage'] = recordsPerPage;
-        if (searchText) params['searchText'] = searchText;
-        if (queryProperties) params['queryProperties'] = queryProperties;
+      switchMap(({ pageQuery }) => {
         return this.http
           .post<GenericResponseInterface<PaginatedResponseInterface<ProgramTypeListInterface[]>>>(
             `${environment.baseUrl}/ProgramType/GetAllPaginated`,
-            { params, withCredentials: true }
+            pageQuery,
+            { withCredentials: true }
           )
           .pipe(
             map((payload) =>

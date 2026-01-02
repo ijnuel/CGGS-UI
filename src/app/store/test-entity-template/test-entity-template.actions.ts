@@ -29,10 +29,7 @@ export const getTestEntityTemplateAllFail = createAction(
 export const getTestEntityTemplateList = createAction(
   '[TestEntityTemplate] Get List',
   props<{
-    start?: number;
-    recordsPerPage?: number;
-    searchText?: string;
-    queryProperties?: string; // serialized QueryProperty[]
+    pageQuery: PageQueryInterface
   }>()
 );
 

@@ -1,6 +1,6 @@
 import { createFeatureSelector, createReducer, on } from '@ngrx/store';
 import * as TestEntityTemplateAction from './test-entity-template.actions';
-import { PaginatedResponseInterface, TestEntityTemplateListInterface } from '../../types';
+import { PageQueryInterface, PaginatedResponseInterface, TestEntityTemplateListInterface } from '../../types';
 
 export const testEntityTemplateFeatureKey = 'testEntityTemplate';
 
@@ -11,12 +11,7 @@ export interface TestEntityTemplateState {
   testEntityTemplateById: TestEntityTemplateListInterface | null;
   exists: boolean | null;
   count: number | null;
-  pageQuery: {
-    start?: number;
-    recordsPerPage?: number;
-    searchText?: string;
-    queryProperties?: string;
-  } | null;
+  pageQuery: PageQueryInterface | null;
   loading: boolean;
   error: string | null;
   createSuccess: boolean;
@@ -66,12 +61,7 @@ export const reducer = createReducer(
   // Get List
   on(TestEntityTemplateAction.getTestEntityTemplateList, (state, action) => ({
     ...state,
-    pageQuery: {
-      start: action.start,
-      recordsPerPage: action.recordsPerPage,
-      searchText: action.searchText,
-      queryProperties: action.queryProperties,
-    },
+    pageQuery: action.pageQuery,
     loading: true,
     error: null,
     createSuccess: false,

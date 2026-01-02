@@ -23,7 +23,7 @@ export class LocalGovernmentAreaEffect {
         this.http
           .post<GenericResponseInterface<LocalGovernmentAreaListInterface[]>>(
             `${environment.baseUrl}/LocalGovernmentArea/GetAll`,
-            {},
+            [],
             { withCredentials: true }
           )
           .pipe(

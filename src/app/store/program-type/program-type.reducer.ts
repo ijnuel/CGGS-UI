@@ -16,12 +16,7 @@ export interface ProgramTypeState {
   programTypeById: ProgramTypeListInterface | null;
   exists: boolean | null;
   count: number | null;
-  pageQuery: {
-    start?: number;
-    recordsPerPage?: number;
-    searchText?: string;
-    queryProperties?: string;
-  } | null;
+  pageQuery: PageQueryInterface | null;
   loading: boolean;
   error: string | null;
   createSuccess: boolean;
@@ -67,12 +62,7 @@ export const reducer = createReducer(
   // Get List
   on(ProgramTypeAction.getProgramTypeList, (state, action) => ({
     ...state,
-    pageQuery: {
-      start: action.start,
-      recordsPerPage: action.recordsPerPage,
-      searchText: action.searchText,
-      queryProperties: action.queryProperties,
-    },
+    pageQuery: action.pageQuery,
     loading: true,
     error: null,
     createSuccess: false,

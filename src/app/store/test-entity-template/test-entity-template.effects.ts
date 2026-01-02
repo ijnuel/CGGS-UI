@@ -68,16 +68,12 @@ export class TestEntityTemplateEffect {
   $testEntityTemplateList = createEffect(() =>
     this.actions$.pipe(
       ofType(TestEntityTemplateAction.getTestEntityTemplateList),
-      switchMap(({ start, recordsPerPage, searchText, queryProperties }) => {
-        const params: any = {};
-        if (start !== undefined) params['start'] = start;
-        if (recordsPerPage !== undefined) params['recordsPerPage'] = recordsPerPage;
-        if (searchText) params['searchText'] = searchText;
-        if (queryProperties) params['queryProperties'] = queryProperties;
+      switchMap(({ pageQuery }) => {
         return this.http
           .post<GenericResponseInterface<PaginatedResponseInterface<TestEntityTemplateListInterface[]>>>(
             `${environment.baseUrl}/TestEntityTemplate/GetAllPaginated`,
-            { params, withCredentials: true }
+            pageQuery,
+            { withCredentials: true }
           )
           .pipe(
             map((payload) =>

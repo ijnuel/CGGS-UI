@@ -23,7 +23,7 @@ export class ClassEffect {
         this.http
           .post<GenericResponseInterface<ClassListInterface[]>>(
             `${environment.baseUrl}/Class/GetAll`,
-            {},
+            [],
             { withCredentials: true }
           )
           .pipe(

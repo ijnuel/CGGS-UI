@@ -23,7 +23,7 @@ export class SessionEffect {
         this.http
           .post<GenericResponseInterface<SessionListInterface[]>>(
             `${environment.baseUrl}/Session/GetAll`,
-            {},
+            [],
             { withCredentials: true }
           )
           .pipe(
