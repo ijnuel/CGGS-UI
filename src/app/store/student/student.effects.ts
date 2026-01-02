@@ -22,8 +22,9 @@ export class StudentEffect {
       ofType(StudentAction.getStudentAll),
       switchMap(() =>
         this.http
-          .get<GenericResponseInterface<StudentListInterface[]>>(
+          .post<GenericResponseInterface<StudentListInterface[]>>(
             `${environment.baseUrl}/Student/GetAll`,
+            [],
             { withCredentials: true }
           )
           .pipe(
@@ -74,27 +75,13 @@ export class StudentEffect {
     this.actions$.pipe(
       ofType(StudentAction.getStudentList),
       switchMap(({ pageQuery }) => {
-        const params: { [key: string]: string | number } = {
-          start: pageQuery.start,
-          recordsPerPage: pageQuery.recordsPerPage,
-          pageIndex: pageQuery.pageIndex || 0
-        };
-
-        if (pageQuery.searchText) {
-          params['searchText'] = pageQuery.searchText;
-        }
-
-        if (pageQuery.queryProperties && pageQuery.queryProperties.length > 0) {
-          params['queryProperties'] = JSON.stringify(pageQuery.queryProperties);
-        }
+        
 
         return this.http
-          .get<GenericResponseInterface<PaginatedResponseInterface<StudentListInterface[]>>>(
+          .post<GenericResponseInterface<PaginatedResponseInterface<StudentListInterface[]>>>(
             `${environment.baseUrl}/Student/GetAllPaginated`,
-            {
-              params,
-              withCredentials: true,
-            }
+            pageQuery,
+            { withCredentials: true }
           )
           .pipe(
             map((response) => {

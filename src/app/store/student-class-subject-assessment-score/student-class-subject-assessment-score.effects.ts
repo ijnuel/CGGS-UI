@@ -24,8 +24,9 @@ export class StudentClassSubjectAssessmentScoreEffects {
       ofType(StudentClassSubjectAssessmentScoreActions.getStudentClassSubjectAssessmentScoreAll),
       mergeMap(() =>
         this.http
-          .get<GenericResponseInterface<StudentClassSubjectAssessmentScoreListInterface[]>>(
+          .post<GenericResponseInterface<StudentClassSubjectAssessmentScoreListInterface[]>>(
             `${environment.baseUrl}/StudentClassSubjectAssessmentScore/GetAll`,
+            [],
             { withCredentials: true }
           )
           .pipe(
@@ -50,9 +51,10 @@ export class StudentClassSubjectAssessmentScoreEffects {
         if (pageQuery.queryProperties && pageQuery.queryProperties.length > 0) { params['queryProperties'] = JSON.stringify(pageQuery.queryProperties); }
         
         return this.http
-          .get<GenericResponseInterface<PaginatedResponseInterface<StudentClassSubjectAssessmentScoreListInterface[]>>>(
+          .post<GenericResponseInterface<PaginatedResponseInterface<StudentClassSubjectAssessmentScoreListInterface[]>>>(
             `${environment.baseUrl}/StudentClassSubjectAssessmentScore/GetAllPaginated`,
-            { params, withCredentials: true }
+            pageQuery,
+            { withCredentials: true }
           )
           .pipe(
             map((response) => {

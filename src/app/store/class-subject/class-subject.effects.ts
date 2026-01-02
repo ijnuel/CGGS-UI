@@ -8,7 +8,6 @@ import {
   ClassSubjectListInterface,
   PaginatedResponseInterface,
   GenericResponseInterface,
-  ClassSubjectFormInterface,
 } from '../../types';
 import { HttpClient } from '@angular/common/http';
 import { GlobalLoadingFacade } from '../global-loading/global-loading.facade';
@@ -20,14 +19,11 @@ export class ClassSubjectEffect {
     this.actions$.pipe(
       ofType(ClassSubjectAction.getClassSubjectAll),
       switchMap(({ queryProperties }) => {
-        const params: any = {};
-        if (queryProperties) {
-          params['queryProperties'] = queryProperties;
-        }
         return this.http
-          .get<GenericResponseInterface<ClassSubjectListInterface[]>>(
+          .post<GenericResponseInterface<ClassSubjectListInterface[]>>(
             `${environment.baseUrl}/ClassSubject/GetAll`,
-            { params, withCredentials: true }
+            queryProperties,
+            { withCredentials: true }
           )
           .pipe(
             map((payload) =>
@@ -45,24 +41,12 @@ export class ClassSubjectEffect {
   $classSubjectList = createEffect(() =>
     this.actions$.pipe(
       ofType(ClassSubjectAction.getClassSubjectList),
-      switchMap(({ start, recordsPerPage, searchText, queryProperties }) => {
-        const params: any = {
-          start,
-          recordsPerPage,
-        };
-        if (searchText) {
-          params['searchText'] = searchText;
-        }
-        if (queryProperties) {
-          params['queryProperties'] = queryProperties;
-        }
+      switchMap(({ pageQuery }) => {
         return this.http
-          .get<GenericResponseInterface<PaginatedResponseInterface<ClassSubjectListInterface[]>>>(
+          .post<GenericResponseInterface<PaginatedResponseInterface<ClassSubjectListInterface[]>>>(
             `${environment.baseUrl}/ClassSubject/GetAllPaginated`,
-            {
-              params,
-              withCredentials: true,
-            }
+            pageQuery,
+            { withCredentials: true }
           )
           .pipe(
             map((response) => {

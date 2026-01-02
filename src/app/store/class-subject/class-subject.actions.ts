@@ -5,6 +5,7 @@ import {
   PaginatedResponseInterface,
   ClassSubjectListInterface,
   ClassSubjectFormInterface,
+  DropdownListInterface,
 } from '../../types';
 
 // Add Subject To Class
@@ -41,7 +42,7 @@ export const getClassSubjectDataImportTemplateFail = createAction(
 // Get All (non-paginated)
 export const getClassSubjectAll = createAction(
   '[ClassSubject] Get All',
-  props<{ queryProperties?: string }>() // serialized QueryProperty[]
+  props<{ queryProperties?: DropdownListInterface[] }>()
 );
 
 export const getClassSubjectAllSuccess = createAction(
@@ -60,10 +61,7 @@ export const getClassSubjectAllFail = createAction(
 export const getClassSubjectList = createAction(
   '[ClassSubject] Get List',
   props<{
-    start?: number;
-    recordsPerPage?: number;
-    searchText?: string;
-    queryProperties?: string; // serialized QueryProperty[]
+    pageQuery: PageQueryInterface;
   }>()
 );
 

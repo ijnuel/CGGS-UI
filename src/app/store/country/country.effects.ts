@@ -21,8 +21,9 @@ export class CountryEffect {
       ofType(CountryAction.getCountryAll),
       switchMap(() =>
         this.http
-          .get<GenericResponseInterface<CountryListInterface[]>>(
+          .post<GenericResponseInterface<CountryListInterface[]>>(
             `${environment.baseUrl}/Country/GetAll`,
+            [],
             { withCredentials: true }
           )
           .pipe(
@@ -42,27 +43,13 @@ export class CountryEffect {
     this.actions$.pipe(
       ofType(CountryAction.getCountryList),
       switchMap(({ pageQuery }) => {
-        const params: { [key: string]: string | number } = {
-          start: pageQuery.start,
-          recordsPerPage: pageQuery.recordsPerPage,
-          pageIndex: pageQuery.pageIndex || 0
-        };
-
-        if (pageQuery.searchText) {
-          params['searchText'] = pageQuery.searchText;
-        }
-
-        if (pageQuery.queryProperties && pageQuery.queryProperties.length > 0) {
-          params['queryProperties'] = JSON.stringify(pageQuery.queryProperties);
-        }
+        
 
         return this.http
-          .get<GenericResponseInterface<PaginatedResponseInterface<CountryListInterface[]>>>(
+          .post<GenericResponseInterface<PaginatedResponseInterface<CountryListInterface[]>>>(
             `${environment.baseUrl}/Country/GetAllPaginated`,
-            {
-              params,
-              withCredentials: true,
-            }
+            pageQuery,
+            { withCredentials: true }
           )
           .pipe(
             map((response) => {

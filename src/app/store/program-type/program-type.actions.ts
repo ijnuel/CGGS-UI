@@ -29,10 +29,7 @@ export const getProgramTypeAllFail = createAction(
 export const getProgramTypeList = createAction(
   '[ProgramType] Get List',
   props<{
-    start?: number;
-    recordsPerPage?: number;
-    searchText?: string;
-    queryProperties?: string; // serialized QueryProperty[]
+    pageQuery: PageQueryInterface
   }>()
 );
 

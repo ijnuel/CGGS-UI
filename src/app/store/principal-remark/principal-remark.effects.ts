@@ -21,8 +21,9 @@ export class PrincipalRemarkEffect {
       ofType(PrincipalRemarkAction.getPrincipalRemarkAll),
       switchMap(() =>
         this.http
-          .get<GenericResponseInterface<PrincipalRemarkListInterface[]>>(
+          .post<GenericResponseInterface<PrincipalRemarkListInterface[]>>(
             `${environment.baseUrl}/PrincipalRemark/GetAll`,
+            [],
             { withCredentials: true }
           )
           .pipe(
@@ -42,27 +43,13 @@ export class PrincipalRemarkEffect {
     this.actions$.pipe(
       ofType(PrincipalRemarkAction.getPrincipalRemarkList),
       switchMap(({ pageQuery }) => {
-        const params: { [key: string]: string | number } = {
-          start: pageQuery.start,
-          recordsPerPage: pageQuery.recordsPerPage,
-          pageIndex: pageQuery.pageIndex || 0
-        };
-
-        if (pageQuery.searchText) {
-          params['searchText'] = pageQuery.searchText;
-        }
-
-        if (pageQuery.queryProperties && pageQuery.queryProperties.length > 0) {
-          params['queryProperties'] = JSON.stringify(pageQuery.queryProperties);
-        }
+        
 
         return this.http
-          .get<GenericResponseInterface<PaginatedResponseInterface<PrincipalRemarkListInterface[]>>>(
+          .post<GenericResponseInterface<PaginatedResponseInterface<PrincipalRemarkListInterface[]>>>(
             `${environment.baseUrl}/PrincipalRemark/GetAllPaginated`,
-            {
-              params,
-              withCredentials: true,
-            }
+            pageQuery,
+            { withCredentials: true }
           )
           .pipe(
             map((response) => {

@@ -21,8 +21,9 @@ export class StaffEffect {
       ofType(StaffAction.getStaffAll),
       switchMap(() =>
         this.http
-          .get<GenericResponseInterface<StaffListInterface[]>>(
+          .post<GenericResponseInterface<StaffListInterface[]>>(
             `${environment.baseUrl}/Staff/GetAll`,
+            [],
             { withCredentials: true }
           )
           .pipe(
@@ -42,27 +43,13 @@ export class StaffEffect {
     this.actions$.pipe(
       ofType(StaffAction.getStaffList),
       switchMap(({ pageQuery }) => {
-        const params: { [key: string]: string | number } = {
-          start: pageQuery.start,
-          recordsPerPage: pageQuery.recordsPerPage,
-          pageIndex: pageQuery.pageIndex || 0
-        };
-
-        if (pageQuery.searchText) {
-          params['searchText'] = pageQuery.searchText;
-        }
-
-        if (pageQuery.queryProperties && pageQuery.queryProperties.length > 0) {
-          params['queryProperties'] = JSON.stringify(pageQuery.queryProperties);
-        }
+        
 
         return this.http
-          .get<GenericResponseInterface<PaginatedResponseInterface<StaffListInterface[]>>>(
+          .post<GenericResponseInterface<PaginatedResponseInterface<StaffListInterface[]>>>(
             `${environment.baseUrl}/Staff/GetAllPaginated`,
-            {
-              params,
-              withCredentials: true,
-            }
+            pageQuery,
+            { withCredentials: true }
           )
           .pipe(
             map((response) => {

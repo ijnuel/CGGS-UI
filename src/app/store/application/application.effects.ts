@@ -21,8 +21,9 @@ export class ApplicationEffect {
       ofType(ApplicationAction.getApplicationAll),
       switchMap(() =>
         this.http
-          .get<GenericResponseInterface<ApplicationListInterface[]>>(
+          .post<GenericResponseInterface<ApplicationListInterface[]>>(
             `${environment.baseUrl}/Application/GetAll`,
+            [],
             { withCredentials: true }
           )
           .pipe(
@@ -42,27 +43,11 @@ export class ApplicationEffect {
     this.actions$.pipe(
       ofType(ApplicationAction.getApplicationList),
       switchMap(({ pageQuery }) => {
-        const params: { [key: string]: string | number } = {
-          start: pageQuery.start,
-          recordsPerPage: pageQuery.recordsPerPage,
-          pageIndex: pageQuery.pageIndex || 0
-        };
-
-        if (pageQuery.searchText) {
-          params['searchText'] = pageQuery.searchText;
-        }
-
-        if (pageQuery.queryProperties && pageQuery.queryProperties.length > 0) {
-          params['queryProperties'] = JSON.stringify(pageQuery.queryProperties);
-        }
-
         return this.http
-          .get<GenericResponseInterface<PaginatedResponseInterface<ApplicationListInterface[]>>>(
+          .post<GenericResponseInterface<PaginatedResponseInterface<ApplicationListInterface[]>>>(
             `${environment.baseUrl}/Application/GetAllPaginated`,
-            {
-              params,
-              withCredentials: true,
-            }
+            pageQuery,
+            { withCredentials: true }
           )
           .pipe(
             map((response) => {

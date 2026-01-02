@@ -696,20 +696,38 @@
       }
     },
     "/api/Administrator/GetAll": {
-      "get": {
+      "post": {
         "tags": [
           "Administrator"
         ],
-        "parameters": [
-          {
-            "name": "queryProperties",
-            "in": "query",
-            "schema": {
-              "type": "string",
-              "default": ""
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/QueryProperty"
+                }
+              }
+            },
+            "text/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/QueryProperty"
+                }
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/QueryProperty"
+                }
+              }
             }
           }
-        ],
+        },
         "responses": {
           "200": {
             "description": "OK",
@@ -795,46 +813,29 @@
       }
     },
     "/api/Administrator/GetAllPaginated": {
-      "get": {
+      "post": {
         "tags": [
           "Administrator"
         ],
-        "parameters": [
-          {
-            "name": "start",
-            "in": "query",
-            "schema": {
-              "type": "integer",
-              "format": "int32",
-              "default": 0
-            }
-          },
-          {
-            "name": "recordsPerPage",
-            "in": "query",
-            "schema": {
-              "type": "integer",
-              "format": "int32",
-              "default": 2147483647
-            }
-          },
-          {
-            "name": "searchText",
-            "in": "query",
-            "schema": {
-              "type": "string",
-              "default": ""
-            }
-          },
-          {
-            "name": "queryProperties",
-            "in": "query",
-            "schema": {
-              "type": "string",
-              "default": ""
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SearchParameters"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SearchParameters"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/SearchParameters"
+              }
             }
           }
-        ],
+        },
         "responses": {
           "200": {
             "description": "OK",
@@ -1019,19 +1020,38 @@
       }
     },
     "/api/Administrator/GetByProperties": {
-      "get": {
+      "post": {
         "tags": [
           "Administrator"
         ],
-        "parameters": [
-          {
-            "name": "queryPropertiesString",
-            "in": "query",
-            "schema": {
-              "type": "string"
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/QueryProperty"
+                }
+              }
+            },
+            "text/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/QueryProperty"
+                }
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/QueryProperty"
+                }
+              }
             }
           }
-        ],
+        },
         "responses": {
           "200": {
             "description": "OK",
@@ -2165,20 +2185,38 @@
       }
     },
     "/api/AdministratorCompany/GetAll": {
-      "get": {
+      "post": {
         "tags": [
           "AdministratorCompany"
         ],
-        "parameters": [
-          {
-            "name": "queryProperties",
-            "in": "query",
-            "schema": {
-              "type": "string",
-              "default": ""
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/QueryProperty"
+                }
+              }
+            },
+            "text/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/QueryProperty"
+                }
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/QueryProperty"
+                }
+              }
             }
           }
-        ],
+        },
         "responses": {
           "200": {
             "description": "OK",
@@ -2264,46 +2302,29 @@
       }
     },
     "/api/AdministratorCompany/GetAllPaginated": {
-      "get": {
+      "post": {
         "tags": [
           "AdministratorCompany"
         ],
-        "parameters": [
-          {
-            "name": "start",
-            "in": "query",
-            "schema": {
-              "type": "integer",
-              "format": "int32",
-              "default": 0
-            }
-          },
-          {
-            "name": "recordsPerPage",
-            "in": "query",
-            "schema": {
-              "type": "integer",
-              "format": "int32",
-              "default": 2147483647
-            }
-          },
-          {
-            "name": "searchText",
-            "in": "query",
-            "schema": {
-              "type": "string",
-              "default": ""
-            }
-          },
-          {
-            "name": "queryProperties",
-            "in": "query",
-            "schema": {
-              "type": "string",
-              "default": ""
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SearchParameters"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SearchParameters"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/SearchParameters"
+              }
             }
           }
-        ],
+        },
         "responses": {
           "200": {
             "description": "OK",
@@ -2488,19 +2509,38 @@
       }
     },
     "/api/AdministratorCompany/GetByProperties": {
-      "get": {
+      "post": {
         "tags": [
           "AdministratorCompany"
         ],
-        "parameters": [
-          {
-            "name": "queryPropertiesString",
-            "in": "query",
-            "schema": {
-              "type": "string"
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/QueryProperty"
+                }
+              }
+            },
+            "text/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/QueryProperty"
+                }
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/QueryProperty"
+                }
+              }
             }
           }
-        ],
+        },
         "responses": {
           "200": {
             "description": "OK",
@@ -3742,20 +3782,38 @@
       }
     },
     "/api/Application/GetAll": {
-      "get": {
+      "post": {
         "tags": [
           "Application"
         ],
-        "parameters": [
-          {
-            "name": "queryProperties",
-            "in": "query",
-            "schema": {
-              "type": "string",
-              "default": ""
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/QueryProperty"
+                }
+              }
+            },
+            "text/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/QueryProperty"
+                }
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/QueryProperty"
+                }
+              }
             }
           }
-        ],
+        },
         "responses": {
           "200": {
             "description": "OK",
@@ -3841,46 +3899,29 @@
       }
     },
     "/api/Application/GetAllPaginated": {
-      "get": {
+      "post": {
         "tags": [
           "Application"
         ],
-        "parameters": [
-          {
-            "name": "start",
-            "in": "query",
-            "schema": {
-              "type": "integer",
-              "format": "int32",
-              "default": 0
-            }
-          },
-          {
-            "name": "recordsPerPage",
-            "in": "query",
-            "schema": {
-              "type": "integer",
-              "format": "int32",
-              "default": 2147483647
-            }
-          },
-          {
-            "name": "searchText",
-            "in": "query",
-            "schema": {
-              "type": "string",
-              "default": ""
-            }
-          },
-          {
-            "name": "queryProperties",
-            "in": "query",
-            "schema": {
-              "type": "string",
-              "default": ""
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SearchParameters"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SearchParameters"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/SearchParameters"
+              }
             }
           }
-        ],
+        },
         "responses": {
           "200": {
             "description": "OK",
@@ -4065,19 +4106,38 @@
       }
     },
     "/api/Application/GetByProperties": {
-      "get": {
+      "post": {
         "tags": [
           "Application"
         ],
-        "parameters": [
-          {
-            "name": "queryPropertiesString",
-            "in": "query",
-            "schema": {
-              "type": "string"
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/QueryProperty"
+                }
+              }
+            },
+            "text/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/QueryProperty"
+                }
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/QueryProperty"
+                }
+              }
             }
           }
-        ],
+        },
         "responses": {
           "200": {
             "description": "OK",
@@ -5319,20 +5379,38 @@
       }
     },
     "/api/Class/GetAll": {
-      "get": {
+      "post": {
         "tags": [
           "Class"
         ],
-        "parameters": [
-          {
-            "name": "queryProperties",
-            "in": "query",
-            "schema": {
-              "type": "string",
-              "default": ""
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/QueryProperty"
+                }
+              }
+            },
+            "text/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/QueryProperty"
+                }
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/QueryProperty"
+                }
+              }
             }
           }
-        ],
+        },
         "responses": {
           "200": {
             "description": "OK",
@@ -5418,46 +5496,29 @@
       }
     },
     "/api/Class/GetAllPaginated": {
-      "get": {
+      "post": {
         "tags": [
           "Class"
         ],
-        "parameters": [
-          {
-            "name": "start",
-            "in": "query",
-            "schema": {
-              "type": "integer",
-              "format": "int32",
-              "default": 0
-            }
-          },
-          {
-            "name": "recordsPerPage",
-            "in": "query",
-            "schema": {
-              "type": "integer",
-              "format": "int32",
-              "default": 2147483647
-            }
-          },
-          {
-            "name": "searchText",
-            "in": "query",
-            "schema": {
-              "type": "string",
-              "default": ""
-            }
-          },
-          {
-            "name": "queryProperties",
-            "in": "query",
-            "schema": {
-              "type": "string",
-              "default": ""
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SearchParameters"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SearchParameters"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/SearchParameters"
+              }
             }
           }
-        ],
+        },
         "responses": {
           "200": {
             "description": "OK",
@@ -5642,19 +5703,38 @@
       }
     },
     "/api/Class/GetByProperties": {
-      "get": {
+      "post": {
         "tags": [
           "Class"
         ],
-        "parameters": [
-          {
-            "name": "queryPropertiesString",
-            "in": "query",
-            "schema": {
-              "type": "string"
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/QueryProperty"
+                }
+              }
+            },
+            "text/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/QueryProperty"
+                }
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/QueryProperty"
+                }
+              }
             }
           }
-        ],
+        },
         "responses": {
           "200": {
             "description": "OK",
@@ -6896,20 +6976,38 @@
       }
     },
     "/api/ClassLevel/GetAll": {
-      "get": {
+      "post": {
         "tags": [
           "ClassLevel"
         ],
-        "parameters": [
-          {
-            "name": "queryProperties",
-            "in": "query",
-            "schema": {
-              "type": "string",
-              "default": ""
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/QueryProperty"
+                }
+              }
+            },
+            "text/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/QueryProperty"
+                }
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/QueryProperty"
+                }
+              }
             }
           }
-        ],
+        },
         "responses": {
           "200": {
             "description": "OK",
@@ -6995,46 +7093,29 @@
       }
     },
     "/api/ClassLevel/GetAllPaginated": {
-      "get": {
+      "post": {
         "tags": [
           "ClassLevel"
         ],
-        "parameters": [
-          {
-            "name": "start",
-            "in": "query",
-            "schema": {
-              "type": "integer",
-              "format": "int32",
-              "default": 0
-            }
-          },
-          {
-            "name": "recordsPerPage",
-            "in": "query",
-            "schema": {
-              "type": "integer",
-              "format": "int32",
-              "default": 2147483647
-            }
-          },
-          {
-            "name": "searchText",
-            "in": "query",
-            "schema": {
-              "type": "string",
-              "default": ""
-            }
-          },
-          {
-            "name": "queryProperties",
-            "in": "query",
-            "schema": {
-              "type": "string",
-              "default": ""
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SearchParameters"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SearchParameters"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/SearchParameters"
+              }
             }
           }
-        ],
+        },
         "responses": {
           "200": {
             "description": "OK",
@@ -7219,19 +7300,38 @@
       }
     },
     "/api/ClassLevel/GetByProperties": {
-      "get": {
+      "post": {
         "tags": [
           "ClassLevel"
         ],
-        "parameters": [
-          {
-            "name": "queryPropertiesString",
-            "in": "query",
-            "schema": {
-              "type": "string"
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/QueryProperty"
+                }
+              }
+            },
+            "text/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/QueryProperty"
+                }
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/QueryProperty"
+                }
+              }
             }
           }
-        ],
+        },
         "responses": {
           "200": {
             "description": "OK",
@@ -8581,20 +8681,38 @@
       }
     },
     "/api/ClassSubject/GetAll": {
-      "get": {
+      "post": {
         "tags": [
           "ClassSubject"
         ],
-        "parameters": [
-          {
-            "name": "queryProperties",
-            "in": "query",
-            "schema": {
-              "type": "string",
-              "default": ""
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/QueryProperty"
+                }
+              }
+            },
+            "text/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/QueryProperty"
+                }
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/QueryProperty"
+                }
+              }
             }
           }
-        ],
+        },
         "responses": {
           "200": {
             "description": "OK",
@@ -8680,46 +8798,29 @@
       }
     },
     "/api/ClassSubject/GetAllPaginated": {
-      "get": {
+      "post": {
         "tags": [
           "ClassSubject"
         ],
-        "parameters": [
-          {
-            "name": "start",
-            "in": "query",
-            "schema": {
-              "type": "integer",
-              "format": "int32",
-              "default": 0
-            }
-          },
-          {
-            "name": "recordsPerPage",
-            "in": "query",
-            "schema": {
-              "type": "integer",
-              "format": "int32",
-              "default": 2147483647
-            }
-          },
-          {
-            "name": "searchText",
-            "in": "query",
-            "schema": {
-              "type": "string",
-              "default": ""
-            }
-          },
-          {
-            "name": "queryProperties",
-            "in": "query",
-            "schema": {
-              "type": "string",
-              "default": ""
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SearchParameters"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SearchParameters"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/SearchParameters"
+              }
             }
           }
-        ],
+        },
         "responses": {
           "200": {
             "description": "OK",
@@ -8904,19 +9005,38 @@
       }
     },
     "/api/ClassSubject/GetByProperties": {
-      "get": {
+      "post": {
         "tags": [
           "ClassSubject"
         ],
-        "parameters": [
-          {
-            "name": "queryPropertiesString",
-            "in": "query",
-            "schema": {
-              "type": "string"
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/QueryProperty"
+                }
+              }
+            },
+            "text/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/QueryProperty"
+                }
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/QueryProperty"
+                }
+              }
             }
           }
-        ],
+        },
         "responses": {
           "200": {
             "description": "OK",
@@ -10158,20 +10278,38 @@
       }
     },
     "/api/ClassSubjectAssessment/GetAll": {
-      "get": {
+      "post": {
         "tags": [
           "ClassSubjectAssessment"
         ],
-        "parameters": [
-          {
-            "name": "queryProperties",
-            "in": "query",
-            "schema": {
-              "type": "string",
-              "default": ""
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/QueryProperty"
+                }
+              }
+            },
+            "text/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/QueryProperty"
+                }
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/QueryProperty"
+                }
+              }
             }
           }
-        ],
+        },
         "responses": {
           "200": {
             "description": "OK",
@@ -10257,46 +10395,29 @@
       }
     },
     "/api/ClassSubjectAssessment/GetAllPaginated": {
-      "get": {
+      "post": {
         "tags": [
           "ClassSubjectAssessment"
         ],
-        "parameters": [
-          {
-            "name": "start",
-            "in": "query",
-            "schema": {
-              "type": "integer",
-              "format": "int32",
-              "default": 0
-            }
-          },
-          {
-            "name": "recordsPerPage",
-            "in": "query",
-            "schema": {
-              "type": "integer",
-              "format": "int32",
-              "default": 2147483647
-            }
-          },
-          {
-            "name": "searchText",
-            "in": "query",
-            "schema": {
-              "type": "string",
-              "default": ""
-            }
-          },
-          {
-            "name": "queryProperties",
-            "in": "query",
-            "schema": {
-              "type": "string",
-              "default": ""
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SearchParameters"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SearchParameters"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/SearchParameters"
+              }
             }
           }
-        ],
+        },
         "responses": {
           "200": {
             "description": "OK",
@@ -10481,19 +10602,38 @@
       }
     },
     "/api/ClassSubjectAssessment/GetByProperties": {
-      "get": {
+      "post": {
         "tags": [
           "ClassSubjectAssessment"
         ],
-        "parameters": [
-          {
-            "name": "queryPropertiesString",
-            "in": "query",
-            "schema": {
-              "type": "string"
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/QueryProperty"
+                }
+              }
+            },
+            "text/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/QueryProperty"
+                }
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/QueryProperty"
+                }
+              }
             }
           }
-        ],
+        },
         "responses": {
           "200": {
             "description": "OK",
@@ -11843,20 +11983,38 @@
       }
     },
     "/api/Company/GetAll": {
-      "get": {
+      "post": {
         "tags": [
           "Company"
         ],
-        "parameters": [
-          {
-            "name": "queryProperties",
-            "in": "query",
-            "schema": {
-              "type": "string",
-              "default": ""
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/QueryProperty"
+                }
+              }
+            },
+            "text/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/QueryProperty"
+                }
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/QueryProperty"
+                }
+              }
             }
           }
-        ],
+        },
         "responses": {
           "200": {
             "description": "OK",
@@ -11942,46 +12100,29 @@
       }
     },
     "/api/Company/GetAllPaginated": {
-      "get": {
+      "post": {
         "tags": [
           "Company"
         ],
-        "parameters": [
-          {
-            "name": "start",
-            "in": "query",
-            "schema": {
-              "type": "integer",
-              "format": "int32",
-              "default": 0
-            }
-          },
-          {
-            "name": "recordsPerPage",
-            "in": "query",
-            "schema": {
-              "type": "integer",
-              "format": "int32",
-              "default": 2147483647
-            }
-          },
-          {
-            "name": "searchText",
-            "in": "query",
-            "schema": {
-              "type": "string",
-              "default": ""
-            }
-          },
-          {
-            "name": "queryProperties",
-            "in": "query",
-            "schema": {
-              "type": "string",
-              "default": ""
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SearchParameters"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SearchParameters"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/SearchParameters"
+              }
             }
           }
-        ],
+        },
         "responses": {
           "200": {
             "description": "OK",
@@ -12166,19 +12307,38 @@
       }
     },
     "/api/Company/GetByProperties": {
-      "get": {
+      "post": {
         "tags": [
           "Company"
         ],
-        "parameters": [
-          {
-            "name": "queryPropertiesString",
-            "in": "query",
-            "schema": {
-              "type": "string"
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/QueryProperty"
+                }
+              }
+            },
+            "text/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/QueryProperty"
+                }
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/QueryProperty"
+                }
+              }
             }
           }
-        ],
+        },
         "responses": {
           "200": {
             "description": "OK",
@@ -13312,20 +13472,38 @@
       }
     },
     "/api/Country/GetAll": {
-      "get": {
+      "post": {
         "tags": [
           "Country"
         ],
-        "parameters": [
-          {
-            "name": "queryProperties",
-            "in": "query",
-            "schema": {
-              "type": "string",
-              "default": ""
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/QueryProperty"
+                }
+              }
+            },
+            "text/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/QueryProperty"
+                }
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/QueryProperty"
+                }
+              }
             }
           }
-        ],
+        },
         "responses": {
           "200": {
             "description": "OK",
@@ -13411,46 +13589,29 @@
       }
     },
     "/api/Country/GetAllPaginated": {
-      "get": {
+      "post": {
         "tags": [
           "Country"
         ],
-        "parameters": [
-          {
-            "name": "start",
-            "in": "query",
-            "schema": {
-              "type": "integer",
-              "format": "int32",
-              "default": 0
-            }
-          },
-          {
-            "name": "recordsPerPage",
-            "in": "query",
-            "schema": {
-              "type": "integer",
-              "format": "int32",
-              "default": 2147483647
-            }
-          },
-          {
-            "name": "searchText",
-            "in": "query",
-            "schema": {
-              "type": "string",
-              "default": ""
-            }
-          },
-          {
-            "name": "queryProperties",
-            "in": "query",
-            "schema": {
-              "type": "string",
-              "default": ""
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SearchParameters"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SearchParameters"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/SearchParameters"
+              }
             }
           }
-        ],
+        },
         "responses": {
           "200": {
             "description": "OK",
@@ -13635,19 +13796,38 @@
       }
     },
     "/api/Country/GetByProperties": {
-      "get": {
+      "post": {
         "tags": [
           "Country"
         ],
-        "parameters": [
-          {
-            "name": "queryPropertiesString",
-            "in": "query",
-            "schema": {
-              "type": "string"
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/QueryProperty"
+                }
+              }
+            },
+            "text/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/QueryProperty"
+                }
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/QueryProperty"
+                }
+              }
             }
           }
-        ],
+        },
         "responses": {
           "200": {
             "description": "OK",
@@ -15531,20 +15711,38 @@
       }
     },
     "/api/Family/GetAll": {
-      "get": {
+      "post": {
         "tags": [
           "Family"
         ],
-        "parameters": [
-          {
-            "name": "queryProperties",
-            "in": "query",
-            "schema": {
-              "type": "string",
-              "default": ""
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/QueryProperty"
+                }
+              }
+            },
+            "text/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/QueryProperty"
+                }
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/QueryProperty"
+                }
+              }
             }
           }
-        ],
+        },
         "responses": {
           "200": {
             "description": "OK",
@@ -15630,46 +15828,29 @@
       }
     },
     "/api/Family/GetAllPaginated": {
-      "get": {
+      "post": {
         "tags": [
           "Family"
         ],
-        "parameters": [
-          {
-            "name": "start",
-            "in": "query",
-            "schema": {
-              "type": "integer",
-              "format": "int32",
-              "default": 0
-            }
-          },
-          {
-            "name": "recordsPerPage",
-            "in": "query",
-            "schema": {
-              "type": "integer",
-              "format": "int32",
-              "default": 2147483647
-            }
-          },
-          {
-            "name": "searchText",
-            "in": "query",
-            "schema": {
-              "type": "string",
-              "default": ""
-            }
-          },
-          {
-            "name": "queryProperties",
-            "in": "query",
-            "schema": {
-              "type": "string",
-              "default": ""
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SearchParameters"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SearchParameters"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/SearchParameters"
+              }
             }
           }
-        ],
+        },
         "responses": {
           "200": {
             "description": "OK",
@@ -15854,19 +16035,38 @@
       }
     },
     "/api/Family/GetByProperties": {
-      "get": {
+      "post": {
         "tags": [
           "Family"
         ],
-        "parameters": [
-          {
-            "name": "queryPropertiesString",
-            "in": "query",
-            "schema": {
-              "type": "string"
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/QueryProperty"
+                }
+              }
+            },
+            "text/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/QueryProperty"
+                }
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/QueryProperty"
+                }
+              }
             }
           }
-        ],
+        },
         "responses": {
           "200": {
             "description": "OK",
@@ -17000,20 +17200,38 @@
       }
     },
     "/api/Fee/GetAll": {
-      "get": {
+      "post": {
         "tags": [
           "Fee"
         ],
-        "parameters": [
-          {
-            "name": "queryProperties",
-            "in": "query",
-            "schema": {
-              "type": "string",
-              "default": ""
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/QueryProperty"
+                }
+              }
+            },
+            "text/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/QueryProperty"
+                }
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/QueryProperty"
+                }
+              }
             }
           }
-        ],
+        },
         "responses": {
           "200": {
             "description": "OK",
@@ -17099,46 +17317,29 @@
       }
     },
     "/api/Fee/GetAllPaginated": {
-      "get": {
+      "post": {
         "tags": [
           "Fee"
         ],
-        "parameters": [
-          {
-            "name": "start",
-            "in": "query",
-            "schema": {
-              "type": "integer",
-              "format": "int32",
-              "default": 0
-            }
-          },
-          {
-            "name": "recordsPerPage",
-            "in": "query",
-            "schema": {
-              "type": "integer",
-              "format": "int32",
-              "default": 2147483647
-            }
-          },
-          {
-            "name": "searchText",
-            "in": "query",
-            "schema": {
-              "type": "string",
-              "default": ""
-            }
-          },
-          {
-            "name": "queryProperties",
-            "in": "query",
-            "schema": {
-              "type": "string",
-              "default": ""
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SearchParameters"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SearchParameters"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/SearchParameters"
+              }
             }
           }
-        ],
+        },
         "responses": {
           "200": {
             "description": "OK",
@@ -17323,19 +17524,38 @@
       }
     },
     "/api/Fee/GetByProperties": {
-      "get": {
+      "post": {
         "tags": [
           "Fee"
         ],
-        "parameters": [
-          {
-            "name": "queryPropertiesString",
-            "in": "query",
-            "schema": {
-              "type": "string"
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/QueryProperty"
+                }
+              }
+            },
+            "text/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/QueryProperty"
+                }
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/QueryProperty"
+                }
+              }
             }
           }
-        ],
+        },
         "responses": {
           "200": {
             "description": "OK",
@@ -18577,20 +18797,38 @@
       }
     },
     "/api/FeeLine/GetAll": {
-      "get": {
+      "post": {
         "tags": [
           "FeeLine"
         ],
-        "parameters": [
-          {
-            "name": "queryProperties",
-            "in": "query",
-            "schema": {
-              "type": "string",
-              "default": ""
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/QueryProperty"
+                }
+              }
+            },
+            "text/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/QueryProperty"
+                }
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/QueryProperty"
+                }
+              }
             }
           }
-        ],
+        },
         "responses": {
           "200": {
             "description": "OK",
@@ -18676,46 +18914,29 @@
       }
     },
     "/api/FeeLine/GetAllPaginated": {
-      "get": {
+      "post": {
         "tags": [
           "FeeLine"
         ],
-        "parameters": [
-          {
-            "name": "start",
-            "in": "query",
-            "schema": {
-              "type": "integer",
-              "format": "int32",
-              "default": 0
-            }
-          },
-          {
-            "name": "recordsPerPage",
-            "in": "query",
-            "schema": {
-              "type": "integer",
-              "format": "int32",
-              "default": 2147483647
-            }
-          },
-          {
-            "name": "searchText",
-            "in": "query",
-            "schema": {
-              "type": "string",
-              "default": ""
-            }
-          },
-          {
-            "name": "queryProperties",
-            "in": "query",
-            "schema": {
-              "type": "string",
-              "default": ""
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SearchParameters"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SearchParameters"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/SearchParameters"
+              }
             }
           }
-        ],
+        },
         "responses": {
           "200": {
             "description": "OK",
@@ -18900,19 +19121,38 @@
       }
     },
     "/api/FeeLine/GetByProperties": {
-      "get": {
+      "post": {
         "tags": [
           "FeeLine"
         ],
-        "parameters": [
-          {
-            "name": "queryPropertiesString",
-            "in": "query",
-            "schema": {
-              "type": "string"
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/QueryProperty"
+                }
+              }
+            },
+            "text/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/QueryProperty"
+                }
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/QueryProperty"
+                }
+              }
             }
           }
-        ],
+        },
         "responses": {
           "200": {
             "description": "OK",
@@ -20154,20 +20394,38 @@
       }
     },
     "/api/FeeSetup/GetAll": {
-      "get": {
+      "post": {
         "tags": [
           "FeeSetup"
         ],
-        "parameters": [
-          {
-            "name": "queryProperties",
-            "in": "query",
-            "schema": {
-              "type": "string",
-              "default": ""
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/QueryProperty"
+                }
+              }
+            },
+            "text/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/QueryProperty"
+                }
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/QueryProperty"
+                }
+              }
             }
           }
-        ],
+        },
         "responses": {
           "200": {
             "description": "OK",
@@ -20253,46 +20511,29 @@
       }
     },
     "/api/FeeSetup/GetAllPaginated": {
-      "get": {
+      "post": {
         "tags": [
           "FeeSetup"
         ],
-        "parameters": [
-          {
-            "name": "start",
-            "in": "query",
-            "schema": {
-              "type": "integer",
-              "format": "int32",
-              "default": 0
-            }
-          },
-          {
-            "name": "recordsPerPage",
-            "in": "query",
-            "schema": {
-              "type": "integer",
-              "format": "int32",
-              "default": 2147483647
-            }
-          },
-          {
-            "name": "searchText",
-            "in": "query",
-            "schema": {
-              "type": "string",
-              "default": ""
-            }
-          },
-          {
-            "name": "queryProperties",
-            "in": "query",
-            "schema": {
-              "type": "string",
-              "default": ""
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SearchParameters"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SearchParameters"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/SearchParameters"
+              }
             }
           }
-        ],
+        },
         "responses": {
           "200": {
             "description": "OK",
@@ -20477,19 +20718,38 @@
       }
     },
     "/api/FeeSetup/GetByProperties": {
-      "get": {
+      "post": {
         "tags": [
           "FeeSetup"
         ],
-        "parameters": [
-          {
-            "name": "queryPropertiesString",
-            "in": "query",
-            "schema": {
-              "type": "string"
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/QueryProperty"
+                }
+              }
+            },
+            "text/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/QueryProperty"
+                }
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/QueryProperty"
+                }
+              }
             }
           }
-        ],
+        },
         "responses": {
           "200": {
             "description": "OK",
@@ -21731,20 +21991,38 @@
       }
     },
     "/api/FeeType/GetAll": {
-      "get": {
+      "post": {
         "tags": [
           "FeeType"
         ],
-        "parameters": [
-          {
-            "name": "queryProperties",
-            "in": "query",
-            "schema": {
-              "type": "string",
-              "default": ""
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/QueryProperty"
+                }
+              }
+            },
+            "text/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/QueryProperty"
+                }
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/QueryProperty"
+                }
+              }
             }
           }
-        ],
+        },
         "responses": {
           "200": {
             "description": "OK",
@@ -21830,46 +22108,29 @@
       }
     },
     "/api/FeeType/GetAllPaginated": {
-      "get": {
+      "post": {
         "tags": [
           "FeeType"
         ],
-        "parameters": [
-          {
-            "name": "start",
-            "in": "query",
-            "schema": {
-              "type": "integer",
-              "format": "int32",
-              "default": 0
-            }
-          },
-          {
-            "name": "recordsPerPage",
-            "in": "query",
-            "schema": {
-              "type": "integer",
-              "format": "int32",
-              "default": 2147483647
-            }
-          },
-          {
-            "name": "searchText",
-            "in": "query",
-            "schema": {
-              "type": "string",
-              "default": ""
-            }
-          },
-          {
-            "name": "queryProperties",
-            "in": "query",
-            "schema": {
-              "type": "string",
-              "default": ""
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SearchParameters"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SearchParameters"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/SearchParameters"
+              }
             }
           }
-        ],
+        },
         "responses": {
           "200": {
             "description": "OK",
@@ -22054,19 +22315,38 @@
       }
     },
     "/api/FeeType/GetByProperties": {
-      "get": {
+      "post": {
         "tags": [
           "FeeType"
         ],
-        "parameters": [
-          {
-            "name": "queryPropertiesString",
-            "in": "query",
-            "schema": {
-              "type": "string"
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/QueryProperty"
+                }
+              }
+            },
+            "text/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/QueryProperty"
+                }
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/QueryProperty"
+                }
+              }
             }
           }
-        ],
+        },
         "responses": {
           "200": {
             "description": "OK",
@@ -23407,20 +23687,38 @@
       }
     },
     "/api/LocalGovernmentArea/GetAll": {
-      "get": {
+      "post": {
         "tags": [
           "LocalGovernmentArea"
         ],
-        "parameters": [
-          {
-            "name": "queryProperties",
-            "in": "query",
-            "schema": {
-              "type": "string",
-              "default": ""
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/QueryProperty"
+                }
+              }
+            },
+            "text/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/QueryProperty"
+                }
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/QueryProperty"
+                }
+              }
             }
           }
-        ],
+        },
         "responses": {
           "200": {
             "description": "OK",
@@ -23506,46 +23804,29 @@
       }
     },
     "/api/LocalGovernmentArea/GetAllPaginated": {
-      "get": {
+      "post": {
         "tags": [
           "LocalGovernmentArea"
         ],
-        "parameters": [
-          {
-            "name": "start",
-            "in": "query",
-            "schema": {
-              "type": "integer",
-              "format": "int32",
-              "default": 0
-            }
-          },
-          {
-            "name": "recordsPerPage",
-            "in": "query",
-            "schema": {
-              "type": "integer",
-              "format": "int32",
-              "default": 2147483647
-            }
-          },
-          {
-            "name": "searchText",
-            "in": "query",
-            "schema": {
-              "type": "string",
-              "default": ""
-            }
-          },
-          {
-            "name": "queryProperties",
-            "in": "query",
-            "schema": {
-              "type": "string",
-              "default": ""
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SearchParameters"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SearchParameters"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/SearchParameters"
+              }
             }
           }
-        ],
+        },
         "responses": {
           "200": {
             "description": "OK",
@@ -23730,19 +24011,38 @@
       }
     },
     "/api/LocalGovernmentArea/GetByProperties": {
-      "get": {
+      "post": {
         "tags": [
           "LocalGovernmentArea"
         ],
-        "parameters": [
-          {
-            "name": "queryPropertiesString",
-            "in": "query",
-            "schema": {
-              "type": "string"
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/QueryProperty"
+                }
+              }
+            },
+            "text/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/QueryProperty"
+                }
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/QueryProperty"
+                }
+              }
             }
           }
-        ],
+        },
         "responses": {
           "200": {
             "description": "OK",
@@ -24984,20 +25284,38 @@
       }
     },
     "/api/Payment/GetAll": {
-      "get": {
+      "post": {
         "tags": [
           "Payment"
         ],
-        "parameters": [
-          {
-            "name": "queryProperties",
-            "in": "query",
-            "schema": {
-              "type": "string",
-              "default": ""
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/QueryProperty"
+                }
+              }
+            },
+            "text/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/QueryProperty"
+                }
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/QueryProperty"
+                }
+              }
             }
           }
-        ],
+        },
         "responses": {
           "200": {
             "description": "OK",
@@ -25083,46 +25401,29 @@
       }
     },
     "/api/Payment/GetAllPaginated": {
-      "get": {
+      "post": {
         "tags": [
           "Payment"
         ],
-        "parameters": [
-          {
-            "name": "start",
-            "in": "query",
-            "schema": {
-              "type": "integer",
-              "format": "int32",
-              "default": 0
-            }
-          },
-          {
-            "name": "recordsPerPage",
-            "in": "query",
-            "schema": {
-              "type": "integer",
-              "format": "int32",
-              "default": 2147483647
-            }
-          },
-          {
-            "name": "searchText",
-            "in": "query",
-            "schema": {
-              "type": "string",
-              "default": ""
-            }
-          },
-          {
-            "name": "queryProperties",
-            "in": "query",
-            "schema": {
-              "type": "string",
-              "default": ""
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SearchParameters"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SearchParameters"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/SearchParameters"
+              }
             }
           }
-        ],
+        },
         "responses": {
           "200": {
             "description": "OK",
@@ -25307,19 +25608,38 @@
       }
     },
     "/api/Payment/GetByProperties": {
-      "get": {
+      "post": {
         "tags": [
           "Payment"
         ],
-        "parameters": [
-          {
-            "name": "queryPropertiesString",
-            "in": "query",
-            "schema": {
-              "type": "string"
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/QueryProperty"
+                }
+              }
+            },
+            "text/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/QueryProperty"
+                }
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/QueryProperty"
+                }
+              }
             }
           }
-        ],
+        },
         "responses": {
           "200": {
             "description": "OK",
@@ -26561,20 +26881,38 @@
       }
     },
     "/api/PrincipalRemark/GetAll": {
-      "get": {
+      "post": {
         "tags": [
           "PrincipalRemark"
         ],
-        "parameters": [
-          {
-            "name": "queryProperties",
-            "in": "query",
-            "schema": {
-              "type": "string",
-              "default": ""
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/QueryProperty"
+                }
+              }
+            },
+            "text/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/QueryProperty"
+                }
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/QueryProperty"
+                }
+              }
             }
           }
-        ],
+        },
         "responses": {
           "200": {
             "description": "OK",
@@ -26660,46 +26998,29 @@
       }
     },
     "/api/PrincipalRemark/GetAllPaginated": {
-      "get": {
+      "post": {
         "tags": [
           "PrincipalRemark"
         ],
-        "parameters": [
-          {
-            "name": "start",
-            "in": "query",
-            "schema": {
-              "type": "integer",
-              "format": "int32",
-              "default": 0
-            }
-          },
-          {
-            "name": "recordsPerPage",
-            "in": "query",
-            "schema": {
-              "type": "integer",
-              "format": "int32",
-              "default": 2147483647
-            }
-          },
-          {
-            "name": "searchText",
-            "in": "query",
-            "schema": {
-              "type": "string",
-              "default": ""
-            }
-          },
-          {
-            "name": "queryProperties",
-            "in": "query",
-            "schema": {
-              "type": "string",
-              "default": ""
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SearchParameters"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SearchParameters"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/SearchParameters"
+              }
             }
           }
-        ],
+        },
         "responses": {
           "200": {
             "description": "OK",
@@ -26884,19 +27205,38 @@
       }
     },
     "/api/PrincipalRemark/GetByProperties": {
-      "get": {
+      "post": {
         "tags": [
           "PrincipalRemark"
         ],
-        "parameters": [
-          {
-            "name": "queryPropertiesString",
-            "in": "query",
-            "schema": {
-              "type": "string"
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/QueryProperty"
+                }
+              }
+            },
+            "text/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/QueryProperty"
+                }
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/QueryProperty"
+                }
+              }
             }
           }
-        ],
+        },
         "responses": {
           "200": {
             "description": "OK",
@@ -28138,20 +28478,38 @@
       }
     },
     "/api/ProgrammeGradeRemark/GetAll": {
-      "get": {
+      "post": {
         "tags": [
           "ProgrammeGradeRemark"
         ],
-        "parameters": [
-          {
-            "name": "queryProperties",
-            "in": "query",
-            "schema": {
-              "type": "string",
-              "default": ""
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/QueryProperty"
+                }
+              }
+            },
+            "text/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/QueryProperty"
+                }
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/QueryProperty"
+                }
+              }
             }
           }
-        ],
+        },
         "responses": {
           "200": {
             "description": "OK",
@@ -28237,46 +28595,29 @@
       }
     },
     "/api/ProgrammeGradeRemark/GetAllPaginated": {
-      "get": {
+      "post": {
         "tags": [
           "ProgrammeGradeRemark"
         ],
-        "parameters": [
-          {
-            "name": "start",
-            "in": "query",
-            "schema": {
-              "type": "integer",
-              "format": "int32",
-              "default": 0
-            }
-          },
-          {
-            "name": "recordsPerPage",
-            "in": "query",
-            "schema": {
-              "type": "integer",
-              "format": "int32",
-              "default": 2147483647
-            }
-          },
-          {
-            "name": "searchText",
-            "in": "query",
-            "schema": {
-              "type": "string",
-              "default": ""
-            }
-          },
-          {
-            "name": "queryProperties",
-            "in": "query",
-            "schema": {
-              "type": "string",
-              "default": ""
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SearchParameters"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SearchParameters"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/SearchParameters"
+              }
             }
           }
-        ],
+        },
         "responses": {
           "200": {
             "description": "OK",
@@ -28461,19 +28802,38 @@
       }
     },
     "/api/ProgrammeGradeRemark/GetByProperties": {
-      "get": {
+      "post": {
         "tags": [
           "ProgrammeGradeRemark"
         ],
-        "parameters": [
-          {
-            "name": "queryPropertiesString",
-            "in": "query",
-            "schema": {
-              "type": "string"
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/QueryProperty"
+                }
+              }
+            },
+            "text/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/QueryProperty"
+                }
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/QueryProperty"
+                }
+              }
             }
           }
-        ],
+        },
         "responses": {
           "200": {
             "description": "OK",
@@ -29715,20 +30075,38 @@
       }
     },
     "/api/ProgramType/GetAll": {
-      "get": {
+      "post": {
         "tags": [
           "ProgramType"
         ],
-        "parameters": [
-          {
-            "name": "queryProperties",
-            "in": "query",
-            "schema": {
-              "type": "string",
-              "default": ""
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/QueryProperty"
+                }
+              }
+            },
+            "text/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/QueryProperty"
+                }
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/QueryProperty"
+                }
+              }
             }
           }
-        ],
+        },
         "responses": {
           "200": {
             "description": "OK",
@@ -29814,46 +30192,29 @@
       }
     },
     "/api/ProgramType/GetAllPaginated": {
-      "get": {
+      "post": {
         "tags": [
           "ProgramType"
         ],
-        "parameters": [
-          {
-            "name": "start",
-            "in": "query",
-            "schema": {
-              "type": "integer",
-              "format": "int32",
-              "default": 0
-            }
-          },
-          {
-            "name": "recordsPerPage",
-            "in": "query",
-            "schema": {
-              "type": "integer",
-              "format": "int32",
-              "default": 2147483647
-            }
-          },
-          {
-            "name": "searchText",
-            "in": "query",
-            "schema": {
-              "type": "string",
-              "default": ""
-            }
-          },
-          {
-            "name": "queryProperties",
-            "in": "query",
-            "schema": {
-              "type": "string",
-              "default": ""
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SearchParameters"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SearchParameters"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/SearchParameters"
+              }
             }
           }
-        ],
+        },
         "responses": {
           "200": {
             "description": "OK",
@@ -30038,19 +30399,38 @@
       }
     },
     "/api/ProgramType/GetByProperties": {
-      "get": {
+      "post": {
         "tags": [
           "ProgramType"
         ],
-        "parameters": [
-          {
-            "name": "queryPropertiesString",
-            "in": "query",
-            "schema": {
-              "type": "string"
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/QueryProperty"
+                }
+              }
+            },
+            "text/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/QueryProperty"
+                }
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/QueryProperty"
+                }
+              }
             }
           }
-        ],
+        },
         "responses": {
           "200": {
             "description": "OK",
@@ -31697,21 +32077,146 @@
         }
       }
     },
-    "/api/SchoolTermSession/GetAll": {
-      "get": {
+    "/api/SchoolTermSession/CloneSchoolTermSession": {
+      "post": {
         "tags": [
           "SchoolTermSession"
         ],
         "parameters": [
           {
-            "name": "queryProperties",
+            "name": "sourceSchoolTermSessionId",
             "in": "query",
             "schema": {
               "type": "string",
-              "default": ""
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "destinationSchoolTermSessionId",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "uuid"
             }
           }
         ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/BooleanResult"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BooleanResult"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BooleanResult"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/SchoolTermSession/GetAll": {
+      "post": {
+        "tags": [
+          "SchoolTermSession"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/QueryProperty"
+                }
+              }
+            },
+            "text/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/QueryProperty"
+                }
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/QueryProperty"
+                }
+              }
+            }
+          }
+        },
         "responses": {
           "200": {
             "description": "OK",
@@ -31797,46 +32302,29 @@
       }
     },
     "/api/SchoolTermSession/GetAllPaginated": {
-      "get": {
+      "post": {
         "tags": [
           "SchoolTermSession"
         ],
-        "parameters": [
-          {
-            "name": "start",
-            "in": "query",
-            "schema": {
-              "type": "integer",
-              "format": "int32",
-              "default": 0
-            }
-          },
-          {
-            "name": "recordsPerPage",
-            "in": "query",
-            "schema": {
-              "type": "integer",
-              "format": "int32",
-              "default": 2147483647
-            }
-          },
-          {
-            "name": "searchText",
-            "in": "query",
-            "schema": {
-              "type": "string",
-              "default": ""
-            }
-          },
-          {
-            "name": "queryProperties",
-            "in": "query",
-            "schema": {
-              "type": "string",
-              "default": ""
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SearchParameters"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SearchParameters"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/SearchParameters"
+              }
             }
           }
-        ],
+        },
         "responses": {
           "200": {
             "description": "OK",
@@ -32021,19 +32509,38 @@
       }
     },
     "/api/SchoolTermSession/GetByProperties": {
-      "get": {
+      "post": {
         "tags": [
           "SchoolTermSession"
         ],
-        "parameters": [
-          {
-            "name": "queryPropertiesString",
-            "in": "query",
-            "schema": {
-              "type": "string"
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/QueryProperty"
+                }
+              }
+            },
+            "text/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/QueryProperty"
+                }
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/QueryProperty"
+                }
+              }
             }
           }
-        ],
+        },
         "responses": {
           "200": {
             "description": "OK",
@@ -33374,20 +33881,38 @@
       }
     },
     "/api/Session/GetAll": {
-      "get": {
+      "post": {
         "tags": [
           "Session"
         ],
-        "parameters": [
-          {
-            "name": "queryProperties",
-            "in": "query",
-            "schema": {
-              "type": "string",
-              "default": ""
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/QueryProperty"
+                }
+              }
+            },
+            "text/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/QueryProperty"
+                }
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/QueryProperty"
+                }
+              }
             }
           }
-        ],
+        },
         "responses": {
           "200": {
             "description": "OK",
@@ -33473,46 +33998,29 @@
       }
     },
     "/api/Session/GetAllPaginated": {
-      "get": {
+      "post": {
         "tags": [
           "Session"
         ],
-        "parameters": [
-          {
-            "name": "start",
-            "in": "query",
-            "schema": {
-              "type": "integer",
-              "format": "int32",
-              "default": 0
-            }
-          },
-          {
-            "name": "recordsPerPage",
-            "in": "query",
-            "schema": {
-              "type": "integer",
-              "format": "int32",
-              "default": 2147483647
-            }
-          },
-          {
-            "name": "searchText",
-            "in": "query",
-            "schema": {
-              "type": "string",
-              "default": ""
-            }
-          },
-          {
-            "name": "queryProperties",
-            "in": "query",
-            "schema": {
-              "type": "string",
-              "default": ""
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SearchParameters"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SearchParameters"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/SearchParameters"
+              }
             }
           }
-        ],
+        },
         "responses": {
           "200": {
             "description": "OK",
@@ -33697,19 +34205,38 @@
       }
     },
     "/api/Session/GetByProperties": {
-      "get": {
+      "post": {
         "tags": [
           "Session"
         ],
-        "parameters": [
-          {
-            "name": "queryPropertiesString",
-            "in": "query",
-            "schema": {
-              "type": "string"
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/QueryProperty"
+                }
+              }
+            },
+            "text/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/QueryProperty"
+                }
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/QueryProperty"
+                }
+              }
             }
           }
-        ],
+        },
         "responses": {
           "200": {
             "description": "OK",
@@ -35059,20 +35586,38 @@
       }
     },
     "/api/Staff/GetAll": {
-      "get": {
+      "post": {
         "tags": [
           "Staff"
         ],
-        "parameters": [
-          {
-            "name": "queryProperties",
-            "in": "query",
-            "schema": {
-              "type": "string",
-              "default": ""
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/QueryProperty"
+                }
+              }
+            },
+            "text/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/QueryProperty"
+                }
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/QueryProperty"
+                }
+              }
             }
           }
-        ],
+        },
         "responses": {
           "200": {
             "description": "OK",
@@ -35158,46 +35703,29 @@
       }
     },
     "/api/Staff/GetAllPaginated": {
-      "get": {
+      "post": {
         "tags": [
           "Staff"
         ],
-        "parameters": [
-          {
-            "name": "start",
-            "in": "query",
-            "schema": {
-              "type": "integer",
-              "format": "int32",
-              "default": 0
-            }
-          },
-          {
-            "name": "recordsPerPage",
-            "in": "query",
-            "schema": {
-              "type": "integer",
-              "format": "int32",
-              "default": 2147483647
-            }
-          },
-          {
-            "name": "searchText",
-            "in": "query",
-            "schema": {
-              "type": "string",
-              "default": ""
-            }
-          },
-          {
-            "name": "queryProperties",
-            "in": "query",
-            "schema": {
-              "type": "string",
-              "default": ""
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SearchParameters"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SearchParameters"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/SearchParameters"
+              }
             }
           }
-        ],
+        },
         "responses": {
           "200": {
             "description": "OK",
@@ -35382,19 +35910,38 @@
       }
     },
     "/api/Staff/GetByProperties": {
-      "get": {
+      "post": {
         "tags": [
           "Staff"
         ],
-        "parameters": [
-          {
-            "name": "queryPropertiesString",
-            "in": "query",
-            "schema": {
-              "type": "string"
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/QueryProperty"
+                }
+              }
+            },
+            "text/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/QueryProperty"
+                }
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/QueryProperty"
+                }
+              }
             }
           }
-        ],
+        },
         "responses": {
           "200": {
             "description": "OK",
@@ -36627,20 +37174,38 @@
       }
     },
     "/api/State/GetAll": {
-      "get": {
+      "post": {
         "tags": [
           "State"
         ],
-        "parameters": [
-          {
-            "name": "queryProperties",
-            "in": "query",
-            "schema": {
-              "type": "string",
-              "default": ""
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/QueryProperty"
+                }
+              }
+            },
+            "text/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/QueryProperty"
+                }
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/QueryProperty"
+                }
+              }
             }
           }
-        ],
+        },
         "responses": {
           "200": {
             "description": "OK",
@@ -36726,46 +37291,29 @@
       }
     },
     "/api/State/GetAllPaginated": {
-      "get": {
+      "post": {
         "tags": [
           "State"
         ],
-        "parameters": [
-          {
-            "name": "start",
-            "in": "query",
-            "schema": {
-              "type": "integer",
-              "format": "int32",
-              "default": 0
-            }
-          },
-          {
-            "name": "recordsPerPage",
-            "in": "query",
-            "schema": {
-              "type": "integer",
-              "format": "int32",
-              "default": 2147483647
-            }
-          },
-          {
-            "name": "searchText",
-            "in": "query",
-            "schema": {
-              "type": "string",
-              "default": ""
-            }
-          },
-          {
-            "name": "queryProperties",
-            "in": "query",
-            "schema": {
-              "type": "string",
-              "default": ""
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SearchParameters"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SearchParameters"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/SearchParameters"
+              }
             }
           }
-        ],
+        },
         "responses": {
           "200": {
             "description": "OK",
@@ -36950,19 +37498,38 @@
       }
     },
     "/api/State/GetByProperties": {
-      "get": {
+      "post": {
         "tags": [
           "State"
         ],
-        "parameters": [
-          {
-            "name": "queryPropertiesString",
-            "in": "query",
-            "schema": {
-              "type": "string"
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/QueryProperty"
+                }
+              }
+            },
+            "text/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/QueryProperty"
+                }
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/QueryProperty"
+                }
+              }
             }
           }
-        ],
+        },
         "responses": {
           "200": {
             "description": "OK",
@@ -38411,20 +38978,38 @@
       }
     },
     "/api/Student/GetAll": {
-      "get": {
+      "post": {
         "tags": [
           "Student"
         ],
-        "parameters": [
-          {
-            "name": "queryProperties",
-            "in": "query",
-            "schema": {
-              "type": "string",
-              "default": ""
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/QueryProperty"
+                }
+              }
+            },
+            "text/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/QueryProperty"
+                }
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/QueryProperty"
+                }
+              }
             }
           }
-        ],
+        },
         "responses": {
           "200": {
             "description": "OK",
@@ -38510,46 +39095,29 @@
       }
     },
     "/api/Student/GetAllPaginated": {
-      "get": {
+      "post": {
         "tags": [
           "Student"
         ],
-        "parameters": [
-          {
-            "name": "start",
-            "in": "query",
-            "schema": {
-              "type": "integer",
-              "format": "int32",
-              "default": 0
-            }
-          },
-          {
-            "name": "recordsPerPage",
-            "in": "query",
-            "schema": {
-              "type": "integer",
-              "format": "int32",
-              "default": 2147483647
-            }
-          },
-          {
-            "name": "searchText",
-            "in": "query",
-            "schema": {
-              "type": "string",
-              "default": ""
-            }
-          },
-          {
-            "name": "queryProperties",
-            "in": "query",
-            "schema": {
-              "type": "string",
-              "default": ""
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SearchParameters"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SearchParameters"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/SearchParameters"
+              }
             }
           }
-        ],
+        },
         "responses": {
           "200": {
             "description": "OK",
@@ -38734,19 +39302,38 @@
       }
     },
     "/api/Student/GetByProperties": {
-      "get": {
+      "post": {
         "tags": [
           "Student"
         ],
-        "parameters": [
-          {
-            "name": "queryPropertiesString",
-            "in": "query",
-            "schema": {
-              "type": "string"
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/QueryProperty"
+                }
+              }
+            },
+            "text/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/QueryProperty"
+                }
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/QueryProperty"
+                }
+              }
             }
           }
-        ],
+        },
         "responses": {
           "200": {
             "description": "OK",
@@ -39880,20 +40467,38 @@
       }
     },
     "/api/StudentClass/GetAll": {
-      "get": {
+      "post": {
         "tags": [
           "StudentClass"
         ],
-        "parameters": [
-          {
-            "name": "queryProperties",
-            "in": "query",
-            "schema": {
-              "type": "string",
-              "default": ""
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/QueryProperty"
+                }
+              }
+            },
+            "text/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/QueryProperty"
+                }
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/QueryProperty"
+                }
+              }
             }
           }
-        ],
+        },
         "responses": {
           "200": {
             "description": "OK",
@@ -39979,46 +40584,29 @@
       }
     },
     "/api/StudentClass/GetAllPaginated": {
-      "get": {
+      "post": {
         "tags": [
           "StudentClass"
         ],
-        "parameters": [
-          {
-            "name": "start",
-            "in": "query",
-            "schema": {
-              "type": "integer",
-              "format": "int32",
-              "default": 0
-            }
-          },
-          {
-            "name": "recordsPerPage",
-            "in": "query",
-            "schema": {
-              "type": "integer",
-              "format": "int32",
-              "default": 2147483647
-            }
-          },
-          {
-            "name": "searchText",
-            "in": "query",
-            "schema": {
-              "type": "string",
-              "default": ""
-            }
-          },
-          {
-            "name": "queryProperties",
-            "in": "query",
-            "schema": {
-              "type": "string",
-              "default": ""
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SearchParameters"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SearchParameters"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/SearchParameters"
+              }
             }
           }
-        ],
+        },
         "responses": {
           "200": {
             "description": "OK",
@@ -40203,19 +40791,38 @@
       }
     },
     "/api/StudentClass/GetByProperties": {
-      "get": {
+      "post": {
         "tags": [
           "StudentClass"
         ],
-        "parameters": [
-          {
-            "name": "queryPropertiesString",
-            "in": "query",
-            "schema": {
-              "type": "string"
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/QueryProperty"
+                }
+              }
+            },
+            "text/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/QueryProperty"
+                }
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/QueryProperty"
+                }
+              }
             }
           }
-        ],
+        },
         "responses": {
           "200": {
             "description": "OK",
@@ -41457,20 +42064,38 @@
       }
     },
     "/api/StudentClassSubjectAssessmentScore/GetAll": {
-      "get": {
+      "post": {
         "tags": [
           "StudentClassSubjectAssessmentScore"
         ],
-        "parameters": [
-          {
-            "name": "queryProperties",
-            "in": "query",
-            "schema": {
-              "type": "string",
-              "default": ""
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/QueryProperty"
+                }
+              }
+            },
+            "text/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/QueryProperty"
+                }
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/QueryProperty"
+                }
+              }
             }
           }
-        ],
+        },
         "responses": {
           "200": {
             "description": "OK",
@@ -41556,46 +42181,29 @@
       }
     },
     "/api/StudentClassSubjectAssessmentScore/GetAllPaginated": {
-      "get": {
+      "post": {
         "tags": [
           "StudentClassSubjectAssessmentScore"
         ],
-        "parameters": [
-          {
-            "name": "start",
-            "in": "query",
-            "schema": {
-              "type": "integer",
-              "format": "int32",
-              "default": 0
-            }
-          },
-          {
-            "name": "recordsPerPage",
-            "in": "query",
-            "schema": {
-              "type": "integer",
-              "format": "int32",
-              "default": 2147483647
-            }
-          },
-          {
-            "name": "searchText",
-            "in": "query",
-            "schema": {
-              "type": "string",
-              "default": ""
-            }
-          },
-          {
-            "name": "queryProperties",
-            "in": "query",
-            "schema": {
-              "type": "string",
-              "default": ""
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SearchParameters"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SearchParameters"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/SearchParameters"
+              }
             }
           }
-        ],
+        },
         "responses": {
           "200": {
             "description": "OK",
@@ -41780,19 +42388,38 @@
       }
     },
     "/api/StudentClassSubjectAssessmentScore/GetByProperties": {
-      "get": {
+      "post": {
         "tags": [
           "StudentClassSubjectAssessmentScore"
         ],
-        "parameters": [
-          {
-            "name": "queryPropertiesString",
-            "in": "query",
-            "schema": {
-              "type": "string"
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/QueryProperty"
+                }
+              }
+            },
+            "text/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/QueryProperty"
+                }
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/QueryProperty"
+                }
+              }
             }
           }
-        ],
+        },
         "responses": {
           "200": {
             "description": "OK",
@@ -43034,20 +43661,38 @@
       }
     },
     "/api/Subject/GetAll": {
-      "get": {
+      "post": {
         "tags": [
           "Subject"
         ],
-        "parameters": [
-          {
-            "name": "queryProperties",
-            "in": "query",
-            "schema": {
-              "type": "string",
-              "default": ""
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/QueryProperty"
+                }
+              }
+            },
+            "text/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/QueryProperty"
+                }
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/QueryProperty"
+                }
+              }
             }
           }
-        ],
+        },
         "responses": {
           "200": {
             "description": "OK",
@@ -43133,46 +43778,29 @@
       }
     },
     "/api/Subject/GetAllPaginated": {
-      "get": {
+      "post": {
         "tags": [
           "Subject"
         ],
-        "parameters": [
-          {
-            "name": "start",
-            "in": "query",
-            "schema": {
-              "type": "integer",
-              "format": "int32",
-              "default": 0
-            }
-          },
-          {
-            "name": "recordsPerPage",
-            "in": "query",
-            "schema": {
-              "type": "integer",
-              "format": "int32",
-              "default": 2147483647
-            }
-          },
-          {
-            "name": "searchText",
-            "in": "query",
-            "schema": {
-              "type": "string",
-              "default": ""
-            }
-          },
-          {
-            "name": "queryProperties",
-            "in": "query",
-            "schema": {
-              "type": "string",
-              "default": ""
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SearchParameters"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SearchParameters"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/SearchParameters"
+              }
             }
           }
-        ],
+        },
         "responses": {
           "200": {
             "description": "OK",
@@ -43357,19 +43985,38 @@
       }
     },
     "/api/Subject/GetByProperties": {
-      "get": {
+      "post": {
         "tags": [
           "Subject"
         ],
-        "parameters": [
-          {
-            "name": "queryPropertiesString",
-            "in": "query",
-            "schema": {
-              "type": "string"
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/QueryProperty"
+                }
+              }
+            },
+            "text/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/QueryProperty"
+                }
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/QueryProperty"
+                }
+              }
             }
           }
-        ],
+        },
         "responses": {
           "200": {
             "description": "OK",
@@ -44611,20 +45258,38 @@
       }
     },
     "/api/TestEntityTemplate/GetAll": {
-      "get": {
+      "post": {
         "tags": [
           "TestEntityTemplate"
         ],
-        "parameters": [
-          {
-            "name": "queryProperties",
-            "in": "query",
-            "schema": {
-              "type": "string",
-              "default": ""
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/QueryProperty"
+                }
+              }
+            },
+            "text/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/QueryProperty"
+                }
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/QueryProperty"
+                }
+              }
             }
           }
-        ],
+        },
         "responses": {
           "200": {
             "description": "OK",
@@ -44710,46 +45375,29 @@
       }
     },
     "/api/TestEntityTemplate/GetAllPaginated": {
-      "get": {
+      "post": {
         "tags": [
           "TestEntityTemplate"
         ],
-        "parameters": [
-          {
-            "name": "start",
-            "in": "query",
-            "schema": {
-              "type": "integer",
-              "format": "int32",
-              "default": 0
-            }
-          },
-          {
-            "name": "recordsPerPage",
-            "in": "query",
-            "schema": {
-              "type": "integer",
-              "format": "int32",
-              "default": 2147483647
-            }
-          },
-          {
-            "name": "searchText",
-            "in": "query",
-            "schema": {
-              "type": "string",
-              "default": ""
-            }
-          },
-          {
-            "name": "queryProperties",
-            "in": "query",
-            "schema": {
-              "type": "string",
-              "default": ""
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SearchParameters"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SearchParameters"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/SearchParameters"
+              }
             }
           }
-        ],
+        },
         "responses": {
           "200": {
             "description": "OK",
@@ -44934,19 +45582,38 @@
       }
     },
     "/api/TestEntityTemplate/GetByProperties": {
-      "get": {
+      "post": {
         "tags": [
           "TestEntityTemplate"
         ],
-        "parameters": [
-          {
-            "name": "queryPropertiesString",
-            "in": "query",
-            "schema": {
-              "type": "string"
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/QueryProperty"
+                }
+              }
+            },
+            "text/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/QueryProperty"
+                }
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/QueryProperty"
+                }
+              }
             }
           }
-        ],
+        },
         "responses": {
           "200": {
             "description": "OK",
@@ -47445,6 +48112,24 @@
         },
         "additionalProperties": false
       },
+      "ClassSubjectAssessmentDto": {
+        "type": "object",
+        "properties": {
+          "classSubjectId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "assessmentType": {
+            "type": "string",
+            "nullable": true
+          },
+          "scoreWeigth": {
+            "type": "integer",
+            "format": "int32"
+          }
+        },
+        "additionalProperties": false
+      },
       "ClassSubjectAssessmentResponseDto": {
         "type": "object",
         "properties": {
@@ -47604,6 +48289,46 @@
           "schoolTermSessionId": {
             "type": "string",
             "format": "uuid"
+          },
+          "classSubjectAssessments": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ClassSubjectAssessmentDto"
+            },
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "ClassSubjectDto": {
+        "type": "object",
+        "properties": {
+          "isActive": {
+            "type": "boolean"
+          },
+          "classId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "subjectId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "staffId": {
+            "type": "string",
+            "format": "uuid",
+            "nullable": true
+          },
+          "schoolTermSessionId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "classSubjectAssessments": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ClassSubjectAssessmentDto"
+            },
+            "nullable": true
           }
         },
         "additionalProperties": false
@@ -47630,6 +48355,13 @@
           "schoolTermSessionId": {
             "type": "string",
             "format": "uuid"
+          },
+          "classSubjectAssessments": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ClassSubjectAssessmentDto"
+            },
+            "nullable": true
           },
           "id": {
             "type": "string",
@@ -47753,6 +48485,13 @@
           "schoolTermSessionId": {
             "type": "string",
             "format": "uuid"
+          },
+          "classSubjectAssessments": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ClassSubjectAssessmentDto"
+            },
+            "nullable": true
           },
           "id": {
             "type": "string",
@@ -49967,6 +50706,20 @@
         },
         "additionalProperties": false
       },
+      "QueryProperty": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "nullable": true
+          },
+          "value": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
       "Religion": {
         "enum": [
           0,
@@ -49997,6 +50750,13 @@
           },
           "isCurrent": {
             "type": "boolean"
+          },
+          "classSubjects": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ClassSubjectDto"
+            },
+            "nullable": true
           }
         },
         "additionalProperties": false
@@ -50021,6 +50781,13 @@
           },
           "isCurrent": {
             "type": "boolean"
+          },
+          "classSubjects": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ClassSubjectDto"
+            },
+            "nullable": true
           },
           "id": {
             "type": "string",
@@ -50152,9 +50919,41 @@
           "isCurrent": {
             "type": "boolean"
           },
+          "classSubjects": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ClassSubjectDto"
+            },
+            "nullable": true
+          },
           "id": {
             "type": "string",
             "format": "uuid"
+          }
+        },
+        "additionalProperties": false
+      },
+      "SearchParameters": {
+        "type": "object",
+        "properties": {
+          "start": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "recordsPerPage": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "searchText": {
+            "type": "string",
+            "nullable": true
+          },
+          "queryProperties": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/QueryProperty"
+            },
+            "nullable": true
           }
         },
         "additionalProperties": false

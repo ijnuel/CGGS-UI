@@ -29,27 +29,13 @@ export class ClassSubjectResultEffects {
     this.actions$.pipe(
       ofType(ClassSubjectResultActions.loadClassSubjectResultsPaginated),
       switchMap(({ pageQuery }) => {
-        const params: { [key: string]: string | number } = {
-          start: pageQuery.start,
-          recordsPerPage: pageQuery.recordsPerPage,
-          pageIndex: pageQuery.pageIndex || 0
-        };
-
-        if (pageQuery.searchText) {
-          params['searchText'] = pageQuery.searchText;
-        }
-
-        if (pageQuery.queryProperties && pageQuery.queryProperties.length > 0) {
-          params['queryProperties'] = JSON.stringify(pageQuery.queryProperties);
-        }
+        
 
         return this.http
-          .get<GenericResponseInterface<PaginatedResponseInterface<ClassSubjectResultInterface[]>>>(
+          .post<GenericResponseInterface<PaginatedResponseInterface<ClassSubjectResultInterface[]>>>(
             `${environment.baseUrl}/ClassSubjectResult/GetAllPaginated`,
-            {
-              params,
-              withCredentials: true,
-            }
+            pageQuery,
+            { withCredentials: true }
           )
           .pipe(
             map((payload) =>

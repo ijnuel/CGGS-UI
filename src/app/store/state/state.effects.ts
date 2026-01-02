@@ -21,8 +21,9 @@ export class StateEffect {
       ofType(StateAction.getStateAll),
       switchMap(() =>
         this.http
-          .get<GenericResponseInterface<StateListInterface[]>>(
+          .post<GenericResponseInterface<StateListInterface[]>>(
             `${environment.baseUrl}/State/GetAll`,
+            [],
             { withCredentials: true }
           )
           .pipe(
@@ -42,27 +43,13 @@ export class StateEffect {
     this.actions$.pipe(
       ofType(StateAction.getStateList),
       switchMap(({ pageQuery }) => {
-        const params: { [key: string]: string | number } = {
-          start: pageQuery.start,
-          recordsPerPage: pageQuery.recordsPerPage,
-          pageIndex: pageQuery.pageIndex || 0
-        };
-
-        if (pageQuery.searchText) {
-          params['searchText'] = pageQuery.searchText;
-        }
-
-        if (pageQuery.queryProperties && pageQuery.queryProperties.length > 0) {
-          params['queryProperties'] = JSON.stringify(pageQuery.queryProperties);
-        }
+        
 
         return this.http
-          .get<GenericResponseInterface<PaginatedResponseInterface<StateListInterface[]>>>(
+          .post<GenericResponseInterface<PaginatedResponseInterface<StateListInterface[]>>>(
             `${environment.baseUrl}/State/GetAllPaginated`,
-            {
-              params,
-              withCredentials: true,
-            }
+            pageQuery,
+            { withCredentials: true }
           )
           .pipe(
             map((response) => {

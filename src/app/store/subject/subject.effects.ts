@@ -21,8 +21,9 @@ export class SubjectEffect {
       ofType(SubjectAction.getSubjectAll),
       switchMap(() =>
         this.http
-          .get<GenericResponseInterface<SubjectListInterface[]>>(
+          .post<GenericResponseInterface<SubjectListInterface[]>>(
             `${environment.baseUrl}/Subject/GetAll`,
+            [],
             { withCredentials: true }
           )
           .pipe(
@@ -42,27 +43,13 @@ export class SubjectEffect {
     this.actions$.pipe(
       ofType(SubjectAction.getSubjectList),
       switchMap(({ pageQuery }) => {
-        const params: { [key: string]: string | number } = {
-          start: pageQuery.start,
-          recordsPerPage: pageQuery.recordsPerPage,
-          pageIndex: pageQuery.pageIndex || 0
-        };
-
-        if (pageQuery.searchText) {
-          params['searchText'] = pageQuery.searchText;
-        }
-
-        if (pageQuery.queryProperties && pageQuery.queryProperties.length > 0) {
-          params['queryProperties'] = JSON.stringify(pageQuery.queryProperties);
-        }
+        
 
         return this.http
-          .get<GenericResponseInterface<PaginatedResponseInterface<SubjectListInterface[]>>>(
+          .post<GenericResponseInterface<PaginatedResponseInterface<SubjectListInterface[]>>>(
             `${environment.baseUrl}/Subject/GetAllPaginated`,
-            {
-              params,
-              withCredentials: true,
-            }
+            pageQuery,
+            { withCredentials: true }
           )
           .pipe(
             map((response) => {

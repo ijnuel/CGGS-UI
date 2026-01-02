@@ -18,27 +18,13 @@ export class StudentClassEffect {
     this.actions$.pipe(
       ofType(StudentClassAction.getStudentClassList),
       switchMap(({ pageQuery }) => {
-        const params: { [key: string]: string | number } = {
-          start: pageQuery.start,
-          recordsPerPage: pageQuery.recordsPerPage,
-          pageIndex: pageQuery.pageIndex || 0
-        };
-
-        if (pageQuery.searchText) {
-          params['searchText'] = pageQuery.searchText;
-        }
-
-        if (pageQuery.queryProperties && pageQuery.queryProperties.length > 0) {
-          params['queryProperties'] = JSON.stringify(pageQuery.queryProperties);
-        }
+        
 
         return this.http
-          .get<GenericResponseInterface<PaginatedResponseInterface<StudentClassListInterface[]>>>(
+          .post<GenericResponseInterface<PaginatedResponseInterface<StudentClassListInterface[]>>>(
             `${environment.baseUrl}/StudentClass/GetAllPaginated`,
-            {
-              params,
-              withCredentials: true,
-            }
+            pageQuery,
+            { withCredentials: true }
           )
           .pipe(
             map((payload) =>

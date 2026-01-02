@@ -21,8 +21,9 @@ export class ProgrammeGradeRemarkEffect {
       ofType(ProgrammeGradeRemarkAction.getProgrammeGradeRemarkAll),
       switchMap(() =>
         this.http
-          .get<GenericResponseInterface<ProgrammeGradeRemarkListInterface[]>>(
+          .post<GenericResponseInterface<ProgrammeGradeRemarkListInterface[]>>(
             `${environment.baseUrl}/ProgrammeGradeRemark/GetAll`,
+            [],
             { withCredentials: true }
           )
           .pipe(
@@ -42,27 +43,13 @@ export class ProgrammeGradeRemarkEffect {
     this.actions$.pipe(
       ofType(ProgrammeGradeRemarkAction.getProgrammeGradeRemarkList),
       switchMap(({ pageQuery }) => {
-        const params: { [key: string]: string | number } = {
-          start: pageQuery.start,
-          recordsPerPage: pageQuery.recordsPerPage,
-          pageIndex: pageQuery.pageIndex || 0
-        };
-
-        if (pageQuery.searchText) {
-          params['searchText'] = pageQuery.searchText;
-        }
-
-        if (pageQuery.queryProperties && pageQuery.queryProperties.length > 0) {
-          params['queryProperties'] = JSON.stringify(pageQuery.queryProperties);
-        }
+        
 
         return this.http
-          .get<GenericResponseInterface<PaginatedResponseInterface<ProgrammeGradeRemarkListInterface[]>>>(
+          .post<GenericResponseInterface<PaginatedResponseInterface<ProgrammeGradeRemarkListInterface[]>>>(
             `${environment.baseUrl}/ProgrammeGradeRemark/GetAllPaginated`,
-            {
-              params,
-              withCredentials: true,
-            }
+            pageQuery,
+            { withCredentials: true }
           )
           .pipe(
             map((response) => {

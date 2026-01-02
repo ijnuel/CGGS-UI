@@ -62,14 +62,9 @@ export const reducer = createReducer(
   })),
 
   // Get List
-  on(ClassSubjectAction.getClassSubjectList, (state, action) => ({
+  on(ClassSubjectAction.getClassSubjectList, (state, { pageQuery }) => ({
     ...state,
-    pageQuery: {
-      start: action.start !== undefined ? action.start : 0,
-      recordsPerPage: action.recordsPerPage !== undefined ? action.recordsPerPage : 0,
-      searchText: action.searchText || '',
-      pageIndex: 0
-    },
+    pageQuery,
     loading: true,
     error: null,
     createSuccess: false,

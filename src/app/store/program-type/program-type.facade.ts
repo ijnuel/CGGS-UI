@@ -56,13 +56,8 @@ export class ProgramTypeFacade {
     this.pageQuery$ = this.store.select(selectProgramTypePageQuery);
   }
 
-  getProgramTypeList(params: {
-    start?: number;
-    recordsPerPage?: number;
-    searchText?: string;
-    queryProperties?: string;
-  }): void {
-    this.store.dispatch(ProgramTypeAction.getProgramTypeList(params));
+  getProgramTypeList(pageQuery: PageQueryInterface): void {
+    this.store.dispatch(ProgramTypeAction.getProgramTypeList({ pageQuery }));
   }
 
   getProgramTypeAll(queryProperties?: string): void {
