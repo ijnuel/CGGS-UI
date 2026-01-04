@@ -6,6 +6,7 @@ import {
 } from '../../../types';
 import CardMenuItems from './card-items';
 import { SidebarItemsInterface } from '../../../types/sidebar';
+import { AuthFacade } from '../../../store/auth/auth.facade';
 
 @Component({
     selector: 'app-settings',
@@ -14,7 +15,17 @@ import { SidebarItemsInterface } from '../../../types/sidebar';
 })
 export class ResultComponent implements OnInit {
   
-  cards: SidebarItemsInterface[] = CardMenuItems;
-  ngOnInit() {
+  cards: SidebarItemsInterface[] = [];
+  
+  constructor(
+    private authFacade: AuthFacade
+  ) {
+
+  }
+  ngOnInit(): void {
+    this.authFacade.selectedCurrentUser$.subscribe(currentUser => 
+      this.cards =  CardMenuItems
+        .filter(x => x.roles.length == 0 || x.roles.includes(currentUser?.userType!))
+    );
   }
 }

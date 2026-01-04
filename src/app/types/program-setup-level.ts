@@ -21,5 +21,5 @@ export interface ProgramSetupLevelConfig {
   tableHeaderData?: any[];
   getTableData?: (id: string) => any[];
   showAddButton?: (item: any) => boolean;
-  dropDownOptions?: (id: string) => { key: string, dropDownListFn:() => DropdownListInterface[] }[]
+  dropDownOptions?: (id: string) => { key: string, dropDownListFn:() => any[] }[]
 }

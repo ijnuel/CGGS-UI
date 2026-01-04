@@ -37,12 +37,20 @@
         </mat-form-field>
         }
         @else if (levelType === ProgramSetupLevel.CLASSARM) {
-          <app-searchable-mat-select
+          <app-searchable-mat-select *ngIf="!visibleFormIsEdit"
             [options]="getDropDownOptions('subjects', item)"
             label="Subject"
             placeholder="Select subject"
             [labelKeys]="['name']"
             [formControl]="getFormControl('subjectId')"
+          ></app-searchable-mat-select>
+          <app-searchable-mat-select
+            [options]="getDropDownOptions('staffs', item)"
+            label="Staff"
+            placeholder="Select Staff"
+            [valueKey]="'id'"
+            [labelKeys]="['lastName', 'firstName','staffNo']"
+            [formControl]="getFormControl('staffId')"
           ></app-searchable-mat-select>
         }
         @else if (levelType === ProgramSetupLevel.CLASSSUBJECT) {
@@ -71,7 +79,7 @@
     <!-- Child Panel Recursion -->
     <ng-container *ngIf="config.childConfig">
       <app-program-setup-level-panel #childPanel [items]="config.childItemsFn(getId(item))" [levelType]="config.childConfig.label"
-        [config]="config.childConfig" [addFormVisibleFor]="addFormVisibleFor" [loading]="loading" [parentItemId]="getId(item)"
+        [config]="config.childConfig" [addFormVisibleFor]="addFormVisibleFor" [visibleFormIsEdit]="visibleFormIsEdit" [loading]="loading" [parentItemId]="getId(item)"
         (edit)="edit.emit($event)" (delete)="delete.emit($event)" (add)="add.emit($event)" (refresh)="onRefresh($event)"
         (showAddForm)="showAddForm.emit($event)" (hideAddForm)="hideAddForm.emit($event)"
         (submit)="submit.emit($event)" 

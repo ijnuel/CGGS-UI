@@ -2,27 +2,31 @@ import { TableHeaderInterface } from '../../../types/table';
 
 export const tableHeader: TableHeaderInterface[] = [
   {
-    key: 'fullName',
+    name: 'Staff No',
+    key: 'staffNo',
+    filterable: true,
     type: 'text',
-    name: 'Full name',
-    align: 'left',
+    align: 'left'
   },
   {
-    key: 'email',
+    name: 'First Name',
+    key: 'firstName',
+    filterable: true,
     type: 'text',
+    align: 'left'
+  },
+  {
+    name: 'Last Name',
+    key: 'lastName',
+    filterable: true,
+    type: 'text',
+    align: 'left'
+  },
+  {
     name: 'Email',
-    align: 'left',
-  },
-  {
-    key: 'phone',
+    key: 'email',
+    filterable: true,
     type: 'text',
-    name: 'Phone Number',
-    align: 'left',
-  },
-  {
-    key: 'role',
-    type: 'text',
-    name: 'Role',
-    align: 'left',
+    align: 'left'
   }
 ];

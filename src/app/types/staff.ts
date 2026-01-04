@@ -16,6 +16,7 @@ export interface StaffListInterface {
     residentialCity: string;
     residentialStateId: string;
     phoneNumber: string;
+    staffNo: string;
 }
 
 export interface StaffFormInterface {
@@ -36,4 +37,5 @@ export interface StaffFormInterface {
     residentialCity: string;
     residentialStateId: string;
     phoneNumber: string;
+    staffNo: string;
 }

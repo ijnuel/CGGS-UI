@@ -3,7 +3,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
 import { ProgramTypeFacade } from '../../../store/program-type/program-type.facade';
 import { ProgramTypeListInterface } from '../../../types/program-type';
-import { ClassFormInterface, ClassLevelFormInterface, ClassLevelListInterface, ClassListInterface, ClassSubjectAssessmentFormInterface, ClassSubjectAssessmentListInterface, ClassSubjectFormInterface, ClassSubjectListInterface, DropdownListInterface, PaginatedResponseInterface, ProgramSetupLevelConfig, SchoolTermSessionListInterface, SessionListInterface, SubjectListInterface } from '../../../types';
+import { ClassFormInterface, ClassLevelFormInterface, ClassLevelListInterface, ClassListInterface, ClassSubjectAssessmentFormInterface, ClassSubjectAssessmentListInterface, ClassSubjectFormInterface, ClassSubjectListInterface, DropdownListInterface, PaginatedResponseInterface, ProgramSetupLevelConfig, SchoolTermSessionListInterface, SessionListInterface, StaffListInterface, SubjectListInterface } from '../../../types';
 import { PageQueryInterface } from '../../../types';
 import { TableHeaderInterface } from '../../../types/table';
 import { MatDialog } from '@angular/material/dialog';
@@ -20,6 +20,7 @@ import { ProgramSetupLevel } from '../../../types';
 import { SchoolTermSessionFacade } from '../../../store/school-term-session/school-term-session.facade';
 import { SessionFacade } from '../../../store/session/session.facade';
 import { SharedFacade } from '../../../store/shared/shared.facade';
+import { StaffFacade } from '../../../store/staff/staff.facade';
 
 @Component({
   selector: 'app-program-type',
@@ -41,11 +42,13 @@ export class ProgramTypeComponent implements OnInit {
   subjectTypeAll$: Observable<DropdownListInterface[] | null>;
   schoolTermSessionAll$: Observable<SchoolTermSessionListInterface[] | null>;
   sessionAll$: Observable<SessionListInterface[] | null>;
+  staffAll$: Observable<StaffListInterface[] | null>;
   loading$: Observable<boolean>;
   tableHeaderData: TableHeaderInterface[] = tableHeader;
   assessmentTypeTableHeaderData: TableHeaderInterface[] = assessmentTypeTableHeader;
 
   addFormVisibleFor: string | null = null;
+  visibleFormIsEdit: boolean = false;
   schoolTermSessionControl = new FormControl("");
   addClassLevelForm: FormGroup<{
     id: FormControl;
@@ -58,6 +61,7 @@ export class ProgramTypeComponent implements OnInit {
   addClassSubjectForm: FormGroup<{
     id: FormControl;
     subjectId: FormControl;
+    staffId: FormControl;
   }>;
   addClassSubjectAssessmentForm: FormGroup<{
     id: FormControl;
@@ -73,6 +77,7 @@ export class ProgramTypeComponent implements OnInit {
   classSubjectAssessmentAllSnapShot: ClassSubjectAssessmentListInterface[] = [];
   subjectAllSnapShot: DropdownListInterface[] = [];
   subjectTypeSnapShot: DropdownListInterface[] = [];
+  staffAllSnapShot: StaffListInterface[] = [];
   schoolTermSessionAllSnapShot: SchoolTermSessionListInterface[] = [];
   sessionAllSnapShot: SessionListInterface[] = [];
   programTypeConfig!: ProgramSetupLevelConfig;
@@ -90,6 +95,7 @@ export class ProgramTypeComponent implements OnInit {
     private schoolTermSessionFacade: SchoolTermSessionFacade,
     private sharedFacade: SharedFacade,
     private sessionFacade: SessionFacade,
+    private staffFacade: StaffFacade,
     private dialog: MatDialog,
     private toastService: ToastNotificationService
   ) {
@@ -103,6 +109,7 @@ export class ProgramTypeComponent implements OnInit {
     this.subjectTypeAll$ = this.sharedFacade.selectSubjectTypeList$;
     this.schoolTermSessionAll$ = this.schoolTermSessionFacade.schoolTermSessionAll$;
     this.sessionAll$ = this.sessionFacade.sessionAll$;
+    this.staffAll$ = this.staffFacade.staffAll$;
     this.loading$ = this.programTypeFacade.loading$;
 
     this.addClassLevelForm = this.fb.group({
@@ -115,6 +122,7 @@ export class ProgramTypeComponent implements OnInit {
     });
     this.addClassSubjectForm = this.fb.group({
       id: [''],
+      staffId: [null],
       subjectId: ['', [Validators.required, Validators.maxLength(255)]],
     });
     this.addClassSubjectAssessmentForm = this.fb.group({
@@ -124,12 +132,15 @@ export class ProgramTypeComponent implements OnInit {
     });
   }
 
-  showAddForm(propertyId: string) {
+  showAddForm(propertyId: string, visibleFormIsEdit: boolean = false) {
+    console.log(visibleFormIsEdit)
     this.addFormVisibleFor = propertyId;
+    this.visibleFormIsEdit = visibleFormIsEdit;
   }
 
   hideAddForm() {
     this.addFormVisibleFor = null;
+    this.visibleFormIsEdit = false;
     this.resetForms();
   }
 
@@ -199,6 +210,12 @@ export class ProgramTypeComponent implements OnInit {
       }
     });
 
+    this.staffAll$.subscribe(data => {
+      if (data) {
+        this.staffAllSnapShot = [...data];
+      }
+    });
+
     this.subjectAll$.subscribe(data => {
       if (data) {
         this.subjectAllSnapShot = [...data].sort((a, b) => a.name.localeCompare(b.name)).map(x => { return { name: x.name, description: x.subjectType, value: x.id } as DropdownListInterface; });
@@ -248,6 +265,7 @@ export class ProgramTypeComponent implements OnInit {
       this.schoolTermSessionFacade.getSchoolTermSessionAll();
       this.sharedFacade.getSubjectTypeList();
       this.sessionFacade.getSessionAll();
+      this.staffFacade.getStaffAll();
     }
     if (programSetupLevel == ProgramSetupLevel.CLASSLEVEL) {
       this.classLevelFacade.getClassLevelAll();
@@ -318,6 +336,7 @@ export class ProgramTypeComponent implements OnInit {
         let item = row as ClassSubjectListInterface;
         this.addClassSubjectForm.patchValue({
           id: item.id,
+          staffId: item.staffId,
           subjectId: item.subjectId
         });
         propertyId = item.classId;
@@ -332,7 +351,7 @@ export class ProgramTypeComponent implements OnInit {
         propertyId = item.classSubjectId;
       }
 
-      this.showAddForm(propertyId)
+      this.showAddForm(propertyId, true);
     }
   }
 
@@ -393,6 +412,10 @@ export class ProgramTypeComponent implements OnInit {
     return this.subjectTypeSnapShot;
   }
 
+  getStaffs(): StaffListInterface[] {
+    return this.staffAllSnapShot;
+  }
+
   getClassLevels(programTypeId: string): ClassLevelListInterface[] {
     return this.classLevelAllSnapShot.filter(x => x.programmeTypeId == programTypeId);
   }
@@ -411,6 +434,20 @@ export class ProgramTypeComponent implements OnInit {
 
   getSubjectName(subjectId: string): string {
     return this.subjectAllSnapShot.find(s => s.value == subjectId)?.name!;
+  }
+
+  getStaffName(staffId: string): string {
+    let staff = this.staffAllSnapShot.find(s => s.id == staffId);
+    return staff ? `${staff?.lastName} ${staff?.firstName}` : '';
+  }
+
+  getSubjectWithStaffName(subjectId: string, staffId: string): string {
+    let output = this.getSubjectName(subjectId);
+    let staffName = this.getStaffName(staffId);
+    if (staffName) {
+      output += ` _____ (${staffName})`
+    }
+    return output;
   }
 
   getSubjectType(subjectId: string): DropdownListInterface {
@@ -497,13 +534,17 @@ export class ProgramTypeComponent implements OnInit {
           showTable: (item: any) => false,
           getName: (item: any) => `${item.description}`,
           showAddButton: (item: any) => true,
-          dropDownOptions: (classId: string) => [{ key: "subjects", dropDownListFn: () => this.getSubjects(classId) }, { key: "subjectTypes", dropDownListFn: () => this.getSubjectTypes() }],
+          dropDownOptions: (classId: string) => [
+            { key: "subjects", dropDownListFn: () => this.getSubjects(classId) }, 
+            { key: "staffs", dropDownListFn: () => this.getStaffs() }, 
+            { key: "subjectTypes", dropDownListFn: () => this.getSubjectTypes() }
+          ],
           childConfig: {
             label: ProgramSetupLevel.CLASSSUBJECT,
             formGroup: this.addClassSubjectAssessmentForm,
             submitHandler: (classSubject: any) => this.submitClassSubjectAssessment(classSubject),
             childItemsFn: (classSubjectId: string) => [], // No further child
-            getName: (item: any) => this.getSubjectName(item.subjectId),
+            getName: (item: any) => this.getSubjectWithStaffName(item.subjectId, item.staffId),
             showAddButton: (item: any) => this.getSubjectType(item.subjectId).value === 1,
             showTable: (item: any) => this.getSubjectType(item.subjectId).value === 1, // Assuming 1 is the value for subject type that requires assessment
             tableHeaderData: this.assessmentTypeTableHeaderData,
@@ -529,19 +570,19 @@ export class ProgramTypeComponent implements OnInit {
         break;
       case ProgramSetupLevel.CLASSLEVEL:
         this.addClassLevelForm.patchValue({ id: item.id, level: item.level });
-        this.addFormVisibleFor = item.programmeTypeId;
+        this.showAddForm(item.programmeTypeId, true);
         break;
       case ProgramSetupLevel.CLASSARM:
         this.addClassArmForm.patchValue({ id: item.id, name: item.name });
-        this.addFormVisibleFor = item.classLevelId;
+        this.showAddForm(item.classLevelId, true);
         break;
       case ProgramSetupLevel.CLASSSUBJECT:
-        this.addClassSubjectForm.patchValue({ id: item.id, subjectId: item.subjectId });
-        this.addFormVisibleFor = item.classId;
+        this.addClassSubjectForm.patchValue({ id: item.id, subjectId: item.subjectId, staffId: item.staffId });
+        this.showAddForm(item.classId, true);
         break;
       case ProgramSetupLevel.CLASSSUBJECTASSESSMENT:
         this.addClassSubjectAssessmentForm.patchValue({ id: item.id, assessmentType: item.assessmentType, scoreWeigth: item.scoreWeigth });
-        this.addFormVisibleFor = item.classSubjectId;
+        this.showAddForm(item.classSubjectId, true);
         break;
     }
   }
@@ -573,7 +614,7 @@ export class ProgramTypeComponent implements OnInit {
     }
   }
   onPanelShowAddForm(event: { id: string, level: ProgramSetupLevel }) {
-    this.addFormVisibleFor = event.id;
+    this.showAddForm(event.id, false);
   }
   onPanelHideAddForm(event: { level: ProgramSetupLevel }) {
     this.hideAddForm();

@@ -5,6 +5,7 @@ export interface ClassSubjectListInterface {
     createdDate: string;
     classId: string;
     subjectId: string;
+    staffId: string;
     schoolTermSessionId: string;
 }
 
@@ -14,5 +15,6 @@ export interface ClassSubjectFormInterface {
     description: string;
     classId: string;
     subjectId: string;
+    staffId: string;
     schoolTermSessionId: string;
 }

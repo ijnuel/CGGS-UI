@@ -1,42 +1,195 @@
-@if (
-  {
-    loading: loading$ | async,
-    dropdownLoading: dropdownLoading$ | async,
-    error: error$ | async
-  };
-  as obs
-) {
-<div class="pl-8 pr-9 pt-6">
-  <div class="flex item-center justify-between">
-    <div class="text-xl font-bold">{{ isEditMode ? 'Edit' : 'Create' }} Staff</div>
-  </div>
-
-  <div class="mt-8">
-    <form [formGroup]="formGroup">
-      <div class="grid grid-cols-2 gap-x-4 mt-2">
-        <div>
-          <mat-form-field class="form-input">
-            <mat-label>Name</mat-label>
-            <input
-              type="text"
-              autocomplete="off"
-              matInput
-              [formControl]="formControl.name"
-            />
-            <mat-error>
-              {{ getErrorMessage("name") }}
-            </mat-error>
-          </mat-form-field>
+@if ( { loading: loading$ | async, dropdownLoading: dropdownLoading$ | async,
+  genderList: genderList$ | async, religionList: religionList$ | async,
+  countryList: countryList$ | async, selectedCountryStateList:
+  selectedCountryStateList$ | async, selectedStateLgaList: selectedStateLgaList$ |
+  async, familyList: familyList$ | async, classList: classList$ | async,
+  error: error$ | async }; as obs ) {
+  <div class="pl-8 pr-9 pt-6">
+    <div class="flex item-center justify-between">
+      <div class="text-xl font-bold">{{ isEditMode ? 'Edit' : 'Create' }} Staff</div>
+    </div>
+  
+    <div class="mt-8">
+      <form [formGroup]="formGroup">
+  
+        <div class="grid grid-cols-2 gap-x-4 mt-2">
+          <div class="form-input-wrapper">
+            <mat-form-field class="form-input">
+              <mat-label>First Name</mat-label>
+              <input type="text" autocomplete="off" matInput [formControl]="formControl.firstName" />
+              <mat-error>
+                {{ getErrorMessage("firstName") }}
+              </mat-error>
+            </mat-form-field>
+          </div>
+  
+          <div>
+            <mat-form-field class="form-input">
+              <mat-label>Last Name</mat-label>
+              <input type="text" autocomplete="off" matInput [formControl]="formControl.lastName" />
+              <mat-error>
+                {{ getErrorMessage("lastName") }}
+              </mat-error>
+            </mat-form-field>
+          </div>
         </div>
+  
+        <div class="grid grid-cols-2 gap-x-4 mt-2">
+          <div>
+            <mat-form-field class="form-input">
+              <mat-label>Middle Name</mat-label>
+              <input type="text" autocomplete="off" matInput [formControl]="formControl.middleName" />
+              <mat-error>
+                {{ getErrorMessage("middleName") }}
+              </mat-error>
+            </mat-form-field>
+          </div>
+  
+          <div>
+            <app-searchable-mat-select
+              [options]="obs.genderList!"
+              label="Gender"
+              placeholder="Select gender"
+              [formControl]="formControl.gender"
+              [error]="getErrorMessage('gender')"
+            ></app-searchable-mat-select>
+          </div>
+        </div>
+  
+        @if(isEditMode) {
+          
+        <div class="grid grid-cols-2 gap-x-4 mt-2">
+          <div class="form-input-wrapper">
+            <mat-form-field class="form-input">
+              <mat-label>Phone Number</mat-label>
+              <input type="text" autocomplete="off" matInput [formControl]="formControl.phoneNumber" />
+              <mat-error>
+                {{ getErrorMessage("phoneNumber") }}
+              </mat-error>
+            </mat-form-field>
+          </div>
+  
+          <div>
+            <mat-form-field class="form-input">
+              <mat-label>Email Address</mat-label>
+              <input type="text" autocomplete="off" matInput [formControl]="formControl.email" />
+              <mat-error>
+                {{ getErrorMessage("email") }}
+              </mat-error>
+            </mat-form-field>
+          </div>
+        </div>
+  
+        <div class="grid grid-cols-2 gap-x-4 mt-2">
+  
+          
+          <div>
+            <mat-form-field class="form-input">
+              <mat-label>Date of Birth</mat-label>
+              <input matInput [matDatepicker]="startDatePicker" [formControl]="formControl.dateOfBirth" [max]="today" />
+              <mat-datepicker-toggle matIconSuffix [for]="startDatePicker"
+                class="small-datepicker-toggle"></mat-datepicker-toggle>
+              <mat-datepicker #startDatePicker></mat-datepicker>
+              <mat-error>
+                {{ getErrorMessage("dateOfBirth") }}
+              </mat-error>
+            </mat-form-field>
+          </div>
+  
+          <div>
+            <app-searchable-mat-select
+              [options]="obs.religionList!"
+              label="Religion"
+              placeholder="Select religion"
+              [formControl]="formControl.religion"
+              [error]="getErrorMessage('religion')"
+            ></app-searchable-mat-select>
+          </div>
+        </div>
+  
+        <div class="grid grid-cols-2 gap-x-4 mt-2">
+          <div>
+            <app-searchable-mat-select
+              [options]="obs.countryList!"
+              label="Nationality"
+              placeholder="Select nationality"
+              [labelKeys]="['name']"
+              [valueKey]="'id'"
+              [formControl]="formControl.nationalityId"
+              [error]="getErrorMessage('nationalityId')"
+            ></app-searchable-mat-select>
+          </div>
+  
+          <div>
+            <app-searchable-mat-select
+              [options]="obs.selectedCountryStateList!"
+              label="State of Origin"
+              placeholder="Select state of origin"
+              [labelKeys]="['name']"
+              [valueKey]="'id'"
+              [formControl]="formControl.stateOfOriginId"
+              [error]="getErrorMessage('stateOfOriginId')"
+            ></app-searchable-mat-select>
+          </div>
+        </div>
+  
+        <div class="grid grid-cols-2 gap-x-4 mt-2">
+          <div>
+            <app-searchable-mat-select
+              [options]="obs.selectedStateLgaList!"
+              label="Local Government"
+              placeholder="Select local government"
+              [labelKeys]="['name']"
+              [valueKey]="'id'"
+              [formControl]="formControl.originLGAId"
+              [error]="getErrorMessage('originLGAId')"
+            ></app-searchable-mat-select>
+          </div>
+          
+          <div>
+            <mat-form-field class="form-input">
+              <mat-label>Home Address</mat-label>
+              <input type="text" autocomplete="off" matInput [formControl]="formControl.homeAddress" />
+              <mat-error>
+                {{ getErrorMessage("homeAddress") }}
+              </mat-error>
+            </mat-form-field>
+          </div>
+        </div>
+  
+        <div class="grid grid-cols-2 gap-x-4 mt-2">
+          <div>
+            <app-searchable-mat-select
+              [loading]="obs.dropdownLoading && !obs.selectedCountryStateList"
+              [options]="obs.selectedCountryStateList!"
+              label="Residential State"
+              placeholder="Select residential state"
+              [labelKeys]="['name']"
+              [valueKey]="'id'"
+              [formControl]="formControl.residentialStateId"
+              [error]="getErrorMessage('residentialStateId')"
+            ></app-searchable-mat-select>
+          </div>
+  
+          <div>
+            <mat-form-field class="form-input">
+              <mat-label>Residential City</mat-label>
+              <input type="text" autocomplete="off" matInput [formControl]="formControl.residentialCity" />
+              <mat-error>
+                {{ getErrorMessage("residentialCity") }}
+              </mat-error>
+            </mat-form-field>
+          </div>
+        </div>
+        }
+      </form>
+  
+      <div class="actions-btn flex justify-end mt-10 gap-5 form-container mx-auto px-3">
+        <button class="cancel-btn" routerLink="/app/staff">Cancel</button>
+        <button class="sec-btn" (click)="submit()" [disabled]="obs.loading">
+          {{ isEditMode ? 'Update' : 'Submit' }}
+        </button>
       </div>
-    </form>
-
-    <div class="actions-btn flex justify-end mt-10 gap-5 form-container mx-auto px-3">
-      <button class="cancel-btn" routerLink="/app/staff">Cancel</button>
-      <button class="sec-btn" (click)="submit()" [disabled]="obs.loading">
-        {{ isEditMode ? 'Update' : 'Submit' }}
-      </button>
     </div>
   </div>
-</div>
-}
+  }

@@ -493,7 +493,7 @@ export class UpdateResultComponent implements OnInit, OnDestroy {
       });
 
       // Get marksheet data
-      this.resultFacade.getResultMarkSheet(schoolTermSessionId, classId, subjectId);
+      // this.resultFacade.getResultMarkSheet(schoolTermSessionId, classId, subjectId);
     }
   }
 } 

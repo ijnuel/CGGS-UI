@@ -17,6 +17,7 @@ export class ProgramSetupLevelPanelComponent {
   @Input() levelType!: ProgramSetupLevel;
   @Input() config!: ProgramSetupLevelConfig;
   @Input() addFormVisibleFor: string | null = null;
+  @Input() visibleFormIsEdit: boolean = false;
   @Input() loading: boolean = false;
   @Input() parentItemId?: string;
 

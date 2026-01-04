@@ -63,11 +63,11 @@
 
   <!-- Error Display -->
   <div *ngIf="error$ | async as error" class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-6">
-    <strong>Error:</strong> {{ error }}
+    <strong>Error:</strong> Result update for selected criteria not allowed for user!
   </div>
 
            <!-- Marksheet Display -->
-    <div *ngIf="!(loading$ | async) && (resultMarkSheet$ | async) as marksheet" class="bg-white rounded-lg shadow-md p-6">
+    <div *ngIf="!(loading$ | async) && !(error$ | async) && (resultMarkSheet$ | async) as marksheet" class="bg-white rounded-lg shadow-md p-6">
       <div class="flex items-center justify-between mb-4">
         <h3 class="text-lg font-semibold">Student Results ({{ marksheet.length }} records)</h3>
         

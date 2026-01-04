@@ -33,10 +33,11 @@ export class AppInterceptorService implements HttpInterceptor {
     return next.handle(modifiedRequest).pipe(
       tap((event: HttpEvent<any>) => {
         // Handle successful responses
+        // console.log('event', event)
         if (event instanceof HttpResponse) {
           const response = event.body;
-          console.log(response);
 
+          console.log(response)
           if (response) {
             let messageToShow = '';
 
@@ -51,7 +52,7 @@ export class AppInterceptorService implements HttpInterceptor {
               messageToShow = response.messages.join(', ');
             }
 
-            if (messageToShow) {
+            if (messageToShow && response.succeeded) {
               const notificationType =
                 response.succeeded === false
                   ? NotificationTypeEnums.ERROR
@@ -103,6 +104,10 @@ export class AppInterceptorService implements HttpInterceptor {
           }
         }
 
+        this.toastNotificationService.openToast(
+          errorMsg ?? 'Error occurred',
+          NotificationTypeEnums.ERROR
+        );
         // Display error to user
         this.globalLoadingFacade.globalErrorShow(
           errorMsg ?? 'Error occurred',
