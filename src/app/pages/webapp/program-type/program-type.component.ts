@@ -57,6 +57,7 @@ export class ProgramTypeComponent implements OnInit {
   addClassArmForm: FormGroup<{
     id: FormControl;
     name: FormControl;
+    staffId: FormControl;
   }>;
   addClassSubjectForm: FormGroup<{
     id: FormControl;
@@ -118,6 +119,7 @@ export class ProgramTypeComponent implements OnInit {
     });
     this.addClassArmForm = this.fb.group({
       id: [''],
+      staffId: [null],
       name: ['', [Validators.required, Validators.maxLength(255)]],
     });
     this.addClassSubjectForm = this.fb.group({
@@ -328,6 +330,7 @@ export class ProgramTypeComponent implements OnInit {
         let item = row as ClassListInterface;
         this.addClassArmForm.patchValue({
           id: item.id,
+          staffId: item.staffId,
           name: item.name
         });
         propertyId = item.classLevelId;
@@ -443,11 +446,15 @@ export class ProgramTypeComponent implements OnInit {
 
   getSubjectWithStaffName(subjectId: string, staffId: string): string {
     let output = this.getSubjectName(subjectId);
+    return this.appendStaffName(output, staffId);
+  }
+
+  appendStaffName(item: string, staffId: string): string {
     let staffName = this.getStaffName(staffId);
     if (staffName) {
-      output += ` _____ (${staffName})`
+      item += ` _____ (${staffName})`
     }
-    return output;
+    return item;
   }
 
   getSubjectType(subjectId: string): DropdownListInterface {
@@ -526,13 +533,16 @@ export class ProgramTypeComponent implements OnInit {
         showTable: (item: any) => false,
         getName: (item: any) => `${item.name} ${item.level}`,
         showAddButton: (item: any) => true,
+        dropDownOptions: (classIdLevelId: string) => [
+          { key: "staffs", dropDownListFn: () => this.getStaffs() }
+        ],
         childConfig: {
           label: ProgramSetupLevel.CLASSARM,
           formGroup: this.addClassSubjectForm,
           submitHandler: (classArm: any) => this.submitClassSubject(classArm),
           childItemsFn: (classId: string) => this.getClassSubjects(classId),
           showTable: (item: any) => false,
-          getName: (item: any) => `${item.description}`,
+          getName: (item: any) => this.appendStaffName(item.description, item.staffId),
           showAddButton: (item: any) => true,
           dropDownOptions: (classId: string) => [
             { key: "subjects", dropDownListFn: () => this.getSubjects(classId) }, 
@@ -573,7 +583,7 @@ export class ProgramTypeComponent implements OnInit {
         this.showAddForm(item.programmeTypeId, true);
         break;
       case ProgramSetupLevel.CLASSARM:
-        this.addClassArmForm.patchValue({ id: item.id, name: item.name });
+        this.addClassArmForm.patchValue({ id: item.id, name: item.name, staffId: item.staffId });
         this.showAddForm(item.classLevelId, true);
         break;
       case ProgramSetupLevel.CLASSSUBJECT:

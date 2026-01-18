@@ -31,10 +31,18 @@
         </mat-form-field>
         }
         @else if (levelType === ProgramSetupLevel.CLASSLEVEL) {
-        <mat-form-field appearance="outline" class="w-full">
+        <mat-form-field appearance="outline" class="w-full" >
           <mat-label>Class Arm (e.g A, B, C...)</mat-label>
-          <input matInput type="text" formControlName="name" required />
+          <input matInput type="text" formControlName="name" [disabled]="visibleFormIsEdit" required />
         </mat-form-field>
+          <app-searchable-mat-select
+            [options]="getDropDownOptions('staffs', item)"
+            label="Staff"
+            placeholder="Select Staff"
+            [valueKey]="'id'"
+            [labelKeys]="['lastName', 'firstName','staffNo']"
+            [formControl]="getFormControl('staffId')"
+          ></app-searchable-mat-select>
         }
         @else if (levelType === ProgramSetupLevel.CLASSARM) {
           <app-searchable-mat-select [disabled]="visibleFormIsEdit"

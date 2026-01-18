@@ -4,6 +4,7 @@ export interface ClassListInterface {
     description: string;
     createdDate: string;
     classLevelId: string;
+    staffId: string;
 }
 
 export interface ClassFormInterface {
@@ -11,4 +12,5 @@ export interface ClassFormInterface {
     name: string;
     description: string;
     classLevelId: string;
+    staffId: string;
 }
