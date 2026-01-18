@@ -1,14 +1,15 @@
-<mat-form-field [class]="formInputClass" appearance="fill" [appLoadingSpinner]="loading">
+<mat-form-field [ariaDisabled]="disabled" [class]="formInputClass" appearance="fill" [appLoadingSpinner]="loading">
     <mat-label>{{ label }}</mat-label>
     <mat-select 
+    [disabled]="disabled"
     [formControl]="formControl"
     [placeholder]="placeholder" [value]="value" (selectionChange)="setValue($event.value)"
         (openedChange)="onDropdownOpened($event)">
         <mat-option>
-            <input #searchInput matInput type="text" [(ngModel)]="searchText" (ngModelChange)="filterOptions()"
+            <input [disabled]="disabled" #searchInput matInput type="text" [(ngModel)]="searchText" (ngModelChange)="filterOptions()"
                 placeholder="Search..." autocomplete="off" (click)="$event.stopPropagation()" />
         </mat-option>
-        <mat-option *ngFor="let option of filteredOptions" [value]="option[valueKey]">
+        <mat-option [disabled]="disabled" *ngFor="let option of filteredOptions" [value]="option[valueKey]">
             {{ getLabel(option) }}
         </mat-option>
     </mat-select>

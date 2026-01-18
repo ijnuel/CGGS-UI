@@ -37,7 +37,7 @@
         </mat-form-field>
         }
         @else if (levelType === ProgramSetupLevel.CLASSARM) {
-          <app-searchable-mat-select *ngIf="!visibleFormIsEdit"
+          <app-searchable-mat-select [disabled]="visibleFormIsEdit"
             [options]="getDropDownOptions('subjects', item)"
             label="Subject"
             placeholder="Select subject"

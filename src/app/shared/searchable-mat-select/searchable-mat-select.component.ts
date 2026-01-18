@@ -24,6 +24,7 @@ export class SearchableMatSelectComponent implements ControlValueAccessor {
   @Input() formInputClass: string = 'form-input';
   @Input() error: string | null = '';
   @Input() loading: boolean | null = false;
+  @Input() disabled: boolean = false;
   @Input({ required: true }) formControl: FormControl<any> = new FormControl();
 
   @Output() selectionChange = new EventEmitter<any>();
@@ -42,6 +43,7 @@ export class SearchableMatSelectComponent implements ControlValueAccessor {
   }
 
   ngOnChanges() {
+    console.log('Disabled:', this.disabled);
     this.filterOptions();
   }
 

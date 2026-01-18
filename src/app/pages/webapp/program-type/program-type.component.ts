@@ -405,7 +405,7 @@ export class ProgramTypeComponent implements OnInit {
 
   getSubjects(classId: string): DropdownListInterface[] {
     var classSubjectIds = this.getClassSubjects(classId).map(x => x.subjectId);
-    return this.subjectAllSnapShot.filter(x => !classSubjectIds.includes(x.value.toString()));
+    return this.subjectAllSnapShot.filter(x => this.visibleFormIsEdit || !classSubjectIds.includes(x.value.toString()));
   }
 
   getSubjectTypes(): DropdownListInterface[] {
