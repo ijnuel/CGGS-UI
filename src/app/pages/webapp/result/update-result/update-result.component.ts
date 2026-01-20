@@ -306,6 +306,7 @@ export class UpdateResultComponent implements OnInit, OnDestroy {
           studentName: `${student.firstName} ${student.lastName}`,
           assessmentScores: {},
           skillGrades: {},
+          comments: {},
           assessmentEntryIds: {}
         });
       }
@@ -315,6 +316,7 @@ export class UpdateResultComponent implements OnInit, OnDestroy {
       if (assessment) {
         studentRow.assessmentScores[assessment.id] = result.score;
         studentRow.skillGrades[assessment.id] = result.skillGrade;
+        studentRow.comments[assessment.id] = result.comment || '';
         studentRow.assessmentEntryIds![assessment.id] = result.id;
       }
     });
@@ -337,7 +339,7 @@ export class UpdateResultComponent implements OnInit, OnDestroy {
   saveChanges(): void {
     // Check if there are any invalid scores (only for subject type 1)
     console.log(this.invalidScores);
-    if (this.selectedSubjectType == '1' && this.invalidScores.size > 0) {
+    if (this.isNumericSubjectType() && this.invalidScores.size > 0) {
       // Don't save if there are invalid scores
       return;
     }
@@ -349,8 +351,9 @@ export class UpdateResultComponent implements OnInit, OnDestroy {
       Object.keys(student.assessmentScores).forEach(assessmentId => {
         const score = student.assessmentScores[assessmentId];
         const skillGrade = student.skillGrades[assessmentId];
+        const comment = student.comments[assessmentId] || '';
         
-        if (this.selectedSubjectType == '1') {
+        if (this.isNumericSubjectType()) {
           // For subject type 1, use numeric scores
           if (score !== null && score !== undefined) {
             updatePayload.push({
@@ -358,9 +361,20 @@ export class UpdateResultComponent implements OnInit, OnDestroy {
               studentId: student.studentId,
               classSubjectAssessmentId: assessmentId,
               score: score,
-              skillGrade: null
+              skillGrade: null,
+              comment: ''
             });
           }
+        } else if (this.isTextBasedSubjectType()) {
+          // For subject type 4, use comments
+          updatePayload.push({
+            id: student.assessmentEntryIds ? student.assessmentEntryIds[assessmentId] || undefined : undefined,
+            studentId: student.studentId,
+            classSubjectAssessmentId: assessmentId,
+            score: 0,
+            skillGrade: null,
+            comment: comment
+          });
         } else {
           // For other subject types, use skill grades
           if (skillGrade !== null && skillGrade !== undefined) {
@@ -369,7 +383,8 @@ export class UpdateResultComponent implements OnInit, OnDestroy {
               studentId: student.studentId,
               classSubjectAssessmentId: assessmentId,
               score: 0, // Default score for non-type-1 subjects
-              skillGrade: skillGrade
+              skillGrade: skillGrade,
+              comment: ''
             });
           }
         }
@@ -444,7 +459,20 @@ export class UpdateResultComponent implements OnInit, OnDestroy {
 
   // Method to check if subject type is 1 (numeric scores)
   isNumericSubjectType(): boolean {
-    return this.selectedSubjectType == '1';
+    return this.selectedSubjectType == '1' || this.selectedSubjectType == '5';
+  }
+
+  // Method to check if subject type is 4 (text-based comments)
+  isTextBasedSubjectType(): boolean {
+    return this.selectedSubjectType == '4';
+  }
+
+  // Method to update a comment
+  updateComment(studentId: string, assessmentId: string, newComment: string): void {
+    const student = this.studentRows.find(s => s.studentId === studentId);
+    if (student) {
+      student.comments[assessmentId] = newComment || '';
+    }
   }
 
   // Method to sort skill grades by value in descending order (largest first)

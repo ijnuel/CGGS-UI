@@ -139,17 +139,22 @@
                  class="px-6 py-4 whitespace-nowrap text-center text-sm text-gray-500">
                <ng-container *ngIf="!isEditMode; else editMode">
                  <!-- Display mode -->
-                 <ng-container *ngIf="isNumericSubjectType(); else gradeDisplay">
+                 <ng-container *ngIf="isNumericSubjectType(); else nonNumericDisplay">
                    {{ student.assessmentScores[assessment.id] || '-' }}
                  </ng-container>
-                 <ng-template #gradeDisplay>
-                   {{ getSkillGradeLabel(student.skillGrades[assessment.id]) || '-' }}
+                 <ng-template #nonNumericDisplay>
+                   <ng-container *ngIf="isTextBasedSubjectType(); else gradeDisplay">
+                     {{ student.comments[assessment.id] || '-' }}
+                   </ng-container>
+                   <ng-template #gradeDisplay>
+                     {{ getSkillGradeLabel(student.skillGrades[assessment.id]) || '-' }}
+                   </ng-template>
                  </ng-template>
                </ng-container>
                
                <ng-template #editMode>
                  <!-- Edit mode -->
-                 <ng-container *ngIf="isNumericSubjectType(); else gradeEdit">
+                 <ng-container *ngIf="isNumericSubjectType(); else nonNumericEdit">
                    <!-- Numeric input for subject type 1 -->
                    <div class="relative">
                      <input 
@@ -157,7 +162,7 @@
                        [value]="student.assessmentScores[assessment.id] || ''"
                        (input)="updateScore(student.studentId, assessment.id, $any($event.target).value ? +$any($event.target).value : null)"
                        (blur)="validateScore($event, assessment.id)"
-                       [class]="'w-16 px-2 py-1 text-center border rounded focus:outline-none focus:ring-2 ' + 
+                       [class]="'w-20 px-2 py-1 text-center border rounded focus:outline-none focus:ring-2 ' + 
                                 (isScoreInvalid(student.studentId, assessment.id) ? 
                                  'border-red-500 focus:ring-red-500 bg-red-50' : 
                                  'border-gray-300 focus:ring-blue-500')"
@@ -174,21 +179,36 @@
                    </div>
                  </ng-container>
                  
-                 <ng-template #gradeEdit>
-                   <!-- Radio buttons for skill grades from API for non-type-1 subjects -->
-                   <div class="flex flex-wrap gap-2 justify-center">
-                     <div *ngFor="let grade of skillGrades$ | async" 
-                          class="flex flex-col items-center cursor-pointer">
+                 <ng-template #nonNumericEdit>
+                   <ng-container *ngIf="isTextBasedSubjectType(); else gradeEdit">
+                     <!-- Text input for subject type 4 (comments) -->
+                     <div class="w-full px-2">
                        <input 
-                         type="radio" 
-                         [name]="'grade_' + student.studentId + '_' + assessment.id"
-                         [value]="grade.value"
-                         [checked]="student.skillGrades[assessment.id] === grade.value"
-                         (change)="updateSkillGrade(student.studentId, assessment.id, grade.value)"
-                         class="text-blue-600 focus:ring-blue-500 mb-1">
-                       <span class="text-xs text-center">{{ grade.name }}</span>
+                         type="text" 
+                         [value]="student.comments[assessment.id] || ''"
+                         (input)="updateComment(student.studentId, assessment.id, $any($event.target).value)"
+                         class="w-full px-2 py-1 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+                         placeholder="Enter comment..."
+                         [title]="'Enter comment for ' + student.studentName">
                      </div>
-                   </div>
+                   </ng-container>
+                   
+                   <ng-template #gradeEdit>
+                     <!-- Radio buttons for skill grades from API for non-type-1 subjects -->
+                     <div class="flex flex-wrap gap-2 justify-center">
+                       <div *ngFor="let grade of skillGrades$ | async" 
+                            class="flex flex-col items-center cursor-pointer">
+                         <input 
+                           type="radio" 
+                           [name]="'grade_' + student.studentId + '_' + assessment.id"
+                           [value]="grade.value"
+                           [checked]="student.skillGrades[assessment.id] === grade.value"
+                           (change)="updateSkillGrade(student.studentId, assessment.id, grade.value)"
+                           class="text-blue-600 focus:ring-blue-500 mb-1">
+                         <span class="text-xs text-center">{{ grade.name }}</span>
+                       </div>
+                     </div>
+                   </ng-template>
                  </ng-template>
                </ng-template>
              </td>

@@ -53,7 +53,7 @@ export class CreateUpdateSubjectComponent implements OnInit, OnDestroy {
 
         this.formGroup = this.fb.group({
             name: ['', [Validators.required, Validators.maxLength(255)]],
-            subjectType: [0, [Validators.required, Validators.min(1), Validators.max(3)]],
+            subjectType: [0, [Validators.required, Validators.min(1)]],
         });
 
         this.sharedFacade.getSubjectTypeList();

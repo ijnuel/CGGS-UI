@@ -26,6 +26,12 @@ export const tableHeader: TableHeaderInterface[] = [
     align: 'left',
   },
   {
+    key: 'noOfOpenedDays',
+    type: 'number',
+    name: 'Number of Opened Days',
+    align: 'left',
+  },
+  {
     key: 'isCurrent',
     type: 'boolean',
     name: 'Is Current',

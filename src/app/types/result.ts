@@ -35,6 +35,7 @@ export interface StudentAssessmentScoreInterface {
   classSubjectAssessmentId: string;
   score: number;
   skillGrade: number | null;
+  comment?: string;
 }
 
 export interface ResultMarkSheetInterface {
@@ -71,6 +72,7 @@ export interface StudentAssessmentRowInterface {
   studentName: string;
   assessmentScores: { [assessmentId: string]: number | null };
   skillGrades: { [assessmentId: string]: number | null };
+  comments: { [assessmentId: string]: string };
   assessmentEntryIds?: { [assessmentId: string]: string | null };
 }
 

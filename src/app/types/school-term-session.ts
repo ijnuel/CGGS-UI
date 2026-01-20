@@ -10,6 +10,7 @@ export interface SchoolTermSessionListInterface {
     termEndDate: string;
     termStartDate: string;
     isCurrent : boolean;
+    noOfOpenedDays: number;
 }
 
 export interface SchoolTermSessionFormInterface {
@@ -24,4 +25,5 @@ export interface SchoolTermSessionFormInterface {
     termEndDate: string;
     termStartDate: string;
     isCurrent : boolean;
+    noOfOpenedDays: number;
 }

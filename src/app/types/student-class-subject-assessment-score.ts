@@ -6,6 +6,7 @@ export interface StudentClassSubjectAssessmentScoreListInterface {
   skillGrade: string | null;
   student?: any; // StudentResponseDto
   classSubjectAssessment?: any; // ClassSubjectAssessmentResponseDto
+  comment: string;
 }
 
 export interface StudentClassSubjectAssessmentScoreFormInterface {
@@ -14,4 +15,5 @@ export interface StudentClassSubjectAssessmentScoreFormInterface {
   classSubjectAssessmentId: string;
   score: number;
   skillGrade?: number | null;
+  comment: string;
 }
