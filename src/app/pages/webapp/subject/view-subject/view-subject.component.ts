@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { SubjectFacade } from '../../../../store/subject/subject.facade';
-import { SubjectFormInterface } from '../../../../types';
+import { SubjectListInterface } from '../../../../types';
 
 @Component({
   selector: 'app-view-subject',
@@ -10,7 +10,7 @@ import { SubjectFormInterface } from '../../../../types';
   styleUrls: ['./view-subject.component.scss'],
 })
 export class ViewSubjectComponent implements OnInit {
-  subject$: Observable<SubjectFormInterface | null>;
+  subject$: Observable<SubjectListInterface | null>;
 
   constructor(
     private route: ActivatedRoute,

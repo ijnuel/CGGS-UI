@@ -47081,6 +47081,12 @@
           "id": {
             "type": "string",
             "format": "uuid"
+          },
+          "administrator": {
+            "$ref": "#/components/schemas/AdministratorResponseDto"
+          },
+          "company": {
+            "$ref": "#/components/schemas/CompanyResponseDto"
           }
         },
         "additionalProperties": false
@@ -47323,6 +47329,21 @@
           "email": {
             "type": "string",
             "nullable": true
+          },
+          "originLGA": {
+            "$ref": "#/components/schemas/LocalGovernmentAreaResponseDto"
+          },
+          "stateOfOrigin": {
+            "$ref": "#/components/schemas/StateResponseDto"
+          },
+          "nationality": {
+            "$ref": "#/components/schemas/CountryResponseDto"
+          },
+          "residentialState": {
+            "$ref": "#/components/schemas/StateResponseDto"
+          },
+          "user": {
+            "$ref": "#/components/schemas/UserResponseDto"
           },
           "administratorCompanies": {
             "type": "array",
@@ -47607,6 +47628,24 @@
           "id": {
             "type": "string",
             "format": "uuid"
+          },
+          "originLGA": {
+            "$ref": "#/components/schemas/LocalGovernmentAreaResponseDto"
+          },
+          "stateOfOrigin": {
+            "$ref": "#/components/schemas/StateResponseDto"
+          },
+          "nationality": {
+            "$ref": "#/components/schemas/CountryResponseDto"
+          },
+          "residentialState": {
+            "$ref": "#/components/schemas/StateResponseDto"
+          },
+          "family": {
+            "$ref": "#/components/schemas/FamilyResponseDto"
+          },
+          "classLevel": {
+            "$ref": "#/components/schemas/ClassLevelResponseDto"
           }
         },
         "additionalProperties": false
@@ -47820,6 +47859,11 @@
           "classLevelId": {
             "type": "string",
             "format": "uuid"
+          },
+          "staffId": {
+            "type": "string",
+            "format": "uuid",
+            "nullable": true
           }
         },
         "additionalProperties": false
@@ -47860,6 +47904,23 @@
           "id": {
             "type": "string",
             "format": "uuid"
+          },
+          "programmeType": {
+            "$ref": "#/components/schemas/ProgramTypeResponseDto"
+          },
+          "classes": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ClassResponseDto"
+            },
+            "nullable": true
+          },
+          "applications": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ApplicationResponseDto"
+            },
+            "nullable": true
           }
         },
         "additionalProperties": false
@@ -47994,9 +48055,48 @@
             "type": "string",
             "format": "uuid"
           },
+          "staffId": {
+            "type": "string",
+            "format": "uuid",
+            "nullable": true
+          },
           "id": {
             "type": "string",
             "format": "uuid"
+          },
+          "classLevel": {
+            "$ref": "#/components/schemas/ClassLevelResponseDto"
+          },
+          "staff": {
+            "$ref": "#/components/schemas/StaffResponseDto"
+          },
+          "classSubjects": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ClassSubjectResponseDto"
+            },
+            "nullable": true
+          },
+          "studentClasses": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/StudentClassResponseDto"
+            },
+            "nullable": true
+          },
+          "feeSetups": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/FeeSetupResponseDto"
+            },
+            "nullable": true
+          },
+          "students": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/StudentResponseDto"
+            },
+            "nullable": true
           }
         },
         "additionalProperties": false
@@ -48112,24 +48212,6 @@
         },
         "additionalProperties": false
       },
-      "ClassSubjectAssessmentDto": {
-        "type": "object",
-        "properties": {
-          "classSubjectId": {
-            "type": "string",
-            "format": "uuid"
-          },
-          "assessmentType": {
-            "type": "string",
-            "nullable": true
-          },
-          "scoreWeigth": {
-            "type": "integer",
-            "format": "int32"
-          }
-        },
-        "additionalProperties": false
-      },
       "ClassSubjectAssessmentResponseDto": {
         "type": "object",
         "properties": {
@@ -48148,6 +48230,16 @@
           "id": {
             "type": "string",
             "format": "uuid"
+          },
+          "classSubject": {
+            "$ref": "#/components/schemas/ClassSubjectResponseDto"
+          },
+          "studentClassSubjectAssessmentScores": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/StudentClassSubjectAssessmentScoreResponseDto"
+            },
+            "nullable": true
           }
         },
         "additionalProperties": false
@@ -48289,46 +48381,6 @@
           "schoolTermSessionId": {
             "type": "string",
             "format": "uuid"
-          },
-          "classSubjectAssessments": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/ClassSubjectAssessmentDto"
-            },
-            "nullable": true
-          }
-        },
-        "additionalProperties": false
-      },
-      "ClassSubjectDto": {
-        "type": "object",
-        "properties": {
-          "isActive": {
-            "type": "boolean"
-          },
-          "classId": {
-            "type": "string",
-            "format": "uuid"
-          },
-          "subjectId": {
-            "type": "string",
-            "format": "uuid"
-          },
-          "staffId": {
-            "type": "string",
-            "format": "uuid",
-            "nullable": true
-          },
-          "schoolTermSessionId": {
-            "type": "string",
-            "format": "uuid"
-          },
-          "classSubjectAssessments": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/ClassSubjectAssessmentDto"
-            },
-            "nullable": true
           }
         },
         "additionalProperties": false
@@ -48356,16 +48408,28 @@
             "type": "string",
             "format": "uuid"
           },
-          "classSubjectAssessments": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/ClassSubjectAssessmentDto"
-            },
-            "nullable": true
-          },
           "id": {
             "type": "string",
             "format": "uuid"
+          },
+          "class": {
+            "$ref": "#/components/schemas/ClassResponseDto"
+          },
+          "subject": {
+            "$ref": "#/components/schemas/SubjectResponseDto"
+          },
+          "staff": {
+            "$ref": "#/components/schemas/StaffResponseDto"
+          },
+          "schoolTermSession": {
+            "$ref": "#/components/schemas/SchoolTermSessionResponseDto"
+          },
+          "classSubjectAssessments": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ClassSubjectAssessmentResponseDto"
+            },
+            "nullable": true
           }
         },
         "additionalProperties": false
@@ -48486,13 +48550,6 @@
             "type": "string",
             "format": "uuid"
           },
-          "classSubjectAssessments": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/ClassSubjectAssessmentDto"
-            },
-            "nullable": true
-          },
           "id": {
             "type": "string",
             "format": "uuid"
@@ -48514,6 +48571,11 @@
           "classLevelId": {
             "type": "string",
             "format": "uuid"
+          },
+          "staffId": {
+            "type": "string",
+            "format": "uuid",
+            "nullable": true
           },
           "id": {
             "type": "string",
@@ -48545,6 +48607,13 @@
           },
           "isCurrent": {
             "type": "boolean"
+          },
+          "administratorCompanies": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/AdministratorCompanyResponseDto"
+            },
+            "nullable": true
           }
         },
         "additionalProperties": false
@@ -48716,6 +48785,13 @@
           "id": {
             "type": "string",
             "format": "uuid"
+          },
+          "states": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/StateResponseDto"
+            },
+            "nullable": true
           }
         },
         "additionalProperties": false
@@ -48985,6 +49061,32 @@
           "email": {
             "type": "string",
             "nullable": true
+          },
+          "originLGA": {
+            "$ref": "#/components/schemas/LocalGovernmentAreaResponseDto"
+          },
+          "stateOfOrigin": {
+            "$ref": "#/components/schemas/StateResponseDto"
+          },
+          "nationality": {
+            "$ref": "#/components/schemas/CountryResponseDto"
+          },
+          "residentialState": {
+            "$ref": "#/components/schemas/StateResponseDto"
+          },
+          "students": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/StudentResponseDto"
+            },
+            "nullable": true
+          },
+          "applications": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ApplicationResponseDto"
+            },
+            "nullable": true
           }
         },
         "additionalProperties": false
@@ -49244,6 +49346,15 @@
           "id": {
             "type": "string",
             "format": "uuid"
+          },
+          "fee": {
+            "$ref": "#/components/schemas/FeeResponseDto"
+          },
+          "feeType": {
+            "$ref": "#/components/schemas/FeeTypeResponseDto"
+          },
+          "feeSetup": {
+            "$ref": "#/components/schemas/FeeSetupResponseDto"
           }
         },
         "additionalProperties": false
@@ -49403,6 +49514,22 @@
           "id": {
             "type": "string",
             "format": "uuid"
+          },
+          "student": {
+            "$ref": "#/components/schemas/StudentResponseDto"
+          },
+          "studentClass": {
+            "$ref": "#/components/schemas/StudentClassResponseDto"
+          },
+          "session": {
+            "$ref": "#/components/schemas/SessionResponseDto"
+          },
+          "feeLines": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/FeeLineResponseDto"
+            },
+            "nullable": true
           }
         },
         "additionalProperties": false
@@ -49550,6 +49677,22 @@
           "id": {
             "type": "string",
             "format": "uuid"
+          },
+          "feeType": {
+            "$ref": "#/components/schemas/FeeTypeResponseDto"
+          },
+          "class": {
+            "$ref": "#/components/schemas/ClassResponseDto"
+          },
+          "session": {
+            "$ref": "#/components/schemas/SessionResponseDto"
+          },
+          "feeLines": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/FeeLineResponseDto"
+            },
+            "nullable": true
           }
         },
         "additionalProperties": false
@@ -49708,6 +49851,20 @@
           "id": {
             "type": "string",
             "format": "uuid"
+          },
+          "feeLines": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/FeeLineResponseDto"
+            },
+            "nullable": true
+          },
+          "feeSetups": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/FeeSetupResponseDto"
+            },
+            "nullable": true
           }
         },
         "additionalProperties": false
@@ -49948,6 +50105,9 @@
           "id": {
             "type": "string",
             "format": "uuid"
+          },
+          "state": {
+            "$ref": "#/components/schemas/StateResponseDto"
           }
         },
         "additionalProperties": false
@@ -50234,6 +50394,9 @@
           "id": {
             "type": "string",
             "format": "uuid"
+          },
+          "programType": {
+            "$ref": "#/components/schemas/ProgramTypeResponseDto"
           }
         },
         "additionalProperties": false
@@ -50412,6 +50575,20 @@
           "id": {
             "type": "string",
             "format": "uuid"
+          },
+          "classLevels": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ClassLevelResponseDto"
+            },
+            "nullable": true
+          },
+          "programmeGradeRemarks": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ProgrammeGradeRemarkResponseDto"
+            },
+            "nullable": true
           }
         },
         "additionalProperties": false
@@ -50579,6 +50756,9 @@
           "id": {
             "type": "string",
             "format": "uuid"
+          },
+          "programType": {
+            "$ref": "#/components/schemas/ProgramTypeResponseDto"
           }
         },
         "additionalProperties": false
@@ -50751,12 +50931,9 @@
           "isCurrent": {
             "type": "boolean"
           },
-          "classSubjects": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/ClassSubjectDto"
-            },
-            "nullable": true
+          "noOfOpenedDays": {
+            "type": "integer",
+            "format": "int32"
           }
         },
         "additionalProperties": false
@@ -50782,12 +50959,9 @@
           "isCurrent": {
             "type": "boolean"
           },
-          "classSubjects": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/ClassSubjectDto"
-            },
-            "nullable": true
+          "noOfOpenedDays": {
+            "type": "integer",
+            "format": "int32"
           },
           "id": {
             "type": "string",
@@ -50801,6 +50975,16 @@
             "type": "string",
             "nullable": true,
             "readOnly": true
+          },
+          "sessionObject": {
+            "$ref": "#/components/schemas/SessionResponseDto"
+          },
+          "classSubjects": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ClassSubjectResponseDto"
+            },
+            "nullable": true
           }
         },
         "additionalProperties": false
@@ -50919,12 +51103,9 @@
           "isCurrent": {
             "type": "boolean"
           },
-          "classSubjects": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/ClassSubjectDto"
-            },
-            "nullable": true
+          "noOfOpenedDays": {
+            "type": "integer",
+            "format": "int32"
           },
           "id": {
             "type": "string",
@@ -50992,6 +51173,34 @@
           "id": {
             "type": "string",
             "format": "uuid"
+          },
+          "studentClasses": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/StudentClassResponseDto"
+            },
+            "nullable": true
+          },
+          "schoolTermSessions": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/SchoolTermSessionResponseDto"
+            },
+            "nullable": true
+          },
+          "fees": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/FeeResponseDto"
+            },
+            "nullable": true
+          },
+          "feeSetups": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/FeeSetupResponseDto"
+            },
+            "nullable": true
           }
         },
         "additionalProperties": false
@@ -51253,6 +51462,28 @@
           "email": {
             "type": "string",
             "nullable": true
+          },
+          "originLGA": {
+            "$ref": "#/components/schemas/LocalGovernmentAreaResponseDto"
+          },
+          "stateOfOrigin": {
+            "$ref": "#/components/schemas/StateResponseDto"
+          },
+          "nationality": {
+            "$ref": "#/components/schemas/CountryResponseDto"
+          },
+          "residentialState": {
+            "$ref": "#/components/schemas/StateResponseDto"
+          },
+          "user": {
+            "$ref": "#/components/schemas/UserResponseDto"
+          },
+          "classSubjects": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ClassSubjectResponseDto"
+            },
+            "nullable": true
           }
         },
         "additionalProperties": false
@@ -51442,6 +51673,16 @@
           "id": {
             "type": "string",
             "format": "uuid"
+          },
+          "country": {
+            "$ref": "#/components/schemas/CountryResponseDto"
+          },
+          "localGovernmentAreas": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/LocalGovernmentAreaResponseDto"
+            },
+            "nullable": true
           }
         },
         "additionalProperties": false
@@ -51622,6 +51863,22 @@
           "studentNo": {
             "type": "string",
             "nullable": true
+          },
+          "student": {
+            "$ref": "#/components/schemas/StudentResponseDto"
+          },
+          "class": {
+            "$ref": "#/components/schemas/ClassResponseDto"
+          },
+          "session": {
+            "$ref": "#/components/schemas/SessionResponseDto"
+          },
+          "fees": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/FeeResponseDto"
+            },
+            "nullable": true
           }
         },
         "additionalProperties": false
@@ -51734,6 +51991,10 @@
             "type": "number",
             "format": "double"
           },
+          "comment": {
+            "type": "string",
+            "nullable": true
+          },
           "skillGrade": {
             "$ref": "#/components/schemas/SkillGrade"
           }
@@ -51754,6 +52015,10 @@
           "score": {
             "type": "number",
             "format": "double"
+          },
+          "comment": {
+            "type": "string",
+            "nullable": true
           },
           "skillGrade": {
             "$ref": "#/components/schemas/SkillGrade"
@@ -51878,6 +52143,10 @@
           "score": {
             "type": "number",
             "format": "double"
+          },
+          "comment": {
+            "type": "string",
+            "nullable": true
           },
           "skillGrade": {
             "$ref": "#/components/schemas/SkillGrade"
@@ -52059,6 +52328,45 @@
           },
           "email": {
             "type": "string",
+            "nullable": true
+          },
+          "originLGA": {
+            "$ref": "#/components/schemas/LocalGovernmentAreaResponseDto"
+          },
+          "stateOfOrigin": {
+            "$ref": "#/components/schemas/StateResponseDto"
+          },
+          "nationality": {
+            "$ref": "#/components/schemas/CountryResponseDto"
+          },
+          "residentialState": {
+            "$ref": "#/components/schemas/StateResponseDto"
+          },
+          "user": {
+            "$ref": "#/components/schemas/UserResponseDto"
+          },
+          "family": {
+            "$ref": "#/components/schemas/FamilyResponseDto"
+          },
+          "studentClasses": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/StudentClassResponseDto"
+            },
+            "nullable": true
+          },
+          "fees": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/FeeResponseDto"
+            },
+            "nullable": true
+          },
+          "studentClassSubjectAssessmentScores": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/StudentClassSubjectAssessmentScoreResponseDto"
+            },
             "nullable": true
           }
         },
@@ -52255,6 +52563,13 @@
           "id": {
             "type": "string",
             "format": "uuid"
+          },
+          "classSubjects": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ClassSubjectResponseDto"
+            },
+            "nullable": true
           }
         },
         "additionalProperties": false
@@ -52356,7 +52671,9 @@
         "enum": [
           1,
           2,
-          3
+          3,
+          4,
+          5
         ],
         "type": "integer",
         "format": "int32"

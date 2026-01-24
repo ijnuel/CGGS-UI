@@ -1,10 +1,15 @@
+import { SchoolTermSessionListInterface } from "./school-term-session";
+import { StudentClassListInterface } from "./student-class";
+
 export interface SessionListInterface {
     id: string;
-    name: string;
+    name?: string;
     isCurrent: boolean;
     sNo: number;
-    description: string;
-    createdDate: string;
+    studentClasses?: StudentClassListInterface[];
+    schoolTermSessions?: SchoolTermSessionListInterface[];
+    // fees?: FeeListInterface[];
+    // feeSetups?: FeeSetupListInterface[];
 }
 
 export interface SessionFormInterface {

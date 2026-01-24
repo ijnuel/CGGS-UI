@@ -7,7 +7,8 @@
     </button>
   </div>
   <div *ngIf="testEntityTemplate$ | async as testEntityTemplate">
-    <p><strong>Name:</strong> {{ testEntityTemplate.name }}</p>
+    <p><strong>Name:</strong> {{ testEntityTemplate.testName }}</p>
+    <p><strong>Another Name:</strong> {{ testEntityTemplate.anotherName }}</p>
     <!-- Add more fields as needed -->
   </div>
   <div *ngIf="!(testEntityTemplate$ | async)">
