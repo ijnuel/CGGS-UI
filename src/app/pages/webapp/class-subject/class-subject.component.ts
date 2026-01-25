@@ -83,7 +83,7 @@ export class ClassSubjectComponent implements OnInit {
       width: '400px',
       data: {
         title: 'Delete Class Subject',
-        message: `Are you sure you want to delete "${row.name}"?`,
+        message: `Are you sure you want to delete "${row.subject?.name!}"?`,
         confirmText: 'Delete',
         cancelText: 'Cancel'
       }

@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { ClassSubjectFacade } from '../../../../store/class-subject/class-subject.facade';
-import { ClassSubjectFormInterface } from '../../../../types';
+import { ClassSubjectListInterface } from '../../../../types';
 
 @Component({
   selector: 'app-view-class-subject',
@@ -10,7 +10,7 @@ import { ClassSubjectFormInterface } from '../../../../types';
   styleUrls: ['./view-class-subject.component.scss'],
 })
 export class ViewClassSubjectComponent implements OnInit {
-  classSubject$: Observable<ClassSubjectFormInterface | null>;
+  classSubject$: Observable<ClassSubjectListInterface | null>;
 
   constructor(
     private route: ActivatedRoute,

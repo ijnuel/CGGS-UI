@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { ClassLevelFacade } from '../../../../store/class-level/class-level.facade';
-import { ClassLevelFormInterface } from '../../../../types';
+import { ClassLevelListInterface } from '../../../../types';
 
 @Component({
   selector: 'app-view-class-level',
@@ -10,7 +10,7 @@ import { ClassLevelFormInterface } from '../../../../types';
   styleUrls: ['./view-class-level.component.scss'],
 })
 export class ViewClassLevelComponent implements OnInit {
-  classLevel$: Observable<ClassLevelFormInterface | null>;
+    classLevel$: Observable<ClassLevelListInterface | null>;
 
   constructor(
     private route: ActivatedRoute,

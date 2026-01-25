@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { ApplicationFacade } from '../../../../store/application/application.facade';
-import { ApplicationFormInterface } from '../../../../types';
+import { ApplicationListInterface } from '../../../../types';
 
 @Component({
   selector: 'app-view-application',
@@ -10,7 +10,7 @@ import { ApplicationFormInterface } from '../../../../types';
   styleUrls: ['./view-application.component.scss'],
 })
 export class ViewApplicationComponent implements OnInit {
-  application$: Observable<ApplicationFormInterface | null>;
+  application$: Observable<ApplicationListInterface | null>;
 
   constructor(
     private route: ActivatedRoute,

@@ -9,7 +9,7 @@ import {
 } from '@angular/forms';
 import { initUserProfileForm } from '../../../../services/helper.service';
 import { getErrorMessageHelper } from '../../../../services/helper.service';
-import { ClassListInterface, DropdownListInterface, FamilyListInterface, StudentFormInterface } from '../../../../types';
+import { ClassListInterface, DropdownListInterface, FamilyListInterface, StudentFormInterface, StudentListInterface } from '../../../../types';
 import { SharedFacade } from '../../../../store/shared/shared.facade';
 import { ActivatedRoute, Router } from '@angular/router';
 import { GlobalLoadingFacade } from '../../../../store/global-loading/global-loading.facade';
@@ -26,7 +26,7 @@ import { ClassLevelFacade } from '../../../../store/class-level/class-level.faca
 export class CreateUpdateStudentComponent implements OnInit, OnDestroy {
   loading$: Observable<boolean>;
   error$: Observable<string | null>;
-  studentById$: Observable<StudentFormInterface | null>;
+  studentById$: Observable<StudentListInterface | null>;
   dropdownLoading$: Observable<boolean>;
 
   formGroup: FormGroup<{

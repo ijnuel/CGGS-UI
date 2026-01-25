@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { LocalGovernmentAreaFacade } from '../../../../store/local-government-area/local-government-area.facade';
-import { LocalGovernmentAreaFormInterface } from '../../../../types';
+import { LocalGovernmentAreaListInterface } from '../../../../types';
 
 @Component({
   selector: 'app-view-local-government-area',
@@ -10,7 +10,7 @@ import { LocalGovernmentAreaFormInterface } from '../../../../types';
   styleUrls: ['./view-local-government-area.component.scss'],
 })
 export class ViewLocalGovernmentAreaComponent implements OnInit {
-  localGovernmentArea$: Observable<LocalGovernmentAreaFormInterface | null>;
+  localGovernmentArea$: Observable<LocalGovernmentAreaListInterface | null>;
 
   constructor(
     private route: ActivatedRoute,

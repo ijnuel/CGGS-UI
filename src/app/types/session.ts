@@ -15,7 +15,6 @@ export interface SessionListInterface {
 export interface SessionFormInterface {
     id?: string;
     name: string;
-    description: string;
     isCurrent: boolean;
     sNo: number;
 }

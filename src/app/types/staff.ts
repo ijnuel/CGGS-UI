@@ -32,7 +32,7 @@ export interface StaffListInterface {
 
 export interface StaffFormInterface {
     id?: string;
-    teacherNo: string;
+    staffNo: string;
     userId: string;
     email: string;
     firstName: string;
@@ -48,5 +48,4 @@ export interface StaffFormInterface {
     residentialCity: string;
     residentialStateId: string;
     phoneNumber: string;
-    staffNo: string;
 }

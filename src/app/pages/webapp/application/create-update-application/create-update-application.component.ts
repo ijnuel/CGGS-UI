@@ -8,7 +8,7 @@ import {
     Validators,
 } from '@angular/forms';
 import { getErrorMessageHelper } from '../../../../services/helper.service';
-import { DropdownListInterface, ApplicationFormInterface } from '../../../../types';
+import { DropdownListInterface, ApplicationFormInterface, ApplicationListInterface } from '../../../../types';
 import { SharedFacade } from '../../../../store/shared/shared.facade';
 import { ActivatedRoute, Router } from '@angular/router';
 import { GlobalLoadingFacade } from '../../../../store/global-loading/global-loading.facade';
@@ -21,7 +21,7 @@ import { GlobalLoadingFacade } from '../../../../store/global-loading/global-loa
 export class CreateUpdateApplicationComponent implements OnInit, OnDestroy {
     loading$: Observable<boolean>;
     error$: Observable<string | null>;
-    applicationById$: Observable<ApplicationFormInterface | null>;
+    applicationById$: Observable<ApplicationListInterface | null>;
     dropdownLoading$: Observable<boolean>;
 
     formGroup: FormGroup<{

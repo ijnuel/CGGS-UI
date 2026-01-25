@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { ProgramTypeFacade } from '../../../../store/program-type/program-type.facade';
-import { ProgramTypeFormInterface } from '../../../../types';
+import { ProgramTypeListInterface } from '../../../../types';
 
 @Component({
   selector: 'app-view-program-type',
@@ -10,7 +10,7 @@ import { ProgramTypeFormInterface } from '../../../../types';
   styleUrls: ['./view-program-type.component.scss'],
 })
 export class ViewProgramTypeComponent implements OnInit {
-  programType$: Observable<ProgramTypeFormInterface | null>;
+  programType$: Observable<ProgramTypeListInterface | null>;
 
   constructor(
     private route: ActivatedRoute,

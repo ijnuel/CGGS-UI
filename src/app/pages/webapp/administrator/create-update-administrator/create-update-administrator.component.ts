@@ -8,7 +8,7 @@ import {
     Validators,
 } from '@angular/forms';
 import { getErrorMessageHelper, initUserProfileForm } from '../../../../services/helper.service';
-import { DropdownListInterface, AdministratorFormInterface } from '../../../../types';
+import { DropdownListInterface, AdministratorFormInterface, AdministratorListInterface } from '../../../../types';
 import { SharedFacade } from '../../../../store/shared/shared.facade';
 import { ActivatedRoute, Router } from '@angular/router';
 import { GlobalLoadingFacade } from '../../../../store/global-loading/global-loading.facade';
@@ -21,7 +21,7 @@ import { GlobalLoadingFacade } from '../../../../store/global-loading/global-loa
 export class CreateUpdateAdministratorComponent implements OnInit, OnDestroy {
     loading$: Observable<boolean>;
     error$: Observable<string | null>;
-    administratorById$: Observable<AdministratorFormInterface | null>;
+    administratorById$: Observable<AdministratorListInterface | null>;
     dropdownLoading$: Observable<boolean>;
 
     formGroup: FormGroup<{

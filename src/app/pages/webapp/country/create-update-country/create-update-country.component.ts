@@ -8,7 +8,7 @@ import {
     Validators,
 } from '@angular/forms';
 import { getErrorMessageHelper } from '../../../../services/helper.service';
-import { DropdownListInterface, CountryFormInterface } from '../../../../types';
+import { DropdownListInterface, CountryFormInterface, CountryListInterface } from '../../../../types';
 import { SharedFacade } from '../../../../store/shared/shared.facade';
 import { ActivatedRoute, Router } from '@angular/router';
 import { GlobalLoadingFacade } from '../../../../store/global-loading/global-loading.facade';
@@ -21,7 +21,7 @@ import { GlobalLoadingFacade } from '../../../../store/global-loading/global-loa
 export class CreateUpdateCountryComponent implements OnInit, OnDestroy {
     loading$: Observable<boolean>;
     error$: Observable<string | null>;
-    countryById$: Observable<CountryFormInterface | null>;
+    countryById$: Observable<CountryListInterface | null>;
     dropdownLoading$: Observable<boolean>;
 
     formGroup: FormGroup<{
@@ -61,7 +61,7 @@ export class CreateUpdateCountryComponent implements OnInit, OnDestroy {
             this.countryById$.pipe(takeUntil(this.unsubscribe$)).subscribe((data) => {
                 if (data) {
                     this.formGroup.patchValue({
-                        name: data.name
+                        name: data.name!
                     });
                 }
             });

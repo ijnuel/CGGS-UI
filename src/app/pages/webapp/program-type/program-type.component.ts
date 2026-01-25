@@ -220,7 +220,7 @@ export class ProgramTypeComponent implements OnInit {
 
     this.subjectAll$.subscribe(data => {
       if (data) {
-        this.subjectAllSnapShot = [...data].sort((a, b) => a.name.localeCompare(b.name)).map(x => { return { name: x.name, description: x.subjectType, value: x.id } as DropdownListInterface; });
+        this.subjectAllSnapShot = [...data].sort((a, b) => a.name!.localeCompare(b.name!)).map(x => { return { name: x.name!, description: x.subjectType, value: x.id } as DropdownListInterface; });
       }
     });
 
@@ -238,7 +238,7 @@ export class ProgramTypeComponent implements OnInit {
 
     this.classAll$.subscribe(data => {
       if (data) {
-        this.classAllSnapShot = [...data].sort((a, b) => a.name.localeCompare(b.name));
+        this.classAllSnapShot = [...data].sort((a, b) => a.name!.localeCompare(b.name!));
       }
     });
 
@@ -472,7 +472,7 @@ export class ProgramTypeComponent implements OnInit {
 
     let formData = this.addClassLevelForm.value as ClassLevelFormInterface;
     formData.programmeTypeId = programType.id;
-    formData.name = programType.name;
+    formData.name = programType.name!;
     formData.id ? this.classLevelFacade.updateClassLevel(formData) : this.classLevelFacade.createClassLevel(formData);
     this.hideAddForm();
     this.classLevelFacade.getClassLevelAll();

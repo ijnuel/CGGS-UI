@@ -30,7 +30,7 @@ export interface ApplicationListInterface {
 
 export interface ApplicationFormInterface {
     id?: string;
-    familyNo: string;
+    familyNo?: string;
     firstName: string;
     lastName: string;
     middleName: string;

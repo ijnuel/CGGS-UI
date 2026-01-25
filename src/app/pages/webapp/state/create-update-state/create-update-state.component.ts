@@ -8,7 +8,7 @@ import {
     Validators,
 } from '@angular/forms';
 import { getErrorMessageHelper } from '../../../../services/helper.service';
-import { DropdownListInterface, StateFormInterface } from '../../../../types';
+import { DropdownListInterface, StateFormInterface, StateListInterface } from '../../../../types';
 import { SharedFacade } from '../../../../store/shared/shared.facade';
 import { ActivatedRoute, Router } from '@angular/router';
 import { GlobalLoadingFacade } from '../../../../store/global-loading/global-loading.facade';
@@ -21,7 +21,7 @@ import { GlobalLoadingFacade } from '../../../../store/global-loading/global-loa
 export class CreateUpdateStateComponent implements OnInit, OnDestroy {
     loading$: Observable<boolean>;
     error$: Observable<string | null>;
-    stateById$: Observable<StateFormInterface | null>;
+    stateById$: Observable<StateListInterface | null>;
     dropdownLoading$: Observable<boolean>;
 
     formGroup: FormGroup<{

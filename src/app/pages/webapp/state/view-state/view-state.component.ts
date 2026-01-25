@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { StateFacade } from '../../../../store/state/state.facade';
-import { StateFormInterface } from '../../../../types';
+import { StateListInterface } from '../../../../types';
 
 @Component({
   selector: 'app-view-state',
@@ -10,7 +10,7 @@ import { StateFormInterface } from '../../../../types';
   styleUrls: ['./view-state.component.scss'],
 })
 export class ViewStateComponent implements OnInit {
-  state$: Observable<StateFormInterface | null>;
+  state$: Observable<StateListInterface | null>;
 
   constructor(
     private route: ActivatedRoute,

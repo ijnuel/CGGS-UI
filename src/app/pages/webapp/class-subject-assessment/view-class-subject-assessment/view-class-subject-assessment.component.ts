@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { ClassSubjectAssessmentFacade } from '../../../../store/class-subject-assessment/class-subject-assessment.facade';
-import { ClassSubjectAssessmentFormInterface } from '../../../../types';
+import { ClassSubjectAssessmentListInterface } from '../../../../types';
 
 @Component({
   selector: 'app-view-class-subject-assessment',
@@ -10,7 +10,7 @@ import { ClassSubjectAssessmentFormInterface } from '../../../../types';
   styleUrls: ['./view-class-subject-assessment.component.scss'],
 })
 export class ViewClassSubjectAssessmentComponent implements OnInit {
-  classSubjectAssessment$: Observable<ClassSubjectAssessmentFormInterface | null>;
+  classSubjectAssessment$: Observable<ClassSubjectAssessmentListInterface | null>;
 
   constructor(
     private route: ActivatedRoute,

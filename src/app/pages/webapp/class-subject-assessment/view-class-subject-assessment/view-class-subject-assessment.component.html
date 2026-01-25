@@ -7,7 +7,7 @@
     </button>
   </div>
   <div *ngIf="classSubjectAssessment$ | async as classSubjectAssessment">
-    <p><strong>Name:</strong> {{ classSubjectAssessment.name }}</p>
+    <p><strong>Name:</strong> {{ classSubjectAssessment.assessmentType }}</p>
     <!-- Add more fields as needed -->
   </div>
   <div *ngIf="!(classSubjectAssessment$ | async)">

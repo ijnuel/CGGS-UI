@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { FamilyFacade } from '../../../../store/family/family.facade';
-import { FamilyFormInterface } from '../../../../types';
+import { FamilyListInterface } from '../../../../types';
 
 @Component({
   selector: 'app-view-family',
@@ -10,7 +10,7 @@ import { FamilyFormInterface } from '../../../../types';
   styleUrls: ['./view-family.component.scss'],
 })
 export class ViewFamilyComponent implements OnInit {
-  family$: Observable<FamilyFormInterface | null>;
+  family$: Observable<FamilyListInterface | null>;
 
   constructor(
     private route: ActivatedRoute,
