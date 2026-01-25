@@ -3,7 +3,7 @@ import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
 import * as TestEntityTemplateAction from './test-entity-template.actions';
 import { TestEntityTemplateState } from './test-entity-template.reducer';
-import { TestEntityTemplateListInterface, TestEntityTemplateFormInterface, PageQueryInterface, PaginatedResponseInterface } from '../../types';
+import { TestEntityTemplateListInterface, TestEntityTemplateFormInterface, PageQueryInterface, PaginatedResponseInterface, QueryInterface } from '../../types';
 import {
   selectTestEntityTemplateList,
   selectTestEntityTemplateAll,
@@ -56,10 +56,8 @@ export class TestEntityTemplateFacade {
     return this.currentPageQuery;
   }
 
-  getTestEntityTemplateAll(queryProperties?: any): void {
-    this.store.dispatch(TestEntityTemplateAction.getTestEntityTemplateAll({
-      queryProperties: queryProperties ? JSON.stringify(queryProperties) : undefined
-    }));
+  getTestEntityTemplateAll(query?: QueryInterface): void {
+    this.store.dispatch(TestEntityTemplateAction.getTestEntityTemplateAll({ query }));
   }
 
   getTestEntityTemplateById(testEntityTemplateId: string): void {

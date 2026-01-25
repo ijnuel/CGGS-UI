@@ -3,7 +3,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
 import { ProgramTypeFacade } from '../../../store/program-type/program-type.facade';
 import { ProgramTypeListInterface } from '../../../types/program-type';
-import { ClassFormInterface, ClassLevelFormInterface, ClassLevelListInterface, ClassListInterface, ClassSubjectAssessmentFormInterface, ClassSubjectAssessmentListInterface, ClassSubjectFormInterface, ClassSubjectListInterface, DropdownListInterface, PaginatedResponseInterface, ProgramSetupLevelConfig, SchoolTermSessionListInterface, SessionListInterface, StaffListInterface, SubjectListInterface } from '../../../types';
+import { ClassFormInterface, ClassLevelFormInterface, ClassLevelListInterface, ClassListInterface, ClassSubjectAssessmentFormInterface, ClassSubjectAssessmentListInterface, ClassSubjectFormInterface, ClassSubjectListInterface, DropdownListInterface, PaginatedResponseInterface, ProgramSetupLevelConfig, QueryInterface, SchoolTermSessionListInterface, SessionListInterface, StaffListInterface, SubjectListInterface } from '../../../types';
 import { PageQueryInterface } from '../../../types';
 import { TableHeaderInterface } from '../../../types/table';
 import { MatDialog } from '@angular/material/dialog';
@@ -179,7 +179,7 @@ export class ProgramTypeComponent implements OnInit {
 
     this.classSubjectFacade.createSuccess$.subscribe(data => {
       if (data) {
-        this.classSubjectFacade.getClassSubjectAll(this.getQueryProperties());
+        this.classSubjectFacade.getClassSubjectAll(this.getClassSubjectQueryParameters());
       }
     });
 
@@ -276,15 +276,21 @@ export class ProgramTypeComponent implements OnInit {
       this.classFacade.getClassAll();
     }
     if (programSetupLevel == ProgramSetupLevel.CLASSSUBJECT) {
-      this.classSubjectFacade.getClassSubjectAll(this.getQueryProperties());
+      this.classSubjectFacade.getClassSubjectAll(this.getClassSubjectQueryParameters());
     }
     if (programSetupLevel == ProgramSetupLevel.CLASSSUBJECTASSESSMENT) {
       this.classSubjectAssessmentFacade.getClassSubjectAssessmentAll();
     }
   }
 
-  getQueryProperties(): any {
-    return [{ Name: 'schoolTermSessionId', Value: this.schoolTermSessionId }];
+  getClassSubjectQueryParameters(): QueryInterface {
+    return {
+      nestedProperties: [ 
+        {name: "subject"},
+        {name: "staff", innerNestedProperty: { name: "nationAlity" }},
+      ],
+      queryProperties: [{ name: 'schoolTermSessionId', value: this.schoolTermSessionId }]
+    };
   }
 
   onSearch(searchText: string) {
@@ -386,7 +392,7 @@ export class ProgramTypeComponent implements OnInit {
         }
         if (programSetupLevel == ProgramSetupLevel.CLASSSUBJECT) {
           this.classSubjectFacade.deleteClassSubject(row.id);
-          this.classSubjectFacade.getClassSubjectAll(this.getQueryProperties());
+          this.classSubjectFacade.getClassSubjectAll(this.getClassSubjectQueryParameters());
         }
         if (programSetupLevel == ProgramSetupLevel.CLASSSUBJECTASSESSMENT) {
           this.classSubjectAssessmentFacade.deleteClassSubjectAssessment(row.id);
@@ -403,7 +409,7 @@ export class ProgramTypeComponent implements OnInit {
 
   onSessionTermChange(sessionTermId: string) {
     this.setSessionTermControls(sessionTermId);
-    this.classSubjectFacade.getClassSubjectAll(this.getQueryProperties());
+    this.classSubjectFacade.getClassSubjectAll(this.getClassSubjectQueryParameters());
   }
 
   getSubjects(classId: string): DropdownListInterface[] {
@@ -501,7 +507,7 @@ export class ProgramTypeComponent implements OnInit {
     formData.schoolTermSessionId = this.schoolTermSessionId;
     formData.id ? this.classSubjectFacade.updateClassSubject(formData) : this.classSubjectFacade.createClassSubject(formData);
     this.hideAddForm();
-    this.classSubjectFacade.getClassSubjectAll(this.getQueryProperties());
+    this.classSubjectFacade.getClassSubjectAll(this.getClassSubjectQueryParameters());
   }
 
   submitClassSubjectAssessment(classSubject: ClassSubjectListInterface) {
@@ -613,7 +619,7 @@ export class ProgramTypeComponent implements OnInit {
         this.classSubjectAssessmentFacade.getClassSubjectAssessmentAll();
         break;
       case ProgramSetupLevel.CLASSARM:
-        this.classSubjectFacade.getClassSubjectAll(this.getQueryProperties());
+        this.classSubjectFacade.getClassSubjectAll(this.getClassSubjectQueryParameters());
         break;
       case ProgramSetupLevel.CLASSLEVEL:
         this.classFacade.getClassAll();

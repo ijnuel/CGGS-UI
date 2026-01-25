@@ -6,6 +6,7 @@ import {
   ClassSubjectListInterface,
   ClassSubjectFormInterface,
   DropdownListInterface,
+  QueryInterface,
 } from '../../types';
 
 // Add Subject To Class
@@ -42,7 +43,7 @@ export const getClassSubjectDataImportTemplateFail = createAction(
 // Get All (non-paginated)
 export const getClassSubjectAll = createAction(
   '[ClassSubject] Get All',
-  props<{ queryProperties?: DropdownListInterface[] }>()
+  props<{ query?: QueryInterface }>()
 );
 
 export const getClassSubjectAllSuccess = createAction(

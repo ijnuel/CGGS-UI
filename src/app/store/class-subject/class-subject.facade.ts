@@ -7,6 +7,7 @@ import {
   PageQueryInterface,
   PaginatedResponseInterface,
   DropdownListInterface,
+  QueryInterface,
 } from '../../types';
 // If QueryProperty type is defined, import it here
 import * as ClassSubjectAction from './class-subject.actions';
@@ -75,12 +76,8 @@ export class ClassSubjectFacade {
     return this.currentPageQuery;
   }
 
-  getClassSubjectAll(queryProperties?: DropdownListInterface[]): void {
-    if (queryProperties) {
-      this.store.dispatch(ClassSubjectAction.getClassSubjectAll({ queryProperties }));
-    } else {
-      this.store.dispatch(ClassSubjectAction.getClassSubjectAll({}));
-    }
+  getClassSubjectAll(query?: QueryInterface): void {
+    this.store.dispatch(ClassSubjectAction.getClassSubjectAll({ query }));
   }
 
   getClassSubjectById(classSubjectId: string): void {

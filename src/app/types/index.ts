@@ -63,7 +63,7 @@ interface PageQueryInterface extends QueryInterface {
 
 interface NestedPropertyInterface {
   name: string;
-  InnerNestedProperty: NestedPropertyInterface;
+  innerNestedProperty?: NestedPropertyInterface;
 }
 
 interface SortPropertyInterface {
