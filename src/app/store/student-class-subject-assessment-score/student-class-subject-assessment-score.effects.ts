@@ -26,7 +26,7 @@ export class StudentClassSubjectAssessmentScoreEffects {
         this.http
           .post<GenericResponseInterface<StudentClassSubjectAssessmentScoreListInterface[]>>(
             `${environment.baseUrl}/StudentClassSubjectAssessmentScore/GetAll`,
-            [],
+            {},
             { withCredentials: true }
           )
           .pipe(

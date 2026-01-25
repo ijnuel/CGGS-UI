@@ -23,7 +23,7 @@ export class StaffEffect {
         this.http
           .post<GenericResponseInterface<StaffListInterface[]>>(
             `${environment.baseUrl}/Staff/GetAll`,
-            [],
+            {},
             { withCredentials: true }
           )
           .pipe(

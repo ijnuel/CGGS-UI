@@ -23,7 +23,7 @@ export class ProgrammeGradeRemarkEffect {
         this.http
           .post<GenericResponseInterface<ProgrammeGradeRemarkListInterface[]>>(
             `${environment.baseUrl}/ProgrammeGradeRemark/GetAll`,
-            [],
+            {},
             { withCredentials: true }
           )
           .pipe(

@@ -23,7 +23,7 @@ export class AdministratorEffect {
         this.http
           .post<GenericResponseInterface<AdministratorListInterface[]>>(
             `${environment.baseUrl}/Administrator/GetAll`,
-            [],
+            {},
             { withCredentials: true }
           )
           .pipe(

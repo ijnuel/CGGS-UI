@@ -23,7 +23,7 @@ export class SchoolTermSessionEffect {
         this.http
           .post<GenericResponseInterface<SchoolTermSessionListInterface[]>>(
             `${environment.baseUrl}/SchoolTermSession/GetAll`,
-            [],
+            {},
             { withCredentials: true }
           )
           .pipe(

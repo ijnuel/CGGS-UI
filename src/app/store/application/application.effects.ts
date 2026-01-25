@@ -23,7 +23,7 @@ export class ApplicationEffect {
         this.http
           .post<GenericResponseInterface<ApplicationListInterface[]>>(
             `${environment.baseUrl}/Application/GetAll`,
-            [],
+            {},
             { withCredentials: true }
           )
           .pipe(

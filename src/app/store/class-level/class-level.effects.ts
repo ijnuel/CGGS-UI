@@ -23,7 +23,7 @@ export class ClassLevelEffect {
         this.http
           .post<GenericResponseInterface<ClassLevelListInterface[]>>(
             `${environment.baseUrl}/ClassLevel/GetAll`,
-            [],
+            {},
             { withCredentials: true }
           )
           .pipe(

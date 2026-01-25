@@ -23,7 +23,7 @@ export class StateEffect {
         this.http
           .post<GenericResponseInterface<StateListInterface[]>>(
             `${environment.baseUrl}/State/GetAll`,
-            [],
+            {},
             { withCredentials: true }
           )
           .pipe(

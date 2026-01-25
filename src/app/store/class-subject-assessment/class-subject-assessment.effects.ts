@@ -23,7 +23,7 @@ export class ClassSubjectAssessmentEffect {
         this.http
           .post<GenericResponseInterface<ClassSubjectAssessmentListInterface[]>>(
             `${environment.baseUrl}/ClassSubjectAssessment/GetAll`,
-            [],
+            {},
             { withCredentials: true }
           )
           .pipe(

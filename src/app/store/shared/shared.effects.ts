@@ -79,7 +79,7 @@ export class SharedEffect {
         this.http
           .post<GenericResponseInterface<DropdownListInterface[]>>(
             `${environment.baseUrl}/Country/GetAll`,
-            [],
+            {},
             {
               withCredentials: true,
             }

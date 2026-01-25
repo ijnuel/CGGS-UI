@@ -23,7 +23,7 @@ export class CompanyEffect {
         this.http
           .post<GenericResponseInterface<CompanyListInterface[]>>(
             `${environment.baseUrl}/Company/GetAll`,
-            [],
+            {},
             { withCredentials: true }
           )
           .pipe(

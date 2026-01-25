@@ -23,7 +23,7 @@ export class PrincipalRemarkEffect {
         this.http
           .post<GenericResponseInterface<PrincipalRemarkListInterface[]>>(
             `${environment.baseUrl}/PrincipalRemark/GetAll`,
-            [],
+            {},
             { withCredentials: true }
           )
           .pipe(

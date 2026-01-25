@@ -23,7 +23,7 @@ export class FamilyEffect {
         this.http
           .post<GenericResponseInterface<FamilyListInterface[]>>(
             `${environment.baseUrl}/Family/GetAll`,
-            [],
+            {},
             { withCredentials: true }
           )
           .pipe(
