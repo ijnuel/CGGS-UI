@@ -11,6 +11,7 @@ export interface ClassSubjectListInterface {
     subjectId: string;
     staffId?: string;
     schoolTermSessionId: string;
+    description: string;
     class?: ClassListInterface;
     subject?: SubjectListInterface;
     staff?: StaffListInterface;
