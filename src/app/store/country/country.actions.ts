@@ -3,12 +3,13 @@ import {
   GenericResponseInterface,
   PageQueryInterface,
   PaginatedResponseInterface,
+  QueryInterface,
   CountryListInterface,
   CountryFormInterface,
 } from '../../types';
 
 // Get All (non-paginated)
-export const getCountryAll = createAction('[Country] Get All');
+export const getCountryAll = createAction('[Country] Get All', props<{ query?: QueryInterface }>());
 
 export const getCountryAllSuccess = createAction(
   '[Country/API] Get All Success',

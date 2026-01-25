@@ -3,12 +3,13 @@ import {
   GenericResponseInterface,
   PageQueryInterface,
   PaginatedResponseInterface,
+  QueryInterface,
   ProgrammeGradeRemarkListInterface,
   ProgrammeGradeRemarkFormInterface,
 } from '../../types';
 
 // Get All (non-paginated)
-export const getProgrammeGradeRemarkAll = createAction('[ProgrammeGradeRemark] Get All');
+export const getProgrammeGradeRemarkAll = createAction('[ProgrammeGradeRemark] Get All', props<{ query?: QueryInterface }>());
 
 export const getProgrammeGradeRemarkAllSuccess = createAction(
   '[ProgrammeGradeRemark/API] Get All Success',

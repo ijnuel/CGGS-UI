@@ -19,11 +19,11 @@ export class SessionEffect {
   $sessionAll = createEffect(() =>
     this.actions$.pipe(
       ofType(SessionAction.getSessionAll),
-      switchMap(() =>
+      switchMap(({ query }) =>
         this.http
           .post<GenericResponseInterface<SessionListInterface[]>>(
             `${environment.baseUrl}/Session/GetAll`,
-            {},
+            query ?? {},
             { withCredentials: true }
           )
           .pipe(

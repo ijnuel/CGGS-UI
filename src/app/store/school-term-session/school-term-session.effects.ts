@@ -19,11 +19,11 @@ export class SchoolTermSessionEffect {
   $schoolTermSessionAll = createEffect(() =>
     this.actions$.pipe(
       ofType(SchoolTermSessionAction.getSchoolTermSessionAll),
-      switchMap(() =>
+      switchMap(({ query }) =>
         this.http
           .post<GenericResponseInterface<SchoolTermSessionListInterface[]>>(
             `${environment.baseUrl}/SchoolTermSession/GetAll`,
-            {},
+            query ?? {},
             { withCredentials: true }
           )
           .pipe(

@@ -19,11 +19,11 @@ export class ClassEffect {
   $classAll = createEffect(() =>
     this.actions$.pipe(
       ofType(ClassAction.getClassAll),
-      switchMap(() =>
+      switchMap(({ query }) =>
         this.http
           .post<GenericResponseInterface<ClassListInterface[]>>(
             `${environment.baseUrl}/Class/GetAll`,
-            {},
+            query ?? {},
             { withCredentials: true }
           )
           .pipe(

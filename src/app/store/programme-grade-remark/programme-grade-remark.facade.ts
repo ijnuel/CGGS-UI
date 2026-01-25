@@ -6,6 +6,7 @@ import {
   ProgrammeGradeRemarkFormInterface,
   PageQueryInterface,
   PaginatedResponseInterface,
+  QueryInterface,
 } from '../../types';
 import * as ProgrammeGradeRemarkAction from './programme-grade-remark.actions';
 import {
@@ -68,8 +69,8 @@ export class ProgrammeGradeRemarkFacade {
     return this.currentPageQuery;
   }
 
-  getProgrammeGradeRemarkAll(): void {
-    this.store.dispatch(ProgrammeGradeRemarkAction.getProgrammeGradeRemarkAll());
+  getProgrammeGradeRemarkAll(query?: QueryInterface): void {
+    this.store.dispatch(ProgrammeGradeRemarkAction.getProgrammeGradeRemarkAll({ query }));
   }
 
   getProgrammeGradeRemarkById(programmeGradeRemarkId: string): void {

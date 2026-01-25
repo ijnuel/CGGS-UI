@@ -19,11 +19,11 @@ export class ApplicationEffect {
   $applicationAll = createEffect(() =>
     this.actions$.pipe(
       ofType(ApplicationAction.getApplicationAll),
-      switchMap(() =>
+      switchMap(({ query }) =>
         this.http
           .post<GenericResponseInterface<ApplicationListInterface[]>>(
             `${environment.baseUrl}/Application/GetAll`,
-            {},
+            query ?? {},
             { withCredentials: true }
           )
           .pipe(

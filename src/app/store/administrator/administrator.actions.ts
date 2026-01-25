@@ -3,12 +3,13 @@ import {
   GenericResponseInterface,
   PageQueryInterface,
   PaginatedResponseInterface,
+  QueryInterface,
   AdministratorListInterface,
   AdministratorFormInterface,
 } from '../../types';
 
 // Get All (non-paginated)
-export const getAdministratorAll = createAction('[Administrator] Get All');
+export const getAdministratorAll = createAction('[Administrator] Get All', props<{ query?: QueryInterface }>());
 
 export const getAdministratorAllSuccess = createAction(
   '[Administrator/API] Get All Success',

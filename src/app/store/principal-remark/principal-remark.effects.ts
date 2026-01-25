@@ -19,11 +19,11 @@ export class PrincipalRemarkEffect {
   $principalRemarkAll = createEffect(() =>
     this.actions$.pipe(
       ofType(PrincipalRemarkAction.getPrincipalRemarkAll),
-      switchMap(() =>
+      switchMap(({ query }) =>
         this.http
           .post<GenericResponseInterface<PrincipalRemarkListInterface[]>>(
             `${environment.baseUrl}/PrincipalRemark/GetAll`,
-            {},
+            query ?? {},
             { withCredentials: true }
           )
           .pipe(

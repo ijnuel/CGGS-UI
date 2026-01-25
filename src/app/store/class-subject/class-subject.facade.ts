@@ -6,8 +6,8 @@ import {
   ClassSubjectFormInterface,
   PageQueryInterface,
   PaginatedResponseInterface,
-  DropdownListInterface,
   QueryInterface,
+  DropdownListInterface,
 } from '../../types';
 // If QueryProperty type is defined, import it here
 import * as ClassSubjectAction from './class-subject.actions';

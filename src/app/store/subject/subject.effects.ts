@@ -19,11 +19,11 @@ export class SubjectEffect {
   $subjectAll = createEffect(() =>
     this.actions$.pipe(
       ofType(SubjectAction.getSubjectAll),
-      switchMap(() =>
+      switchMap(({ query }) =>
         this.http
           .post<GenericResponseInterface<SubjectListInterface[]>>(
             `${environment.baseUrl}/Subject/GetAll`,
-            {},
+            query ?? {},
             { withCredentials: true }
           )
           .pipe(

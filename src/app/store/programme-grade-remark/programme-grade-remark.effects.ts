@@ -19,11 +19,11 @@ export class ProgrammeGradeRemarkEffect {
   $programmeGradeRemarkAll = createEffect(() =>
     this.actions$.pipe(
       ofType(ProgrammeGradeRemarkAction.getProgrammeGradeRemarkAll),
-      switchMap(() =>
+      switchMap(({ query }) =>
         this.http
           .post<GenericResponseInterface<ProgrammeGradeRemarkListInterface[]>>(
             `${environment.baseUrl}/ProgrammeGradeRemark/GetAll`,
-            {},
+            query ?? {},
             { withCredentials: true }
           )
           .pipe(

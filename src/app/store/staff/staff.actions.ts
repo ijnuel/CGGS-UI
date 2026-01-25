@@ -3,12 +3,13 @@ import {
   GenericResponseInterface,
   PageQueryInterface,
   PaginatedResponseInterface,
+  QueryInterface,
   StaffListInterface,
   StaffFormInterface,
 } from '../../types';
 
 // Get All (non-paginated)
-export const getStaffAll = createAction('[Staff] Get All');
+export const getStaffAll = createAction('[Staff] Get All', props<{ query?: QueryInterface }>());
 
 export const getStaffAllSuccess = createAction(
   '[Staff/API] Get All Success',

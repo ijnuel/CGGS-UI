@@ -3,12 +3,13 @@ import {
   GenericResponseInterface,
   PageQueryInterface,
   PaginatedResponseInterface,
+  QueryInterface,
   FamilyListInterface,
   FamilyFormInterface,
 } from '../../types';
 
 // Get All (non-paginated)
-export const getFamilyAll = createAction('[Family] Get All');
+export const getFamilyAll = createAction('[Family] Get All', props<{ query?: QueryInterface }>());
 
 export const getFamilyAllSuccess = createAction(
   '[Family/API] Get All Success',

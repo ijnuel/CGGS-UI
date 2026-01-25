@@ -6,6 +6,7 @@ import {
   LocalGovernmentAreaFormInterface,
   PageQueryInterface,
   PaginatedResponseInterface,
+  QueryInterface,
 } from '../../types';
 import * as LocalGovernmentAreaAction from './local-government-area.actions';
 import {
@@ -65,8 +66,8 @@ export class LocalGovernmentAreaFacade {
     return this.currentPageQuery;
   }
 
-  getLocalGovernmentAreaAll(): void {
-    this.store.dispatch(LocalGovernmentAreaAction.getLocalGovernmentAreaAll());
+  getLocalGovernmentAreaAll(query?: QueryInterface): void {
+    this.store.dispatch(LocalGovernmentAreaAction.getLocalGovernmentAreaAll({ query }));
   }
 
   getLocalGovernmentAreaById(localGovernmentAreaId: string): void {

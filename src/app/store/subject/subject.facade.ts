@@ -6,6 +6,7 @@ import {
   SubjectFormInterface,
   PageQueryInterface,
   PaginatedResponseInterface,
+  QueryInterface,
 } from '../../types';
 import * as SubjectAction from './subject.actions';
 import {
@@ -65,8 +66,8 @@ export class SubjectFacade {
     return this.currentPageQuery;
   }
 
-  getSubjectAll(): void {
-    this.store.dispatch(SubjectAction.getSubjectAll());
+  getSubjectAll(query?: QueryInterface): void {
+    this.store.dispatch(SubjectAction.getSubjectAll({ query }));
   }
 
   getSubjectById(subjectId: string): void {

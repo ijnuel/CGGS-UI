@@ -6,6 +6,7 @@ import {
   StaffFormInterface,
   PageQueryInterface,
   PaginatedResponseInterface,
+  QueryInterface,
 } from '../../types';
 import * as StaffAction from './staff.actions';
 import {
@@ -65,8 +66,8 @@ export class StaffFacade {
     return this.currentPageQuery;
   }
 
-  getStaffAll(): void {
-    this.store.dispatch(StaffAction.getStaffAll());
+  getStaffAll(query?: QueryInterface): void {
+    this.store.dispatch(StaffAction.getStaffAll({ query }));
   }
 
   getStaffById(staffId: string): void {

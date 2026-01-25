@@ -19,11 +19,11 @@ export class ClassSubjectAssessmentEffect {
   $classSubjectAssessmentAll = createEffect(() =>
     this.actions$.pipe(
       ofType(ClassSubjectAssessmentAction.getClassSubjectAssessmentAll),
-      switchMap(() =>
+      switchMap(({ query }) =>
         this.http
           .post<GenericResponseInterface<ClassSubjectAssessmentListInterface[]>>(
             `${environment.baseUrl}/ClassSubjectAssessment/GetAll`,
-            {},
+            query ?? {},
             { withCredentials: true }
           )
           .pipe(

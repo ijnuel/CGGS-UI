@@ -19,11 +19,11 @@ export class CountryEffect {
   $countryAll = createEffect(() =>
     this.actions$.pipe(
       ofType(CountryAction.getCountryAll),
-      switchMap(() =>
+      switchMap(({ query }) =>
         this.http
           .post<GenericResponseInterface<CountryListInterface[]>>(
             `${environment.baseUrl}/Country/GetAll`,
-            {},
+            query ?? {},
             { withCredentials: true }
           )
           .pipe(

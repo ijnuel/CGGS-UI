@@ -3,12 +3,13 @@ import {
   GenericResponseInterface,
   PageQueryInterface,
   PaginatedResponseInterface,
+  QueryInterface,
   ClassLevelListInterface,
   ClassLevelFormInterface,
 } from '../../types';
 
 // Get All (non-paginated)
-export const getClassLevelAll = createAction('[ClassLevel] Get All');
+export const getClassLevelAll = createAction('[ClassLevel] Get All', props<{ query?: QueryInterface }>());
 
 export const getClassLevelAllSuccess = createAction(
   '[ClassLevel/API] Get All Success',

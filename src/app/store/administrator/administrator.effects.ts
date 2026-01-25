@@ -19,11 +19,11 @@ export class AdministratorEffect {
   $administratorAll = createEffect(() =>
     this.actions$.pipe(
       ofType(AdministratorAction.getAdministratorAll),
-      switchMap(() =>
+      switchMap(({ query }) =>
         this.http
           .post<GenericResponseInterface<AdministratorListInterface[]>>(
             `${environment.baseUrl}/Administrator/GetAll`,
-            {},
+            query ?? {},
             { withCredentials: true }
           )
           .pipe(

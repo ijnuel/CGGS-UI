@@ -19,11 +19,11 @@ export class StaffEffect {
   $staffAll = createEffect(() =>
     this.actions$.pipe(
       ofType(StaffAction.getStaffAll),
-      switchMap(() =>
+      switchMap(({ query }) =>
         this.http
           .post<GenericResponseInterface<StaffListInterface[]>>(
             `${environment.baseUrl}/Staff/GetAll`,
-            {},
+            query ?? {},
             { withCredentials: true }
           )
           .pipe(

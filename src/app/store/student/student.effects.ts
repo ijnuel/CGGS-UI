@@ -19,11 +19,11 @@ export class StudentEffect {
   $studentAll = createEffect(() =>
     this.actions$.pipe(
       ofType(StudentAction.getStudentAll),
-      switchMap(() =>
+      switchMap(({ query }) =>
         this.http
           .post<GenericResponseInterface<StudentListInterface[]>>(
             `${environment.baseUrl}/Student/GetAll`,
-            {},
+            query ?? {},
             { withCredentials: true }
           )
           .pipe(

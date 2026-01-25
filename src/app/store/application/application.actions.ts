@@ -3,12 +3,13 @@ import {
   GenericResponseInterface,
   PageQueryInterface,
   PaginatedResponseInterface,
+  QueryInterface,
   ApplicationListInterface,
   ApplicationFormInterface,
 } from '../../types';
 
 // Get All (non-paginated)
-export const getApplicationAll = createAction('[Application] Get All');
+export const getApplicationAll = createAction('[Application] Get All', props<{ query?: QueryInterface }>());
 
 export const getApplicationAllSuccess = createAction(
   '[Application/API] Get All Success',

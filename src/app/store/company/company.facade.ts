@@ -6,6 +6,7 @@ import {
   CompanyFormInterface,
   PageQueryInterface,
   PaginatedResponseInterface,
+  QueryInterface,
 } from '../../types';
 import * as CompanyAction from './company.actions';
 import {
@@ -65,8 +66,8 @@ export class CompanyFacade {
     return this.currentPageQuery;
   }
 
-  getCompanyAll(): void {
-    this.store.dispatch(CompanyAction.getCompanyAll());
+  getCompanyAll(query?: QueryInterface): void {
+    this.store.dispatch(CompanyAction.getCompanyAll({ query }));
   }
 
   getCompanyById(companyId: string): void {
