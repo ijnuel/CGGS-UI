@@ -6,6 +6,7 @@ import {
   PrincipalRemarkFormInterface,
   PageQueryInterface,
   PaginatedResponseInterface,
+  QueryInterface,
 } from '../../types';
 import * as PrincipalRemarkAction from './principal-remark.actions';
 import {
@@ -68,8 +69,8 @@ export class PrincipalRemarkFacade {
     return this.currentPageQuery;
   }
 
-  getPrincipalRemarkAll(): void {
-    this.store.dispatch(PrincipalRemarkAction.getPrincipalRemarkAll());
+  getPrincipalRemarkAll(query?: QueryInterface): void {
+    this.store.dispatch(PrincipalRemarkAction.getPrincipalRemarkAll({ query }));
   }
 
   getPrincipalRemarkById(principalRemarkId: string): void {

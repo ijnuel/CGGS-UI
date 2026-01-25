@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { CountryFacade } from '../../../../store/country/country.facade';
-import { CountryFormInterface } from '../../../../types';
+import { CountryListInterface } from '../../../../types';
 
 @Component({
   selector: 'app-view-country',
@@ -10,7 +10,7 @@ import { CountryFormInterface } from '../../../../types';
   styleUrls: ['./view-country.component.scss'],
 })
 export class ViewCountryComponent implements OnInit {
-  country$: Observable<CountryFormInterface | null>;
+  country$: Observable<CountryListInterface | null>;
 
   constructor(
     private route: ActivatedRoute,

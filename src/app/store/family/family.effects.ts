@@ -19,11 +19,11 @@ export class FamilyEffect {
   $familyAll = createEffect(() =>
     this.actions$.pipe(
       ofType(FamilyAction.getFamilyAll),
-      switchMap(() =>
+      switchMap(({ query }) =>
         this.http
           .post<GenericResponseInterface<FamilyListInterface[]>>(
             `${environment.baseUrl}/Family/GetAll`,
-            [],
+            query ?? {},
             { withCredentials: true }
           )
           .pipe(

@@ -6,6 +6,7 @@ import {
   CountryFormInterface,
   PageQueryInterface,
   PaginatedResponseInterface,
+  QueryInterface,
 } from '../../types';
 import * as CountryAction from './country.actions';
 import {
@@ -65,8 +66,8 @@ export class CountryFacade {
     return this.currentPageQuery;
   }
 
-  getCountryAll(): void {
-    this.store.dispatch(CountryAction.getCountryAll());
+  getCountryAll(query?: QueryInterface): void {
+    this.store.dispatch(CountryAction.getCountryAll({ query }));
   }
 
   getCountryById(countryId: string): void {

@@ -6,6 +6,7 @@ import {
   FamilyFormInterface,
   PageQueryInterface,
   PaginatedResponseInterface,
+  QueryInterface,
 } from '../../types';
 import * as FamilyAction from './family.actions';
 import {
@@ -65,8 +66,8 @@ export class FamilyFacade {
     return this.currentPageQuery;
   }
 
-  getFamilyAll(): void {
-    this.store.dispatch(FamilyAction.getFamilyAll());
+  getFamilyAll(query?: QueryInterface): void {
+    this.store.dispatch(FamilyAction.getFamilyAll({ query }));
   }
 
   getFamilyById(familyId: string): void {

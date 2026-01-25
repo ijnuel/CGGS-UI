@@ -3,12 +3,13 @@ import {
   GenericResponseInterface,
   PageQueryInterface,
   PaginatedResponseInterface,
+  QueryInterface,
   SubjectListInterface,
   SubjectFormInterface,
 } from '../../types';
 
 // Get All (non-paginated)
-export const getSubjectAll = createAction('[Subject] Get All');
+export const getSubjectAll = createAction('[Subject] Get All', props<{ query?: QueryInterface }>());
 
 export const getSubjectAllSuccess = createAction(
   '[Subject/API] Get All Success',

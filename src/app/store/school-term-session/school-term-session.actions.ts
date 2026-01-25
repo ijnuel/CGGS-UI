@@ -3,12 +3,13 @@ import {
   GenericResponseInterface,
   PageQueryInterface,
   PaginatedResponseInterface,
+  QueryInterface,
   SchoolTermSessionListInterface,
   SchoolTermSessionFormInterface,
 } from '../../types';
 
 // Get All (non-paginated)
-export const getSchoolTermSessionAll = createAction('[SchoolTermSession] Get All');
+export const getSchoolTermSessionAll = createAction('[SchoolTermSession] Get All', props<{ query?: QueryInterface }>());
 
 export const getSchoolTermSessionAllSuccess = createAction(
   '[SchoolTermSession/API] Get All Success',

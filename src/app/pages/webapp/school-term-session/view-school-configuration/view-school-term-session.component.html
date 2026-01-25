@@ -7,7 +7,12 @@
     </button>
   </div>
   <div *ngIf="schoolTermSession$ | async as schoolTermSession">
-    <p><strong>Name:</strong> {{ schoolTermSession.name }}</p>
+    <p><strong>Session:</strong> {{ schoolTermSession.sessionObject?.name }}</p>
+    <p><strong>Term:</strong> {{ schoolTermSession.termString }}</p>
+    <p><strong>Term Start Date:</strong> {{ schoolTermSession.termStartDate }}</p>
+    <p><strong>Term End Date:</strong> {{ schoolTermSession.termEndDate }}</p>
+    <p><strong>Is Current:</strong> {{ schoolTermSession.isCurrent }}</p>
+    <p><strong>No of Opened Days:</strong> {{ schoolTermSession.noOfOpenedDays }}</p>
     <!-- Add more fields as needed -->
   </div>
   <div *ngIf="!(schoolTermSession$ | async)">

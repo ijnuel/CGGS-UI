@@ -19,11 +19,11 @@ export class ClassLevelEffect {
   $classLevelAll = createEffect(() =>
     this.actions$.pipe(
       ofType(ClassLevelAction.getClassLevelAll),
-      switchMap(() =>
+      switchMap(({ query }) =>
         this.http
           .post<GenericResponseInterface<ClassLevelListInterface[]>>(
             `${environment.baseUrl}/ClassLevel/GetAll`,
-            [],
+            query ?? {},
             { withCredentials: true }
           )
           .pipe(

@@ -6,6 +6,7 @@ import {
   SessionFormInterface,
   PageQueryInterface,
   PaginatedResponseInterface,
+  QueryInterface,
 } from '../../types';
 import * as SessionAction from './session.actions';
 import {
@@ -65,8 +66,8 @@ export class SessionFacade {
     return this.currentPageQuery;
   }
 
-  getSessionAll(): void {
-    this.store.dispatch(SessionAction.getSessionAll());
+  getSessionAll(query?: QueryInterface): void {
+    this.store.dispatch(SessionAction.getSessionAll({ query }));
   }
 
   getSessionById(sessionId: string): void {

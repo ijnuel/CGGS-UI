@@ -6,6 +6,7 @@ import {
   ClassLevelFormInterface,
   PageQueryInterface,
   PaginatedResponseInterface,
+  QueryInterface,
 } from '../../types';
 import * as ClassLevelAction from './class-level.actions';
 import {
@@ -65,8 +66,8 @@ export class ClassLevelFacade {
     return this.currentPageQuery;
   }
 
-  getClassLevelAll(): void {
-    this.store.dispatch(ClassLevelAction.getClassLevelAll());
+  getClassLevelAll(query?: QueryInterface): void {
+    this.store.dispatch(ClassLevelAction.getClassLevelAll({ query }));
   }
 
   getClassLevelById(classLevelId: string): void {

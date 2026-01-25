@@ -8,7 +8,7 @@ import {
     Validators,
 } from '@angular/forms';
 import { getErrorMessageHelper } from '../../../../services/helper.service';
-import { DropdownListInterface, TestEntityTemplateFormInterface } from '../../../../types';
+import { DropdownListInterface, TestEntityTemplateFormInterface, TestEntityTemplateListInterface } from '../../../../types';
 import { SharedFacade } from '../../../../store/shared/shared.facade';
 import { ActivatedRoute, Router } from '@angular/router';
 import { GlobalLoadingFacade } from '../../../../store/global-loading/global-loading.facade';
@@ -21,11 +21,11 @@ import { GlobalLoadingFacade } from '../../../../store/global-loading/global-loa
 export class CreateUpdateTestEntityTemplateComponent implements OnInit, OnDestroy {
     loading$: Observable<boolean>;
     error$: Observable<string | null>;
-    testEntityTemplateById$: Observable<TestEntityTemplateFormInterface | null>;
+    testEntityTemplateById$: Observable<TestEntityTemplateListInterface | null>;
     dropdownLoading$: Observable<boolean>;
 
     formGroup: FormGroup<{
-        name: FormControl;
+        testName: FormControl;
     }>;
 
     get formControl() {
@@ -49,7 +49,7 @@ export class CreateUpdateTestEntityTemplateComponent implements OnInit, OnDestro
         this.dropdownLoading$ = this.sharedFacade.selectedLoading$;
 
         this.formGroup = this.fb.group({
-            name: ['', [Validators.required, Validators.maxLength(255)]],
+            testName: ['', [Validators.required, Validators.maxLength(255)]],
         });
     }
 
@@ -61,7 +61,7 @@ export class CreateUpdateTestEntityTemplateComponent implements OnInit, OnDestro
             this.testEntityTemplateById$.pipe(takeUntil(this.unsubscribe$)).subscribe((data) => {
                 if (data) {
                     this.formGroup.patchValue({
-                        name: data.name
+                        testName: data.testName,
                     });
                 }
             });

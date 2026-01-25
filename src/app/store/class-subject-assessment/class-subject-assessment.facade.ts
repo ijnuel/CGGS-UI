@@ -6,6 +6,7 @@ import {
   ClassSubjectAssessmentFormInterface,
   PageQueryInterface,
   PaginatedResponseInterface,
+  QueryInterface,
 } from '../../types';
 import * as ClassSubjectAssessmentAction from './class-subject-assessment.actions';
 import {
@@ -65,8 +66,8 @@ export class ClassSubjectAssessmentFacade {
     return this.currentPageQuery;
   }
 
-  getClassSubjectAssessmentAll(): void {
-    this.store.dispatch(ClassSubjectAssessmentAction.getClassSubjectAssessmentAll());
+  getClassSubjectAssessmentAll(query?: QueryInterface): void {
+    this.store.dispatch(ClassSubjectAssessmentAction.getClassSubjectAssessmentAll({ query }));
   }
 
   getClassSubjectAssessmentById(classSubjectAssessmentId: string): void {

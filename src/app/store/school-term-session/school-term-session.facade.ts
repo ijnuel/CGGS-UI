@@ -6,6 +6,7 @@ import {
   SchoolTermSessionFormInterface,
   PageQueryInterface,
   PaginatedResponseInterface,
+  QueryInterface,
 } from '../../types';
 import * as SchoolTermSessionAction from './school-term-session.actions';
 import {
@@ -65,8 +66,8 @@ export class SchoolTermSessionFacade {
     return this.currentPageQuery;
   }
 
-  getSchoolTermSessionAll(): void {
-    this.store.dispatch(SchoolTermSessionAction.getSchoolTermSessionAll());
+  getSchoolTermSessionAll(query?: QueryInterface): void {
+    this.store.dispatch(SchoolTermSessionAction.getSchoolTermSessionAll({ query }));
   }
 
   getSchoolTermSessionById(schoolTermSessionId: string): void {

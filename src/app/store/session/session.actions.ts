@@ -3,12 +3,13 @@ import {
   GenericResponseInterface,
   PageQueryInterface,
   PaginatedResponseInterface,
+  QueryInterface,
   SessionListInterface,
   SessionFormInterface,
 } from '../../types';
 
 // Get All (non-paginated)
-export const getSessionAll = createAction('[Session] Get All');
+export const getSessionAll = createAction('[Session] Get All', props<{ query?: QueryInterface }>());
 
 export const getSessionAllSuccess = createAction(
   '[Session/API] Get All Success',

@@ -19,11 +19,11 @@ export class CompanyEffect {
   $companyAll = createEffect(() =>
     this.actions$.pipe(
       ofType(CompanyAction.getCompanyAll),
-      switchMap(() =>
+      switchMap(({ query }) =>
         this.http
           .post<GenericResponseInterface<CompanyListInterface[]>>(
             `${environment.baseUrl}/Company/GetAll`,
-            [],
+            query ?? {},
             { withCredentials: true }
           )
           .pipe(

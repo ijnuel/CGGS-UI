@@ -3,12 +3,13 @@ import {
   GenericResponseInterface,
   PageQueryInterface,
   PaginatedResponseInterface,
+  QueryInterface,
   PrincipalRemarkListInterface,
   PrincipalRemarkFormInterface,
 } from '../../types';
 
 // Get All (non-paginated)
-export const getPrincipalRemarkAll = createAction('[PrincipalRemark] Get All');
+export const getPrincipalRemarkAll = createAction('[PrincipalRemark] Get All', props<{ query?: QueryInterface }>());
 
 export const getPrincipalRemarkAllSuccess = createAction(
   '[PrincipalRemark/API] Get All Success',

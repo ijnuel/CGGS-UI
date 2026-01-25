@@ -1,12 +1,22 @@
+import { ClassListInterface } from "./class";
+import { ClassSubjectAssessmentListInterface } from "./class-subject-assessment";
+import { SchoolTermSessionListInterface } from "./school-term-session";
+import { StaffListInterface } from "./staff";
+import { SubjectListInterface } from "./subject";
+
 export interface ClassSubjectListInterface {
     id: string;
-    name: string;
-    description: string;
-    createdDate: string;
+    isActive: boolean;
     classId: string;
     subjectId: string;
-    staffId: string;
+    staffId?: string;
     schoolTermSessionId: string;
+    description: string;
+    class?: ClassListInterface;
+    subject?: SubjectListInterface;
+    staff?: StaffListInterface;
+    schoolTermSession?: SchoolTermSessionListInterface;
+    classSubjectAssessments?: ClassSubjectAssessmentListInterface[];
 }
 
 export interface ClassSubjectFormInterface {

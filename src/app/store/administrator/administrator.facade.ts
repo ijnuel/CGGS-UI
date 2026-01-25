@@ -6,6 +6,7 @@ import {
   AdministratorFormInterface,
   PageQueryInterface,
   PaginatedResponseInterface,
+  QueryInterface,
 } from '../../types';
 import * as AdministratorAction from './administrator.actions';
 import {
@@ -65,8 +66,8 @@ export class AdministratorFacade {
     return this.currentPageQuery;
   }
 
-  getAdministratorAll(): void {
-    this.store.dispatch(AdministratorAction.getAdministratorAll());
+  getAdministratorAll(query?: QueryInterface): void {
+    this.store.dispatch(AdministratorAction.getAdministratorAll({ query }));
   }
 
   getAdministratorById(administratorId: string): void {

@@ -90,7 +90,7 @@ export class SchoolTermSessionComponent implements OnInit {
       width: '400px',
       data: {
         title: 'Delete School Term Session',
-        message: `Are you sure you want to delete "${row.name}"?`,
+        message: `Are you sure you want to delete "${row.sessionObject?.name} - ${row.termString}"?`,
         confirmText: 'Delete',
         cancelText: 'Cancel'
       }

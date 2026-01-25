@@ -1,8 +1,18 @@
+import { ClassListInterface } from "./class";
+import { StudentListInterface } from "./student";
+import { SessionListInterface } from "./session";
+
 export interface StudentClassListInterface {
     id: string;
-    name: string;
-    studentNo: string;
-    studentFullName: string;
+    studentId: string;
+    classId: string;
+    sessionId: string;
+    studentFullName?: string;
+    studentNo?: string;
+    student?: StudentListInterface;
+    class?: ClassListInterface;
+    session?: SessionListInterface;
+    // fees?: FeeListInterface[];
 }
 
 export interface StudentClassFormInterface {

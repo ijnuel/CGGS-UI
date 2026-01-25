@@ -19,11 +19,11 @@ export class StateEffect {
   $stateAll = createEffect(() =>
     this.actions$.pipe(
       ofType(StateAction.getStateAll),
-      switchMap(() =>
+      switchMap(({ query }) =>
         this.http
           .post<GenericResponseInterface<StateListInterface[]>>(
             `${environment.baseUrl}/State/GetAll`,
-            [],
+            query ?? {},
             { withCredentials: true }
           )
           .pipe(

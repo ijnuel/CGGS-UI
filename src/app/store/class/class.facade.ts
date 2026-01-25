@@ -6,6 +6,7 @@ import {
   ClassFormInterface,
   PageQueryInterface,
   PaginatedResponseInterface,
+  QueryInterface,
 } from '../../types';
 import * as ClassAction from './class.actions';
 import {
@@ -65,8 +66,8 @@ export class ClassFacade {
     return this.currentPageQuery;
   }
 
-  getClassAll(): void {
-    this.store.dispatch(ClassAction.getClassAll());
+  getClassAll(query?: QueryInterface): void {
+    this.store.dispatch(ClassAction.getClassAll({ query }));
   }
 
   getClassById(classId: string): void {

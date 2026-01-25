@@ -1,8 +1,10 @@
+import { StateListInterface } from "./state";
+
 export interface LocalGovernmentAreaListInterface {
     id: string;
-    name: string;
-    description: string;
-    createdDate: string;
+    stateId: string;
+    name?: string;
+    state?: StateListInterface;
 }
 
 export interface LocalGovernmentAreaFormInterface {

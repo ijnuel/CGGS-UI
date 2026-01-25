@@ -8,7 +8,7 @@ import {
     Validators,
 } from '@angular/forms';
 import { getErrorMessageHelper } from '../../../../services/helper.service';
-import { DropdownListInterface, FamilyFormInterface } from '../../../../types';
+import { DropdownListInterface, FamilyFormInterface, FamilyListInterface } from '../../../../types';
 import { SharedFacade } from '../../../../store/shared/shared.facade';
 import { ActivatedRoute, Router } from '@angular/router';
 import { GlobalLoadingFacade } from '../../../../store/global-loading/global-loading.facade';
@@ -21,11 +21,27 @@ import { GlobalLoadingFacade } from '../../../../store/global-loading/global-loa
 export class CreateUpdateFamilyComponent implements OnInit, OnDestroy {
     loading$: Observable<boolean>;
     error$: Observable<string | null>;
-    familyById$: Observable<FamilyFormInterface | null>;
+    familyById$: Observable<FamilyListInterface | null>;
     dropdownLoading$: Observable<boolean>;
 
     formGroup: FormGroup<{
         name: FormControl;
+        originLgaId: FormControl;
+        stateOfOriginId: FormControl;
+        nationalityId: FormControl;
+        homeAddress: FormControl;
+        residentialCity: FormControl;
+        residentialStateId: FormControl;
+        phoneNumber: FormControl;
+        email: FormControl;
+        religion: FormControl;
+        status: FormControl;
+        userId: FormControl;
+        familyNo: FormControl;
+        firstName: FormControl;
+        middleName: FormControl;
+        dateOfBirth: FormControl;
+        gender: FormControl;
     }>;
 
     get formControl() {
@@ -50,6 +66,22 @@ export class CreateUpdateFamilyComponent implements OnInit, OnDestroy {
 
         this.formGroup = this.fb.group({
             name: ['', [Validators.required, Validators.maxLength(255)]],
+            originLgaId: ['', [Validators.required]],
+            stateOfOriginId: ['', [Validators.required]],
+            nationalityId: ['', [Validators.required]],
+            homeAddress: ['', [Validators.required]],
+            residentialCity: ['', [Validators.required]],
+            residentialStateId: ['', [Validators.required]],
+            phoneNumber: ['', [Validators.required]],
+            email: ['', [Validators.required]],
+            religion: ['', [Validators.required]],
+            status: ['', [Validators.required]],
+            userId: ['', [Validators.required]],
+            familyNo: ['', [Validators.required]],
+            firstName: ['', [Validators.required]],
+            middleName: ['', [Validators.required]],
+            dateOfBirth: ['', [Validators.required]],
+            gender: ['', [Validators.required]],
         });
     }
 
@@ -61,7 +93,23 @@ export class CreateUpdateFamilyComponent implements OnInit, OnDestroy {
             this.familyById$.pipe(takeUntil(this.unsubscribe$)).subscribe((data) => {
                 if (data) {
                     this.formGroup.patchValue({
-                        name: data.lastName
+                        name: data.lastName!,
+                        originLgaId: data.originLGAId!,
+                        stateOfOriginId: data.stateOfOriginId!,
+                        nationalityId: data.nationalityId!,
+                        homeAddress: data.homeAddress!,
+                        residentialCity: data.residentialCity!,
+                        residentialStateId: data.residentialStateId!,
+                        phoneNumber: data.phoneNumber!,
+                        email: data.email!,
+                        religion: data.religion,
+                        status: data.status,
+                        userId: data.userId!,
+                        familyNo: data.familyNo!,
+                        firstName: data.firstName!,
+                        middleName: data.middleName!,
+                        dateOfBirth: data.dateOfBirth,
+                        gender: data.gender,
                     });
                 }
             });

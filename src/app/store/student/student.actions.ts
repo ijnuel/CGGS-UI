@@ -3,12 +3,13 @@ import {
   GenericResponseInterface,
   PageQueryInterface,
   PaginatedResponseInterface,
+  QueryInterface,
   StudentListInterface,
   StudentFormInterface,
 } from '../../types';
 
 // Get All (non-paginated)
-export const getStudentAll = createAction('[Student] Get All');
+export const getStudentAll = createAction('[Student] Get All', props<{ query?: QueryInterface }>());
 
 export const getStudentAllSuccess = createAction(
   '[Student/API] Get All Success',

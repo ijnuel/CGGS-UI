@@ -3,12 +3,13 @@ import {
   GenericResponseInterface,
   PageQueryInterface,
   PaginatedResponseInterface,
+  QueryInterface,
   LocalGovernmentAreaListInterface,
   LocalGovernmentAreaFormInterface,
 } from '../../types';
 
 // Get All (non-paginated)
-export const getLocalGovernmentAreaAll = createAction('[LocalGovernmentArea] Get All');
+export const getLocalGovernmentAreaAll = createAction('[LocalGovernmentArea] Get All', props<{ query?: QueryInterface }>());
 
 export const getLocalGovernmentAreaAllSuccess = createAction(
   '[LocalGovernmentArea/API] Get All Success',

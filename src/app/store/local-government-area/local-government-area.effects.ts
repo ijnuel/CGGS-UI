@@ -19,11 +19,11 @@ export class LocalGovernmentAreaEffect {
   $localGovernmentAreaAll = createEffect(() =>
     this.actions$.pipe(
       ofType(LocalGovernmentAreaAction.getLocalGovernmentAreaAll),
-      switchMap(() =>
+      switchMap(({ query }) =>
         this.http
           .post<GenericResponseInterface<LocalGovernmentAreaListInterface[]>>(
             `${environment.baseUrl}/LocalGovernmentArea/GetAll`,
-            [],
+            query ?? {},
             { withCredentials: true }
           )
           .pipe(

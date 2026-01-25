@@ -6,6 +6,7 @@ import {
   StateFormInterface,
   PageQueryInterface,
   PaginatedResponseInterface,
+  QueryInterface,
 } from '../../types';
 import * as StateAction from './state.actions';
 import {
@@ -65,8 +66,8 @@ export class StateFacade {
     return this.currentPageQuery;
   }
 
-  getStateAll(): void {
-    this.store.dispatch(StateAction.getStateAll());
+  getStateAll(query?: QueryInterface): void {
+    this.store.dispatch(StateAction.getStateAll({ query }));
   }
 
   getStateById(stateId: string): void {

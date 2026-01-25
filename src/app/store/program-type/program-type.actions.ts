@@ -5,12 +5,13 @@ import {
   PaginatedResponseInterface,
   ProgramTypeListInterface,
   ProgramTypeFormInterface,
+  QueryInterface,
 } from '../../types';
 
 // Get All (non-paginated)
 export const getProgramTypeAll = createAction(
   '[ProgramType] Get All',
-  props<{ queryProperties?: string }>() // serialized QueryProperty[]
+  props<{ query?: QueryInterface }>()
 );
 
 export const getProgramTypeAllSuccess = createAction(

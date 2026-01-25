@@ -7,7 +7,7 @@ import { ClassFacade } from '../../../../store/class/class.facade';
 import { SessionFacade } from '../../../../store/session/session.facade';
 import { StudentClassFacade } from '../../../../store/student-class/student-class.facade';
 import { StudentFacade } from '../../../../store/student/student.facade';
-import { ClassFormInterface, SessionListInterface, StudentClassListInterface, StudentListInterface, PaginatedResponseInterface, PageQueryInterface } from '../../../../types';
+import { SessionListInterface, StudentClassListInterface, StudentListInterface, PaginatedResponseInterface, PageQueryInterface, ClassListInterface } from '../../../../types';
 import { TableHeaderInterface } from '../../../../types/table';
 import { MatDialog } from '@angular/material/dialog';
 import { ConfirmDialogComponent } from '../../../../shared/confirm-dialog/confirm-dialog.component';
@@ -19,7 +19,7 @@ import { ToastNotificationService, NotificationTypeEnums } from '../../../../ser
   styleUrls: ['./view-class.component.scss'],
 })
 export class ViewClassComponent implements OnInit, OnDestroy {
-  class$: Observable<ClassFormInterface | null>;
+  class$: Observable<ClassListInterface | null>;
   sessions$: Observable<SessionListInterface[] | null>;
   studentClassList$: Observable<PaginatedResponseInterface<StudentClassListInterface[]> | null>;
   allStudents$: Observable<StudentListInterface[] | null>;

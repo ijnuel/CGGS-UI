@@ -83,7 +83,7 @@ export class ClassSubjectAssessmentComponent implements OnInit {
       width: '400px',
       data: {
         title: 'Delete Class Subject Assessment',
-        message: `Are you sure you want to delete "${row.name}"?`,
+        message: `Are you sure you want to delete "${row.assessmentType}"?`,
         confirmText: 'Delete',
         cancelText: 'Cancel'
       }

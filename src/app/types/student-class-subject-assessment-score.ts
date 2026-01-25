@@ -1,11 +1,14 @@
+import { ClassSubjectAssessmentListInterface } from "./class-subject-assessment";
+import { StudentListInterface } from "./student";
+
 export interface StudentClassSubjectAssessmentScoreListInterface {
   id: string;
   studentId: string;
   classSubjectAssessmentId: string;
   score: number;
   skillGrade: string | null;
-  student?: any; // StudentResponseDto
-  classSubjectAssessment?: any; // ClassSubjectAssessmentResponseDto
+  student?: StudentListInterface; // StudentResponseDto
+  classSubjectAssessment?: ClassSubjectAssessmentListInterface; // ClassSubjectAssessmentResponseDto
   comment: string;
 }
 

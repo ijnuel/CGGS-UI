@@ -8,7 +8,7 @@ import {
     Validators,
 } from '@angular/forms';
 import { getErrorMessageHelper } from '../../../../services/helper.service';
-import { DropdownListInterface, SchoolTermSessionFormInterface, SessionListInterface } from '../../../../types';
+import { DropdownListInterface, SchoolTermSessionFormInterface, SchoolTermSessionListInterface, SessionListInterface } from '../../../../types';
 import { SharedFacade } from '../../../../store/shared/shared.facade';
 import { ActivatedRoute, Router } from '@angular/router';
 import { GlobalLoadingFacade } from '../../../../store/global-loading/global-loading.facade';
@@ -22,7 +22,7 @@ import { SessionFacade } from '../../../../store/session/session.facade';
 export class CreateUpdateSchoolTermSessionComponent implements OnInit, OnDestroy {
     loading$: Observable<boolean>;
     error$: Observable<string | null>;
-    schoolTermSessionById$: Observable<SchoolTermSessionFormInterface | null>;
+    schoolTermSessionById$: Observable<SchoolTermSessionListInterface | null>;
     dropdownLoading$: Observable<boolean>;
     termList$: Observable<DropdownListInterface[] | null>;
     sessionList$: Observable<SessionListInterface[] | null>;

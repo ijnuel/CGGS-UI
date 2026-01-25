@@ -6,6 +6,7 @@ import {
   ProgramTypeFormInterface,
   PageQueryInterface,
   PaginatedResponseInterface,
+  QueryInterface,
 } from '../../types';
 import * as ProgramTypeAction from './program-type.actions';
 import {
@@ -60,8 +61,8 @@ export class ProgramTypeFacade {
     this.store.dispatch(ProgramTypeAction.getProgramTypeList({ pageQuery }));
   }
 
-  getProgramTypeAll(queryProperties?: string): void {
-    this.store.dispatch(ProgramTypeAction.getProgramTypeAll({ queryProperties }));
+  getProgramTypeAll(query?: QueryInterface): void {
+    this.store.dispatch(ProgramTypeAction.getProgramTypeAll({ query }));
   }
 
   getProgramTypeById(programTypeId: string): void {

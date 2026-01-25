@@ -6,6 +6,7 @@ import {
   ApplicationFormInterface,
   PageQueryInterface,
   PaginatedResponseInterface,
+  QueryInterface,
 } from '../../types';
 import * as ApplicationAction from './application.actions';
 import {
@@ -65,8 +66,8 @@ export class ApplicationFacade {
     return this.currentPageQuery;
   }
 
-  getApplicationAll(): void {
-    this.store.dispatch(ApplicationAction.getApplicationAll());
+  getApplicationAll(query?: QueryInterface): void {
+    this.store.dispatch(ApplicationAction.getApplicationAll({ query }));
   }
 
   getApplicationById(applicationId: string): void {

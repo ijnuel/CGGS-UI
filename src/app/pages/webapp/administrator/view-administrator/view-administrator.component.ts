@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { AdministratorFacade } from '../../../../store/administrator/administrator.facade';
-import { AdministratorFormInterface } from '../../../../types';
+import { AdministratorListInterface } from '../../../../types';
 
 @Component({
   selector: 'app-view-administrator',
@@ -10,7 +10,7 @@ import { AdministratorFormInterface } from '../../../../types';
   styleUrls: ['./view-administrator.component.scss'],
 })
 export class ViewAdministratorComponent implements OnInit {
-  administrator$: Observable<AdministratorFormInterface | null>;
+  administrator$: Observable<AdministratorListInterface | null>;
 
   constructor(
     private route: ActivatedRoute,

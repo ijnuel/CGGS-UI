@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { TestEntityTemplateFacade } from '../../../../store/test-entity-template/test-entity-template.facade';
-import { TestEntityTemplateFormInterface } from '../../../../types';
+import { TestEntityTemplateListInterface } from '../../../../types';
 
 @Component({
   selector: 'app-view-test-entity-template',
@@ -10,7 +10,7 @@ import { TestEntityTemplateFormInterface } from '../../../../types';
   styleUrls: ['./view-test-entity-template.component.scss'],
 })
 export class ViewTestEntityTemplateComponent implements OnInit {
-  testEntityTemplate$: Observable<TestEntityTemplateFormInterface | null>;
+  testEntityTemplate$: Observable<TestEntityTemplateListInterface | null>;
 
   constructor(
     private route: ActivatedRoute,

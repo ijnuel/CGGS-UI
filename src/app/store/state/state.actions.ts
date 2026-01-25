@@ -3,12 +3,13 @@ import {
   GenericResponseInterface,
   PageQueryInterface,
   PaginatedResponseInterface,
+  QueryInterface,
   StateListInterface,
   StateFormInterface,
 } from '../../types';
 
 // Get All (non-paginated)
-export const getStateAll = createAction('[State] Get All');
+export const getStateAll = createAction('[State] Get All', props<{ query?: QueryInterface }>());
 
 export const getStateAllSuccess = createAction(
   '[State/API] Get All Success',

@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { PrincipalRemarkFacade } from '../../../../store/principal-remark/principal-remark.facade';
-import { PrincipalRemarkFormInterface } from '../../../../types';
+import { PrincipalRemarkListInterface } from '../../../../types';
 
 @Component({
   selector: 'app-view-principal-remark',
@@ -10,7 +10,7 @@ import { PrincipalRemarkFormInterface } from '../../../../types';
   styleUrls: ['./view-principal-remark.component.scss'],
 })
 export class ViewPrincipalRemarkComponent implements OnInit {
-  principalRemark$: Observable<PrincipalRemarkFormInterface | null>;
+  principalRemark$: Observable<PrincipalRemarkListInterface | null>;
 
   constructor(
     private route: ActivatedRoute,

@@ -83,7 +83,7 @@ export class TestEntityTemplateComponent implements OnInit {
       width: '400px',
       data: {
         title: 'Delete Test Entity Template',
-        message: `Are you sure you want to delete "${row.name}"?`,
+        message: `Are you sure you want to delete "${row.testName}"?`,
         confirmText: 'Delete',
         cancelText: 'Cancel'
       }

@@ -5,12 +5,13 @@ import {
   PaginatedResponseInterface,
   TestEntityTemplateListInterface,
   TestEntityTemplateFormInterface,
+  QueryInterface,
 } from '../../types';
 
 // Get All (non-paginated)
 export const getTestEntityTemplateAll = createAction(
   '[TestEntityTemplate] Get All',
-  props<{ queryProperties?: string }>() // serialized QueryProperty[]
+  props<{ query?: QueryInterface }>()
 );
 
 export const getTestEntityTemplateAllSuccess = createAction(

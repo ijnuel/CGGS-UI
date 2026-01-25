@@ -7,7 +7,7 @@
     </button>
   </div>
   <div *ngIf="classSubject$ | async as classSubject">
-    <p><strong>Name:</strong> {{ classSubject.name }}</p>
+    <p><strong>Name:</strong> {{ classSubject.subject?.name! }}</p>
     <!-- Add more fields as needed -->
   </div>
   <div *ngIf="!(classSubject$ | async)">

@@ -18,11 +18,11 @@ export class ClassSubjectEffect {
   $classSubjectAll = createEffect(() =>
     this.actions$.pipe(
       ofType(ClassSubjectAction.getClassSubjectAll),
-      switchMap(({ queryProperties }) => {
+      switchMap(({ query }) => {
         return this.http
           .post<GenericResponseInterface<ClassSubjectListInterface[]>>(
             `${environment.baseUrl}/ClassSubject/GetAll`,
-            queryProperties,
+            query ?? {},
             { withCredentials: true }
           )
           .pipe(

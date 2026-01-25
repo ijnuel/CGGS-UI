@@ -6,6 +6,7 @@ import {
   StudentFormInterface,
   PageQueryInterface,
   PaginatedResponseInterface,
+  QueryInterface,
 } from '../../types';
 import * as StudentAction from './student.actions';
 import {
@@ -68,8 +69,8 @@ export class StudentFacade {
     return this.currentPageQuery;
   }
 
-  getStudentAll(): void {
-    this.store.dispatch(StudentAction.getStudentAll());
+  getStudentAll(query?: QueryInterface): void {
+    this.store.dispatch(StudentAction.getStudentAll({ query }));
   }
 
   getStudentsWithoutClass(sessionId: string): void {

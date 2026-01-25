@@ -19,11 +19,11 @@ export class ProgramTypeEffect {
   $programTypeAll = createEffect(() =>
     this.actions$.pipe(
       ofType(ProgramTypeAction.getProgramTypeAll),
-      switchMap(({ queryProperties }) => {
+      switchMap(({ query }) => {
         return this.http
           .post<GenericResponseInterface<ProgramTypeListInterface[]>>(
             `${environment.baseUrl}/ProgramType/GetAll`,
-            queryProperties,
+            query ?? {},
             { withCredentials: true }
           )
           .pipe(

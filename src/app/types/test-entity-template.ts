@@ -1,8 +1,7 @@
 export interface TestEntityTemplateListInterface {
     id: string;
-    name: string;
-    description: string;
-    createdDate: string;
+    testName?: string;
+    anotherName?: string;
 }
 
 export interface TestEntityTemplateFormInterface {

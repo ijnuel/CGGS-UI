@@ -48,12 +48,27 @@ interface PaginatedResponseInterface<T> {
   data: T;
 }
 
-interface PageQueryInterface {
+interface QueryInterface {
+  searchText?: string;
+  queryProperties?: NameValueInterface[];
+  nestedProperties?: NestedPropertyInterface[];
+  sortProperties?: SortPropertyInterface[];
+}
+
+interface PageQueryInterface extends QueryInterface {
   start: number;
   recordsPerPage: number;
   pageIndex?: number;
-  searchText?: string;
-  queryProperties?: NameValueInterface[];
+}
+
+interface NestedPropertyInterface {
+  name: string;
+  innerNestedProperty?: NestedPropertyInterface;
+}
+
+interface SortPropertyInterface {
+  name: string;
+  isDescending: boolean;
 }
 
 interface NameValueInterface {
@@ -69,8 +84,11 @@ export {
   LoginResponseInterface,
   UserRolesEnum,
   CurrentUserInterface,
+  QueryInterface,
   PageQueryInterface,
   StudentFormInterface,
+  SortPropertyInterface,
+  NestedPropertyInterface,
   NameValueInterface as DropdownListInterface,
   AdministratorListInterface,
   AdministratorFormInterface,

@@ -8,7 +8,7 @@ import {
     Validators,
 } from '@angular/forms';
 import { getErrorMessageHelper } from '../../../../services/helper.service';
-import { DropdownListInterface, ClassSubjectFormInterface } from '../../../../types';
+import { DropdownListInterface, ClassSubjectFormInterface, ClassSubjectListInterface } from '../../../../types';
 import { SharedFacade } from '../../../../store/shared/shared.facade';
 import { ActivatedRoute, Router } from '@angular/router';
 import { GlobalLoadingFacade } from '../../../../store/global-loading/global-loading.facade';
@@ -21,7 +21,7 @@ import { GlobalLoadingFacade } from '../../../../store/global-loading/global-loa
 export class CreateUpdateClassSubjectComponent implements OnInit, OnDestroy {
     loading$: Observable<boolean>;
     error$: Observable<string | null>;
-    classSubjectById$: Observable<ClassSubjectFormInterface | null>;
+    classSubjectById$: Observable<ClassSubjectListInterface | null>;
     dropdownLoading$: Observable<boolean>;
 
     formGroup: FormGroup<{
@@ -61,7 +61,7 @@ export class CreateUpdateClassSubjectComponent implements OnInit, OnDestroy {
             this.classSubjectById$.pipe(takeUntil(this.unsubscribe$)).subscribe((data) => {
                 if (data) {
                     this.formGroup.patchValue({
-                        name: data.name
+                        name: data.subject?.name
                     });
                 }
             });

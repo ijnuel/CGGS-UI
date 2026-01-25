@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { SessionFacade } from '../../../../store/session/session.facade';
-import { SessionFormInterface } from '../../../../types';
+import { SessionListInterface } from '../../../../types';
 
 @Component({
   selector: 'app-view-session',
@@ -10,7 +10,7 @@ import { SessionFormInterface } from '../../../../types';
   styleUrls: ['./view-session.component.scss'],
 })
 export class ViewSessionComponent implements OnInit {
-  session$: Observable<SessionFormInterface | null>;
+  session$: Observable<SessionListInterface | null>;
 
   constructor(
     private route: ActivatedRoute,

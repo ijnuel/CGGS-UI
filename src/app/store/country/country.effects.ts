@@ -19,11 +19,11 @@ export class CountryEffect {
   $countryAll = createEffect(() =>
     this.actions$.pipe(
       ofType(CountryAction.getCountryAll),
-      switchMap(() =>
+      switchMap(({ query }) =>
         this.http
           .post<GenericResponseInterface<CountryListInterface[]>>(
             `${environment.baseUrl}/Country/GetAll`,
-            [],
+            query ?? {},
             { withCredentials: true }
           )
           .pipe(
@@ -43,8 +43,6 @@ export class CountryEffect {
     this.actions$.pipe(
       ofType(CountryAction.getCountryList),
       switchMap(({ pageQuery }) => {
-        
-
         return this.http
           .post<GenericResponseInterface<PaginatedResponseInterface<CountryListInterface[]>>>(
             `${environment.baseUrl}/Country/GetAllPaginated`,

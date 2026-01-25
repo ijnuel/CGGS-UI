@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
 import { StudentClassSubjectAssessmentScoreListInterface, StudentClassSubjectAssessmentScoreFormInterface } from '../../types/student-class-subject-assessment-score';
-import { PaginatedResponseInterface, PageQueryInterface } from '../../types';
+import { PaginatedResponseInterface, PageQueryInterface, QueryInterface } from '../../types';
 import { StudentClassSubjectAssessmentScoreState } from './student-class-subject-assessment-score.reducer';
 import * as StudentClassSubjectAssessmentScoreActions from './student-class-subject-assessment-score.actions';
 import * as StudentClassSubjectAssessmentScoreSelectors from './student-class-subject-assessment-score.selector';

@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { StaffFacade } from '../../../../store/staff/staff.facade';
-import { StaffFormInterface } from '../../../../types';
+import { StaffListInterface } from '../../../../types';
 
 @Component({
   selector: 'app-view-staff',
@@ -10,7 +10,7 @@ import { StaffFormInterface } from '../../../../types';
   styleUrls: ['./view-staff.component.scss'],
 })
 export class ViewStaffComponent implements OnInit {
-  staff$: Observable<StaffFormInterface | null>;
+  staff$: Observable<StaffListInterface | null>;
 
   constructor(
     private route: ActivatedRoute,

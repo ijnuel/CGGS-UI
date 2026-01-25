@@ -42,15 +42,12 @@ export class TestEntityTemplateEffect {
   $testEntityTemplateAll = createEffect(() =>
     this.actions$.pipe(
       ofType(TestEntityTemplateAction.getTestEntityTemplateAll),
-      switchMap(({ queryProperties }) => {
-        const params: any = {};
-        if (queryProperties) {
-          params['queryProperties'] = queryProperties;
-        }
+      switchMap(({ query }) => {
         return this.http
-          .get<GenericResponseInterface<TestEntityTemplateListInterface[]>>(
+          .post<GenericResponseInterface<TestEntityTemplateListInterface[]>>(
             `${environment.baseUrl}/TestEntityTemplate/GetAll`,
-            { params, withCredentials: true }
+            query ?? {},
+            { withCredentials: true }
           )
           .pipe(
             map((payload) =>
