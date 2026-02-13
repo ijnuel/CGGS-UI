@@ -58,4 +58,33 @@ export class LayoutTopbarComponent implements OnInit, OnDestroy {
     const selectedCompanyId = event.value;
     this.authFacade.switchCompany(selectedCompanyId);
   }
+
+  navigateToChangePassword() {
+    this.router.navigate(['app/change-password']);
+  }
+
+  navigateToProfile() {
+    // TODO: Navigate to profile page when implemented
+    console.log('Navigate to profile');
+  }
+
+  logout() {
+    this.authFacade.logout();
+  }
+
+  getInitials(): string {
+    if (!this.currentUser) return 'U';
+    const firstName = this.currentUser.firstName || '';
+    const lastName = this.currentUser.lastName || '';
+    if (firstName && lastName) {
+      return `${firstName.charAt(0)}${lastName.charAt(0)}`.toUpperCase();
+    }
+    if (firstName) {
+      return firstName.charAt(0).toUpperCase();
+    }
+    if (lastName) {
+      return lastName.charAt(0).toUpperCase();
+    }
+    return 'U';
+  }
 }
