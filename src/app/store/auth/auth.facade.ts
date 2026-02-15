@@ -83,4 +83,16 @@ export class AuthFacade {
             .pipe(ofType(AuthActions.getUserCompaniesSuccess))
             .pipe(map(({ payload }) => payload));
     }
+
+    changePassword(payload: { oldPassword?: string; newPassword?: string; confirmNewPassword?: string }) {
+        this.store.dispatch(AuthActions.changePassword({ payload }));
+    }
+
+    changePasswordSuccessAction(): Observable<
+        GenericResponseInterface<boolean>
+    > {
+        return this.actionsListener$
+            .pipe(ofType(AuthActions.changePasswordSuccess))
+            .pipe(map(({ payload }) => payload));
+    }
 }

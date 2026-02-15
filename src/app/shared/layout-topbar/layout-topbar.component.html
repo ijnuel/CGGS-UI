@@ -57,5 +57,31 @@
         </mat-option>
       </mat-select>
     </div>
+
+    <!-- Avatar with dropdown menu -->
+    <div class="relative" [matMenuTriggerFor]="userMenu">
+      <div
+        class="w-10 h-10 rounded-full bg-[#e9eef9] hover:bg-[#d5ddef] flex items-center justify-center cursor-pointer transition-colors"
+        [title]="currentUser?.firstName + ' ' + currentUser?.lastName"
+      >
+        <span class="text-sm font-semibold text-gray-700">{{ getInitials() }}</span>
+      </div>
+    </div>
+
+    <mat-menu #userMenu="matMenu" class="user-menu">
+      <!-- <button mat-menu-item (click)="navigateToProfile()">
+        <mat-icon>person</mat-icon>
+        <span>Update Profile</span>
+      </button> -->
+      <button mat-menu-item (click)="navigateToChangePassword()">
+        <mat-icon>lock</mat-icon>
+        <span>Change Password</span>
+      </button>
+      <mat-divider></mat-divider>
+      <button mat-menu-item (click)="logout()">
+        <mat-icon>logout</mat-icon>
+        <span>Logout</span>
+      </button>
+    </mat-menu>
   </div>
 </div>

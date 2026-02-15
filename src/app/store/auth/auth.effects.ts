@@ -4,7 +4,7 @@ import { of } from 'rxjs';
 import { catchError, map, switchMap, tap } from 'rxjs/operators';
 import * as AuthAction from './auth.actions';
 import { environment } from '../../../environments/environment';
-import { LoginResponseInterface } from '../../types/auth';
+import { LoginResponseInterface, ChangePasswordDto } from '../../types/auth';
 import {
     CurrentUserInterface,
     GenericResponseInterface,
@@ -145,6 +145,30 @@ export class AuthEffect {
         )
     );
 
+    $changePassword = createEffect(() =>
+        this.actions$.pipe(
+            ofType(AuthAction.changePassword),
+            switchMap(({ payload }) =>
+                this.http
+                    .post<GenericResponseInterface<boolean>>(
+                        `${environment.baseUrl}/Account/ChangePassword`,
+                        payload,
+                        { withCredentials: true }
+                    )
+                    .pipe(
+                        map((response) => {
+                            this.toast.openToast('Password changed successfully!', NotificationTypeEnums.SUCCESS);
+                            return AuthAction.changePasswordSuccess({ payload: response });
+                        }),
+                        catchError((error) => {
+                            this.toast.openToast('Failed to change password. Please try again.', NotificationTypeEnums.ERROR);
+                            return of(AuthAction.changePasswordFail({ error }));
+                        })
+                    )
+            )
+        )
+    );
+
     $authLoading = createEffect(
         () =>
             this.actions$.pipe(
@@ -153,7 +177,8 @@ export class AuthEffect {
                     AuthAction.logout,
                     AuthAction.getCurrentUser,
                     AuthAction.switchCompany,
-                    AuthAction.getUserCompanies
+                    AuthAction.getUserCompanies,
+                    AuthAction.changePassword
                 ),
                 tap((action) => {
                     this.errorLoadingFacade.globalLoadingShow(action.type);
@@ -173,7 +198,9 @@ export class AuthEffect {
                     AuthAction.switchCompanySuccess,
                     AuthAction.switchCompanyFail,
                     AuthAction.getUserCompaniesSuccess,
-                    AuthAction.getUserCompaniesFail
+                    AuthAction.getUserCompaniesFail,
+                    AuthAction.changePasswordSuccess,
+                    AuthAction.changePasswordFail
                 ),
                 tap(() => {
                     this.errorLoadingFacade.globalLoadingHide();

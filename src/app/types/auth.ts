@@ -25,3 +25,9 @@ export enum UserRolesEnum {
   Family,
   Guest
 }
+
+export interface ChangePasswordDto {
+  oldPassword?: string;
+  newPassword?: string;
+  confirmNewPassword?: string;
+}

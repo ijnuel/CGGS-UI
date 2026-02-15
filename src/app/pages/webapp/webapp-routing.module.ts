@@ -45,6 +45,7 @@ const routes: Routes = [
       { path: 'admin-setup', loadChildren: () => import('./admin-setup/admin-setup.module').then((m) => m.AdminSetupModule), },
       { path: 'result', loadChildren: () => import('./result/result.module').then((m) => m.ResultModule), },
       { path: 'administrator', loadChildren: () => import('./administrator/administrator.module').then((m) => m.AdministratorModule), },
+      { path: 'change-password', loadChildren: () => import('./change-password/change-password.module').then((m) => m.ChangePasswordModule), },
     ],
   },
 ];

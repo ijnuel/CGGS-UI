@@ -1,0 +1,13 @@
+.user-menu {
+  min-width: 200px;
+  
+  .mat-mdc-menu-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    
+    mat-icon {
+      margin-right: 0;
+    }
+  }
+}

@@ -2,6 +2,7 @@ import { createAction, props } from '@ngrx/store';
 import {
     LoginResponseInterface,
     LoginPayloadInterface,
+    ChangePasswordDto,
 } from '../../types/auth';
 import { GenericResponseInterface, CurrentUserInterface, CompanyListInterface } from '../../types';
 
@@ -64,5 +65,20 @@ export const getUserCompaniesSuccess = createAction(
 
 export const getUserCompaniesFail = createAction(
     '[Auth/API] Get Admin Companies Fail',
+    props<{ error: string }>()
+);
+
+export const changePassword = createAction(
+    '[Auth] Change Password',
+    props<{ payload: ChangePasswordDto }>()
+);
+
+export const changePasswordSuccess = createAction(
+    '[Auth/API] Change Password Success',
+    props<{ payload: GenericResponseInterface<boolean> }>()
+);
+
+export const changePasswordFail = createAction(
+    '[Auth/API] Change Password Fail',
     props<{ error: string }>()
 );
