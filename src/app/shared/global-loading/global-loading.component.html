@@ -1,3 +1,27 @@
 <div class="global-loading-overlay flex items-center justify-center">
-  <mat-spinner class="-mt-24" [diameter]="45" color="primary"></mat-spinner>
+  <div class="loader-card">
+
+    <!-- Spinning rings -->
+    <div class="rings-wrapper">
+      <div class="ring ring-outer"></div>
+      <div class="ring ring-middle"></div>
+      <div class="ring ring-inner"></div>
+
+      <!-- Logo in centre -->
+      <div class="logo-center">
+        <img src="assets/images/logo.png" alt="CGGS" />
+      </div>
+    </div>
+
+    <!-- Label -->
+    <p class="loader-label">Please wait…</p>
+
+    <!-- Pulsing dots -->
+    <div class="dots">
+      <span class="dot dot-1"></span>
+      <span class="dot dot-2"></span>
+      <span class="dot dot-3"></span>
+    </div>
+
+  </div>
 </div>
