@@ -1,19 +1,24 @@
-<div class="min-w-[18rem] md:min-w-[21rem]">
-  <div class="flex justify-start mb-6 ml-2">
-    <span class="text-black font-bold text-lg">Login</span>
+<div class="w-full">
+
+  <!-- Header -->
+  <div class="mb-8">
+    <h3 class="text-[var(--app-primary)] font-bold">Welcome Back</h3>
+    <p class="text-gray-400 text-sm mt-1">Sign in to your CGGS portal account to continue.</p>
   </div>
+
+  <!-- Form -->
   <form
     [formGroup]="formGroup"
     (keyup.enter)="onSubmit()"
     (submit)="onSubmit()"
-    class="flex flex-col gap-6"
+    class="flex flex-col gap-5"
   >
-    <mat-form-field hideRequiredMarker class="mt-3">
-      <mat-label>Email/Username</mat-label>
+    <mat-form-field hideRequiredMarker appearance="outline">
+      <mat-label>Email / Username</mat-label>
       <input data-cy="email" matInput [formControl]="formControl.email" />
     </mat-form-field>
 
-    <mat-form-field hideRequiredMarker>
+    <mat-form-field hideRequiredMarker appearance="outline">
       <mat-label>Password</mat-label>
       <input
         data-cy="password"
@@ -34,9 +39,21 @@
       type="submit"
       [disabled]="formGroup.invalid"
       data-cy="login"
-      class="sec-btn"
+      class="sec-btn py-3 rounded-lg font-semibold text-sm tracking-wide"
     >
-      Login
+      Sign In
     </button>
   </form>
+
+  <!-- Footer link -->
+  <div class="mt-8 pt-6 border-t border-gray-200 text-center space-y-2">
+    <p class="text-gray-400 text-sm">New to CGGS Portal?</p>
+    <a
+      routerLink="/auth/enroll"
+      class="text-[#006efe] font-semibold text-sm hover:underline inline-block"
+    >
+      Apply for Admission &rarr;
+    </a>
+  </div>
+
 </div>

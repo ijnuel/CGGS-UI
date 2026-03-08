@@ -4,24 +4,30 @@ countryList: countryList$ | async, selectedCountryStateList:
 selectedCountryStateList$ | async, selectedStateLgaList: selectedStateLgaList$ |
 async }; as obs ) {
 
-<div class="min-w-[18rem] md:min-w-[21rem]">
-  <div class="flex justify-start mb-6 ml-2">
-    <span class="text-black font-bold text-lg">Create Profile</span>
-  </div>
-  <form [formGroup]="formGroup" (submit)="onSubmit()" class="flex flex-col gap-6">
-    <div class="grid gap-x-4 mt-2">
-      <div class="form-input-wrapper">
+<div class="w-full">
 
-        <mat-form-field class="mx-5">
+  <!-- Header -->
+  <div class="mb-8">
+    <h3 class="text-[var(--app-primary)] font-bold">Apply for Admission</h3>
+    <p class="text-gray-400 text-sm mt-1">Complete the form below to create your family profile and begin the admission process.</p>
+  </div>
+
+  <form [formGroup]="formGroup" (submit)="onSubmit()" class="flex flex-col gap-8">
+
+    <!-- Section 1: Family Information -->
+    <div>
+      <div class="flex items-center gap-2 mb-4">
+        <div class="w-1 h-5 bg-[#006efe] rounded-full"></div>
+        <p class="text-xs font-bold text-gray-500 uppercase tracking-widest">Family Information</p>
+      </div>
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <mat-form-field hideRequiredMarker>
           <mat-label>Family Name</mat-label>
           <input type="text" matInput [formControl]="formControl.lastName" />
-          <mat-error>
-            {{ getErrorMessage("lastName") }}
-          </mat-error>
+          <mat-error>{{ getErrorMessage("lastName") }}</mat-error>
         </mat-form-field>
 
         <app-searchable-mat-select
-          class="mx-5"
           [loading]="obs.dropdownLoading && !obs.religionList"
           [options]="obs.religionList!"
           label="Religion"
@@ -30,24 +36,38 @@ async }; as obs ) {
           [formInputClass]="''"
           [error]="getErrorMessage('religion')"
         ></app-searchable-mat-select>
+      </div>
+    </div>
 
-        <mat-form-field class="mx-5">
-          <mat-label>Email</mat-label>
+    <!-- Section 2: Contact Details -->
+    <div>
+      <div class="flex items-center gap-2 mb-4">
+        <div class="w-1 h-5 bg-[#006efe] rounded-full"></div>
+        <p class="text-xs font-bold text-gray-500 uppercase tracking-widest">Contact Details</p>
+      </div>
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <mat-form-field hideRequiredMarker>
+          <mat-label>Email Address</mat-label>
           <input type="email" matInput [formControl]="formControl.email" />
-          <mat-error>
-            {{ getErrorMessage("email") }}
-          </mat-error>
+          <mat-error>{{ getErrorMessage("email") }}</mat-error>
         </mat-form-field>
 
-        <mat-form-field class="mx-5">
+        <mat-form-field hideRequiredMarker>
           <mat-label>Phone Number</mat-label>
           <input type="text" matInput [formControl]="formControl.phoneNumber" />
-          <mat-error>
-            {{ getErrorMessage("phoneNumber") }}
-          </mat-error>
+          <mat-error>{{ getErrorMessage("phoneNumber") }}</mat-error>
         </mat-form-field>
+      </div>
+    </div>
 
-        <app-searchable-mat-select class="mx-5"
+    <!-- Section 3: Location & Origin -->
+    <div>
+      <div class="flex items-center gap-2 mb-4">
+        <div class="w-1 h-5 bg-[#006efe] rounded-full"></div>
+        <p class="text-xs font-bold text-gray-500 uppercase tracking-widest">Location &amp; Origin</p>
+      </div>
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <app-searchable-mat-select
           [options]="obs.countryList!"
           label="Nationality"
           placeholder="Select nationality"
@@ -58,7 +78,7 @@ async }; as obs ) {
           [error]="getErrorMessage('nationalityId')"
         ></app-searchable-mat-select>
 
-        <app-searchable-mat-select class="mx-5"
+        <app-searchable-mat-select
           [options]="obs.selectedCountryStateList!"
           label="State of Origin"
           placeholder="Select state of origin"
@@ -69,9 +89,9 @@ async }; as obs ) {
           [error]="getErrorMessage('stateOfOriginId')"
         ></app-searchable-mat-select>
 
-        <app-searchable-mat-select class="mx-5"
+        <app-searchable-mat-select
           [options]="obs.selectedStateLgaList!"
-          label="Local Government"
+          label="Local Government Area"
           placeholder="Select local government"
           [labelKeys]="['name']"
           [valueKey]="'id'"
@@ -80,23 +100,19 @@ async }; as obs ) {
           [error]="getErrorMessage('originLGAId')"
         ></app-searchable-mat-select>
 
-        <mat-form-field class="mx-5">
+        <mat-form-field hideRequiredMarker>
           <mat-label>Home Address</mat-label>
           <input type="text" matInput [formControl]="formControl.homeAddress" />
-          <mat-error>
-            {{ getErrorMessage("homeAddress") }}
-          </mat-error>
+          <mat-error>{{ getErrorMessage("homeAddress") }}</mat-error>
         </mat-form-field>
 
-        <mat-form-field class="mx-5">
-          <mat-label>City/Town</mat-label>
+        <mat-form-field hideRequiredMarker>
+          <mat-label>City / Town</mat-label>
           <input type="text" matInput [formControl]="formControl.residentialCity" />
-          <mat-error>
-            {{ getErrorMessage("residentialCity") }}
-          </mat-error>
+          <mat-error>{{ getErrorMessage("residentialCity") }}</mat-error>
         </mat-form-field>
 
-        <app-searchable-mat-select class="mx-5"
+        <app-searchable-mat-select
           [options]="obs.selectedCountryStateList!"
           label="Residential State"
           placeholder="Select residential state"
@@ -106,12 +122,28 @@ async }; as obs ) {
           [formInputClass]="''"
           [error]="getErrorMessage('residentialStateId')"
         ></app-searchable-mat-select>
-
       </div>
     </div>
-    <button type="submit" [disabled]="formGroup.invalid" class="sec-btn mx-5">
-      Create Profile
+
+    <!-- Submit -->
+    <button
+      type="submit"
+      [disabled]="formGroup.invalid"
+      class="sec-btn py-3 rounded-lg font-semibold text-sm tracking-wide"
+    >
+      Create Profile &amp; Continue
     </button>
+
   </form>
+
+  <!-- Footer link -->
+  <div class="mt-6 pt-5 border-t border-gray-200 text-center space-y-1">
+    <p class="text-gray-400 text-sm">Already have an account?</p>
+    <a routerLink="/auth/login" class="text-[#006efe] font-semibold text-sm hover:underline inline-block">
+      Sign In &rarr;
+    </a>
+  </div>
+
 </div>
+
 }

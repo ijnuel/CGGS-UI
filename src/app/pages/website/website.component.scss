@@ -1,11 +1,119 @@
+/* ===== TOPBAR ===== */
 #topbar {
   background-image: url("../../../assets/images/home-background.svg");
   background-color: var(--app-primary);
+  z-index: 50;
 }
 
+/* ===== HERO SECTION ===== */
 #home {
   background-image: url("../../../assets/images/cggs-building.jpg");
   background-size: cover;
+  background-position: center;
   background-color: var(--app-primary);
   overflow: hidden;
+  position: relative;
+  min-height: 100vh;
+}
+
+.hero-overlay {
+  background: linear-gradient(
+    145deg,
+    rgba(15, 14, 23, 0.9) 0%,
+    rgba(15, 14, 23, 0.7) 60%,
+    rgba(0, 110, 254, 0.15) 100%
+  );
+}
+
+/* ===== SCROLL BOUNCE ANIMATION ===== */
+@keyframes bounce-slow {
+  0%, 100% { transform: translateY(0); }
+  50%       { transform: translateY(6px); }
+}
+
+.scroll-bounce {
+  animation: bounce-slow 1.8s ease-in-out infinite;
+}
+
+/* ===== NAV LINKS ===== */
+.nav-link {
+  position: relative;
+  cursor: pointer;
+  padding-bottom: 0.2rem;
+  transition: color 0.2s ease;
+
+  &::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background-color: var(--app-secondary);
+    border-radius: 99px;
+    transition: width 0.25s ease;
+  }
+
+  &:hover::after {
+    width: 100%;
+  }
+}
+
+/* ===== STAT CARDS ===== */
+.stat-card {
+  transition: transform 0.3s ease;
+
+  &:hover {
+    transform: translateY(-5px);
+  }
+}
+
+/* ===== NEWS CARDS ===== */
+.news-card {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+
+  &:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 14px 40px rgba(0, 0, 0, 0.1);
+  }
+}
+
+/* ===== VALUE CARDS ===== */
+.value-card {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+
+  &:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 30px rgba(0, 110, 254, 0.1);
+  }
+}
+
+/* ===== MOBILE RESPONSIVENESS ===== */
+
+/* Scale hero heading down on small screens since global typography uses !important */
+@media (max-width: 639px) {
+  #home h1 {
+    font-size: 2.4rem !important;
+    line-height: 1.2 !important;
+  }
+
+  #home p {
+    font-size: 1rem !important;
+  }
+
+  /* About section headings */
+  #about-us h2,
+  #news h2,
+  #contact-us h2 {
+    font-size: 1.6rem !important;
+  }
+
+  #about-us h3 {
+    font-size: 1.2rem !important;
+  }
+
+  /* Admission banner heading */
+  .admission-banner h3 {
+    font-size: 1.3rem !important;
+  }
 }

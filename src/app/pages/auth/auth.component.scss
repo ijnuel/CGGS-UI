@@ -1,0 +1,6 @@
+/* Decorative background blobs on the branding panel */
+.auth-blob-1,
+.auth-blob-2,
+.auth-blob-3 {
+  filter: blur(60px);
+}

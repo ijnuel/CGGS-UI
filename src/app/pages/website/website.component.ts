@@ -19,5 +19,10 @@ export class WebsiteComponent {
     });
   }
 
+  scrollAndClose(id: string) {
+    this.smoothScroll(id);
+    this.isMobileMenuOpen = false;
+  }
+
   goToLoginPage() {}
 }
