@@ -704,26 +704,17 @@
           "content": {
             "application/json": {
               "schema": {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/QueryProperty"
-                }
+                "$ref": "#/components/schemas/SearchParameters"
               }
             },
             "text/json": {
               "schema": {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/QueryProperty"
-                }
+                "$ref": "#/components/schemas/SearchParameters"
               }
             },
             "application/*+json": {
               "schema": {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/QueryProperty"
-                }
+                "$ref": "#/components/schemas/SearchParameters"
               }
             }
           }
@@ -821,17 +812,17 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/SearchParameters"
+                "$ref": "#/components/schemas/PaginatedSearchParameters"
               }
             },
             "text/json": {
               "schema": {
-                "$ref": "#/components/schemas/SearchParameters"
+                "$ref": "#/components/schemas/PaginatedSearchParameters"
               }
             },
             "application/*+json": {
               "schema": {
-                "$ref": "#/components/schemas/SearchParameters"
+                "$ref": "#/components/schemas/PaginatedSearchParameters"
               }
             }
           }
@@ -1028,26 +1019,17 @@
           "content": {
             "application/json": {
               "schema": {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/QueryProperty"
-                }
+                "$ref": "#/components/schemas/SearchParameters"
               }
             },
             "text/json": {
               "schema": {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/QueryProperty"
-                }
+                "$ref": "#/components/schemas/SearchParameters"
               }
             },
             "application/*+json": {
               "schema": {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/QueryProperty"
-                }
+                "$ref": "#/components/schemas/SearchParameters"
               }
             }
           }
@@ -2193,26 +2175,17 @@
           "content": {
             "application/json": {
               "schema": {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/QueryProperty"
-                }
+                "$ref": "#/components/schemas/SearchParameters"
               }
             },
             "text/json": {
               "schema": {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/QueryProperty"
-                }
+                "$ref": "#/components/schemas/SearchParameters"
               }
             },
             "application/*+json": {
               "schema": {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/QueryProperty"
-                }
+                "$ref": "#/components/schemas/SearchParameters"
               }
             }
           }
@@ -2310,17 +2283,17 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/SearchParameters"
+                "$ref": "#/components/schemas/PaginatedSearchParameters"
               }
             },
             "text/json": {
               "schema": {
-                "$ref": "#/components/schemas/SearchParameters"
+                "$ref": "#/components/schemas/PaginatedSearchParameters"
               }
             },
             "application/*+json": {
               "schema": {
-                "$ref": "#/components/schemas/SearchParameters"
+                "$ref": "#/components/schemas/PaginatedSearchParameters"
               }
             }
           }
@@ -2517,26 +2490,17 @@
           "content": {
             "application/json": {
               "schema": {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/QueryProperty"
-                }
+                "$ref": "#/components/schemas/SearchParameters"
               }
             },
             "text/json": {
               "schema": {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/QueryProperty"
-                }
+                "$ref": "#/components/schemas/SearchParameters"
               }
             },
             "application/*+json": {
               "schema": {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/QueryProperty"
-                }
+                "$ref": "#/components/schemas/SearchParameters"
               }
             }
           }
@@ -3790,26 +3754,17 @@
           "content": {
             "application/json": {
               "schema": {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/QueryProperty"
-                }
+                "$ref": "#/components/schemas/SearchParameters"
               }
             },
             "text/json": {
               "schema": {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/QueryProperty"
-                }
+                "$ref": "#/components/schemas/SearchParameters"
               }
             },
             "application/*+json": {
               "schema": {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/QueryProperty"
-                }
+                "$ref": "#/components/schemas/SearchParameters"
               }
             }
           }
@@ -3907,17 +3862,17 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/SearchParameters"
+                "$ref": "#/components/schemas/PaginatedSearchParameters"
               }
             },
             "text/json": {
               "schema": {
-                "$ref": "#/components/schemas/SearchParameters"
+                "$ref": "#/components/schemas/PaginatedSearchParameters"
               }
             },
             "application/*+json": {
               "schema": {
-                "$ref": "#/components/schemas/SearchParameters"
+                "$ref": "#/components/schemas/PaginatedSearchParameters"
               }
             }
           }
@@ -4114,26 +4069,17 @@
           "content": {
             "application/json": {
               "schema": {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/QueryProperty"
-                }
+                "$ref": "#/components/schemas/SearchParameters"
               }
             },
             "text/json": {
               "schema": {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/QueryProperty"
-                }
+                "$ref": "#/components/schemas/SearchParameters"
               }
             },
             "application/*+json": {
               "schema": {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/QueryProperty"
-                }
+                "$ref": "#/components/schemas/SearchParameters"
               }
             }
           }
@@ -5387,26 +5333,17 @@
           "content": {
             "application/json": {
               "schema": {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/QueryProperty"
-                }
+                "$ref": "#/components/schemas/SearchParameters"
               }
             },
             "text/json": {
               "schema": {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/QueryProperty"
-                }
+                "$ref": "#/components/schemas/SearchParameters"
               }
             },
             "application/*+json": {
               "schema": {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/QueryProperty"
-                }
+                "$ref": "#/components/schemas/SearchParameters"
               }
             }
           }
@@ -5504,17 +5441,17 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/SearchParameters"
+                "$ref": "#/components/schemas/PaginatedSearchParameters"
               }
             },
             "text/json": {
               "schema": {
-                "$ref": "#/components/schemas/SearchParameters"
+                "$ref": "#/components/schemas/PaginatedSearchParameters"
               }
             },
             "application/*+json": {
               "schema": {
-                "$ref": "#/components/schemas/SearchParameters"
+                "$ref": "#/components/schemas/PaginatedSearchParameters"
               }
             }
           }
@@ -5711,26 +5648,17 @@
           "content": {
             "application/json": {
               "schema": {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/QueryProperty"
-                }
+                "$ref": "#/components/schemas/SearchParameters"
               }
             },
             "text/json": {
               "schema": {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/QueryProperty"
-                }
+                "$ref": "#/components/schemas/SearchParameters"
               }
             },
             "application/*+json": {
               "schema": {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/QueryProperty"
-                }
+                "$ref": "#/components/schemas/SearchParameters"
               }
             }
           }
@@ -6984,26 +6912,17 @@
           "content": {
             "application/json": {
               "schema": {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/QueryProperty"
-                }
+                "$ref": "#/components/schemas/SearchParameters"
               }
             },
             "text/json": {
               "schema": {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/QueryProperty"
-                }
+                "$ref": "#/components/schemas/SearchParameters"
               }
             },
             "application/*+json": {
               "schema": {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/QueryProperty"
-                }
+                "$ref": "#/components/schemas/SearchParameters"
               }
             }
           }
@@ -7101,17 +7020,17 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/SearchParameters"
+                "$ref": "#/components/schemas/PaginatedSearchParameters"
               }
             },
             "text/json": {
               "schema": {
-                "$ref": "#/components/schemas/SearchParameters"
+                "$ref": "#/components/schemas/PaginatedSearchParameters"
               }
             },
             "application/*+json": {
               "schema": {
-                "$ref": "#/components/schemas/SearchParameters"
+                "$ref": "#/components/schemas/PaginatedSearchParameters"
               }
             }
           }
@@ -7308,26 +7227,17 @@
           "content": {
             "application/json": {
               "schema": {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/QueryProperty"
-                }
+                "$ref": "#/components/schemas/SearchParameters"
               }
             },
             "text/json": {
               "schema": {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/QueryProperty"
-                }
+                "$ref": "#/components/schemas/SearchParameters"
               }
             },
             "application/*+json": {
               "schema": {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/QueryProperty"
-                }
+                "$ref": "#/components/schemas/SearchParameters"
               }
             }
           }
@@ -8689,26 +8599,17 @@
           "content": {
             "application/json": {
               "schema": {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/QueryProperty"
-                }
+                "$ref": "#/components/schemas/SearchParameters"
               }
             },
             "text/json": {
               "schema": {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/QueryProperty"
-                }
+                "$ref": "#/components/schemas/SearchParameters"
               }
             },
             "application/*+json": {
               "schema": {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/QueryProperty"
-                }
+                "$ref": "#/components/schemas/SearchParameters"
               }
             }
           }
@@ -8806,17 +8707,17 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/SearchParameters"
+                "$ref": "#/components/schemas/PaginatedSearchParameters"
               }
             },
             "text/json": {
               "schema": {
-                "$ref": "#/components/schemas/SearchParameters"
+                "$ref": "#/components/schemas/PaginatedSearchParameters"
               }
             },
             "application/*+json": {
               "schema": {
-                "$ref": "#/components/schemas/SearchParameters"
+                "$ref": "#/components/schemas/PaginatedSearchParameters"
               }
             }
           }
@@ -9013,26 +8914,17 @@
           "content": {
             "application/json": {
               "schema": {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/QueryProperty"
-                }
+                "$ref": "#/components/schemas/SearchParameters"
               }
             },
             "text/json": {
               "schema": {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/QueryProperty"
-                }
+                "$ref": "#/components/schemas/SearchParameters"
               }
             },
             "application/*+json": {
               "schema": {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/QueryProperty"
-                }
+                "$ref": "#/components/schemas/SearchParameters"
               }
             }
           }
@@ -10286,26 +10178,17 @@
           "content": {
             "application/json": {
               "schema": {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/QueryProperty"
-                }
+                "$ref": "#/components/schemas/SearchParameters"
               }
             },
             "text/json": {
               "schema": {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/QueryProperty"
-                }
+                "$ref": "#/components/schemas/SearchParameters"
               }
             },
             "application/*+json": {
               "schema": {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/QueryProperty"
-                }
+                "$ref": "#/components/schemas/SearchParameters"
               }
             }
           }
@@ -10403,17 +10286,17 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/SearchParameters"
+                "$ref": "#/components/schemas/PaginatedSearchParameters"
               }
             },
             "text/json": {
               "schema": {
-                "$ref": "#/components/schemas/SearchParameters"
+                "$ref": "#/components/schemas/PaginatedSearchParameters"
               }
             },
             "application/*+json": {
               "schema": {
-                "$ref": "#/components/schemas/SearchParameters"
+                "$ref": "#/components/schemas/PaginatedSearchParameters"
               }
             }
           }
@@ -10610,26 +10493,17 @@
           "content": {
             "application/json": {
               "schema": {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/QueryProperty"
-                }
+                "$ref": "#/components/schemas/SearchParameters"
               }
             },
             "text/json": {
               "schema": {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/QueryProperty"
-                }
+                "$ref": "#/components/schemas/SearchParameters"
               }
             },
             "application/*+json": {
               "schema": {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/QueryProperty"
-                }
+                "$ref": "#/components/schemas/SearchParameters"
               }
             }
           }
@@ -11991,26 +11865,17 @@
           "content": {
             "application/json": {
               "schema": {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/QueryProperty"
-                }
+                "$ref": "#/components/schemas/SearchParameters"
               }
             },
             "text/json": {
               "schema": {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/QueryProperty"
-                }
+                "$ref": "#/components/schemas/SearchParameters"
               }
             },
             "application/*+json": {
               "schema": {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/QueryProperty"
-                }
+                "$ref": "#/components/schemas/SearchParameters"
               }
             }
           }
@@ -12108,17 +11973,17 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/SearchParameters"
+                "$ref": "#/components/schemas/PaginatedSearchParameters"
               }
             },
             "text/json": {
               "schema": {
-                "$ref": "#/components/schemas/SearchParameters"
+                "$ref": "#/components/schemas/PaginatedSearchParameters"
               }
             },
             "application/*+json": {
               "schema": {
-                "$ref": "#/components/schemas/SearchParameters"
+                "$ref": "#/components/schemas/PaginatedSearchParameters"
               }
             }
           }
@@ -12315,26 +12180,17 @@
           "content": {
             "application/json": {
               "schema": {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/QueryProperty"
-                }
+                "$ref": "#/components/schemas/SearchParameters"
               }
             },
             "text/json": {
               "schema": {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/QueryProperty"
-                }
+                "$ref": "#/components/schemas/SearchParameters"
               }
             },
             "application/*+json": {
               "schema": {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/QueryProperty"
-                }
+                "$ref": "#/components/schemas/SearchParameters"
               }
             }
           }
@@ -13480,26 +13336,17 @@
           "content": {
             "application/json": {
               "schema": {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/QueryProperty"
-                }
+                "$ref": "#/components/schemas/SearchParameters"
               }
             },
             "text/json": {
               "schema": {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/QueryProperty"
-                }
+                "$ref": "#/components/schemas/SearchParameters"
               }
             },
             "application/*+json": {
               "schema": {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/QueryProperty"
-                }
+                "$ref": "#/components/schemas/SearchParameters"
               }
             }
           }
@@ -13597,17 +13444,17 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/SearchParameters"
+                "$ref": "#/components/schemas/PaginatedSearchParameters"
               }
             },
             "text/json": {
               "schema": {
-                "$ref": "#/components/schemas/SearchParameters"
+                "$ref": "#/components/schemas/PaginatedSearchParameters"
               }
             },
             "application/*+json": {
               "schema": {
-                "$ref": "#/components/schemas/SearchParameters"
+                "$ref": "#/components/schemas/PaginatedSearchParameters"
               }
             }
           }
@@ -13804,26 +13651,17 @@
           "content": {
             "application/json": {
               "schema": {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/QueryProperty"
-                }
+                "$ref": "#/components/schemas/SearchParameters"
               }
             },
             "text/json": {
               "schema": {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/QueryProperty"
-                }
+                "$ref": "#/components/schemas/SearchParameters"
               }
             },
             "application/*+json": {
               "schema": {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/QueryProperty"
-                }
+                "$ref": "#/components/schemas/SearchParameters"
               }
             }
           }
@@ -15719,26 +15557,17 @@
           "content": {
             "application/json": {
               "schema": {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/QueryProperty"
-                }
+                "$ref": "#/components/schemas/SearchParameters"
               }
             },
             "text/json": {
               "schema": {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/QueryProperty"
-                }
+                "$ref": "#/components/schemas/SearchParameters"
               }
             },
             "application/*+json": {
               "schema": {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/QueryProperty"
-                }
+                "$ref": "#/components/schemas/SearchParameters"
               }
             }
           }
@@ -15836,17 +15665,17 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/SearchParameters"
+                "$ref": "#/components/schemas/PaginatedSearchParameters"
               }
             },
             "text/json": {
               "schema": {
-                "$ref": "#/components/schemas/SearchParameters"
+                "$ref": "#/components/schemas/PaginatedSearchParameters"
               }
             },
             "application/*+json": {
               "schema": {
-                "$ref": "#/components/schemas/SearchParameters"
+                "$ref": "#/components/schemas/PaginatedSearchParameters"
               }
             }
           }
@@ -16043,26 +15872,17 @@
           "content": {
             "application/json": {
               "schema": {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/QueryProperty"
-                }
+                "$ref": "#/components/schemas/SearchParameters"
               }
             },
             "text/json": {
               "schema": {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/QueryProperty"
-                }
+                "$ref": "#/components/schemas/SearchParameters"
               }
             },
             "application/*+json": {
               "schema": {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/QueryProperty"
-                }
+                "$ref": "#/components/schemas/SearchParameters"
               }
             }
           }
@@ -17208,26 +17028,17 @@
           "content": {
             "application/json": {
               "schema": {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/QueryProperty"
-                }
+                "$ref": "#/components/schemas/SearchParameters"
               }
             },
             "text/json": {
               "schema": {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/QueryProperty"
-                }
+                "$ref": "#/components/schemas/SearchParameters"
               }
             },
             "application/*+json": {
               "schema": {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/QueryProperty"
-                }
+                "$ref": "#/components/schemas/SearchParameters"
               }
             }
           }
@@ -17325,17 +17136,17 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/SearchParameters"
+                "$ref": "#/components/schemas/PaginatedSearchParameters"
               }
             },
             "text/json": {
               "schema": {
-                "$ref": "#/components/schemas/SearchParameters"
+                "$ref": "#/components/schemas/PaginatedSearchParameters"
               }
             },
             "application/*+json": {
               "schema": {
-                "$ref": "#/components/schemas/SearchParameters"
+                "$ref": "#/components/schemas/PaginatedSearchParameters"
               }
             }
           }
@@ -17532,26 +17343,17 @@
           "content": {
             "application/json": {
               "schema": {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/QueryProperty"
-                }
+                "$ref": "#/components/schemas/SearchParameters"
               }
             },
             "text/json": {
               "schema": {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/QueryProperty"
-                }
+                "$ref": "#/components/schemas/SearchParameters"
               }
             },
             "application/*+json": {
               "schema": {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/QueryProperty"
-                }
+                "$ref": "#/components/schemas/SearchParameters"
               }
             }
           }
@@ -18805,26 +18607,17 @@
           "content": {
             "application/json": {
               "schema": {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/QueryProperty"
-                }
+                "$ref": "#/components/schemas/SearchParameters"
               }
             },
             "text/json": {
               "schema": {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/QueryProperty"
-                }
+                "$ref": "#/components/schemas/SearchParameters"
               }
             },
             "application/*+json": {
               "schema": {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/QueryProperty"
-                }
+                "$ref": "#/components/schemas/SearchParameters"
               }
             }
           }
@@ -18922,17 +18715,17 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/SearchParameters"
+                "$ref": "#/components/schemas/PaginatedSearchParameters"
               }
             },
             "text/json": {
               "schema": {
-                "$ref": "#/components/schemas/SearchParameters"
+                "$ref": "#/components/schemas/PaginatedSearchParameters"
               }
             },
             "application/*+json": {
               "schema": {
-                "$ref": "#/components/schemas/SearchParameters"
+                "$ref": "#/components/schemas/PaginatedSearchParameters"
               }
             }
           }
@@ -19129,26 +18922,17 @@
           "content": {
             "application/json": {
               "schema": {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/QueryProperty"
-                }
+                "$ref": "#/components/schemas/SearchParameters"
               }
             },
             "text/json": {
               "schema": {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/QueryProperty"
-                }
+                "$ref": "#/components/schemas/SearchParameters"
               }
             },
             "application/*+json": {
               "schema": {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/QueryProperty"
-                }
+                "$ref": "#/components/schemas/SearchParameters"
               }
             }
           }
@@ -20402,26 +20186,17 @@
           "content": {
             "application/json": {
               "schema": {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/QueryProperty"
-                }
+                "$ref": "#/components/schemas/SearchParameters"
               }
             },
             "text/json": {
               "schema": {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/QueryProperty"
-                }
+                "$ref": "#/components/schemas/SearchParameters"
               }
             },
             "application/*+json": {
               "schema": {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/QueryProperty"
-                }
+                "$ref": "#/components/schemas/SearchParameters"
               }
             }
           }
@@ -20519,17 +20294,17 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/SearchParameters"
+                "$ref": "#/components/schemas/PaginatedSearchParameters"
               }
             },
             "text/json": {
               "schema": {
-                "$ref": "#/components/schemas/SearchParameters"
+                "$ref": "#/components/schemas/PaginatedSearchParameters"
               }
             },
             "application/*+json": {
               "schema": {
-                "$ref": "#/components/schemas/SearchParameters"
+                "$ref": "#/components/schemas/PaginatedSearchParameters"
               }
             }
           }
@@ -20726,26 +20501,17 @@
           "content": {
             "application/json": {
               "schema": {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/QueryProperty"
-                }
+                "$ref": "#/components/schemas/SearchParameters"
               }
             },
             "text/json": {
               "schema": {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/QueryProperty"
-                }
+                "$ref": "#/components/schemas/SearchParameters"
               }
             },
             "application/*+json": {
               "schema": {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/QueryProperty"
-                }
+                "$ref": "#/components/schemas/SearchParameters"
               }
             }
           }
@@ -21999,26 +21765,17 @@
           "content": {
             "application/json": {
               "schema": {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/QueryProperty"
-                }
+                "$ref": "#/components/schemas/SearchParameters"
               }
             },
             "text/json": {
               "schema": {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/QueryProperty"
-                }
+                "$ref": "#/components/schemas/SearchParameters"
               }
             },
             "application/*+json": {
               "schema": {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/QueryProperty"
-                }
+                "$ref": "#/components/schemas/SearchParameters"
               }
             }
           }
@@ -22116,17 +21873,17 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/SearchParameters"
+                "$ref": "#/components/schemas/PaginatedSearchParameters"
               }
             },
             "text/json": {
               "schema": {
-                "$ref": "#/components/schemas/SearchParameters"
+                "$ref": "#/components/schemas/PaginatedSearchParameters"
               }
             },
             "application/*+json": {
               "schema": {
-                "$ref": "#/components/schemas/SearchParameters"
+                "$ref": "#/components/schemas/PaginatedSearchParameters"
               }
             }
           }
@@ -22323,26 +22080,17 @@
           "content": {
             "application/json": {
               "schema": {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/QueryProperty"
-                }
+                "$ref": "#/components/schemas/SearchParameters"
               }
             },
             "text/json": {
               "schema": {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/QueryProperty"
-                }
+                "$ref": "#/components/schemas/SearchParameters"
               }
             },
             "application/*+json": {
               "schema": {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/QueryProperty"
-                }
+                "$ref": "#/components/schemas/SearchParameters"
               }
             }
           }
@@ -23695,26 +23443,17 @@
           "content": {
             "application/json": {
               "schema": {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/QueryProperty"
-                }
+                "$ref": "#/components/schemas/SearchParameters"
               }
             },
             "text/json": {
               "schema": {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/QueryProperty"
-                }
+                "$ref": "#/components/schemas/SearchParameters"
               }
             },
             "application/*+json": {
               "schema": {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/QueryProperty"
-                }
+                "$ref": "#/components/schemas/SearchParameters"
               }
             }
           }
@@ -23812,17 +23551,17 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/SearchParameters"
+                "$ref": "#/components/schemas/PaginatedSearchParameters"
               }
             },
             "text/json": {
               "schema": {
-                "$ref": "#/components/schemas/SearchParameters"
+                "$ref": "#/components/schemas/PaginatedSearchParameters"
               }
             },
             "application/*+json": {
               "schema": {
-                "$ref": "#/components/schemas/SearchParameters"
+                "$ref": "#/components/schemas/PaginatedSearchParameters"
               }
             }
           }
@@ -24019,26 +23758,17 @@
           "content": {
             "application/json": {
               "schema": {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/QueryProperty"
-                }
+                "$ref": "#/components/schemas/SearchParameters"
               }
             },
             "text/json": {
               "schema": {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/QueryProperty"
-                }
+                "$ref": "#/components/schemas/SearchParameters"
               }
             },
             "application/*+json": {
               "schema": {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/QueryProperty"
-                }
+                "$ref": "#/components/schemas/SearchParameters"
               }
             }
           }
@@ -25292,26 +25022,17 @@
           "content": {
             "application/json": {
               "schema": {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/QueryProperty"
-                }
+                "$ref": "#/components/schemas/SearchParameters"
               }
             },
             "text/json": {
               "schema": {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/QueryProperty"
-                }
+                "$ref": "#/components/schemas/SearchParameters"
               }
             },
             "application/*+json": {
               "schema": {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/QueryProperty"
-                }
+                "$ref": "#/components/schemas/SearchParameters"
               }
             }
           }
@@ -25409,17 +25130,17 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/SearchParameters"
+                "$ref": "#/components/schemas/PaginatedSearchParameters"
               }
             },
             "text/json": {
               "schema": {
-                "$ref": "#/components/schemas/SearchParameters"
+                "$ref": "#/components/schemas/PaginatedSearchParameters"
               }
             },
             "application/*+json": {
               "schema": {
-                "$ref": "#/components/schemas/SearchParameters"
+                "$ref": "#/components/schemas/PaginatedSearchParameters"
               }
             }
           }
@@ -25616,26 +25337,17 @@
           "content": {
             "application/json": {
               "schema": {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/QueryProperty"
-                }
+                "$ref": "#/components/schemas/SearchParameters"
               }
             },
             "text/json": {
               "schema": {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/QueryProperty"
-                }
+                "$ref": "#/components/schemas/SearchParameters"
               }
             },
             "application/*+json": {
               "schema": {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/QueryProperty"
-                }
+                "$ref": "#/components/schemas/SearchParameters"
               }
             }
           }
@@ -26889,26 +26601,17 @@
           "content": {
             "application/json": {
               "schema": {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/QueryProperty"
-                }
+                "$ref": "#/components/schemas/SearchParameters"
               }
             },
             "text/json": {
               "schema": {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/QueryProperty"
-                }
+                "$ref": "#/components/schemas/SearchParameters"
               }
             },
             "application/*+json": {
               "schema": {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/QueryProperty"
-                }
+                "$ref": "#/components/schemas/SearchParameters"
               }
             }
           }
@@ -27006,17 +26709,17 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/SearchParameters"
+                "$ref": "#/components/schemas/PaginatedSearchParameters"
               }
             },
             "text/json": {
               "schema": {
-                "$ref": "#/components/schemas/SearchParameters"
+                "$ref": "#/components/schemas/PaginatedSearchParameters"
               }
             },
             "application/*+json": {
               "schema": {
-                "$ref": "#/components/schemas/SearchParameters"
+                "$ref": "#/components/schemas/PaginatedSearchParameters"
               }
             }
           }
@@ -27213,26 +26916,17 @@
           "content": {
             "application/json": {
               "schema": {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/QueryProperty"
-                }
+                "$ref": "#/components/schemas/SearchParameters"
               }
             },
             "text/json": {
               "schema": {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/QueryProperty"
-                }
+                "$ref": "#/components/schemas/SearchParameters"
               }
             },
             "application/*+json": {
               "schema": {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/QueryProperty"
-                }
+                "$ref": "#/components/schemas/SearchParameters"
               }
             }
           }
@@ -28486,26 +28180,17 @@
           "content": {
             "application/json": {
               "schema": {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/QueryProperty"
-                }
+                "$ref": "#/components/schemas/SearchParameters"
               }
             },
             "text/json": {
               "schema": {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/QueryProperty"
-                }
+                "$ref": "#/components/schemas/SearchParameters"
               }
             },
             "application/*+json": {
               "schema": {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/QueryProperty"
-                }
+                "$ref": "#/components/schemas/SearchParameters"
               }
             }
           }
@@ -28603,17 +28288,17 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/SearchParameters"
+                "$ref": "#/components/schemas/PaginatedSearchParameters"
               }
             },
             "text/json": {
               "schema": {
-                "$ref": "#/components/schemas/SearchParameters"
+                "$ref": "#/components/schemas/PaginatedSearchParameters"
               }
             },
             "application/*+json": {
               "schema": {
-                "$ref": "#/components/schemas/SearchParameters"
+                "$ref": "#/components/schemas/PaginatedSearchParameters"
               }
             }
           }
@@ -28810,26 +28495,17 @@
           "content": {
             "application/json": {
               "schema": {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/QueryProperty"
-                }
+                "$ref": "#/components/schemas/SearchParameters"
               }
             },
             "text/json": {
               "schema": {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/QueryProperty"
-                }
+                "$ref": "#/components/schemas/SearchParameters"
               }
             },
             "application/*+json": {
               "schema": {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/QueryProperty"
-                }
+                "$ref": "#/components/schemas/SearchParameters"
               }
             }
           }
@@ -30083,26 +29759,17 @@
           "content": {
             "application/json": {
               "schema": {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/QueryProperty"
-                }
+                "$ref": "#/components/schemas/SearchParameters"
               }
             },
             "text/json": {
               "schema": {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/QueryProperty"
-                }
+                "$ref": "#/components/schemas/SearchParameters"
               }
             },
             "application/*+json": {
               "schema": {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/QueryProperty"
-                }
+                "$ref": "#/components/schemas/SearchParameters"
               }
             }
           }
@@ -30200,17 +29867,17 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/SearchParameters"
+                "$ref": "#/components/schemas/PaginatedSearchParameters"
               }
             },
             "text/json": {
               "schema": {
-                "$ref": "#/components/schemas/SearchParameters"
+                "$ref": "#/components/schemas/PaginatedSearchParameters"
               }
             },
             "application/*+json": {
               "schema": {
-                "$ref": "#/components/schemas/SearchParameters"
+                "$ref": "#/components/schemas/PaginatedSearchParameters"
               }
             }
           }
@@ -30407,26 +30074,17 @@
           "content": {
             "application/json": {
               "schema": {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/QueryProperty"
-                }
+                "$ref": "#/components/schemas/SearchParameters"
               }
             },
             "text/json": {
               "schema": {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/QueryProperty"
-                }
+                "$ref": "#/components/schemas/SearchParameters"
               }
             },
             "application/*+json": {
               "schema": {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/QueryProperty"
-                }
+                "$ref": "#/components/schemas/SearchParameters"
               }
             }
           }
@@ -32193,26 +31851,17 @@
           "content": {
             "application/json": {
               "schema": {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/QueryProperty"
-                }
+                "$ref": "#/components/schemas/SearchParameters"
               }
             },
             "text/json": {
               "schema": {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/QueryProperty"
-                }
+                "$ref": "#/components/schemas/SearchParameters"
               }
             },
             "application/*+json": {
               "schema": {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/QueryProperty"
-                }
+                "$ref": "#/components/schemas/SearchParameters"
               }
             }
           }
@@ -32310,17 +31959,17 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/SearchParameters"
+                "$ref": "#/components/schemas/PaginatedSearchParameters"
               }
             },
             "text/json": {
               "schema": {
-                "$ref": "#/components/schemas/SearchParameters"
+                "$ref": "#/components/schemas/PaginatedSearchParameters"
               }
             },
             "application/*+json": {
               "schema": {
-                "$ref": "#/components/schemas/SearchParameters"
+                "$ref": "#/components/schemas/PaginatedSearchParameters"
               }
             }
           }
@@ -32517,26 +32166,17 @@
           "content": {
             "application/json": {
               "schema": {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/QueryProperty"
-                }
+                "$ref": "#/components/schemas/SearchParameters"
               }
             },
             "text/json": {
               "schema": {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/QueryProperty"
-                }
+                "$ref": "#/components/schemas/SearchParameters"
               }
             },
             "application/*+json": {
               "schema": {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/QueryProperty"
-                }
+                "$ref": "#/components/schemas/SearchParameters"
               }
             }
           }
@@ -33889,26 +33529,17 @@
           "content": {
             "application/json": {
               "schema": {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/QueryProperty"
-                }
+                "$ref": "#/components/schemas/SearchParameters"
               }
             },
             "text/json": {
               "schema": {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/QueryProperty"
-                }
+                "$ref": "#/components/schemas/SearchParameters"
               }
             },
             "application/*+json": {
               "schema": {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/QueryProperty"
-                }
+                "$ref": "#/components/schemas/SearchParameters"
               }
             }
           }
@@ -34006,17 +33637,17 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/SearchParameters"
+                "$ref": "#/components/schemas/PaginatedSearchParameters"
               }
             },
             "text/json": {
               "schema": {
-                "$ref": "#/components/schemas/SearchParameters"
+                "$ref": "#/components/schemas/PaginatedSearchParameters"
               }
             },
             "application/*+json": {
               "schema": {
-                "$ref": "#/components/schemas/SearchParameters"
+                "$ref": "#/components/schemas/PaginatedSearchParameters"
               }
             }
           }
@@ -34213,26 +33844,17 @@
           "content": {
             "application/json": {
               "schema": {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/QueryProperty"
-                }
+                "$ref": "#/components/schemas/SearchParameters"
               }
             },
             "text/json": {
               "schema": {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/QueryProperty"
-                }
+                "$ref": "#/components/schemas/SearchParameters"
               }
             },
             "application/*+json": {
               "schema": {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/QueryProperty"
-                }
+                "$ref": "#/components/schemas/SearchParameters"
               }
             }
           }
@@ -35594,26 +35216,17 @@
           "content": {
             "application/json": {
               "schema": {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/QueryProperty"
-                }
+                "$ref": "#/components/schemas/SearchParameters"
               }
             },
             "text/json": {
               "schema": {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/QueryProperty"
-                }
+                "$ref": "#/components/schemas/SearchParameters"
               }
             },
             "application/*+json": {
               "schema": {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/QueryProperty"
-                }
+                "$ref": "#/components/schemas/SearchParameters"
               }
             }
           }
@@ -35711,17 +35324,17 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/SearchParameters"
+                "$ref": "#/components/schemas/PaginatedSearchParameters"
               }
             },
             "text/json": {
               "schema": {
-                "$ref": "#/components/schemas/SearchParameters"
+                "$ref": "#/components/schemas/PaginatedSearchParameters"
               }
             },
             "application/*+json": {
               "schema": {
-                "$ref": "#/components/schemas/SearchParameters"
+                "$ref": "#/components/schemas/PaginatedSearchParameters"
               }
             }
           }
@@ -35918,26 +35531,17 @@
           "content": {
             "application/json": {
               "schema": {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/QueryProperty"
-                }
+                "$ref": "#/components/schemas/SearchParameters"
               }
             },
             "text/json": {
               "schema": {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/QueryProperty"
-                }
+                "$ref": "#/components/schemas/SearchParameters"
               }
             },
             "application/*+json": {
               "schema": {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/QueryProperty"
-                }
+                "$ref": "#/components/schemas/SearchParameters"
               }
             }
           }
@@ -37182,26 +36786,17 @@
           "content": {
             "application/json": {
               "schema": {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/QueryProperty"
-                }
+                "$ref": "#/components/schemas/SearchParameters"
               }
             },
             "text/json": {
               "schema": {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/QueryProperty"
-                }
+                "$ref": "#/components/schemas/SearchParameters"
               }
             },
             "application/*+json": {
               "schema": {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/QueryProperty"
-                }
+                "$ref": "#/components/schemas/SearchParameters"
               }
             }
           }
@@ -37299,17 +36894,17 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/SearchParameters"
+                "$ref": "#/components/schemas/PaginatedSearchParameters"
               }
             },
             "text/json": {
               "schema": {
-                "$ref": "#/components/schemas/SearchParameters"
+                "$ref": "#/components/schemas/PaginatedSearchParameters"
               }
             },
             "application/*+json": {
               "schema": {
-                "$ref": "#/components/schemas/SearchParameters"
+                "$ref": "#/components/schemas/PaginatedSearchParameters"
               }
             }
           }
@@ -37506,26 +37101,17 @@
           "content": {
             "application/json": {
               "schema": {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/QueryProperty"
-                }
+                "$ref": "#/components/schemas/SearchParameters"
               }
             },
             "text/json": {
               "schema": {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/QueryProperty"
-                }
+                "$ref": "#/components/schemas/SearchParameters"
               }
             },
             "application/*+json": {
               "schema": {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/QueryProperty"
-                }
+                "$ref": "#/components/schemas/SearchParameters"
               }
             }
           }
@@ -38986,26 +38572,17 @@
           "content": {
             "application/json": {
               "schema": {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/QueryProperty"
-                }
+                "$ref": "#/components/schemas/SearchParameters"
               }
             },
             "text/json": {
               "schema": {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/QueryProperty"
-                }
+                "$ref": "#/components/schemas/SearchParameters"
               }
             },
             "application/*+json": {
               "schema": {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/QueryProperty"
-                }
+                "$ref": "#/components/schemas/SearchParameters"
               }
             }
           }
@@ -39103,17 +38680,17 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/SearchParameters"
+                "$ref": "#/components/schemas/PaginatedSearchParameters"
               }
             },
             "text/json": {
               "schema": {
-                "$ref": "#/components/schemas/SearchParameters"
+                "$ref": "#/components/schemas/PaginatedSearchParameters"
               }
             },
             "application/*+json": {
               "schema": {
-                "$ref": "#/components/schemas/SearchParameters"
+                "$ref": "#/components/schemas/PaginatedSearchParameters"
               }
             }
           }
@@ -39310,26 +38887,17 @@
           "content": {
             "application/json": {
               "schema": {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/QueryProperty"
-                }
+                "$ref": "#/components/schemas/SearchParameters"
               }
             },
             "text/json": {
               "schema": {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/QueryProperty"
-                }
+                "$ref": "#/components/schemas/SearchParameters"
               }
             },
             "application/*+json": {
               "schema": {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/QueryProperty"
-                }
+                "$ref": "#/components/schemas/SearchParameters"
               }
             }
           }
@@ -40475,26 +40043,17 @@
           "content": {
             "application/json": {
               "schema": {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/QueryProperty"
-                }
+                "$ref": "#/components/schemas/SearchParameters"
               }
             },
             "text/json": {
               "schema": {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/QueryProperty"
-                }
+                "$ref": "#/components/schemas/SearchParameters"
               }
             },
             "application/*+json": {
               "schema": {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/QueryProperty"
-                }
+                "$ref": "#/components/schemas/SearchParameters"
               }
             }
           }
@@ -40592,17 +40151,17 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/SearchParameters"
+                "$ref": "#/components/schemas/PaginatedSearchParameters"
               }
             },
             "text/json": {
               "schema": {
-                "$ref": "#/components/schemas/SearchParameters"
+                "$ref": "#/components/schemas/PaginatedSearchParameters"
               }
             },
             "application/*+json": {
               "schema": {
-                "$ref": "#/components/schemas/SearchParameters"
+                "$ref": "#/components/schemas/PaginatedSearchParameters"
               }
             }
           }
@@ -40799,26 +40358,17 @@
           "content": {
             "application/json": {
               "schema": {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/QueryProperty"
-                }
+                "$ref": "#/components/schemas/SearchParameters"
               }
             },
             "text/json": {
               "schema": {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/QueryProperty"
-                }
+                "$ref": "#/components/schemas/SearchParameters"
               }
             },
             "application/*+json": {
               "schema": {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/QueryProperty"
-                }
+                "$ref": "#/components/schemas/SearchParameters"
               }
             }
           }
@@ -42072,26 +41622,17 @@
           "content": {
             "application/json": {
               "schema": {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/QueryProperty"
-                }
+                "$ref": "#/components/schemas/SearchParameters"
               }
             },
             "text/json": {
               "schema": {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/QueryProperty"
-                }
+                "$ref": "#/components/schemas/SearchParameters"
               }
             },
             "application/*+json": {
               "schema": {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/QueryProperty"
-                }
+                "$ref": "#/components/schemas/SearchParameters"
               }
             }
           }
@@ -42189,17 +41730,17 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/SearchParameters"
+                "$ref": "#/components/schemas/PaginatedSearchParameters"
               }
             },
             "text/json": {
               "schema": {
-                "$ref": "#/components/schemas/SearchParameters"
+                "$ref": "#/components/schemas/PaginatedSearchParameters"
               }
             },
             "application/*+json": {
               "schema": {
-                "$ref": "#/components/schemas/SearchParameters"
+                "$ref": "#/components/schemas/PaginatedSearchParameters"
               }
             }
           }
@@ -42396,26 +41937,17 @@
           "content": {
             "application/json": {
               "schema": {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/QueryProperty"
-                }
+                "$ref": "#/components/schemas/SearchParameters"
               }
             },
             "text/json": {
               "schema": {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/QueryProperty"
-                }
+                "$ref": "#/components/schemas/SearchParameters"
               }
             },
             "application/*+json": {
               "schema": {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/QueryProperty"
-                }
+                "$ref": "#/components/schemas/SearchParameters"
               }
             }
           }
@@ -43669,26 +43201,17 @@
           "content": {
             "application/json": {
               "schema": {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/QueryProperty"
-                }
+                "$ref": "#/components/schemas/SearchParameters"
               }
             },
             "text/json": {
               "schema": {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/QueryProperty"
-                }
+                "$ref": "#/components/schemas/SearchParameters"
               }
             },
             "application/*+json": {
               "schema": {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/QueryProperty"
-                }
+                "$ref": "#/components/schemas/SearchParameters"
               }
             }
           }
@@ -43786,17 +43309,17 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/SearchParameters"
+                "$ref": "#/components/schemas/PaginatedSearchParameters"
               }
             },
             "text/json": {
               "schema": {
-                "$ref": "#/components/schemas/SearchParameters"
+                "$ref": "#/components/schemas/PaginatedSearchParameters"
               }
             },
             "application/*+json": {
               "schema": {
-                "$ref": "#/components/schemas/SearchParameters"
+                "$ref": "#/components/schemas/PaginatedSearchParameters"
               }
             }
           }
@@ -43993,26 +43516,17 @@
           "content": {
             "application/json": {
               "schema": {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/QueryProperty"
-                }
+                "$ref": "#/components/schemas/SearchParameters"
               }
             },
             "text/json": {
               "schema": {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/QueryProperty"
-                }
+                "$ref": "#/components/schemas/SearchParameters"
               }
             },
             "application/*+json": {
               "schema": {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/QueryProperty"
-                }
+                "$ref": "#/components/schemas/SearchParameters"
               }
             }
           }
@@ -45266,26 +44780,17 @@
           "content": {
             "application/json": {
               "schema": {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/QueryProperty"
-                }
+                "$ref": "#/components/schemas/SearchParameters"
               }
             },
             "text/json": {
               "schema": {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/QueryProperty"
-                }
+                "$ref": "#/components/schemas/SearchParameters"
               }
             },
             "application/*+json": {
               "schema": {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/QueryProperty"
-                }
+                "$ref": "#/components/schemas/SearchParameters"
               }
             }
           }
@@ -45383,17 +44888,17 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/SearchParameters"
+                "$ref": "#/components/schemas/PaginatedSearchParameters"
               }
             },
             "text/json": {
               "schema": {
-                "$ref": "#/components/schemas/SearchParameters"
+                "$ref": "#/components/schemas/PaginatedSearchParameters"
               }
             },
             "application/*+json": {
               "schema": {
-                "$ref": "#/components/schemas/SearchParameters"
+                "$ref": "#/components/schemas/PaginatedSearchParameters"
               }
             }
           }
@@ -45590,26 +45095,17 @@
           "content": {
             "application/json": {
               "schema": {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/QueryProperty"
-                }
+                "$ref": "#/components/schemas/SearchParameters"
               }
             },
             "text/json": {
               "schema": {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/QueryProperty"
-                }
+                "$ref": "#/components/schemas/SearchParameters"
               }
             },
             "application/*+json": {
               "schema": {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/QueryProperty"
-                }
+                "$ref": "#/components/schemas/SearchParameters"
               }
             }
           }
@@ -50223,6 +49719,58 @@
         },
         "additionalProperties": false
       },
+      "NestedProperty": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "nullable": true
+          },
+          "innerNestedProperty": {
+            "$ref": "#/components/schemas/NestedProperty"
+          }
+        },
+        "additionalProperties": false
+      },
+      "PaginatedSearchParameters": {
+        "type": "object",
+        "properties": {
+          "searchText": {
+            "type": "string",
+            "nullable": true
+          },
+          "queryProperties": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/QueryProperty"
+            },
+            "nullable": true
+          },
+          "nestedProperties": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/NestedProperty"
+            },
+            "nullable": true
+          },
+          "sortProperties": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/SortProperty"
+            },
+            "nullable": true
+          },
+          "start": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "recordsPerPage": {
+            "type": "integer",
+            "format": "int32"
+          }
+        },
+        "additionalProperties": false
+      },
       "PaymentCreateDto": {
         "type": "object",
         "additionalProperties": false
@@ -51117,14 +50665,6 @@
       "SearchParameters": {
         "type": "object",
         "properties": {
-          "start": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "recordsPerPage": {
-            "type": "integer",
-            "format": "int32"
-          },
           "searchText": {
             "type": "string",
             "nullable": true
@@ -51133,6 +50673,20 @@
             "type": "array",
             "items": {
               "$ref": "#/components/schemas/QueryProperty"
+            },
+            "nullable": true
+          },
+          "nestedProperties": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/NestedProperty"
+            },
+            "nullable": true
+          },
+          "sortProperties": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/SortProperty"
             },
             "nullable": true
           }
@@ -51329,6 +50883,19 @@
         ],
         "type": "integer",
         "format": "int32"
+      },
+      "SortProperty": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "nullable": true
+          },
+          "isDescending": {
+            "type": "boolean"
+          }
+        },
+        "additionalProperties": false
       },
       "StaffCreateDto": {
         "type": "object",
