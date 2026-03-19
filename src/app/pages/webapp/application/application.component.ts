@@ -1,10 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
 import { ApplicationFacade } from '../../../store/application/application.facade';
 import { ApplicationListInterface } from '../../../types/application';
-import { PaginatedResponseInterface } from '../../../types';
-import { PageQueryInterface } from '../../../types';
+import { PaginatedResponseInterface, PageQueryInterface } from '../../../types';
 import { TableHeaderInterface } from '../../../types/table';
 import { MatDialog } from '@angular/material/dialog';
 import { ConfirmDialogComponent } from '../../../shared/confirm-dialog/confirm-dialog.component';
@@ -16,10 +15,11 @@ import { tableHeader } from './table-header';
   templateUrl: './application.component.html',
   styleUrls: ['./application.component.scss'],
 })
-export class ApplicationComponent implements OnInit {
+export class ApplicationComponent {
   applicationList$: Observable<PaginatedResponseInterface<ApplicationListInterface[]> | null>;
   loading$: Observable<boolean>;
   tableHeaderData: TableHeaderInterface[] = tableHeader;
+  private lastQuery: PageQueryInterface = { start: 0, recordsPerPage: 10, pageIndex: 0 };
 
   constructor(
     private router: Router,
@@ -32,42 +32,13 @@ export class ApplicationComponent implements OnInit {
     this.loading$ = this.applicationFacade.loading$;
   }
 
-  ngOnInit() {
-    this.loadApplications();
-  }
-
-  loadApplications() {
-    this.applicationFacade.getApplicationList({
-      start: 0,
-      recordsPerPage: 10,
-      pageIndex: 0
-    });
-  }
-
-  onPageChange(event: PageQueryInterface) {
-    this.applicationFacade.getApplicationList(event);
-  }
-
-  onSearch(searchText: string) {
-    this.applicationFacade.getApplicationList({
-      start: 0,
-      recordsPerPage: 10,
-      pageIndex: 0,
-      searchText
-    });
-  }
-
-  onFilter(filters: { name: string; value: string }[]) {
-    this.applicationFacade.getApplicationList({
-      start: 0,
-      recordsPerPage: 10,
-      pageIndex: 0,
-      queryProperties: filters
-    });
+  onQueryChange(query: PageQueryInterface) {
+    this.lastQuery = query;
+    this.applicationFacade.getApplicationList(query);
   }
 
   onRefresh() {
-    this.loadApplications();
+    this.applicationFacade.getApplicationList(this.lastQuery);
   }
 
   onView(row: ApplicationListInterface) {
@@ -93,12 +64,8 @@ export class ApplicationComponent implements OnInit {
       if (result) {
         this.applicationFacade.deleteApplication(row.id);
         this.toastService.openToast('Application deleted successfully', NotificationTypeEnums.SUCCESS);
-        this.loadApplications();
+        this.applicationFacade.getApplicationList(this.lastQuery);
       }
     });
-  }
-
-  onCancel() {
-    this.router.navigate(['../'], { relativeTo: this.route });
   }
 }

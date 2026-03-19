@@ -1,10 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
 import { CountryFacade } from '../../../store/country/country.facade';
 import { CountryListInterface } from '../../../types/country';
-import { PaginatedResponseInterface } from '../../../types';
-import { PageQueryInterface } from '../../../types';
+import { PaginatedResponseInterface, PageQueryInterface } from '../../../types';
 import { TableHeaderInterface } from '../../../types/table';
 import { MatDialog } from '@angular/material/dialog';
 import { ConfirmDialogComponent } from '../../../shared/confirm-dialog/confirm-dialog.component';
@@ -16,10 +15,11 @@ import { tableHeader } from './table-header';
   templateUrl: './country.component.html',
   styleUrls: ['./country.component.scss'],
 })
-export class CountryComponent implements OnInit {
+export class CountryComponent {
   countryList$: Observable<PaginatedResponseInterface<CountryListInterface[]> | null>;
   loading$: Observable<boolean>;
   tableHeaderData: TableHeaderInterface[] = tableHeader;
+  private lastQuery: PageQueryInterface = { start: 0, recordsPerPage: 10, pageIndex: 0 };
 
   constructor(
     private router: Router,
@@ -32,42 +32,13 @@ export class CountryComponent implements OnInit {
     this.loading$ = this.countryFacade.loading$;
   }
 
-  ngOnInit() {
-    this.loadCountrys();
-  }
-
-  loadCountrys() {
-    this.countryFacade.getCountryList({
-      start: 0,
-      recordsPerPage: 10,
-      pageIndex: 0
-    });
-  }
-
-  onPageChange(event: PageQueryInterface) {
-    this.countryFacade.getCountryList(event);
-  }
-
-  onSearch(searchText: string) {
-    this.countryFacade.getCountryList({
-      start: 0,
-      recordsPerPage: 10,
-      pageIndex: 0,
-      searchText
-    });
-  }
-
-  onFilter(filters: { name: string; value: string }[]) {
-    this.countryFacade.getCountryList({
-      start: 0,
-      recordsPerPage: 10,
-      pageIndex: 0,
-      queryProperties: filters
-    });
+  onQueryChange(query: PageQueryInterface) {
+    this.lastQuery = query;
+    this.countryFacade.getCountryList(query);
   }
 
   onRefresh() {
-    this.loadCountrys();
+    this.countryFacade.getCountryList(this.lastQuery);
   }
 
   onView(row: CountryListInterface) {
@@ -93,12 +64,8 @@ export class CountryComponent implements OnInit {
       if (result) {
         this.countryFacade.deleteCountry(row.id);
         this.toastService.openToast('Country deleted successfully', NotificationTypeEnums.SUCCESS);
-        this.loadCountrys();
+        this.countryFacade.getCountryList(this.lastQuery);
       }
     });
-  }
-
-  onCancel() {
-    this.router.navigate(['../'], { relativeTo: this.route });
   }
 }

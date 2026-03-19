@@ -1,10 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
 import { ClassSubjectAssessmentFacade } from '../../../store/class-subject-assessment/class-subject-assessment.facade';
 import { ClassSubjectAssessmentListInterface } from '../../../types/class-subject-assessment';
-import { PaginatedResponseInterface } from '../../../types';
-import { PageQueryInterface } from '../../../types';
+import { PaginatedResponseInterface, PageQueryInterface } from '../../../types';
 import { TableHeaderInterface } from '../../../types/table';
 import { MatDialog } from '@angular/material/dialog';
 import { ConfirmDialogComponent } from '../../../shared/confirm-dialog/confirm-dialog.component';
@@ -16,10 +15,11 @@ import { tableHeader } from './table-header';
   templateUrl: './class-subject-assessment.component.html',
   styleUrls: ['./class-subject-assessment.component.scss'],
 })
-export class ClassSubjectAssessmentComponent implements OnInit {
+export class ClassSubjectAssessmentComponent {
   classSubjectAssessmentList$: Observable<PaginatedResponseInterface<ClassSubjectAssessmentListInterface[]> | null>;
   loading$: Observable<boolean>;
   tableHeaderData: TableHeaderInterface[] = tableHeader;
+  private lastQuery: PageQueryInterface = { start: 0, recordsPerPage: 10, pageIndex: 0 };
 
   constructor(
     private router: Router,
@@ -32,42 +32,13 @@ export class ClassSubjectAssessmentComponent implements OnInit {
     this.loading$ = this.classSubjectAssessmentFacade.loading$;
   }
 
-  ngOnInit() {
-    this.loadClassSubjectAssessments();
-  }
-
-  loadClassSubjectAssessments() {
-    this.classSubjectAssessmentFacade.getClassSubjectAssessmentList({
-      start: 0,
-      recordsPerPage: 10,
-      pageIndex: 0
-    });
-  }
-
-  onPageChange(event: PageQueryInterface) {
-    this.classSubjectAssessmentFacade.getClassSubjectAssessmentList(event);
-  }
-
-  onSearch(searchText: string) {
-    this.classSubjectAssessmentFacade.getClassSubjectAssessmentList({
-      start: 0,
-      recordsPerPage: 10,
-      pageIndex: 0,
-      searchText
-    });
-  }
-
-  onFilter(filters: { name: string; value: string }[]) {
-    this.classSubjectAssessmentFacade.getClassSubjectAssessmentList({
-      start: 0,
-      recordsPerPage: 10,
-      pageIndex: 0,
-      queryProperties: filters
-    });
+  onQueryChange(query: PageQueryInterface) {
+    this.lastQuery = query;
+    this.classSubjectAssessmentFacade.getClassSubjectAssessmentList(query);
   }
 
   onRefresh() {
-    this.loadClassSubjectAssessments();
+    this.classSubjectAssessmentFacade.getClassSubjectAssessmentList(this.lastQuery);
   }
 
   onView(row: ClassSubjectAssessmentListInterface) {
@@ -93,12 +64,8 @@ export class ClassSubjectAssessmentComponent implements OnInit {
       if (result) {
         this.classSubjectAssessmentFacade.deleteClassSubjectAssessment(row.id);
         this.toastService.openToast('Class Subject Assessment deleted successfully', NotificationTypeEnums.SUCCESS);
-        this.loadClassSubjectAssessments();
+        this.classSubjectAssessmentFacade.getClassSubjectAssessmentList(this.lastQuery);
       }
     });
-  }
-
-  onCancel() {
-    this.router.navigate(['../'], { relativeTo: this.route });
   }
 }

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
 import { ClassFacade } from '../../../store/class/class.facade';
@@ -16,10 +16,12 @@ import { tableHeader } from './table-header';
   templateUrl: './class.component.html',
   styleUrls: ['./class.component.scss'],
 })
-export class ClassComponent implements OnInit {
+export class ClassComponent {
   classList$: Observable<PaginatedResponseInterface<ClassListInterface[]> | null>;
   loading$: Observable<boolean>;
   tableHeaderData: TableHeaderInterface[] = tableHeader;
+
+  private lastQuery: PageQueryInterface = { start: 0, recordsPerPage: 100, pageIndex: 0 };
 
   constructor(
     private router: Router,
@@ -32,42 +34,13 @@ export class ClassComponent implements OnInit {
     this.loading$ = this.classFacade.loading$;
   }
 
-  ngOnInit() {
-    this.loadClasss();
-  }
-
-  loadClasss() {
-    this.classFacade.getClassList({
-      start: 0,
-      recordsPerPage: 100,
-      pageIndex: 0
-    });
-  }
-
-  onPageChange(event: PageQueryInterface) {
-    this.classFacade.getClassList(event);
-  }
-
-  onSearch(searchText: string) {
-    this.classFacade.getClassList({
-      start: 0,
-      recordsPerPage: 100,
-      pageIndex: 0,
-      searchText
-    });
-  }
-
-  onFilter(filters: { name: string; value: string }[]) {
-    this.classFacade.getClassList({
-      start: 0,
-      recordsPerPage: 100,
-      pageIndex: 0,
-      queryProperties: filters
-    });
+  onQueryChange(query: PageQueryInterface) {
+    this.lastQuery = query;
+    this.classFacade.getClassList(query);
   }
 
   onRefresh() {
-    this.loadClasss();
+    this.classFacade.getClassList(this.lastQuery);
   }
 
   onView(row: ClassListInterface) {
@@ -93,7 +66,7 @@ export class ClassComponent implements OnInit {
       if (result) {
         this.classFacade.deleteClass(row.id);
         this.toastService.openToast('Class deleted successfully', NotificationTypeEnums.SUCCESS);
-        this.loadClasss();
+        this.classFacade.getClassList(this.lastQuery);
       }
     });
   }

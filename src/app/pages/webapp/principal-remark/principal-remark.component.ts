@@ -122,26 +122,8 @@ export class PrincipalRemarkComponent implements OnInit, OnDestroy {
     this.principalRemarkFacade.getPrincipalRemarkList(merged);
   }
 
-  onPageChange(event: PageQueryInterface) {
-    this.loadPrincipalRemarks(event);
-  }
-
-  onSearch(searchText: string) {
-    this.loadPrincipalRemarks({
-      start: 0,
-      recordsPerPage: 10,
-      pageIndex: 0,
-      searchText,
-    });
-  }
-
-  onFilter(filters: { name: string; value: string }[]) {
-    this.loadPrincipalRemarks({
-      start: 0,
-      recordsPerPage: 10,
-      pageIndex: 0,
-      queryProperties: filters,
-    });
+  onQueryChange(query: PageQueryInterface) {
+    this.loadPrincipalRemarks(query);
   }
 
   onRefresh(): void {

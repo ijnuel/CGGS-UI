@@ -1,10 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
 import { StateFacade } from '../../../store/state/state.facade';
 import { StateListInterface } from '../../../types/state';
-import { PaginatedResponseInterface } from '../../../types';
-import { PageQueryInterface } from '../../../types';
+import { PaginatedResponseInterface, PageQueryInterface } from '../../../types';
 import { TableHeaderInterface } from '../../../types/table';
 import { MatDialog } from '@angular/material/dialog';
 import { ConfirmDialogComponent } from '../../../shared/confirm-dialog/confirm-dialog.component';
@@ -16,10 +15,11 @@ import { tableHeader } from './table-header';
   templateUrl: './state.component.html',
   styleUrls: ['./state.component.scss'],
 })
-export class StateComponent implements OnInit {
+export class StateComponent {
   stateList$: Observable<PaginatedResponseInterface<StateListInterface[]> | null>;
   loading$: Observable<boolean>;
   tableHeaderData: TableHeaderInterface[] = tableHeader;
+  private lastQuery: PageQueryInterface = { start: 0, recordsPerPage: 10, pageIndex: 0 };
 
   constructor(
     private router: Router,
@@ -32,42 +32,13 @@ export class StateComponent implements OnInit {
     this.loading$ = this.stateFacade.loading$;
   }
 
-  ngOnInit() {
-    this.loadStates();
-  }
-
-  loadStates() {
-    this.stateFacade.getStateList({
-      start: 0,
-      recordsPerPage: 10,
-      pageIndex: 0
-    });
-  }
-
-  onPageChange(event: PageQueryInterface) {
-    this.stateFacade.getStateList(event);
-  }
-
-  onSearch(searchText: string) {
-    this.stateFacade.getStateList({
-      start: 0,
-      recordsPerPage: 10,
-      pageIndex: 0,
-      searchText
-    });
-  }
-
-  onFilter(filters: { name: string; value: string }[]) {
-    this.stateFacade.getStateList({
-      start: 0,
-      recordsPerPage: 10,
-      pageIndex: 0,
-      queryProperties: filters
-    });
+  onQueryChange(query: PageQueryInterface) {
+    this.lastQuery = query;
+    this.stateFacade.getStateList(query);
   }
 
   onRefresh() {
-    this.loadStates();
+    this.stateFacade.getStateList(this.lastQuery);
   }
 
   onView(row: StateListInterface) {
@@ -93,12 +64,8 @@ export class StateComponent implements OnInit {
       if (result) {
         this.stateFacade.deleteState(row.id);
         this.toastService.openToast('State deleted successfully', NotificationTypeEnums.SUCCESS);
-        this.loadStates();
+        this.stateFacade.getStateList(this.lastQuery);
       }
     });
-  }
-
-  onCancel() {
-    this.router.navigate(['../'], { relativeTo: this.route });
   }
 }

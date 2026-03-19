@@ -1,10 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
 import { TestEntityTemplateFacade } from '../../../store/test-entity-template/test-entity-template.facade';
 import { TestEntityTemplateListInterface } from '../../../types/test-entity-template';
-import { PaginatedResponseInterface } from '../../../types';
-import { PageQueryInterface } from '../../../types';
+import { PaginatedResponseInterface, PageQueryInterface } from '../../../types';
 import { TableHeaderInterface } from '../../../types/table';
 import { MatDialog } from '@angular/material/dialog';
 import { ConfirmDialogComponent } from '../../../shared/confirm-dialog/confirm-dialog.component';
@@ -16,10 +15,11 @@ import { tableHeader } from './table-header';
   templateUrl: './test-entity-template.component.html',
   styleUrls: ['./test-entity-template.component.scss'],
 })
-export class TestEntityTemplateComponent implements OnInit {
+export class TestEntityTemplateComponent {
   testEntityTemplateList$: Observable<PaginatedResponseInterface<TestEntityTemplateListInterface[]> | null>;
   loading$: Observable<boolean>;
   tableHeaderData: TableHeaderInterface[] = tableHeader;
+  private lastQuery: PageQueryInterface = { start: 0, recordsPerPage: 10, pageIndex: 0 };
 
   constructor(
     private router: Router,
@@ -32,42 +32,13 @@ export class TestEntityTemplateComponent implements OnInit {
     this.loading$ = this.testEntityTemplateFacade.loading$;
   }
 
-  ngOnInit() {
-    this.loadTestEntityTemplates();
-  }
-
-  loadTestEntityTemplates() {
-    this.testEntityTemplateFacade.getTestEntityTemplateList({
-      start: 0,
-      recordsPerPage: 10,
-      pageIndex: 0
-    });
-  }
-
-  onPageChange(event: PageQueryInterface) {
-    this.testEntityTemplateFacade.getTestEntityTemplateList(event);
-  }
-
-  onSearch(searchText: string) {
-    this.testEntityTemplateFacade.getTestEntityTemplateList({
-      start: 0,
-      recordsPerPage: 10,
-      pageIndex: 0,
-      searchText
-    });
-  }
-
-  onFilter(filters: { name: string; value: string }[]) {
-    this.testEntityTemplateFacade.getTestEntityTemplateList({
-      start: 0,
-      recordsPerPage: 10,
-      pageIndex: 0,
-      queryProperties: filters
-    });
+  onQueryChange(query: PageQueryInterface) {
+    this.lastQuery = query;
+    this.testEntityTemplateFacade.getTestEntityTemplateList(query);
   }
 
   onRefresh() {
-    this.loadTestEntityTemplates();
+    this.testEntityTemplateFacade.getTestEntityTemplateList(this.lastQuery);
   }
 
   onView(row: TestEntityTemplateListInterface) {
@@ -93,12 +64,8 @@ export class TestEntityTemplateComponent implements OnInit {
       if (result) {
         this.testEntityTemplateFacade.deleteTestEntityTemplate(row.id);
         this.toastService.openToast('Test Entity Template deleted successfully', NotificationTypeEnums.SUCCESS);
-        this.loadTestEntityTemplates();
+        this.testEntityTemplateFacade.getTestEntityTemplateList(this.lastQuery);
       }
     });
-  }
-
-  onCancel() {
-    this.router.navigate(['../'], { relativeTo: this.route });
   }
 }

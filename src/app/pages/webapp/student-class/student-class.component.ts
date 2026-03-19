@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { tableHeader } from './table-header';
 import { StudentClassFacade } from '../../../store/student-class/student-class.facade';
 import { Observable } from 'rxjs';
@@ -7,20 +7,14 @@ import {
   PaginatedResponseInterface,
   StudentClassListInterface,
 } from '../../../types';
-import { PageEvent } from '@angular/material/paginator';
 
 @Component({
     selector: 'app-student-class',
     templateUrl: './student-class.component.html',
     styleUrl: './student-class.component.scss',
 })
-export class StudentClassComponent implements OnInit {
+export class StudentClassComponent {
   header = tableHeader;
-  pageQuery: PageQueryInterface = {
-    start: 0,
-    recordsPerPage: 10,
-    pageIndex: 0
-  };
   studentClassList$: Observable<PaginatedResponseInterface<
     StudentClassListInterface[]
   > | null>;
@@ -31,12 +25,7 @@ export class StudentClassComponent implements OnInit {
     this.loading$ = this.studentClassFacade.loading$;
   }
 
-  ngOnInit() {
-    this.studentClassFacade.getStudentClassList(this.pageQuery);
-  }
-  
-  onPageChange(pageQuery: PageQueryInterface) {
-    this.pageQuery = pageQuery;
-    this.studentClassFacade.getStudentClassList(this.pageQuery);
+  onQueryChange(query: PageQueryInterface) {
+    this.studentClassFacade.getStudentClassList(query);
   }
 }

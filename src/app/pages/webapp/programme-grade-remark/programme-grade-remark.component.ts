@@ -91,8 +91,8 @@ export class ProgrammeGradeRemarkComponent implements OnInit, OnDestroy {
     }
   }
 
-  onPageChange(event: PageQueryInterface) {
-    this.loadProgrammeGradeRemarks(event);
+  onQueryChange(query: PageQueryInterface) {
+    this.loadProgrammeGradeRemarks(query);
   }
 
   onRefresh(): void {

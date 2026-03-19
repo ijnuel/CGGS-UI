@@ -1,10 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
 import { ClassSubjectFacade } from '../../../store/class-subject/class-subject.facade';
 import { ClassSubjectListInterface } from '../../../types/class-subject';
-import { PaginatedResponseInterface } from '../../../types';
-import { PageQueryInterface } from '../../../types';
+import { PaginatedResponseInterface, PageQueryInterface } from '../../../types';
 import { TableHeaderInterface } from '../../../types/table';
 import { MatDialog } from '@angular/material/dialog';
 import { ConfirmDialogComponent } from '../../../shared/confirm-dialog/confirm-dialog.component';
@@ -16,10 +15,11 @@ import { tableHeader } from './table-header';
   templateUrl: './class-subject.component.html',
   styleUrls: ['./class-subject.component.scss'],
 })
-export class ClassSubjectComponent implements OnInit {
+export class ClassSubjectComponent {
   classSubjectList$: Observable<PaginatedResponseInterface<ClassSubjectListInterface[]> | null>;
   loading$: Observable<boolean>;
   tableHeaderData: TableHeaderInterface[] = tableHeader;
+  private lastQuery: PageQueryInterface = { start: 0, recordsPerPage: 10, pageIndex: 0 };
 
   constructor(
     private router: Router,
@@ -32,42 +32,13 @@ export class ClassSubjectComponent implements OnInit {
     this.loading$ = this.classSubjectFacade.loading$;
   }
 
-  ngOnInit() {
-    this.loadClassSubjects();
-  }
-
-  loadClassSubjects() {
-    this.classSubjectFacade.getClassSubjectList({
-      start: 0,
-      recordsPerPage: 10,
-      pageIndex: 0
-    });
-  }
-
-  onPageChange(event: PageQueryInterface) {
-    this.classSubjectFacade.getClassSubjectList(event);
-  }
-
-  onSearch(searchText: string) {
-    this.classSubjectFacade.getClassSubjectList({
-      start: 0,
-      recordsPerPage: 10,
-      pageIndex: 0,
-      searchText
-    });
-  }
-
-  onFilter(filters: { name: string; value: string }[]) {
-    this.classSubjectFacade.getClassSubjectList({
-      start: 0,
-      recordsPerPage: 10,
-      pageIndex: 0,
-      queryProperties: filters
-    });
+  onQueryChange(query: PageQueryInterface) {
+    this.lastQuery = query;
+    this.classSubjectFacade.getClassSubjectList(query);
   }
 
   onRefresh() {
-    this.loadClassSubjects();
+    this.classSubjectFacade.getClassSubjectList(this.lastQuery);
   }
 
   onView(row: ClassSubjectListInterface) {
@@ -93,12 +64,8 @@ export class ClassSubjectComponent implements OnInit {
       if (result) {
         this.classSubjectFacade.deleteClassSubject(row.id);
         this.toastService.openToast('Class Subject deleted successfully', NotificationTypeEnums.SUCCESS);
-        this.loadClassSubjects();
+        this.classSubjectFacade.getClassSubjectList(this.lastQuery);
       }
     });
-  }
-
-  onCancel() {
-    this.router.navigate(['../'], { relativeTo: this.route });
   }
 }

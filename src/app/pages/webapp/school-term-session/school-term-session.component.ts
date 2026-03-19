@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
 import { SchoolTermSessionFacade } from '../../../store/school-term-session/school-term-session.facade';
@@ -17,14 +17,13 @@ import { SessionFacade } from '../../../store/session/session.facade';
   templateUrl: './school-term-session.component.html',
   styleUrls: ['./school-term-session.component.scss'],
 })
-export class SchoolTermSessionComponent implements OnInit {
+export class SchoolTermSessionComponent {
   schoolTermSessionList$: Observable<PaginatedResponseInterface<SchoolTermSessionListInterface[]> | null>;
   sessionList$: Observable<SessionListInterface[] | null>;
   loading$: Observable<boolean>;
   tableHeaderData: TableHeaderInterface[] = tableHeader;
 
-  sessionList: SessionListInterface[] = [];
-  schoolTermSessionList: SchoolTermSessionListInterface[] = [];
+  private lastQuery: PageQueryInterface = { start: 0, recordsPerPage: 10, pageIndex: 0 };
 
   constructor(
     private router: Router,
@@ -39,42 +38,13 @@ export class SchoolTermSessionComponent implements OnInit {
     this.loading$ = this.schoolTermSessionFacade.loading$;
   }
 
-  ngOnInit() {
-    this.loadSchoolTermSessions();
-  }
-
-  loadSchoolTermSessions() {
-    this.schoolTermSessionFacade.getSchoolTermSessionList({
-      start: 0,
-      recordsPerPage: 10,
-      pageIndex: 0
-    });
-  }
-
-  onPageChange(event: PageQueryInterface) {
-    this.schoolTermSessionFacade.getSchoolTermSessionList(event);
-  }
-
-  onSearch(searchText: string) {
-    this.schoolTermSessionFacade.getSchoolTermSessionList({
-      start: 0,
-      recordsPerPage: 10,
-      pageIndex: 0,
-      searchText
-    });
-  }
-
-  onFilter(filters: { name: string; value: string }[]) {
-    this.schoolTermSessionFacade.getSchoolTermSessionList({
-      start: 0,
-      recordsPerPage: 10,
-      pageIndex: 0,
-      queryProperties: filters
-    });
+  onQueryChange(query: PageQueryInterface) {
+    this.lastQuery = query;
+    this.schoolTermSessionFacade.getSchoolTermSessionList(query);
   }
 
   onRefresh() {
-    this.loadSchoolTermSessions();
+    this.schoolTermSessionFacade.getSchoolTermSessionList(this.lastQuery);
   }
 
   onView(row: SchoolTermSessionListInterface) {
@@ -100,7 +70,7 @@ export class SchoolTermSessionComponent implements OnInit {
       if (result) {
         this.schoolTermSessionFacade.deleteSchoolTermSession(row.id);
         this.toastService.openToast('School Term Session deleted successfully', NotificationTypeEnums.SUCCESS);
-        this.loadSchoolTermSessions();
+        this.schoolTermSessionFacade.getSchoolTermSessionList(this.lastQuery);
       }
     });
   }

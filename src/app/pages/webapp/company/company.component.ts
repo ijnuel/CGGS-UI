@@ -1,10 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
 import { CompanyFacade } from '../../../store/company/company.facade';
 import { CompanyListInterface } from '../../../types/company';
-import { PaginatedResponseInterface } from '../../../types';
-import { PageQueryInterface } from '../../../types';
+import { PaginatedResponseInterface, PageQueryInterface } from '../../../types';
 import { TableHeaderInterface } from '../../../types/table';
 import { MatDialog } from '@angular/material/dialog';
 import { ConfirmDialogComponent } from '../../../shared/confirm-dialog/confirm-dialog.component';
@@ -16,10 +15,11 @@ import { tableHeader } from './table-header';
   templateUrl: './company.component.html',
   styleUrls: ['./company.component.scss'],
 })
-export class CompanyComponent implements OnInit {
+export class CompanyComponent {
   companyList$: Observable<PaginatedResponseInterface<CompanyListInterface[]> | null>;
   loading$: Observable<boolean>;
   tableHeaderData: TableHeaderInterface[] = tableHeader;
+  private lastQuery: PageQueryInterface = { start: 0, recordsPerPage: 10, pageIndex: 0 };
 
   constructor(
     private router: Router,
@@ -32,42 +32,13 @@ export class CompanyComponent implements OnInit {
     this.loading$ = this.companyFacade.loading$;
   }
 
-  ngOnInit() {
-    this.loadCompanys();
-  }
-
-  loadCompanys() {
-    this.companyFacade.getCompanyList({
-      start: 0,
-      recordsPerPage: 10,
-      pageIndex: 0
-    });
-  }
-
-  onPageChange(event: PageQueryInterface) {
-    this.companyFacade.getCompanyList(event);
-  }
-
-  onSearch(searchText: string) {
-    this.companyFacade.getCompanyList({
-      start: 0,
-      recordsPerPage: 10,
-      pageIndex: 0,
-      searchText
-    });
-  }
-
-  onFilter(filters: { name: string; value: string }[]) {
-    this.companyFacade.getCompanyList({
-      start: 0,
-      recordsPerPage: 10,
-      pageIndex: 0,
-      queryProperties: filters
-    });
+  onQueryChange(query: PageQueryInterface) {
+    this.lastQuery = query;
+    this.companyFacade.getCompanyList(query);
   }
 
   onRefresh() {
-    this.loadCompanys();
+    this.companyFacade.getCompanyList(this.lastQuery);
   }
 
   onView(row: CompanyListInterface) {
@@ -93,12 +64,8 @@ export class CompanyComponent implements OnInit {
       if (result) {
         this.companyFacade.deleteCompany(row.id);
         this.toastService.openToast('Company deleted successfully', NotificationTypeEnums.SUCCESS);
-        this.loadCompanys();
+        this.companyFacade.getCompanyList(this.lastQuery);
       }
     });
-  }
-
-  onCancel() {
-    this.router.navigate(['../'], { relativeTo: this.route });
   }
 }

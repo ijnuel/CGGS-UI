@@ -1,10 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
 import { LocalGovernmentAreaFacade } from '../../../store/local-government-area/local-government-area.facade';
 import { LocalGovernmentAreaListInterface } from '../../../types/local-government-area';
-import { PaginatedResponseInterface } from '../../../types';
-import { PageQueryInterface } from '../../../types';
+import { PaginatedResponseInterface, PageQueryInterface } from '../../../types';
 import { TableHeaderInterface } from '../../../types/table';
 import { MatDialog } from '@angular/material/dialog';
 import { ConfirmDialogComponent } from '../../../shared/confirm-dialog/confirm-dialog.component';
@@ -16,10 +15,11 @@ import { tableHeader } from './table-header';
   templateUrl: './local-government-area.component.html',
   styleUrls: ['./local-government-area.component.scss'],
 })
-export class LocalGovernmentAreaComponent implements OnInit {
+export class LocalGovernmentAreaComponent {
   localGovernmentAreaList$: Observable<PaginatedResponseInterface<LocalGovernmentAreaListInterface[]> | null>;
   loading$: Observable<boolean>;
   tableHeaderData: TableHeaderInterface[] = tableHeader;
+  private lastQuery: PageQueryInterface = { start: 0, recordsPerPage: 10, pageIndex: 0 };
 
   constructor(
     private router: Router,
@@ -32,42 +32,13 @@ export class LocalGovernmentAreaComponent implements OnInit {
     this.loading$ = this.localGovernmentAreaFacade.loading$;
   }
 
-  ngOnInit() {
-    this.loadLocalGovernmentAreas();
-  }
-
-  loadLocalGovernmentAreas() {
-    this.localGovernmentAreaFacade.getLocalGovernmentAreaList({
-      start: 0,
-      recordsPerPage: 10,
-      pageIndex: 0
-    });
-  }
-
-  onPageChange(event: PageQueryInterface) {
-    this.localGovernmentAreaFacade.getLocalGovernmentAreaList(event);
-  }
-
-  onSearch(searchText: string) {
-    this.localGovernmentAreaFacade.getLocalGovernmentAreaList({
-      start: 0,
-      recordsPerPage: 10,
-      pageIndex: 0,
-      searchText
-    });
-  }
-
-  onFilter(filters: { name: string; value: string }[]) {
-    this.localGovernmentAreaFacade.getLocalGovernmentAreaList({
-      start: 0,
-      recordsPerPage: 10,
-      pageIndex: 0,
-      queryProperties: filters
-    });
+  onQueryChange(query: PageQueryInterface) {
+    this.lastQuery = query;
+    this.localGovernmentAreaFacade.getLocalGovernmentAreaList(query);
   }
 
   onRefresh() {
-    this.loadLocalGovernmentAreas();
+    this.localGovernmentAreaFacade.getLocalGovernmentAreaList(this.lastQuery);
   }
 
   onView(row: LocalGovernmentAreaListInterface) {
@@ -93,12 +64,8 @@ export class LocalGovernmentAreaComponent implements OnInit {
       if (result) {
         this.localGovernmentAreaFacade.deleteLocalGovernmentArea(row.id);
         this.toastService.openToast('Local Government Area deleted successfully', NotificationTypeEnums.SUCCESS);
-        this.loadLocalGovernmentAreas();
+        this.localGovernmentAreaFacade.getLocalGovernmentAreaList(this.lastQuery);
       }
     });
-  }
-
-  onCancel() {
-    this.router.navigate(['../'], { relativeTo: this.route });
   }
 }

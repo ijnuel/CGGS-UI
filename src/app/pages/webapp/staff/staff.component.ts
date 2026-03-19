@@ -1,10 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
 import { StaffFacade } from '../../../store/staff/staff.facade';
 import { StaffListInterface } from '../../../types/staff';
-import { PaginatedResponseInterface } from '../../../types';
-import { PageQueryInterface } from '../../../types';
+import { PaginatedResponseInterface, PageQueryInterface } from '../../../types';
 import { TableHeaderInterface } from '../../../types/table';
 import { MatDialog } from '@angular/material/dialog';
 import { ConfirmDialogComponent } from '../../../shared/confirm-dialog/confirm-dialog.component';
@@ -16,10 +15,11 @@ import { tableHeader } from './table-header';
   templateUrl: './staff.component.html',
   styleUrls: ['./staff.component.scss'],
 })
-export class StaffComponent implements OnInit {
+export class StaffComponent {
   staffList$: Observable<PaginatedResponseInterface<StaffListInterface[]> | null>;
   loading$: Observable<boolean>;
   tableHeaderData: TableHeaderInterface[] = tableHeader;
+  private lastQuery: PageQueryInterface = { start: 0, recordsPerPage: 10, pageIndex: 0 };
 
   constructor(
     private router: Router,
@@ -32,42 +32,13 @@ export class StaffComponent implements OnInit {
     this.loading$ = this.staffFacade.loading$;
   }
 
-  ngOnInit() {
-    this.loadStaffs();
-  }
-
-  loadStaffs() {
-    this.staffFacade.getStaffList({
-      start: 0,
-      recordsPerPage: 10,
-      pageIndex: 0
-    });
-  }
-
-  onPageChange(event: PageQueryInterface) {
-    this.staffFacade.getStaffList(event);
-  }
-
-  onSearch(searchText: string) {
-    this.staffFacade.getStaffList({
-      start: 0,
-      recordsPerPage: 10,
-      pageIndex: 0,
-      searchText
-    });
-  }
-
-  onFilter(filters: { name: string; value: string }[]) {
-    this.staffFacade.getStaffList({
-      start: 0,
-      recordsPerPage: 10,
-      pageIndex: 0,
-      queryProperties: filters
-    });
+  onQueryChange(query: PageQueryInterface) {
+    this.lastQuery = query;
+    this.staffFacade.getStaffList(query);
   }
 
   onRefresh() {
-    this.loadStaffs();
+    this.staffFacade.getStaffList(this.lastQuery);
   }
 
   onView(row: StaffListInterface) {
@@ -93,12 +64,8 @@ export class StaffComponent implements OnInit {
       if (result) {
         this.staffFacade.deleteStaff(row.id);
         this.toastService.openToast('Staff deleted successfully', NotificationTypeEnums.SUCCESS);
-        this.loadStaffs();
+        this.staffFacade.getStaffList(this.lastQuery);
       }
     });
-  }
-
-  onCancel() {
-    this.router.navigate(['../'], { relativeTo: this.route });
   }
 }

@@ -25,6 +25,7 @@ export class SubjectComponent implements OnInit {
 
   subjectTypeList: DropdownListInterface[] = [];
   subjectList: SubjectListInterface[] = [];
+  private lastQuery: PageQueryInterface = { start: 0, recordsPerPage: 10, pageIndex: 0 };
 
   constructor(
     private router: Router,
@@ -41,53 +42,24 @@ export class SubjectComponent implements OnInit {
 
   ngOnInit() {
     this.sharedFacade.getSubjectTypeList();
-    this.loadSubjects();
-    
+
     this.subjectList$.subscribe(x => {
       this.subjectList = this.getTableData(x?.data ?? []);
-      console.log('Subject List:', this.subjectList);
     });
 
     this.subjectTypeList$.subscribe(x => {
-      this.subjectTypeList = x! ?? [];
-      console.log('Subject Type List:', this.subjectTypeList);
+      this.subjectTypeList = x ?? [];
       this.subjectList = this.getTableData(this.subjectList);
-      console.log('Subject List:', this.subjectList);
-    })
-  }
-
-  loadSubjects() {
-    this.subjectFacade.getSubjectList({
-      start: 0,
-      recordsPerPage: 10,
-      pageIndex: 0
     });
   }
 
-  onPageChange(event: PageQueryInterface) {
-    this.subjectFacade.getSubjectList(event);
-  }
-
-  onSearch(searchText: string) {
-    this.subjectFacade.getSubjectList({
-      start: 0,
-      recordsPerPage: 10,
-      pageIndex: 0,
-      searchText
-    });
-  }
-
-  onFilter(filters: { name: string; value: string }[]) {
-    this.subjectFacade.getSubjectList({
-      start: 0,
-      recordsPerPage: 10,
-      pageIndex: 0,
-      queryProperties: filters
-    });
+  onQueryChange(query: PageQueryInterface) {
+    this.lastQuery = query;
+    this.subjectFacade.getSubjectList(query);
   }
 
   onRefresh() {
-    this.loadSubjects();
+    this.subjectFacade.getSubjectList(this.lastQuery);
   }
 
   onView(row: SubjectListInterface) {
@@ -113,7 +85,7 @@ export class SubjectComponent implements OnInit {
       if (result) {
         this.subjectFacade.deleteSubject(row.id);
         this.toastService.openToast('Subject deleted successfully', NotificationTypeEnums.SUCCESS);
-        this.loadSubjects();
+        this.subjectFacade.getSubjectList(this.lastQuery);
       }
     });
   }

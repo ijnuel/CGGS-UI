@@ -1,10 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
 import { SessionFacade } from '../../../store/session/session.facade';
 import { SessionListInterface } from '../../../types/session';
-import { PaginatedResponseInterface } from '../../../types';
-import { PageQueryInterface } from '../../../types';
+import { PaginatedResponseInterface, PageQueryInterface } from '../../../types';
 import { TableHeaderInterface } from '../../../types/table';
 import { MatDialog } from '@angular/material/dialog';
 import { ConfirmDialogComponent } from '../../../shared/confirm-dialog/confirm-dialog.component';
@@ -16,10 +15,11 @@ import { tableHeader } from './table-header';
   templateUrl: './session.component.html',
   styleUrls: ['./session.component.scss'],
 })
-export class SessionComponent implements OnInit {
+export class SessionComponent {
   sessionList$: Observable<PaginatedResponseInterface<SessionListInterface[]> | null>;
   loading$: Observable<boolean>;
   tableHeaderData: TableHeaderInterface[] = tableHeader;
+  private lastQuery: PageQueryInterface = { start: 0, recordsPerPage: 10, pageIndex: 0 };
 
   constructor(
     private router: Router,
@@ -32,42 +32,13 @@ export class SessionComponent implements OnInit {
     this.loading$ = this.sessionFacade.loading$;
   }
 
-  ngOnInit() {
-    this.loadSessions();
-  }
-
-  loadSessions() {
-    this.sessionFacade.getSessionList({
-      start: 0,
-      recordsPerPage: 10,
-      pageIndex: 0
-    });
-  }
-
-  onPageChange(event: PageQueryInterface) {
-    this.sessionFacade.getSessionList(event);
-  }
-
-  onSearch(searchText: string) {
-    this.sessionFacade.getSessionList({
-      start: 0,
-      recordsPerPage: 10,
-      pageIndex: 0,
-      searchText
-    });
-  }
-
-  onFilter(filters: { name: string; value: string }[]) {
-    this.sessionFacade.getSessionList({
-      start: 0,
-      recordsPerPage: 10,
-      pageIndex: 0,
-      queryProperties: filters
-    });
+  onQueryChange(query: PageQueryInterface) {
+    this.lastQuery = query;
+    this.sessionFacade.getSessionList(query);
   }
 
   onRefresh() {
-    this.loadSessions();
+    this.sessionFacade.getSessionList(this.lastQuery);
   }
 
   onView(row: SessionListInterface) {
@@ -93,12 +64,8 @@ export class SessionComponent implements OnInit {
       if (result) {
         this.sessionFacade.deleteSession(row.id);
         this.toastService.openToast('Session deleted successfully', NotificationTypeEnums.SUCCESS);
-        this.loadSessions();
+        this.sessionFacade.getSessionList(this.lastQuery);
       }
     });
-  }
-
-  onCancel() {
-    this.router.navigate(['../'], { relativeTo: this.route });
   }
 }

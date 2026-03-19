@@ -1,10 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
 import { AdministratorFacade } from '../../../store/administrator/administrator.facade';
 import { AdministratorListInterface } from '../../../types/administrator';
-import { PaginatedResponseInterface } from '../../../types';
-import { PageQueryInterface } from '../../../types';
+import { PaginatedResponseInterface, PageQueryInterface } from '../../../types';
 import { TableHeaderInterface } from '../../../types/table';
 import { MatDialog } from '@angular/material/dialog';
 import { ConfirmDialogComponent } from '../../../shared/confirm-dialog/confirm-dialog.component';
@@ -16,10 +15,11 @@ import { tableHeader } from './table-header';
   templateUrl: './administrator.component.html',
   styleUrls: ['./administrator.component.scss'],
 })
-export class AdministratorComponent implements OnInit {
+export class AdministratorComponent {
   administratorList$: Observable<PaginatedResponseInterface<AdministratorListInterface[]> | null>;
   loading$: Observable<boolean>;
   tableHeaderData: TableHeaderInterface[] = tableHeader;
+  private lastQuery: PageQueryInterface = { start: 0, recordsPerPage: 10, pageIndex: 0 };
 
   constructor(
     private router: Router,
@@ -32,42 +32,13 @@ export class AdministratorComponent implements OnInit {
     this.loading$ = this.administratorFacade.loading$;
   }
 
-  ngOnInit() {
-    this.loadAdministrators();
-  }
-
-  loadAdministrators() {
-    this.administratorFacade.getAdministratorList({
-      start: 0,
-      recordsPerPage: 10,
-      pageIndex: 0
-    });
-  }
-
-  onPageChange(event: PageQueryInterface) {
-    this.administratorFacade.getAdministratorList(event);
-  }
-
-  onSearch(searchText: string) {
-    this.administratorFacade.getAdministratorList({
-      start: 0,
-      recordsPerPage: 10,
-      pageIndex: 0,
-      searchText
-    });
-  }
-
-  onFilter(filters: { name: string; value: string }[]) {
-    this.administratorFacade.getAdministratorList({
-      start: 0,
-      recordsPerPage: 10,
-      pageIndex: 0,
-      queryProperties: filters
-    });
+  onQueryChange(query: PageQueryInterface) {
+    this.lastQuery = query;
+    this.administratorFacade.getAdministratorList(query);
   }
 
   onRefresh() {
-    this.loadAdministrators();
+    this.administratorFacade.getAdministratorList(this.lastQuery);
   }
 
   onView(row: AdministratorListInterface) {
@@ -93,12 +64,8 @@ export class AdministratorComponent implements OnInit {
       if (result) {
         this.administratorFacade.deleteAdministrator(row.id);
         this.toastService.openToast('Administrator deleted successfully', NotificationTypeEnums.SUCCESS);
-        this.loadAdministrators();
+        this.administratorFacade.getAdministratorList(this.lastQuery);
       }
     });
-  }
-
-  onCancel() {
-    this.router.navigate(['../'], { relativeTo: this.route });
   }
 }

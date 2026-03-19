@@ -1,10 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
 import { ClassLevelFacade } from '../../../store/class-level/class-level.facade';
 import { ClassLevelListInterface } from '../../../types/class-level';
-import { PaginatedResponseInterface } from '../../../types';
-import { PageQueryInterface } from '../../../types';
+import { PaginatedResponseInterface, PageQueryInterface } from '../../../types';
 import { TableHeaderInterface } from '../../../types/table';
 import { MatDialog } from '@angular/material/dialog';
 import { ConfirmDialogComponent } from '../../../shared/confirm-dialog/confirm-dialog.component';
@@ -16,10 +15,11 @@ import { tableHeader } from './table-header';
   templateUrl: './class-level.component.html',
   styleUrls: ['./class-level.component.scss'],
 })
-export class ClassLevelComponent implements OnInit {
+export class ClassLevelComponent {
   classLevelList$: Observable<PaginatedResponseInterface<ClassLevelListInterface[]> | null>;
   loading$: Observable<boolean>;
   tableHeaderData: TableHeaderInterface[] = tableHeader;
+  private lastQuery: PageQueryInterface = { start: 0, recordsPerPage: 10, pageIndex: 0 };
 
   constructor(
     private router: Router,
@@ -32,42 +32,13 @@ export class ClassLevelComponent implements OnInit {
     this.loading$ = this.classLevelFacade.loading$;
   }
 
-  ngOnInit() {
-    this.loadClassLevels();
-  }
-
-  loadClassLevels() {
-    this.classLevelFacade.getClassLevelList({
-      start: 0,
-      recordsPerPage: 10,
-      pageIndex: 0
-    });
-  }
-
-  onPageChange(event: PageQueryInterface) {
-    this.classLevelFacade.getClassLevelList(event);
-  }
-
-  onSearch(searchText: string) {
-    this.classLevelFacade.getClassLevelList({
-      start: 0,
-      recordsPerPage: 10,
-      pageIndex: 0,
-      searchText
-    });
-  }
-
-  onFilter(filters: { name: string; value: string }[]) {
-    this.classLevelFacade.getClassLevelList({
-      start: 0,
-      recordsPerPage: 10,
-      pageIndex: 0,
-      queryProperties: filters
-    });
+  onQueryChange(query: PageQueryInterface) {
+    this.lastQuery = query;
+    this.classLevelFacade.getClassLevelList(query);
   }
 
   onRefresh() {
-    this.loadClassLevels();
+    this.classLevelFacade.getClassLevelList(this.lastQuery);
   }
 
   onView(row: ClassLevelListInterface) {
@@ -93,12 +64,8 @@ export class ClassLevelComponent implements OnInit {
       if (result) {
         this.classLevelFacade.deleteClassLevel(row.id);
         this.toastService.openToast('Class Level deleted successfully', NotificationTypeEnums.SUCCESS);
-        this.loadClassLevels();
+        this.classLevelFacade.getClassLevelList(this.lastQuery);
       }
     });
-  }
-
-  onCancel() {
-    this.router.navigate(['../'], { relativeTo: this.route });
   }
 }
