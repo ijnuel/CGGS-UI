@@ -33,7 +33,7 @@
             [class.col-center]="header.align === 'center'"
             [class.col-right]="header.align === 'right'">
           <ng-container *ngIf="header.format && header.type !== 'boolean' && header.type !== 'date'">
-            {{ header.format(getValue(row, header)) }}
+            {{ header.format(getValue(row, header), row) }}
           </ng-container>
           <ng-container *ngIf="!header.format && header.type !== 'boolean' && header.type !== 'date'">
             {{ getValue(row, header) }}

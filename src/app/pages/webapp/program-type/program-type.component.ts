@@ -173,7 +173,7 @@ export class ProgramTypeComponent implements OnInit {
 
     this.classFacade.createSuccess$.subscribe(data => {
       if (data) {
-        this.classFacade.getClassAll();
+        this.classFacade.getClassAll(this.getClassQueryParameters());
       }
     });
 
@@ -273,7 +273,7 @@ export class ProgramTypeComponent implements OnInit {
       this.classLevelFacade.getClassLevelAll();
     }
     if (programSetupLevel == ProgramSetupLevel.CLASSARM) {
-      this.classFacade.getClassAll();
+      this.classFacade.getClassAll(this.getClassQueryParameters());
     }
     if (programSetupLevel == ProgramSetupLevel.CLASSSUBJECT) {
       this.classSubjectFacade.getClassSubjectAll(this.getClassSubjectQueryParameters());
@@ -285,12 +285,27 @@ export class ProgramTypeComponent implements OnInit {
 
   getClassSubjectQueryParameters(): QueryInterface {
     return {
-      nestedProperties: [ 
+      nestedProperties: [
         {name: "subject"},
         {name: "staff", innerNestedProperty: { name: "nationAlity" }},
       ],
       queryProperties: [{ name: 'schoolTermSessionId', value: this.schoolTermSessionId }]
     };
+  }
+
+  getClassQueryParameters(): QueryInterface {
+    return {
+      nestedProperties: [
+        { name: 'classLevel', innerNestedProperty: { name: 'programmeType' } }
+      ]
+    };
+  }
+
+  getClassName(item: ClassListInterface): string {
+    const programmeType = item?.classLevel?.programmeType?.name ?? '';
+    const level = item?.classLevel?.level ?? '';
+    const name = item?.name ?? '';
+    return [programmeType, level, name].filter(Boolean).join(' ');
   }
 
   onSearch(searchText: string) {
@@ -388,7 +403,7 @@ export class ProgramTypeComponent implements OnInit {
         }
         if (programSetupLevel == ProgramSetupLevel.CLASSARM) {
           this.classFacade.deleteClass(row.id);
-          this.classFacade.getClassAll();
+          this.classFacade.getClassAll(this.getClassQueryParameters());
         }
         if (programSetupLevel == ProgramSetupLevel.CLASSSUBJECT) {
           this.classSubjectFacade.deleteClassSubject(row.id);
@@ -494,7 +509,7 @@ export class ProgramTypeComponent implements OnInit {
     formData.classLevelId = classLevel.id;
     formData.id ? this.classFacade.updateClass(formData) : this.classFacade.createClass(formData);
     this.hideAddForm();
-    this.classFacade.getClassAll();
+    this.classFacade.getClassAll(this.getClassQueryParameters());
   }
 
   submitClassSubject(classArm: ClassListInterface) {
@@ -548,7 +563,7 @@ export class ProgramTypeComponent implements OnInit {
           submitHandler: (classArm: any) => this.submitClassSubject(classArm),
           childItemsFn: (classId: string) => this.getClassSubjects(classId),
           showTable: (item: any) => false,
-          getName: (item: any) => this.appendStaffName(item.description, item.staffId),
+          getName: (item: any) => this.appendStaffName(this.getClassName(item), item.staffId),
           showAddButton: (item: any) => true,
           dropDownOptions: (classId: string) => [
             { key: "subjects", dropDownListFn: () => this.getSubjects(classId) }, 
@@ -622,7 +637,7 @@ export class ProgramTypeComponent implements OnInit {
         this.classSubjectFacade.getClassSubjectAll(this.getClassSubjectQueryParameters());
         break;
       case ProgramSetupLevel.CLASSLEVEL:
-        this.classFacade.getClassAll();
+        this.classFacade.getClassAll(this.getClassQueryParameters());
         break;
       case ProgramSetupLevel.PROGRAMTYPE:
         this.classLevelFacade.getClassLevelAll();

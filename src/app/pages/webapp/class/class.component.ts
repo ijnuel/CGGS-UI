@@ -34,9 +34,13 @@ export class ClassComponent {
     this.loading$ = this.classFacade.loading$;
   }
 
+  private readonly nestedProperties = [
+    { name: 'classLevel', innerNestedProperty: { name: 'programmeType' } }
+  ];
+
   onQueryChange(query: PageQueryInterface) {
-    this.lastQuery = query;
-    this.classFacade.getClassList(query);
+    this.lastQuery = { ...query, nestedProperties: this.nestedProperties };
+    this.classFacade.getClassList(this.lastQuery);
   }
 
   onRefresh() {

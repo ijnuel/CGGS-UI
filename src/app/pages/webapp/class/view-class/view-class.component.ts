@@ -1,7 +1,7 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Observable, Subject } from 'rxjs';
-import { takeUntil, first, filter } from 'rxjs/operators';
+import { map, takeUntil, first, filter } from 'rxjs/operators';
 import { FormBuilder, FormGroup, FormControl } from '@angular/forms';
 import { ClassFacade } from '../../../../store/class/class.facade';
 import { SessionFacade } from '../../../../store/session/session.facade';
@@ -97,7 +97,9 @@ export class ViewClassComponent implements OnInit, OnDestroy {
     private dialog: MatDialog,
     private toastService: ToastNotificationService
   ) {
-    this.class$ = this.classFacade.classById$;
+    this.class$ = this.classFacade.classAll$.pipe(
+      map(classes => classes?.[0] ?? null)
+    );
     this.sessions$ = this.sessionFacade.sessionAll$;
     this.studentClassList$ = this.studentClassFacade.studentClassList$;
     this.allStudents$ = this.studentFacade.studentsWithoutClass$;
@@ -118,7 +120,12 @@ export class ViewClassComponent implements OnInit, OnDestroy {
     const classId = this.route.snapshot.params['id'];
     if (classId) {
       this.selectedClassId = classId;
-      this.classFacade.getClassById(classId);
+      this.classFacade.getClassAll({
+        queryProperties: [{ name: 'id', value: classId }],
+        nestedProperties: [
+          { name: 'classLevel', innerNestedProperty: { name: 'programmeType' } }
+        ]
+      });
     }
 
     // Load sessions

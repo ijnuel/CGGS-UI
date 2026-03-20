@@ -7,6 +7,12 @@ export const tableHeader: TableHeaderInterface[] = [
     sortable: true,
     filterable: true,
     type: 'text',
-    align: 'left'
+    align: 'left',
+    format: (_: any, row: any) => {
+      const programmeType = row?.classLevel?.programmeType?.name ?? '';
+      const level = row?.classLevel?.level ?? '';
+      const name = row?.name ?? '';
+      return [programmeType, level, name].filter(Boolean).join(' ');
+    }
   }
 ];

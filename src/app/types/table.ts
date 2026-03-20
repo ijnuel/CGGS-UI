@@ -7,5 +7,5 @@ export interface TableHeaderInterface {
   type?: 'text' | 'number' | 'date' | 'boolean';
   width?: string;
   align?: 'left' | 'center' | 'right';
-  format?: (value: any) => string;
+  format?: (value: any, row?: any) => string;
 }
