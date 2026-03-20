@@ -9,6 +9,13 @@
     </mat-form-field>
   </div>
 
+  <div *ngIf="showExport" class="flex justify-end mb-2">
+    <button mat-stroked-button (click)="exportToCsv()" [disabled]="isExporting">
+      <mat-icon>download</mat-icon>
+      {{ isExporting ? 'Exporting...' : 'Export CSV' }}
+    </button>
+  </div>
+
   <div class="mat-elevation-z8" [formGroup]="filterForm">
     <table mat-table [dataSource]="dataSource" class="w-full">
 

@@ -10,11 +10,13 @@ import {
 import { MatTableDataSource } from '@angular/material/table';
 import { TableHeaderInterface } from '../../types/table';
 import { PageEvent } from '@angular/material/paginator';
-import { PageQueryInterface } from '../../types';
+import { PageQueryInterface, QueryInterface, GenericResponseInterface } from '../../types';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
+import { HttpClient } from '@angular/common/http';
 import { Subject } from 'rxjs';
 import { debounceTime, distinctUntilChanged, takeUntil } from 'rxjs/operators';
+import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'app-table',
@@ -43,6 +45,10 @@ export class TableComponent implements OnInit, OnChanges, OnDestroy {
   @Input() showSearch = false;
   @Input() showPaginator = true;
   @Input() showFilters = false;
+  @Input() showExport = false;
+  @Input() exportEndpoint = '';
+  @Input() exportQueryMerge: QueryInterface = {};
+  @Input() exportFileName = 'export';
   @Input() tableData: any[] | null = [];
   @Input() tableHeaderData: TableHeaderInterface[] = [];
 
@@ -60,6 +66,7 @@ export class TableComponent implements OnInit, OnChanges, OnDestroy {
   sortColumn: string | null = null;  // header.key — used for UI state
   sortKey: string | null = null;     // header.nestedKey ?? header.key — sent to API
   sortDescending = false;
+  isExporting = false;
 
   internalPageIndex = 0;
   internalPageSize = 10;
@@ -71,7 +78,8 @@ export class TableComponent implements OnInit, OnChanges, OnDestroy {
   constructor(
     private fb: FormBuilder,
     private router: Router,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private http: HttpClient
   ) {
     this.filterForm = this.fb.group({});
     this.searchForm = this.fb.group({ search: [''] });
@@ -239,6 +247,69 @@ export class TableComponent implements OnInit, OnChanges, OnDestroy {
   onView(row: any) { this.view.emit(row); }
   onEdit(row: any) { this.edit.emit(row); }
   onDelete(row: any) { this.delete.emit(row); }
+
+  exportToCsv() {
+    if (!this.exportEndpoint || this.isExporting) return;
+    this.isExporting = true;
+
+    const base = this.buildQuery();
+    const query: QueryInterface = {};
+    if (base.searchText) query.searchText = base.searchText;
+    if (base.queryProperties?.length) query.queryProperties = [...base.queryProperties];
+    if (base.sortProperties?.length) query.sortProperties = base.sortProperties;
+
+    if (this.exportQueryMerge.nestedProperties?.length) {
+      query.nestedProperties = this.exportQueryMerge.nestedProperties;
+    }
+    if (this.exportQueryMerge.queryProperties?.length) {
+      query.queryProperties = [...(query.queryProperties ?? []), ...this.exportQueryMerge.queryProperties];
+    }
+
+    this.http
+      .post<GenericResponseInterface<any[]>>(
+        `${environment.baseUrl}${this.exportEndpoint}`,
+        query,
+        { withCredentials: true }
+      )
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: (response) => {
+          this.downloadAsCsv(response.entity ?? []);
+          this.isExporting = false;
+        },
+        error: () => { this.isExporting = false; }
+      });
+  }
+
+  private downloadAsCsv(rows: any[]) {
+    const headers = this.tableHeaderData.map(h => `"${h.name}"`).join(',');
+
+    const csvRows = rows.map(row =>
+      this.tableHeaderData.map(h => {
+        const val = this.getValue(row, h);
+        let display: string;
+        if (h.format) {
+          display = h.format(val, row) ?? '';
+        } else if (h.type === 'boolean') {
+          display = val ? 'Yes' : 'No';
+        } else if (val === null || val === undefined) {
+          display = '';
+        } else {
+          display = String(val);
+        }
+        return `"${display.replace(/"/g, '""')}"`;
+      }).join(',')
+    );
+
+    const csv = '\uFEFF' + [headers, ...csvRows].join('\r\n');
+    const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const anchor = document.createElement('a');
+    anchor.href = url;
+    anchor.download = `${this.exportFileName}.csv`;
+    anchor.click();
+    URL.revokeObjectURL(url);
+  }
 
   ngOnDestroy() {
     this.destroy$.next();
