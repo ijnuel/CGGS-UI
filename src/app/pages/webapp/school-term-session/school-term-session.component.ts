@@ -23,6 +23,7 @@ export class SchoolTermSessionComponent {
   loading$: Observable<boolean>;
   tableHeaderData: TableHeaderInterface[] = tableHeader;
 
+  private readonly nestedProperties = [{ name: 'session' }];
   private lastQuery: PageQueryInterface = { start: 0, recordsPerPage: 10, pageIndex: 0 };
 
   constructor(
@@ -39,8 +40,8 @@ export class SchoolTermSessionComponent {
   }
 
   onQueryChange(query: PageQueryInterface) {
-    this.lastQuery = query;
-    this.schoolTermSessionFacade.getSchoolTermSessionList(query);
+    this.lastQuery = { ...query, nestedProperties: this.nestedProperties };
+    this.schoolTermSessionFacade.getSchoolTermSessionList(this.lastQuery);
   }
 
   onRefresh() {
@@ -60,7 +61,7 @@ export class SchoolTermSessionComponent {
       width: '400px',
       data: {
         title: 'Delete School Term Session',
-        message: `Are you sure you want to delete "${row.sessionObject?.name} - ${row.termString}"?`,
+        message: `Are you sure you want to delete "${row.session?.name} - ${row.termString}"?`,
         confirmText: 'Delete',
         cancelText: 'Cancel'
       }

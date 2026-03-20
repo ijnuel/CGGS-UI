@@ -33,6 +33,7 @@ error: error$ | async }; as obs ) {
             placeholder="Select class"
             [required]="true"
             [valueKey]="'id'"
+            [labelFn]="getClassName.bind(this)"
             [formControl]="formControl.classId"
             [error]="getErrorMessage('classId')"
             [disabled]="isEditMode"

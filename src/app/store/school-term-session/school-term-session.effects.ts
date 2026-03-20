@@ -19,11 +19,15 @@ export class SchoolTermSessionEffect {
   $schoolTermSessionAll = createEffect(() =>
     this.actions$.pipe(
       ofType(SchoolTermSessionAction.getSchoolTermSessionAll),
-      switchMap(({ query }) =>
-        this.http
+      switchMap(({ query }) => {
+        const body = {
+          ...query,
+          nestedProperties: [{ name: 'session' }, ...(query?.nestedProperties ?? [])]
+        };
+        return this.http
           .post<GenericResponseInterface<SchoolTermSessionListInterface[]>>(
             `${environment.baseUrl}/SchoolTermSession/GetAll`,
-            query ?? {},
+            body,
             { withCredentials: true }
           )
           .pipe(
@@ -33,8 +37,8 @@ export class SchoolTermSessionEffect {
             catchError((error) => {
               return of(SchoolTermSessionAction.getSchoolTermSessionAllFail({ error }));
             })
-          )
-      )
+          );
+      })
     )
   );
 
@@ -43,12 +47,15 @@ export class SchoolTermSessionEffect {
     this.actions$.pipe(
       ofType(SchoolTermSessionAction.getSchoolTermSessionList),
       switchMap(({ pageQuery }) => {
-        
+        const body = {
+          ...pageQuery,
+          nestedProperties: [{ name: 'session' }, ...(pageQuery.nestedProperties ?? [])]
+        };
 
         return this.http
           .post<GenericResponseInterface<PaginatedResponseInterface<SchoolTermSessionListInterface[]>>>(
             `${environment.baseUrl}/SchoolTermSession/GetAllPaginated`,
-            pageQuery,
+            body,
             { withCredentials: true }
           )
           .pipe(
@@ -108,11 +115,11 @@ export class SchoolTermSessionEffect {
   $schoolTermSessionByProperties = createEffect(() =>
     this.actions$.pipe(
       ofType(SchoolTermSessionAction.getSchoolTermSessionByProperties),
-      switchMap(({ properties }) =>
+      switchMap(({ query }) =>
         this.http
           .post<GenericResponseInterface<SchoolTermSessionListInterface[]>>(
             `${environment.baseUrl}/SchoolTermSession/GetByProperties`,
-            properties,
+            query,
             { withCredentials: true }
           )
           .pipe(

@@ -74,8 +74,8 @@ export class SchoolTermSessionFacade {
     this.store.dispatch(SchoolTermSessionAction.getSchoolTermSessionById({ schoolTermSessionId }));
   }
 
-  getSchoolTermSessionByProperties(properties: Partial<SchoolTermSessionFormInterface>): void {
-    this.store.dispatch(SchoolTermSessionAction.getSchoolTermSessionByProperties({ properties }));
+  getSchoolTermSessionByProperties(query: QueryInterface): void {
+    this.store.dispatch(SchoolTermSessionAction.getSchoolTermSessionByProperties({ query }));
   }
 
   schoolTermSessionExists(properties: Partial<SchoolTermSessionFormInterface>): void {

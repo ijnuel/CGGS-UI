@@ -64,7 +64,7 @@ export const getSchoolTermSessionByIdFail = createAction(
 // Get By Properties
 export const getSchoolTermSessionByProperties = createAction(
   '[SchoolTermSession] Get By Properties',
-  props<{ properties: Partial<SchoolTermSessionFormInterface> }>()
+  props<{ query: QueryInterface }>()
 );
 
 export const getSchoolTermSessionByPropertiesSuccess = createAction(

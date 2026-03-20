@@ -1,5 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { BehaviorSubject, Observable, Subject, takeUntil } from 'rxjs';
+import { map } from 'rxjs/operators';
 import { StudentFacade } from '../../../../store/student/student.facade';
 import {
   FormBuilder,
@@ -80,7 +81,9 @@ export class CreateUpdateStudentComponent implements OnInit, OnDestroy {
   ) {
     this.loading$ = this.studentFacade.loading$;
     this.error$ = this.studentFacade.error$;
-    this.studentById$ = this.studentFacade.studentById$;
+    this.studentById$ = this.studentFacade.studentAll$.pipe(
+      map(students => students?.[0] ?? null)
+    );
     this.dropdownLoading$ = this.sharedFacade.selectedLoading$;
     this.genderList$ = this.sharedFacade.selectGenderList$;
     this.religionList$ = this.sharedFacade.selectReligionList$;
@@ -111,12 +114,17 @@ export class CreateUpdateStudentComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.familyFacade.getFamilyAll();
-    this.classFacade.getClassAll();
+    this.classFacade.getClassAll({
+      nestedProperties: [{ name: 'classLevel', innerNestedProperty: { name: 'programmeType' } }]
+    });
     initUserProfileForm(this.sharedFacade, this.formControl, this.unsubscribe$, this.selectedCountryStateList$, this.selectedStateLgaList$);
     const studentId = this.route.snapshot.params['id'];
     if (studentId) {
       this.isEditMode = true;
-      this.studentFacade.getStudentById(studentId);
+      this.studentFacade.getStudentAll({
+        queryProperties: [{ name: 'id', value: studentId }],
+        nestedProperties: [{ name: 'studentClasses' }]
+      });
       this.studentById$.pipe(takeUntil(this.unsubscribe$)).subscribe((data) => {
         if (data) {
           this.formGroup.patchValue({
@@ -158,6 +166,13 @@ export class CreateUpdateStudentComponent implements OnInit, OnDestroy {
           this.globalLoadingFacade.globalSuccessShow('Student updated successfully', 3000);
         }
       });
+  }
+
+  getClassName(item: ClassListInterface): string {
+    const programmeType = item?.classLevel?.programmeType?.name ?? '';
+    const level = item?.classLevel?.level ?? '';
+    const name = item?.name ?? '';
+    return [programmeType, level, name].filter(Boolean).join(' ');
   }
 
   getErrorMessage(controlName: string): string | null {

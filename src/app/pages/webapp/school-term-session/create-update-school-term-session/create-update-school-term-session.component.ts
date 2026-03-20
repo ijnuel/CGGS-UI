@@ -1,5 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { BehaviorSubject, Observable, Subject, takeUntil } from 'rxjs';
+import { map } from 'rxjs/operators';
 import { SchoolTermSessionFacade } from '../../../../store/school-term-session/school-term-session.facade';
 import {
     FormBuilder,
@@ -54,7 +55,9 @@ export class CreateUpdateSchoolTermSessionComponent implements OnInit, OnDestroy
     ) {
         this.loading$ = this.schoolTermSessionFacade.loading$;
         this.error$ = this.schoolTermSessionFacade.error$;
-        this.schoolTermSessionById$ = this.schoolTermSessionFacade.schoolTermSessionById$;
+        this.schoolTermSessionById$ = this.schoolTermSessionFacade.schoolTermSessionAll$.pipe(
+            map(items => items?.[0] ?? null)
+        );
         this.dropdownLoading$ = this.sharedFacade.selectedLoading$;
         this.termList$ = this.sharedFacade.selectTermList$;
         this.sessionList$ = this.sessionFacade.sessionAll$;
@@ -76,7 +79,10 @@ export class CreateUpdateSchoolTermSessionComponent implements OnInit, OnDestroy
         const schoolTermSessionId = this.route.snapshot.params['id'];
         if (schoolTermSessionId) {
             this.isEditMode = true;
-            this.schoolTermSessionFacade.getSchoolTermSessionById(schoolTermSessionId);
+            this.schoolTermSessionFacade.getSchoolTermSessionAll({
+                queryProperties: [{ name: 'id', value: schoolTermSessionId }],
+                nestedProperties: [{ name: 'session' }]
+            });
             this.schoolTermSessionById$.pipe(takeUntil(this.unsubscribe$)).subscribe((data) => {
                 if (data) {
                     this.formGroup.patchValue(data);

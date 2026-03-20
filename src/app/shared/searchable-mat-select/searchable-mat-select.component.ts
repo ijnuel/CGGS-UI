@@ -18,6 +18,7 @@ export class SearchableMatSelectComponent implements ControlValueAccessor {
   @Input() options: any[] = [];
   @Input() labelSeparator: string = ' ';
   @Input() labelKeys: string[] = ['description'];
+  @Input() labelFn?: (option: any) => string;
   @Input() valueKey: string = 'value';
   @Input() placeholder: string = '';
   @Input() label: string = '';
@@ -53,7 +54,9 @@ export class SearchableMatSelectComponent implements ControlValueAccessor {
     } else {
       const search = this.searchText.toLowerCase();
       this.filteredOptions = this.options.filter(option =>
-        this.labelKeys.some(key => (option[key] || '').toLowerCase().includes(search))
+        this.labelFn
+          ? this.labelFn(option).toLowerCase().includes(search)
+          : this.labelKeys.some(key => (option[key] || '').toLowerCase().includes(search))
       );
     }
   }
@@ -82,6 +85,7 @@ export class SearchableMatSelectComponent implements ControlValueAccessor {
     }
   }
   getLabel(option: any) {
+    if (this.labelFn) return this.labelFn(option);
     return this.labelKeys.map(key => option[key] ?? '').join(this.labelSeparator);
   }
 }

@@ -3,6 +3,7 @@ import { TableHeaderInterface } from '../../../types/table';
 export const tableHeader: TableHeaderInterface[] = [
   {
     key: 'session',
+    nestedKey: 'session.name',
     type: 'text',
     name: 'Session',
     sortable: true,
