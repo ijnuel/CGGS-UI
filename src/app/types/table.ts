@@ -1,6 +1,7 @@
 export interface TableHeaderInterface {
   name: string;
   key: string;
+  nestedKey?: string;
   sortable?: boolean;
   filterable?: boolean;
   type?: 'text' | 'number' | 'date' | 'boolean';

@@ -1,5 +1,5 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import { Observable, Subject } from 'rxjs';
 import { takeUntil, first, filter } from 'rxjs/operators';
 import { FormBuilder, FormGroup, FormControl } from '@angular/forms';
@@ -31,13 +31,35 @@ export class ViewClassComponent implements OnInit, OnDestroy {
     {
       name: 'Student No',
       key: 'studentNo',
+      nestedKey: 'student.studentNo',
+      sortable: true,
       filterable: true,
       type: 'text',
       align: 'left'
     },
     {
-      name: 'Name',
-      key: 'studentFullName',
+      name: 'First Name',
+      key: 'firstName',
+      nestedKey: 'student.firstName',
+      sortable: true,
+      filterable: true,
+      type: 'text',
+      align: 'left'
+    },
+    {
+      name: 'Last Name',
+      key: 'lastName',
+      nestedKey: 'student.lastName',
+      sortable: true,
+      filterable: true,
+      type: 'text',
+      align: 'left'
+    },
+    {
+      name: 'Email',
+      key: 'email',
+      nestedKey: 'student.email',
+      sortable: true,
       filterable: true,
       type: 'text',
       align: 'left'
@@ -67,7 +89,6 @@ export class ViewClassComponent implements OnInit, OnDestroy {
 
   constructor(
     private route: ActivatedRoute,
-    private router: Router,
     private fb: FormBuilder,
     private classFacade: ClassFacade,
     private sessionFacade: SessionFacade,
@@ -140,6 +161,7 @@ export class ViewClassComponent implements OnInit, OnDestroy {
     if (this.selectedSessionId) {
       this.studentClassFacade.getStudentClassList({
         ...this.pageQuery,
+        nestedProperties: [{ name: 'student' }],
         queryProperties: [
           { name: 'sessionId', value: this.selectedSessionId },
           { name: 'classId', value: this.selectedClassId }
@@ -148,31 +170,16 @@ export class ViewClassComponent implements OnInit, OnDestroy {
     }
   }
 
-  onPageChange(event: PageQueryInterface) {
-    this.pageQuery = event;
-    this.loadStudentsInClass();
-  }
-
-  onSearch(searchText: string) {
+  onQueryChange(query: PageQueryInterface) {
     this.pageQuery = {
-      ...this.pageQuery,
-      searchText,
-      pageIndex: 0
-    };
-    this.loadStudentsInClass();
-  }
-
-  onFilter(filters: { name: string; value: string }[]) {
-    this.pageQuery = {
-      ...this.pageQuery,
+      ...query,
       queryProperties: [
         { name: 'sessionId', value: this.selectedSessionId },
         { name: 'classId', value: this.selectedClassId },
-        ...filters
+        ...(query.queryProperties ?? []).filter(p => p.name !== 'sessionId' && p.name !== 'classId'),
       ],
-      pageIndex: 0
     };
-    this.loadStudentsInClass();
+    this.studentClassFacade.getStudentClassList(this.pageQuery);
   }
 
   onRefresh() {

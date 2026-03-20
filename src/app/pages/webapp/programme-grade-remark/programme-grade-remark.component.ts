@@ -159,7 +159,11 @@ export class ProgrammeGradeRemarkComponent implements OnInit, OnDestroy {
       recordsPerPage: overrides?.recordsPerPage ?? this.pageQuery.recordsPerPage ?? 10,
       pageIndex: overrides?.pageIndex ?? this.pageQuery.pageIndex ?? 0,
       searchText: overrides?.searchText ?? this.pageQuery.searchText,
-      queryProperties: [{ name: 'programTypeId', value: this.selectedProgramTypeId }],
+      sortProperties: overrides?.sortProperties ?? this.pageQuery.sortProperties,
+      queryProperties: [
+        { name: 'programTypeId', value: this.selectedProgramTypeId },
+        ...(overrides?.queryProperties ?? this.pageQuery.queryProperties ?? []).filter(p => p.name !== 'programTypeId'),
+      ],
     };
 
     this.pageQuery = merged;

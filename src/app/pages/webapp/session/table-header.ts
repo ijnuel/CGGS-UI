@@ -11,6 +11,7 @@ export const tableHeader: TableHeaderInterface[] = [
   {
     name: 'Name',
     key: 'name',
+    sortable: true,
     filterable: true,
     type: 'text',
     align: 'left'
@@ -18,6 +19,7 @@ export const tableHeader: TableHeaderInterface[] = [
   {
     name: 'Is Current',
     key: 'isCurrent',
+    sortable: true,
     filterable: true,
     type: 'boolean',
     align: 'left'

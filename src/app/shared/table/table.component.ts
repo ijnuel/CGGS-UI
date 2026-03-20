@@ -57,7 +57,8 @@ export class TableComponent implements OnInit, OnChanges, OnDestroy {
   readonly dataPredicate = (_: number, row: any) => !row._skeleton;
   private readonly skeletonRows = Array(7).fill({ _skeleton: true });
 
-  sortColumn: string | null = null;
+  sortColumn: string | null = null;  // header.key — used for UI state
+  sortKey: string | null = null;     // header.nestedKey ?? header.key — sent to API
   sortDescending = false;
 
   internalPageIndex = 0;
@@ -97,6 +98,10 @@ export class TableComponent implements OnInit, OnChanges, OnDestroy {
     this.internalPageSize = parseInt(params.get('size') || String(this.pageSize), 10);
     this.sortColumn = params.get('sort') || null;
     this.sortDescending = params.get('dir') === 'desc';
+    if (this.sortColumn) {
+      const header = this.tableHeaderData.find(h => h.key === this.sortColumn);
+      this.sortKey = header?.nestedKey || this.sortColumn;
+    }
     const searchVal = params.get('search') || '';
     this.searchForm.get('search')!.setValue(searchVal, { emitEvent: false });
   }
@@ -141,6 +146,7 @@ export class TableComponent implements OnInit, OnChanges, OnDestroy {
       this.sortDescending = !this.sortDescending;
     } else {
       this.sortColumn = header.key;
+      this.sortKey = header.nestedKey || header.key;
       this.sortDescending = false;
     }
     this.internalPageIndex = 0;
@@ -177,7 +183,7 @@ export class TableComponent implements OnInit, OnChanges, OnDestroy {
 
     if (this.sortColumn) {
       query.sortProperties = [
-        { name: this.sortColumn, isDescending: this.sortDescending },
+        { name: this.sortKey!, isDescending: this.sortDescending },
       ];
     }
 
@@ -221,6 +227,13 @@ export class TableComponent implements OnInit, OnChanges, OnDestroy {
     const query = this.buildQuery();
     this.queryChange.emit(query);
     this.pageChange.emit(query);
+  }
+
+  getValue(row: any, header: TableHeaderInterface): any {
+    if (header.nestedKey) {
+      return header.nestedKey.split('.').reduce((obj, key) => obj?.[key], row);
+    }
+    return row[header.key];
   }
 
   onView(row: any) { this.view.emit(row); }

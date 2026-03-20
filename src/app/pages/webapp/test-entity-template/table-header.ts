@@ -4,6 +4,7 @@ export const tableHeader: TableHeaderInterface[] = [
   {
     name: 'Id',
     key: 'id',
+    sortable: true,
     filterable: true,
     type: 'text',
     align: 'left'
@@ -11,6 +12,7 @@ export const tableHeader: TableHeaderInterface[] = [
   {
     name: 'Name',
     key: 'name',
+    sortable: true,
     filterable: true,
     type: 'text',
     align: 'left'
