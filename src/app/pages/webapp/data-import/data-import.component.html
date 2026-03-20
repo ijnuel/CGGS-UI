@@ -19,13 +19,13 @@
       <p class="text-sm text-gray-500 mb-4">Choose the data type you want to import.</p>
 
       <app-searchable-mat-select
-        [options]="importEntities"
+        [options]="(importEntities$ | async) ?? []"
         label="Import Entity"
         placeholder="Select an entity"
         valueKey="name"
         [labelFn]="getEntityLabel.bind(this)"
         [formControl]="formControl.entityName"
-        [loading]="isLoadingEntities"
+        [loading]="(loading$ | async) ?? false"
         (selectionChange)="onEntitySelect($event)">
       </app-searchable-mat-select>
     </div>
@@ -38,11 +38,11 @@
       <button
         mat-raised-button
         color="primary"
-        [disabled]="!selectedEntity || isDownloading"
+        [disabled]="!selectedEntity || (isDownloading$ | async)"
         (click)="downloadTemplate()">
         <mat-icon class="mr-2">download</mat-icon>
-        <span *ngIf="!isDownloading">Download Template</span>
-        <span *ngIf="isDownloading">Downloading...</span>
+        <span *ngIf="!(isDownloading$ | async)">Download Template</span>
+        <span *ngIf="isDownloading$ | async">Downloading...</span>
       </button>
     </div>
 
@@ -83,11 +83,11 @@
       <button
         mat-raised-button
         color="accent"
-        [disabled]="!selectedEntity || !selectedFile || isImporting"
+        [disabled]="!selectedEntity || !selectedFile || (isImporting$ | async)"
         (click)="importData()">
         <mat-icon class="mr-2">upload</mat-icon>
-        <span *ngIf="!isImporting">Import Data</span>
-        <span *ngIf="isImporting">Importing...</span>
+        <span *ngIf="!(isImporting$ | async)">Import Data</span>
+        <span *ngIf="isImporting$ | async">Importing...</span>
       </button>
     </div>
 
