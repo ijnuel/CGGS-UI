@@ -69,6 +69,8 @@ import { ProgramTypeEffect } from './store/program-type/program-type.effects';
 import { StaffEffect } from './store/staff/staff.effects';
 import { ResultEffects } from './store/result/result.effects';
 import { StudentClassSubjectAssessmentScoreEffects } from './store/student-class-subject-assessment-score/student-class-subject-assessment-score.effects';
+import { DataImportEffect } from './store/data-import/data-import.effects';
+import { DataImportFacade } from './store/data-import/data-import.facade';
 // import { provideStoreDevtools } from '@ngrx/store-devtools';
 
 export const appConfig: ApplicationConfig = {
@@ -101,6 +103,7 @@ export const appConfig: ApplicationConfig = {
         StaffEffect,
         ResultEffects,
         StudentClassSubjectAssessmentScoreEffects,
+        DataImportEffect,
       ]),
       HttpClientModule
     ),
@@ -155,5 +158,6 @@ export const appConfig: ApplicationConfig = {
     StaffFacade,
     ResultFacade,
     StudentClassSubjectAssessmentScoreFacade,
+    DataImportFacade,
   ],
 };

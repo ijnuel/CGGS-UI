@@ -10,8 +10,16 @@ export const tableHeader: TableHeaderInterface[] = [
     align: 'left'
   },
   {
-    name: 'Name',
-    key: 'name',
+    name: 'Test Name',
+    key: 'testName',
+    sortable: true,
+    filterable: true,
+    type: 'text',
+    align: 'left'
+  },
+  {
+    name: 'Another Name',
+    key: 'anotherName',
     sortable: true,
     filterable: true,
     type: 'text',

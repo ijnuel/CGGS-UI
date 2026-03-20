@@ -42,5 +42,11 @@ export default [
     icon: 'assets/icons/admin-setup-icon.svg',
     roles: [],
     url: '/app/school-term-session'
+  },
+  {
+    name: 'Data Import',
+    icon: 'assets/icons/admin-setup-icon.svg',
+    roles: [],
+    url: '/app/data-import'
   }
 ];

@@ -43,6 +43,7 @@ const routes: Routes = [
       { path: 'staff', loadChildren: () => import('./staff/staff.module').then((m) => m.StaffModule), },
       { path: 'settings', loadChildren: () => import('./settings/settings.module').then((m) => m.SettingsModule), },
       { path: 'admin-setup', loadChildren: () => import('./admin-setup/admin-setup.module').then((m) => m.AdminSetupModule), },
+      { path: 'data-import', loadChildren: () => import('./data-import/data-import.module').then((m) => m.DataImportModule), },
       { path: 'result', loadChildren: () => import('./result/result.module').then((m) => m.ResultModule), },
       { path: 'administrator', loadChildren: () => import('./administrator/administrator.module').then((m) => m.AdministratorModule), },
       { path: 'change-password', loadChildren: () => import('./change-password/change-password.module').then((m) => m.ChangePasswordModule), },

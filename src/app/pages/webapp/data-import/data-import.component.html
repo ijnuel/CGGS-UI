@@ -1,0 +1,95 @@
+<div class="pl-8 pr-9 pt-6">
+  <div class="flex items-center justify-between mb-6">
+    <div class="text-xl font-bold">Data Import</div>
+  </div>
+
+  <!-- Back Button -->
+  <div class="flex justify-start mb-5">
+    <button mat-button routerLink="/app/admin-setup" class="flex items-center gap-1">
+      <mat-icon>arrow_back</mat-icon>
+      <span>Back</span>
+    </button>
+  </div>
+
+  <div class="bg-white rounded-lg shadow-md p-8 max-w-2xl">
+
+    <!-- Step 1: Select Entity -->
+    <div class="mb-8">
+      <h3 class="text-base font-semibold text-gray-700 mb-1">Step 1: Select Import Entity</h3>
+      <p class="text-sm text-gray-500 mb-4">Choose the data type you want to import.</p>
+
+      <app-searchable-mat-select
+        [options]="importEntities"
+        label="Import Entity"
+        placeholder="Select an entity"
+        valueKey="name"
+        [labelFn]="getEntityLabel.bind(this)"
+        [formControl]="formControl.entityName"
+        [loading]="isLoadingEntities"
+        (selectionChange)="onEntitySelect($event)">
+      </app-searchable-mat-select>
+    </div>
+
+    <!-- Step 2: Download Template -->
+    <div class="mb-8" [class.opacity-40]="!selectedEntity" [class.pointer-events-none]="!selectedEntity">
+      <h3 class="text-base font-semibold text-gray-700 mb-1">Step 2: Download Template</h3>
+      <p class="text-sm text-gray-500 mb-4">Download the Excel template, fill it with your data, then upload it below.</p>
+
+      <button
+        mat-raised-button
+        color="primary"
+        [disabled]="!selectedEntity || isDownloading"
+        (click)="downloadTemplate()">
+        <mat-icon class="mr-2">download</mat-icon>
+        <span *ngIf="!isDownloading">Download Template</span>
+        <span *ngIf="isDownloading">Downloading...</span>
+      </button>
+    </div>
+
+    <!-- Divider -->
+    <mat-divider class="mb-8"></mat-divider>
+
+    <!-- Step 3: Upload & Import -->
+    <div [class.opacity-40]="!selectedEntity" [class.pointer-events-none]="!selectedEntity">
+      <h3 class="text-base font-semibold text-gray-700 mb-1">Step 3: Upload & Import</h3>
+      <p class="text-sm text-gray-500 mb-4">Attach the completed Excel file and click Import to upload your data.</p>
+
+      <!-- File Input -->
+      <div class="mb-4">
+        <label class="block text-sm font-medium text-gray-600 mb-2">Select Excel File</label>
+        <div class="flex items-center gap-3">
+          <label class="cursor-pointer">
+            <input
+              type="file"
+              accept=".xlsx,.xls"
+              class="hidden"
+              (change)="onFileSelect($event)">
+            <span
+              mat-stroked-button
+              class="inline-flex items-center gap-2 px-4 py-2 border border-gray-300 rounded text-sm text-gray-700 hover:bg-gray-50 cursor-pointer">
+              <mat-icon class="text-base">attach_file</mat-icon>
+              Choose File
+            </span>
+          </label>
+          <span class="text-sm text-gray-500" *ngIf="!selectedFile">No file chosen</span>
+          <span class="text-sm text-green-600 font-medium flex items-center gap-1" *ngIf="selectedFile">
+            <mat-icon class="text-base">check_circle</mat-icon>
+            {{ selectedFile.name }}
+          </span>
+        </div>
+      </div>
+
+      <!-- Import Button -->
+      <button
+        mat-raised-button
+        color="accent"
+        [disabled]="!selectedEntity || !selectedFile || isImporting"
+        (click)="importData()">
+        <mat-icon class="mr-2">upload</mat-icon>
+        <span *ngIf="!isImporting">Import Data</span>
+        <span *ngIf="isImporting">Importing...</span>
+      </button>
+    </div>
+
+  </div>
+</div>

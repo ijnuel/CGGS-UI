@@ -27,6 +27,7 @@ import { AdministratorFormInterface, AdministratorListInterface } from './admini
 import { ProgramSetupLevel, ProgramSetupLevelConfig } from './program-setup-level';
 import { ResultMarkSheetInterface, ResultMarkSheetFormInterface, StudentAssessmentScoreInterface, AssessmentColumnInterface, StudentAssessmentRowInterface } from './result';
 import { StudentClassSubjectAssessmentScoreListInterface, StudentClassSubjectAssessmentScoreFormInterface } from './student-class-subject-assessment-score';
+import { ImportEntityInterface } from './data-import';
 import {
   CurrentUserInterface,
 } from './user';
@@ -140,4 +141,5 @@ export {
   StaffFormInterface,
   ProgramSetupLevel,
   ProgramSetupLevelConfig,
+  ImportEntityInterface,
 };
