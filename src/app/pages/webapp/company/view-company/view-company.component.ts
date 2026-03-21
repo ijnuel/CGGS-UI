@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Location } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { CompanyFacade } from '../../../../store/company/company.facade';
@@ -15,7 +16,8 @@ export class ViewCompanyComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private companyFacade: CompanyFacade,
-    private router: Router
+    private router: Router,
+    private location: Location
   ) {
     this.company$ = this.companyFacade.companyById$;
   }
@@ -25,5 +27,9 @@ export class ViewCompanyComponent implements OnInit {
     if (companyId) {
       this.companyFacade.getCompanyById(companyId);
     }
+  }
+
+  goBack(): void {
+    this.location.back();
   }
 } 

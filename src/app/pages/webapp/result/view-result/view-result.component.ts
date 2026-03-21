@@ -53,9 +53,22 @@ export class ViewResultComponent implements OnInit, OnDestroy {
     this.classes$ = this.classFacade.classAll$;
   }
 
+  getClassName(item: ClassListInterface): string {
+    const programmeType = item?.classLevel?.programmeType?.name ?? '';
+    const level = item?.classLevel?.level ?? '';
+    const name = item?.name ?? '';
+    return [programmeType, level, name].filter(Boolean).join(' ');
+  }
+
   ngOnInit(): void {
-    this.schoolTermSessionFacade.getSchoolTermSessionAll();
-    this.classFacade.getClassAll();
+    this.schoolTermSessionFacade.getSchoolTermSessionAll({
+      nestedProperties: [{ name: 'session' }],
+    });
+    this.classFacade.getClassAll({
+      nestedProperties: [
+        { name: 'classLevel', innerNestedProperties: [{ name: 'programmeType' }] },
+      ],
+    });
 
     this.schoolTermSessions$
       .pipe(takeUntil(this.destroy$))

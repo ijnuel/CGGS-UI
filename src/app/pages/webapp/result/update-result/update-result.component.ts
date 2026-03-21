@@ -164,12 +164,25 @@ export class UpdateResultComponent implements OnInit, OnDestroy {
     this.destroy$.complete();
   }
 
+  getClassName(item: ClassListInterface): string {
+    const programmeType = item?.classLevel?.programmeType?.name ?? '';
+    const level = item?.classLevel?.level ?? '';
+    const name = item?.name ?? '';
+    return [programmeType, level, name].filter(Boolean).join(' ');
+  }
+
   loadDropdownData(): void {
     // Load school term sessions
-    this.schoolTermSessionFacade.getSchoolTermSessionAll();
+    this.schoolTermSessionFacade.getSchoolTermSessionAll({
+      nestedProperties: [{ name: 'session' }],
+    });
 
     // Load classes
-    this.classFacade.getClassAll();
+    this.classFacade.getClassAll({
+      nestedProperties: [
+        { name: 'classLevel', innerNestedProperties: [{ name: 'programmeType' }] },
+      ],
+    });
 
     // Load subjects
     this.subjectFacade.getSubjectAll();

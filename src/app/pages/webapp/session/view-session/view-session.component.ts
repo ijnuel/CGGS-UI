@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Location } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { SessionFacade } from '../../../../store/session/session.facade';
@@ -15,7 +16,8 @@ export class ViewSessionComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private sessionFacade: SessionFacade,
-    private router: Router
+    private router: Router,
+    private location: Location
   ) {
     this.session$ = this.sessionFacade.sessionById$;
   }
@@ -25,5 +27,9 @@ export class ViewSessionComponent implements OnInit {
     if (sessionId) {
       this.sessionFacade.getSessionById(sessionId);
     }
+  }
+
+  goBack(): void {
+    this.location.back();
   }
 } 

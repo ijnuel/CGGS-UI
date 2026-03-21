@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Location } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { StateFacade } from '../../../../store/state/state.facade';
@@ -15,7 +16,8 @@ export class ViewStateComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private stateFacade: StateFacade,
-    private router: Router
+    private router: Router,
+    private location: Location
   ) {
     this.state$ = this.stateFacade.stateById$;
   }
@@ -25,5 +27,9 @@ export class ViewStateComponent implements OnInit {
     if (stateId) {
       this.stateFacade.getStateById(stateId);
     }
+  }
+
+  goBack(): void {
+    this.location.back();
   }
 } 

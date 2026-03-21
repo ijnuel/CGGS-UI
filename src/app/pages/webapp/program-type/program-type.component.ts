@@ -264,7 +264,7 @@ export class ProgramTypeComponent implements OnInit {
     if (programSetupLevel == ProgramSetupLevel.PROGRAMTYPE) {
       this.programTypeFacade.getProgramTypeAll();
       this.subjectFacade.getSubjectAll();
-      this.schoolTermSessionFacade.getSchoolTermSessionAll();
+      this.schoolTermSessionFacade.getSchoolTermSessionAll({ nestedProperties: [{ name: 'session' }] });
       this.sharedFacade.getSubjectTypeList();
       this.sessionFacade.getSessionAll();
       this.staffFacade.getStaffAll();

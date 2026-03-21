@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Location } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { TestEntityTemplateFacade } from '../../../../store/test-entity-template/test-entity-template.facade';
@@ -15,7 +16,8 @@ export class ViewTestEntityTemplateComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private testEntityTemplateFacade: TestEntityTemplateFacade,
-    private router: Router
+    private router: Router,
+    private location: Location
   ) {
     this.testEntityTemplate$ = this.testEntityTemplateFacade.testEntityTemplateById$;
   }
@@ -25,5 +27,9 @@ export class ViewTestEntityTemplateComponent implements OnInit {
     if (testEntityTemplateId) {
       this.testEntityTemplateFacade.getTestEntityTemplateById(testEntityTemplateId);
     }
+  }
+
+  goBack(): void {
+    this.location.back();
   }
 } 

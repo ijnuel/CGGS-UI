@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Location } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { ProgramTypeFacade } from '../../../../store/program-type/program-type.facade';
@@ -15,7 +16,8 @@ export class ViewProgramTypeComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private programTypeFacade: ProgramTypeFacade,
-    private router: Router
+    private router: Router,
+    private location: Location
   ) {
     this.programType$ = this.programTypeFacade.programTypeById$;
   }
@@ -25,5 +27,9 @@ export class ViewProgramTypeComponent implements OnInit {
     if (programTypeId) {
       this.programTypeFacade.getProgramTypeById(programTypeId);
     }
+  }
+
+  goBack(): void {
+    this.location.back();
   }
 } 

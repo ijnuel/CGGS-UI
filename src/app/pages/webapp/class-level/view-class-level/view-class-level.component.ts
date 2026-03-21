@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Location } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { ClassLevelFacade } from '../../../../store/class-level/class-level.facade';
@@ -15,7 +16,8 @@ export class ViewClassLevelComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private classLevelFacade: ClassLevelFacade,
-    private router: Router
+    private router: Router,
+    private location: Location
   ) {
     this.classLevel$ = this.classLevelFacade.classLevelById$;
   }
@@ -25,5 +27,9 @@ export class ViewClassLevelComponent implements OnInit {
     if (classLevelId) {
       this.classLevelFacade.getClassLevelById(classLevelId);
     }
+  }
+
+  goBack(): void {
+    this.location.back();
   }
 } 

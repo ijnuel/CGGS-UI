@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Location } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
@@ -16,7 +17,8 @@ export class ViewSchoolTermSessionComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private schoolTermSessionFacade: SchoolTermSessionFacade,
-    private router: Router
+    private router: Router,
+    private location: Location
   ) {
     this.schoolTermSession$ = this.schoolTermSessionFacade.schoolTermSessionAll$.pipe(
       map(items => items?.[0] ?? null)
@@ -31,5 +33,9 @@ export class ViewSchoolTermSessionComponent implements OnInit {
         nestedProperties: [{ name: 'session' }]
       });
     }
+  }
+
+  goBack(): void {
+    this.location.back();
   }
 } 

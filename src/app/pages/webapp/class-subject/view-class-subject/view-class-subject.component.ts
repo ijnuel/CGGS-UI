@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Location } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { ClassSubjectFacade } from '../../../../store/class-subject/class-subject.facade';
@@ -15,7 +16,8 @@ export class ViewClassSubjectComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private classSubjectFacade: ClassSubjectFacade,
-    private router: Router
+    private router: Router,
+    private location: Location
   ) {
     this.classSubject$ = this.classSubjectFacade.classSubjectById$;
   }
@@ -25,5 +27,9 @@ export class ViewClassSubjectComponent implements OnInit {
     if (classSubjectId) {
       this.classSubjectFacade.getClassSubjectById(classSubjectId);
     }
+  }
+
+  goBack(): void {
+    this.location.back();
   }
 } 

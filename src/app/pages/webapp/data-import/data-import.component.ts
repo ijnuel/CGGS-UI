@@ -1,4 +1,5 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Location } from '@angular/common';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Observable, Subject } from 'rxjs';
 import { filter, first, takeUntil } from 'rxjs/operators';
@@ -33,7 +34,8 @@ export class DataImportComponent implements OnInit, OnDestroy {
   constructor(
     private fb: FormBuilder,
     private dataImportFacade: DataImportFacade,
-    private toastService: ToastNotificationService
+    private toastService: ToastNotificationService,
+    private location: Location
   ) {
     this.importEntities$ = this.dataImportFacade.importEntities$;
     this.loading$ = this.dataImportFacade.loading$;
@@ -105,5 +107,9 @@ export class DataImportComponent implements OnInit, OnDestroy {
 
   getEntityLabel(entity: ImportEntityInterface): string {
     return entity.description;
+  }
+
+  goBack(): void {
+    this.location.back();
   }
 }

@@ -98,12 +98,12 @@ export class ClassFacade {
     this.store.dispatch(ClassAction.deleteClass({ classId }));
   }
 
-  createManyClasss(classs: ClassFormInterface[]): void {
-    this.store.dispatch(ClassAction.createManyClasss({ payload: classs }));
+  createManyClasss(classes: ClassFormInterface[]): void {
+    this.store.dispatch(ClassAction.createManyClasss({ payload: classes }));
   }
 
-  updateManyClasss(classs: ClassFormInterface[]): void {
-    this.store.dispatch(ClassAction.updateManyClasss({ payload: classs }));
+  updateManyClasss(classes: ClassFormInterface[]): void {
+    this.store.dispatch(ClassAction.updateManyClasss({ payload: classes }));
   }
 
   deleteManyClasss(classIds: string[]): void {

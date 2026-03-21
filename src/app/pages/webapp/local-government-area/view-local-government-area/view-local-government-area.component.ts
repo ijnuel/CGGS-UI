@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Location } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { LocalGovernmentAreaFacade } from '../../../../store/local-government-area/local-government-area.facade';
@@ -15,7 +16,8 @@ export class ViewLocalGovernmentAreaComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private localGovernmentAreaFacade: LocalGovernmentAreaFacade,
-    private router: Router
+    private router: Router,
+    private location: Location
   ) {
     this.localGovernmentArea$ = this.localGovernmentAreaFacade.localGovernmentAreaById$;
   }
@@ -25,5 +27,9 @@ export class ViewLocalGovernmentAreaComponent implements OnInit {
     if (localGovernmentAreaId) {
       this.localGovernmentAreaFacade.getLocalGovernmentAreaById(localGovernmentAreaId);
     }
+  }
+
+  goBack(): void {
+    this.location.back();
   }
 } 

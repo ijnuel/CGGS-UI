@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Location } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { ProgrammeGradeRemarkFacade } from '../../../../store/programme-grade-remark/programme-grade-remark.facade';
@@ -15,7 +16,8 @@ export class ViewProgrammeGradeRemarkComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private programmeGradeRemarkFacade: ProgrammeGradeRemarkFacade,
-    private router: Router
+    private router: Router,
+    private location: Location
   ) {
     this.programmeGradeRemark$ = this.programmeGradeRemarkFacade.programmeGradeRemarkById$;
   }
@@ -25,5 +27,9 @@ export class ViewProgrammeGradeRemarkComponent implements OnInit {
     if (programmeGradeRemarkId) {
       this.programmeGradeRemarkFacade.getProgrammeGradeRemarkById(programmeGradeRemarkId);
     }
+  }
+
+  goBack(): void {
+    this.location.back();
   }
 } 

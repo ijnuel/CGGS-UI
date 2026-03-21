@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Location } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { PrincipalRemarkFacade } from '../../../../store/principal-remark/principal-remark.facade';
@@ -15,7 +16,8 @@ export class ViewPrincipalRemarkComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private principalRemarkFacade: PrincipalRemarkFacade,
-    private router: Router
+    private router: Router,
+    private location: Location
   ) {
     this.principalRemark$ = this.principalRemarkFacade.principalRemarkById$;
   }
@@ -25,5 +27,9 @@ export class ViewPrincipalRemarkComponent implements OnInit {
     if (principalRemarkId) {
       this.principalRemarkFacade.getPrincipalRemarkById(principalRemarkId);
     }
+  }
+
+  goBack(): void {
+    this.location.back();
   }
 } 

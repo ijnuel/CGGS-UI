@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Location } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { FamilyFacade } from '../../../../store/family/family.facade';
@@ -15,7 +16,8 @@ export class ViewFamilyComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private familyFacade: FamilyFacade,
-    private router: Router
+    private router: Router,
+    private location: Location
   ) {
     this.family$ = this.familyFacade.familyById$;
   }
@@ -25,5 +27,9 @@ export class ViewFamilyComponent implements OnInit {
     if (familyId) {
       this.familyFacade.getFamilyById(familyId);
     }
+  }
+
+  goBack(): void {
+    this.location.back();
   }
 } 

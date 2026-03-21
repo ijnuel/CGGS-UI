@@ -28,7 +28,7 @@
             (selectionChange)="onSchoolTermSessionChange()"
             required>
                          <mat-option *ngFor="let session of schoolTermSessions$ | async" [value]="session.id">
-               {{ session.session }}, {{session.termString}} Term
+               {{ session.session?.name }}, {{session.termString}} Term
              </mat-option>
           </mat-select>
           <mat-error *ngIf="updateResultForm.get('schoolTermSessionId')?.hasError('required')">
@@ -42,7 +42,7 @@
            label="Class"
            placeholder="Select Class"
            valueKey="id"
-           [labelKeys]="['description']"
+           [labelFn]="getClassName.bind(this)"
            [formControl]="formControl.classId"
            (selectionChange)="onClassChange()">
          </app-searchable-mat-select>

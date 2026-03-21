@@ -1,12 +1,12 @@
 <div class="p-6">
 
   <!-- Header -->
-  <div class="flex items-center justify-between mb-6">
-    <h2 class="text-2xl font-bold text-gray-800">Staff Profile</h2>
-    <button mat-button routerLink="/app/staff" class="flex items-center gap-1">
+  <div class="flex items-center gap-4 mb-6">
+    <button mat-button (click)="goBack()" class="flex items-center gap-1">
       <mat-icon>arrow_back</mat-icon>
       <span>Back</span>
     </button>
+    <h2 class="text-2xl font-bold text-gray-800">Staff Profile</h2>
   </div>
 
   <!-- Skeleton Loader -->

@@ -1,4 +1,5 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Location } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
 import { Observable, Subject } from 'rxjs';
 import { map, takeUntil, first, filter } from 'rxjs/operators';
@@ -95,7 +96,8 @@ export class ViewClassComponent implements OnInit, OnDestroy {
     private studentClassFacade: StudentClassFacade,
     private studentFacade: StudentFacade,
     private dialog: MatDialog,
-    private toastService: ToastNotificationService
+    private toastService: ToastNotificationService,
+    private location: Location
   ) {
     this.class$ = this.classFacade.classAll$.pipe(
       map(classes => classes?.[0] ?? null)
@@ -180,6 +182,7 @@ export class ViewClassComponent implements OnInit, OnDestroy {
   onQueryChange(query: PageQueryInterface) {
     this.pageQuery = {
       ...query,
+      nestedProperties: [{ name: 'student' }],
       queryProperties: [
         { name: 'sessionId', value: this.selectedSessionId },
         { name: 'classId', value: this.selectedClassId },
@@ -257,7 +260,7 @@ export class ViewClassComponent implements OnInit, OnDestroy {
       };
 
       this.studentClassFacade.createStudentClass(payload);
-      
+
       // Subscribe to success
       this.studentClassFacade.createSuccess$
         .pipe(takeUntil(this.destroy$))
@@ -272,5 +275,9 @@ export class ViewClassComponent implements OnInit, OnDestroy {
           }
         });
     }
+  }
+
+  goBack(): void {
+    this.location.back();
   }
 } 

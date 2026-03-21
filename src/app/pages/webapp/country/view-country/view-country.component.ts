@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Location } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { CountryFacade } from '../../../../store/country/country.facade';
@@ -15,7 +16,8 @@ export class ViewCountryComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private countryFacade: CountryFacade,
-    private router: Router
+    private router: Router,
+    private location: Location
   ) {
     this.country$ = this.countryFacade.countryById$;
   }
@@ -25,5 +27,9 @@ export class ViewCountryComponent implements OnInit {
     if (countryId) {
       this.countryFacade.getCountryById(countryId);
     }
+  }
+
+  goBack(): void {
+    this.location.back();
   }
 } 

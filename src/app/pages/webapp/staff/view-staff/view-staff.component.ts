@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Location } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
@@ -22,6 +23,7 @@ export class ViewStaffComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private router: Router,
+    private location: Location,
     private staffFacade: StaffFacade,
     private sharedFacade: SharedFacade
   ) {
@@ -73,6 +75,8 @@ export class ViewStaffComponent implements OnInit {
     const name = cs.class?.name ?? cs.classId;
     return [programmeType, level, name].filter(Boolean).join(' ');
   }
+
+  goBack(): void { this.location.back(); }
 
   navigateToEdit() {
     this.router.navigate(['/app/staff/edit', this.staffId]);

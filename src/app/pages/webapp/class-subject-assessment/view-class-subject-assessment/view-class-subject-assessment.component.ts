@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Location } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { ClassSubjectAssessmentFacade } from '../../../../store/class-subject-assessment/class-subject-assessment.facade';
@@ -15,7 +16,8 @@ export class ViewClassSubjectAssessmentComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private classSubjectAssessmentFacade: ClassSubjectAssessmentFacade,
-    private router: Router
+    private router: Router,
+    private location: Location
   ) {
     this.classSubjectAssessment$ = this.classSubjectAssessmentFacade.classSubjectAssessmentById$;
   }
@@ -25,5 +27,9 @@ export class ViewClassSubjectAssessmentComponent implements OnInit {
     if (classSubjectAssessmentId) {
       this.classSubjectAssessmentFacade.getClassSubjectAssessmentById(classSubjectAssessmentId);
     }
+  }
+
+  goBack(): void {
+    this.location.back();
   }
 } 

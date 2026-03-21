@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Location } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { ApplicationFacade } from '../../../../store/application/application.facade';
@@ -15,7 +16,8 @@ export class ViewApplicationComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private applicationFacade: ApplicationFacade,
-    private router: Router
+    private router: Router,
+    private location: Location
   ) {
     this.application$ = this.applicationFacade.applicationById$;
   }
@@ -25,5 +27,9 @@ export class ViewApplicationComponent implements OnInit {
     if (applicationId) {
       this.applicationFacade.getApplicationById(applicationId);
     }
+  }
+
+  goBack(): void {
+    this.location.back();
   }
 } 

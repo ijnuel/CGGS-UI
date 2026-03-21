@@ -10,7 +10,7 @@
           <mat-label>School Term Session</mat-label>
           <mat-select formControlName="schoolTermSessionId" required>
             <mat-option *ngFor="let session of schoolTermSessions$ | async" [value]="session.id">
-              {{ session.session }}, {{ session.termString }} Term
+              {{ session.session?.name }}, {{ session.termString }} Term
             </mat-option>
           </mat-select>
           <mat-error *ngIf="formControl.schoolTermSessionId?.hasError('required')">
@@ -22,7 +22,7 @@
           [options]="(classes$ | async) ?? []"
           label="Class"
           placeholder="Select Class"
-          [labelKeys]="['description']"
+          [labelFn]="getClassName.bind(this)"
           valueKey="id"
           [formControl]="formControl.classId">
         </app-searchable-mat-select>

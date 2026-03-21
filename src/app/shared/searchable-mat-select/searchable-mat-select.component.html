@@ -7,7 +7,7 @@
         (openedChange)="onDropdownOpened($event)">
         <mat-option>
             <input [disabled]="disabled" #searchInput matInput type="text" [(ngModel)]="searchText" (ngModelChange)="filterOptions()"
-                placeholder="Search..." autocomplete="off" (click)="$event.stopPropagation()" />
+                placeholder="Search..." autocomplete="off" (click)="$event.stopPropagation()" (keydown)="$event.stopPropagation()" />
         </mat-option>
         <mat-option [disabled]="disabled" *ngFor="let option of filteredOptions" [value]="option[valueKey]">
             {{ getLabel(option) }}

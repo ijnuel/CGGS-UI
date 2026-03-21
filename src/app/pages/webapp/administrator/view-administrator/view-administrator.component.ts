@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Location } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
@@ -22,6 +23,7 @@ export class ViewAdministratorComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private router: Router,
+    private location: Location,
     private administratorFacade: AdministratorFacade,
     private sharedFacade: SharedFacade
   ) {
@@ -55,6 +57,8 @@ export class ViewAdministratorComponent implements OnInit {
     if (value === undefined || value === null) return '—';
     return list?.find(item => +item.value === value)?.name ?? '—';
   }
+
+  goBack(): void { this.location.back(); }
 
   navigateToEdit() {
     this.router.navigate(['/app/administrator/edit', this.administratorId]);
