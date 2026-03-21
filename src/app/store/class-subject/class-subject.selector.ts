@@ -73,3 +73,8 @@ export const selectClassSubjectUpdateSuccess = createSelector(
     selectClassSubjectState,
     (state) => state.updateSuccess
 );
+
+export const selectClassSubjectDeleteSuccess = createSelector(
+    selectClassSubjectState,
+    (state) => state.deleteSuccess
+);

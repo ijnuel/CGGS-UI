@@ -1,50 +1,186 @@
 <div class="p-6">
-  <div class="flex justify-between items-center mb-4">
-    <h3 class="text-xl font-semibold">Program Types</h3>
-    <div class="flex gap-2">
-      <button mat-raised-button color="primary" (click)="onRefresh()" class="flex items-center">
-        <mat-icon>refresh</mat-icon>
-        <span>Refresh</span>
-      </button>
-      <button mat-raised-button color="accent" routerLink="create" class="flex items-center">
-        <mat-icon>add</mat-icon>
-        <span>Create New</span>
-      </button>
+
+  @if ({
+    loading: loading$ | async,
+    schoolTermSessionAll: schoolTermSessionAll$ | async
+  }; as obs) {
+
+  <!-- Header -->
+  <div class="mb-6">
+    <!-- Row 1: Title + Session/Term selector -->
+    <div class="flex items-center justify-between gap-4">
+      <h3 class="text-xl font-semibold text-gray-800">Programme Setup</h3>
+      <mat-form-field [appLoadingSpinner]="obs.loading && !obs.schoolTermSessionAll" class="flex-shrink-0">
+        <mat-label>Session/Term</mat-label>
+        <mat-select [formControl]="schoolTermSessionControl" (selectionChange)="onSessionTermChange($event.value)">
+          @for (st of obs.schoolTermSessionAll; track $index) {
+            <mat-option [value]="st.id">{{ st.session?.name }}, {{ st.termString }} Term</mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+    </div>
+
+    <!-- Row 2: Breadcrumbs + (search) + Add button -->
+    <div class="flex items-center justify-between gap-4 mt-2">
+      <nav class="flex items-center gap-0.5 text-sm flex-wrap">
+        <ng-container *ngFor="let crumb of breadcrumbs; let last = last">
+          <button *ngIf="!last" mat-button (click)="navigateToLevel(crumb.level)"
+            class="text-indigo-600 hover:text-indigo-800 font-medium text-sm px-1 min-w-0 h-7">
+            {{ crumb.label }}
+          </button>
+          <span *ngIf="last" class="text-gray-700 font-semibold text-sm px-1">{{ crumb.label }}</span>
+          <mat-icon *ngIf="!last" class="icon-sm text-gray-400 flex-shrink-0">chevron_right</mat-icon>
+        </ng-container>
+      </nav>
+
+      <div class="flex items-center gap-3 flex-shrink-0">
+        <!-- Subject search (only at subject level) -->
+        <mat-form-field *ngIf="currentLevel === ProgramSetupLevel.CLASSSUBJECT" class="w-52" subscriptSizing="dynamic">
+          <mat-icon matPrefix class="icon-md text-gray-400 mr-1">search</mat-icon>
+          <input matInput [(ngModel)]="subjectSearchText" placeholder="Search subjects…" />
+          <button *ngIf="subjectSearchText" matSuffix mat-icon-button (click)="subjectSearchText = ''">
+            <mat-icon class="icon-sm">close</mat-icon>
+          </button>
+        </mat-form-field>
+
+        <!-- Add button -->
+        <button *ngIf="currentLevel !== ProgramSetupLevel.PROGRAMTYPE" mat-raised-button color="primary"
+          (click)="openAddForm()">
+          <mat-icon>add</mat-icon> Add {{ currentLevelLabel }}
+        </button>
+        <button *ngIf="currentLevel === ProgramSetupLevel.PROGRAMTYPE" mat-raised-button color="primary"
+          routerLink="create">
+          <mat-icon>add</mat-icon> Add Programme Type
+        </button>
+      </div>
     </div>
   </div>
 
-
-  @if ( { loading: loading$ | async,
-  programTypeAll: programTypeAll$ | async,
-  classLevelAll: classLevelAll$ | async,
-  classAll: classAll$ | async,
-  classSubjectAll: classSubjectAll$ | async,
-  classSubjectAssessmentAll: classSubjectAssessmentAll$ | async,
-  subjectAll: subjectAll$ | async,
-  schoolTermSessionAll: schoolTermSessionAll$ | async
-  }; as obs ) {
-  <div class="flex justify-end items-center">
-    <mat-form-field [appLoadingSpinner]="obs.loading && !obs.schoolTermSessionAll">
-      <mat-label>Session/Term</mat-label>
-      <mat-select [formControl]="schoolTermSessionControl" (selectionChange)="onSessionTermChange($event.value)">
-        @for (sessionTerm of obs.schoolTermSessionAll; track $index) {
-        <mat-option [value]="sessionTerm.id">
-          {{ sessionTerm.session?.name }}, {{ sessionTerm.termString }} Term</mat-option>
-        }
-      </mat-select>
-    </mat-form-field>
+  <!-- Skeleton loader -->
+  <div *ngIf="obs.loading && !currentItems.length"
+    class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+    <div *ngFor="let _ of [1,2,3,4,5,6]"
+      class="bg-white rounded-xl border border-gray-100 p-5 animate-pulse">
+      <div class="h-5 bg-gray-200 rounded w-2/3 mb-3"></div>
+      <div class="h-3 bg-gray-100 rounded w-1/2 mb-5"></div>
+      <div class="h-3 bg-gray-100 rounded w-1/4"></div>
+    </div>
   </div>
-  <app-program-setup-level-panel [items]="programTypeAllSnapShot" [levelType]="programTypeConfig.label"
-    [config]="programTypeConfig" [addFormVisibleFor]="addFormVisibleFor" [visibleFormIsEdit]="visibleFormIsEdit" [loading]="(loading$ | async) ?? false"
-    (edit)="onPanelEdit($event)" (delete)="onPanelDelete($event)" (add)="onPanelAdd($event)"
-    (refresh)="onPanelRefresh($event)" (showAddForm)="onPanelShowAddForm($event)"
-    (hideAddForm)="onPanelHideAddForm($event)" (submit)="onPanelSubmit($event)">
-    <!-- You can use ng-template or ng-content for custom form fields if needed -->
-  </app-program-setup-level-panel>
-  }
-  @else {
-  <app-table-loader></app-table-loader>
-  }
 
+  <!-- ── Subject level: search + grouped display ─────────────────────── -->
+  <ng-container *ngIf="currentLevel === ProgramSetupLevel.CLASSSUBJECT && !obs.loading">
+
+    <!-- No results after search -->
+    <div *ngIf="groupedCurrentSubjects.length === 0"
+      class="flex flex-col items-center justify-center py-12 text-gray-400">
+      <mat-icon class="icon-xl mb-3">search_off</mat-icon>
+      <p class="text-base font-medium">No subjects match "{{ subjectSearchText }}"</p>
+    </div>
+
+    <!-- Grouped subject sections -->
+    <ng-container *ngFor="let group of groupedCurrentSubjects">
+      <div class="mb-6">
+        <!-- Group header -->
+        <div class="flex items-center gap-3 mb-3">
+          <span class="text-xs font-semibold uppercase tracking-wide text-gray-500">{{ group.type }}</span>
+          <span class="text-xs text-gray-400 bg-gray-100 px-2 py-0.5 rounded-full">{{ group.items.length }}</span>
+          <div class="flex-1 h-px bg-gray-100"></div>
+        </div>
+
+        <!-- Cards in this group -->
+        <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
+          <div *ngFor="let item of group.items"
+            class="bg-white rounded-xl border border-gray-100 p-5 transition-all hover:shadow-md">
+
+            <div class="flex items-start justify-between gap-2">
+              <div class="min-w-0 flex-1">
+                <p class="text-sm font-semibold text-gray-800 truncate">{{ getItemDisplayName(item) }}</p>
+                <p class="text-xs text-gray-400 mt-0.5 truncate">{{ getItemSubtitle(item) }}</p>
+              </div>
+              <div class="flex items-center flex-shrink-0 -mt-1" (click)="$event.stopPropagation()">
+                <button mat-icon-button (click)="openEditForm(item)" matTooltip="Edit">
+                  <mat-icon class="!text-indigo-400">edit</mat-icon>
+                </button>
+                <button *ngIf="!hasChildren(item)" mat-icon-button (click)="deleteCurrentItem(item)" matTooltip="Delete">
+                  <mat-icon class="!text-red-400">delete</mat-icon>
+                </button>
+              </div>
+            </div>
+
+            <div *ngIf="canDrillInto(item)"
+              class="flex items-center justify-end mt-3 pt-3 border-t border-gray-50 cursor-pointer"
+              (click)="drillInto(item)">
+              <span class="text-xs text-indigo-500 flex items-center gap-0.5 font-medium">
+                View assessments
+                <mat-icon class="icon-xs">chevron_right</mat-icon>
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </ng-container>
+
+    <!-- Empty state (no subjects at all) -->
+    <div *ngIf="currentItems.length === 0"
+      class="flex flex-col items-center justify-center py-16 text-gray-400">
+      <mat-icon class="icon-xl mb-3">folder_open</mat-icon>
+      <p class="text-base font-medium">No subjects found</p>
+      <p class="text-sm mt-1">Click "Add Subject" to get started</p>
+    </div>
+  </ng-container>
+
+  <!-- ── All other levels: flat card grid ───────────────────────────── -->
+  <ng-container *ngIf="currentLevel !== ProgramSetupLevel.CLASSSUBJECT">
+
+    <!-- Items grid -->
+    <div *ngIf="currentItems.length" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+      <div *ngFor="let item of currentItems"
+        class="bg-white rounded-xl border border-gray-100 p-5 transition-all hover:shadow-md"
+        [class.cursor-pointer]="canDrillInto(item)"
+        [class.hover:border-indigo-200]="canDrillInto(item)"
+        (click)="canDrillInto(item) ? drillInto(item) : null">
+
+        <div class="flex items-start justify-between gap-2">
+          <div class="min-w-0 flex-1">
+            <p class="font-semibold text-gray-800 truncate">{{ getItemDisplayName(item) }}</p>
+            <p class="text-sm text-gray-400 mt-0.5 truncate">{{ getItemSubtitle(item) }}</p>
+          </div>
+          <div class="flex items-center flex-shrink-0 -mt-1" (click)="$event.stopPropagation()">
+            <button mat-icon-button *ngIf="currentLevel !== ProgramSetupLevel.PROGRAMTYPE"
+              (click)="openEditForm(item)" matTooltip="Edit">
+              <mat-icon class="!text-indigo-400">edit</mat-icon>
+            </button>
+            <button mat-icon-button *ngIf="currentLevel === ProgramSetupLevel.PROGRAMTYPE"
+              [routerLink]="['edit', item.id]" matTooltip="Edit">
+              <mat-icon class="!text-indigo-400">edit</mat-icon>
+            </button>
+            <button *ngIf="!hasChildren(item)" mat-icon-button (click)="deleteCurrentItem(item)" matTooltip="Delete">
+              <mat-icon class="!text-red-400">delete</mat-icon>
+            </button>
+          </div>
+        </div>
+
+        <div *ngIf="canDrillInto(item)"
+          class="flex items-center justify-end mt-3 pt-3 border-t border-gray-50">
+          <span class="text-xs text-indigo-500 flex items-center gap-0.5 font-medium">
+            View children
+            <mat-icon class="icon-xs">chevron_right</mat-icon>
+          </span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Empty state -->
+    <div *ngIf="!obs.loading && !currentItems.length"
+      class="flex flex-col items-center justify-center py-16 text-gray-400">
+      <mat-icon class="icon-xl mb-3">folder_open</mat-icon>
+      <p class="text-base font-medium">No {{ currentLevelLabel }}s found</p>
+      <p *ngIf="currentLevel !== ProgramSetupLevel.PROGRAMTYPE" class="text-sm mt-1">
+        Click "Add {{ currentLevelLabel }}" to get started
+      </p>
+    </div>
+  </ng-container>
+
+  }
 
 </div>

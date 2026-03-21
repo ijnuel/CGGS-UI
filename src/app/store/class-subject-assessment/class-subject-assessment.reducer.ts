@@ -20,6 +20,7 @@ export interface ClassSubjectAssessmentState {
   error: string | null;
   createSuccess: boolean;
   updateSuccess: boolean;
+  deleteSuccess: boolean;
 }
 
 export const initialState: ClassSubjectAssessmentState = {
@@ -34,6 +35,7 @@ export const initialState: ClassSubjectAssessmentState = {
   error: null,
   createSuccess: false,
   updateSuccess: false,
+  deleteSuccess: false,
 };
 
 export const reducer = createReducer(
@@ -45,6 +47,7 @@ export const reducer = createReducer(
     error: null,
     createSuccess: false,
     updateSuccess: false,
+    deleteSuccess: false,
   })),
   on(ClassSubjectAssessmentAction.getClassSubjectAssessmentAllSuccess, (state, { payload }) => ({
     ...state,
@@ -210,6 +213,7 @@ export const reducer = createReducer(
     ...state,
     loading: true,
     error: null,
+    deleteSuccess: false,
   })),
   on(ClassSubjectAssessmentAction.deleteClassSubjectAssessmentSuccess, (state) => ({
     ...state,
@@ -221,6 +225,7 @@ export const reducer = createReducer(
         }
       : null,
     loading: false,
+    deleteSuccess: true,
   })),
   on(ClassSubjectAssessmentAction.deleteClassSubjectAssessmentFail, (state, { error }) => ({
     ...state,

@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
+import { filter, take } from 'rxjs/operators';
 import { ProgramTypeFacade } from '../../../store/program-type/program-type.facade';
 import { ProgramTypeListInterface } from '../../../types/program-type';
 import { ClassFormInterface, ClassLevelFormInterface, ClassLevelListInterface, ClassListInterface, ClassSubjectAssessmentFormInterface, ClassSubjectAssessmentListInterface, ClassSubjectFormInterface, ClassSubjectListInterface, DropdownListInterface, PaginatedResponseInterface, ProgramSetupLevelConfig, QueryInterface, SchoolTermSessionListInterface, SessionListInterface, StaffListInterface, SubjectListInterface } from '../../../types';
@@ -8,6 +9,7 @@ import { PageQueryInterface } from '../../../types';
 import { TableHeaderInterface } from '../../../types/table';
 import { MatDialog } from '@angular/material/dialog';
 import { ConfirmDialogComponent } from '../../../shared/confirm-dialog/confirm-dialog.component';
+import { ProgramSetupFormDialogComponent, ProgramSetupFormDialogData } from './program-setup-form-dialog/program-setup-form-dialog.component';
 import { ToastNotificationService, NotificationTypeEnums } from '../../../services/toast-notification.service';
 import { assessmentTypeTableHeader, tableHeader } from './table-header';
 import { ClassLevelFacade } from '../../../store/class-level/class-level.facade';
@@ -47,9 +49,26 @@ export class ProgramTypeComponent implements OnInit {
   tableHeaderData: TableHeaderInterface[] = tableHeader;
   assessmentTypeTableHeaderData: TableHeaderInterface[] = assessmentTypeTableHeader;
 
+  // Legacy accordion state (kept for backward compat with submit methods)
   addFormVisibleFor: string | null = null;
   visibleFormIsEdit: boolean = false;
   schoolTermSessionControl = new FormControl("");
+
+  // Drill-down navigation state
+  currentLevel: ProgramSetupLevel = ProgramSetupLevel.PROGRAMTYPE;
+  selectedProgramType: ProgramTypeListInterface | null = null;
+  selectedClassLevel: ClassLevelListInterface | null = null;
+  selectedClassArm: ClassListInterface | null = null;
+  selectedClassSubject: ClassSubjectListInterface | null = null;
+
+  // Subject search
+  groupedCurrentSubjects: { type: string; items: ClassSubjectListInterface[] }[] = [];
+  private _subjectSearchText = '';
+  get subjectSearchText(): string { return this._subjectSearchText; }
+  set subjectSearchText(value: string) {
+    this._subjectSearchText = value;
+    this.updateGroupedSubjects();
+  }
   addClassLevelForm: FormGroup<{
     id: FormControl;
     level: FormControl;
@@ -162,32 +181,30 @@ export class ProgramTypeComponent implements OnInit {
     this.createSuccessActions();
 
     this.programTypeConfig = this.buildProgramTypeConfig();
+
+    this.restoreFromQueryParams();
   }
 
   private createSuccessActions() {
-    this.classLevelFacade.createSuccess$.subscribe(data => {
-      if (data) {
-        this.classLevelFacade.getClassLevelAll();
-      }
-    });
+    // Class Level
+    this.classLevelFacade.createSuccess$.subscribe(ok => { if (ok) this.classLevelFacade.getClassLevelAll(); });
+    this.classLevelFacade.updateSuccess$.subscribe(ok => { if (ok) this.classLevelFacade.getClassLevelAll(); });
+    this.classLevelFacade.deleteSuccess$.subscribe(ok => { if (ok) this.classLevelFacade.getClassLevelAll(); });
 
-    this.classFacade.createSuccess$.subscribe(data => {
-      if (data) {
-        this.classFacade.getClassAll(this.getClassQueryParameters());
-      }
-    });
+    // Class (arm)
+    this.classFacade.createSuccess$.subscribe(ok => { if (ok) this.classFacade.getClassAll(this.getClassQueryParameters()); });
+    this.classFacade.updateSuccess$.subscribe(ok => { if (ok) this.classFacade.getClassAll(this.getClassQueryParameters()); });
+    this.classFacade.deleteSuccess$.subscribe(ok => { if (ok) this.classFacade.getClassAll(this.getClassQueryParameters()); });
 
-    this.classSubjectFacade.createSuccess$.subscribe(data => {
-      if (data) {
-        this.classSubjectFacade.getClassSubjectAll(this.getClassSubjectQueryParameters());
-      }
-    });
+    // Class Subject
+    this.classSubjectFacade.createSuccess$.subscribe(ok => { if (ok) this.classSubjectFacade.getClassSubjectAll(this.getClassSubjectQueryParameters()); });
+    this.classSubjectFacade.updateSuccess$.subscribe(ok => { if (ok) this.classSubjectFacade.getClassSubjectAll(this.getClassSubjectQueryParameters()); });
+    this.classSubjectFacade.deleteSuccess$.subscribe(ok => { if (ok) this.classSubjectFacade.getClassSubjectAll(this.getClassSubjectQueryParameters()); });
 
-    this.classSubjectAssessmentFacade.createSuccess$.subscribe(data => {
-      if (data) {
-        this.classSubjectAssessmentFacade.getClassSubjectAssessmentAll();
-      }
-    });
+    // Assessment
+    this.classSubjectAssessmentFacade.createSuccess$.subscribe(ok => { if (ok) this.classSubjectAssessmentFacade.getClassSubjectAssessmentAll(); });
+    this.classSubjectAssessmentFacade.updateSuccess$.subscribe(ok => { if (ok) this.classSubjectAssessmentFacade.getClassSubjectAssessmentAll(); });
+    this.classSubjectAssessmentFacade.deleteSuccess$.subscribe(ok => { if (ok) this.classSubjectAssessmentFacade.getClassSubjectAssessmentAll(); });
   }
 
   private getSnapShots() {
@@ -245,6 +262,7 @@ export class ProgramTypeComponent implements OnInit {
     this.classSubjectAll$.subscribe(data => {
       if (data) {
         this.classSubjectAllSnapShot = [...data];
+        this.updateGroupedSubjects();
       }
     });
 
@@ -257,6 +275,9 @@ export class ProgramTypeComponent implements OnInit {
   setSessionTermControls(sessionTermId: string) {
     this.schoolTermSessionId = sessionTermId;
     this.schoolTermSessionControl.setValue(sessionTermId);
+    // Eagerly load session-dependent levels for accurate counts
+    this.classSubjectFacade.getClassSubjectAll(this.getClassSubjectQueryParameters());
+    this.classSubjectAssessmentFacade.getClassSubjectAssessmentAll();
   }
 
   loadProgramTypes(programSetupLevel: ProgramSetupLevel = ProgramSetupLevel.PROGRAMTYPE) {
@@ -268,6 +289,9 @@ export class ProgramTypeComponent implements OnInit {
       this.sharedFacade.getSubjectTypeList();
       this.sessionFacade.getSessionAll();
       this.staffFacade.getStaffAll();
+      // Eagerly load session-independent levels for accurate counts
+      this.classLevelFacade.getClassLevelAll();
+      this.classFacade.getClassAll(this.getClassQueryParameters());
     }
     if (programSetupLevel == ProgramSetupLevel.CLASSLEVEL) {
       this.classLevelFacade.getClassLevelAll();
@@ -384,7 +408,7 @@ export class ProgramTypeComponent implements OnInit {
       width: '400px',
       data: {
         title: `Delete ${programSetupLevel}`,
-        message: `Are you sure you want to delete "${row.description || row.name || ''}"?`,
+        message: `Are you sure you want to delete "${row.description || row.name || row.assessmentType || ''}"?`,
         confirmText: 'Delete',
         cancelText: 'Cancel'
       }
@@ -399,19 +423,15 @@ export class ProgramTypeComponent implements OnInit {
         }
         if (programSetupLevel == ProgramSetupLevel.CLASSLEVEL) {
           this.classLevelFacade.deleteClassLevel(row.id);
-          this.classLevelFacade.getClassLevelAll();
         }
         if (programSetupLevel == ProgramSetupLevel.CLASSARM) {
           this.classFacade.deleteClass(row.id);
-          this.classFacade.getClassAll(this.getClassQueryParameters());
         }
         if (programSetupLevel == ProgramSetupLevel.CLASSSUBJECT) {
           this.classSubjectFacade.deleteClassSubject(row.id);
-          this.classSubjectFacade.getClassSubjectAll(this.getClassSubjectQueryParameters());
         }
         if (programSetupLevel == ProgramSetupLevel.CLASSSUBJECTASSESSMENT) {
           this.classSubjectAssessmentFacade.deleteClassSubjectAssessment(row.id);
-          this.classSubjectAssessmentFacade.getClassSubjectAssessmentAll();
         }
         this.toastService.openToast(`${programSetupLevel} deleted successfully`, NotificationTypeEnums.SUCCESS);
       }
@@ -424,12 +444,11 @@ export class ProgramTypeComponent implements OnInit {
 
   onSessionTermChange(sessionTermId: string) {
     this.setSessionTermControls(sessionTermId);
-    this.classSubjectFacade.getClassSubjectAll(this.getClassSubjectQueryParameters());
   }
 
-  getSubjects(classId: string): DropdownListInterface[] {
-    var classSubjectIds = this.getClassSubjects(classId).map(x => x.subjectId);
-    return this.subjectAllSnapShot.filter(x => this.visibleFormIsEdit || !classSubjectIds.includes(x.value.toString()));
+  getSubjects(classId: string, isEditMode: boolean = false): DropdownListInterface[] {
+    const classSubjectIds = this.getClassSubjects(classId).map(x => x.subjectId);
+    return this.subjectAllSnapShot.filter(x => isEditMode || !classSubjectIds.includes(x.value.toString()));
   }
 
   getSubjectTypes(): DropdownListInterface[] {
@@ -652,5 +671,333 @@ export class ProgramTypeComponent implements OnInit {
   }
   onPanelSubmit(event: { item: any, level: ProgramSetupLevel, config: ProgramSetupLevelConfig }) {
     event.config.submitHandler(event?.item);
+  }
+
+  // ── Drill-down navigation ─────────────────────────────────────────────
+
+  get currentItems(): any[] {
+    switch (this.currentLevel) {
+      case ProgramSetupLevel.PROGRAMTYPE:
+        return this.programTypeAllSnapShot;
+      case ProgramSetupLevel.CLASSLEVEL:
+        return this.selectedProgramType ? this.getClassLevels(this.selectedProgramType.id) : [];
+      case ProgramSetupLevel.CLASSARM:
+        return this.selectedClassLevel ? this.getClasses(this.selectedClassLevel.id) : [];
+      case ProgramSetupLevel.CLASSSUBJECT:
+        return this.selectedClassArm ? this.getClassSubjects(this.selectedClassArm.id) : [];
+      case ProgramSetupLevel.CLASSSUBJECTASSESSMENT:
+        return this.selectedClassSubject ? this.getClassSubjectAssessments(this.selectedClassSubject.id) : [];
+      default:
+        return [];
+    }
+  }
+
+  get currentLevelLabel(): string {
+    switch (this.currentLevel) {
+      case ProgramSetupLevel.PROGRAMTYPE: return 'Programme Type';
+      case ProgramSetupLevel.CLASSLEVEL: return 'Class Level';
+      case ProgramSetupLevel.CLASSARM: return 'Class';
+      case ProgramSetupLevel.CLASSSUBJECT: return 'Subject';
+      case ProgramSetupLevel.CLASSSUBJECTASSESSMENT: return 'Assessment';
+      default: return '';
+    }
+  }
+
+  get breadcrumbs(): { label: string; level: ProgramSetupLevel }[] {
+    const crumbs: { label: string; level: ProgramSetupLevel }[] = [
+      { label: 'Programme Types', level: ProgramSetupLevel.PROGRAMTYPE }
+    ];
+    if (this.currentLevel === ProgramSetupLevel.PROGRAMTYPE) return crumbs;
+    crumbs.push({ label: this.selectedProgramType?.name || '...', level: ProgramSetupLevel.CLASSLEVEL });
+    if (this.currentLevel === ProgramSetupLevel.CLASSLEVEL) return crumbs;
+    crumbs.push({ label: `${this.selectedClassLevel?.name} ${this.selectedClassLevel?.level}`, level: ProgramSetupLevel.CLASSARM });
+    if (this.currentLevel === ProgramSetupLevel.CLASSARM) return crumbs;
+    crumbs.push({ label: this.selectedClassArm?.name || '' + ' Subjects', level: ProgramSetupLevel.CLASSSUBJECT });
+    if (this.currentLevel === ProgramSetupLevel.CLASSSUBJECT) return crumbs;
+    crumbs.push({ label: this.getSubjectName(this.selectedClassSubject?.subjectId ?? '') ?? '...', level: ProgramSetupLevel.CLASSSUBJECTASSESSMENT });
+    return crumbs;
+  }
+
+  drillInto(item: any): void {
+    this.closeForm();
+    this.subjectSearchText = '';
+    switch (this.currentLevel) {
+      case ProgramSetupLevel.PROGRAMTYPE:
+        this.selectedProgramType = item;
+        this.currentLevel = ProgramSetupLevel.CLASSLEVEL;
+        this.loadProgramTypes(ProgramSetupLevel.CLASSLEVEL);
+        break;
+      case ProgramSetupLevel.CLASSLEVEL:
+        this.selectedClassLevel = item;
+        this.currentLevel = ProgramSetupLevel.CLASSARM;
+        this.loadProgramTypes(ProgramSetupLevel.CLASSARM);
+        break;
+      case ProgramSetupLevel.CLASSARM:
+        this.selectedClassArm = item;
+        this.currentLevel = ProgramSetupLevel.CLASSSUBJECT;
+        this.loadProgramTypes(ProgramSetupLevel.CLASSSUBJECT);
+        this.updateGroupedSubjects();
+        break;
+      case ProgramSetupLevel.CLASSSUBJECT:
+        if (this.canDrillInto(item)) {
+          this.selectedClassSubject = item;
+          this.currentLevel = ProgramSetupLevel.CLASSSUBJECTASSESSMENT;
+          this.loadProgramTypes(ProgramSetupLevel.CLASSSUBJECTASSESSMENT);
+        }
+        break;
+    }
+    this.updateQueryParams();
+  }
+
+  navigateToLevel(level: ProgramSetupLevel): void {
+    this.closeForm();
+    this.currentLevel = level;
+    if (level === ProgramSetupLevel.PROGRAMTYPE) {
+      this.selectedProgramType = null;
+      this.selectedClassLevel = null;
+      this.selectedClassArm = null;
+      this.selectedClassSubject = null;
+    } else if (level === ProgramSetupLevel.CLASSLEVEL) {
+      this.selectedClassLevel = null;
+      this.selectedClassArm = null;
+      this.selectedClassSubject = null;
+    } else if (level === ProgramSetupLevel.CLASSARM) {
+      this.selectedClassArm = null;
+      this.selectedClassSubject = null;
+    } else if (level === ProgramSetupLevel.CLASSSUBJECT) {
+      this.selectedClassSubject = null;
+      this.updateGroupedSubjects();
+    }
+    this.updateQueryParams();
+  }
+
+  private updateQueryParams(): void {
+    const params: any = {};
+    if (this.currentLevel !== ProgramSetupLevel.PROGRAMTYPE) {
+      params['level'] = this.currentLevel;
+    }
+    if (this.selectedProgramType) params['ptId'] = this.selectedProgramType.id;
+    if (this.selectedClassLevel) params['clId'] = this.selectedClassLevel.id;
+    if (this.selectedClassArm) params['caId'] = this.selectedClassArm.id;
+    if (this.selectedClassSubject) params['csId'] = this.selectedClassSubject.id;
+    if (this.schoolTermSessionId) params['stId'] = this.schoolTermSessionId;
+    this.router.navigate([], { relativeTo: this.route, queryParams: params, replaceUrl: true });
+  }
+
+  private restoreFromQueryParams(): void {
+    const params = this.route.snapshot.queryParams;
+    const level = params['level'] as ProgramSetupLevel;
+    const ptId = params['ptId'];
+    const clId = params['clId'];
+    const caId = params['caId'];
+    const csId = params['csId'];
+
+    if (!level || !ptId) return;
+
+    this.programTypeAll$.pipe(
+      filter(data => !!data && data.length > 0),
+      take(1)
+    ).subscribe(pts => {
+      const pt = pts?.find(p => p.id === ptId);
+      if (!pt) return;
+      this.selectedProgramType = pt;
+      this.currentLevel = ProgramSetupLevel.CLASSLEVEL;
+
+      if (level === ProgramSetupLevel.CLASSLEVEL || !clId) return;
+
+      this.classLevelAll$.pipe(
+        filter(data => !!data && data.length > 0),
+        take(1)
+      ).subscribe(cls => {
+        const cl = cls?.find(c => c.id === clId);
+        if (!cl) return;
+        this.selectedClassLevel = cl;
+        this.currentLevel = ProgramSetupLevel.CLASSARM;
+
+        if (level === ProgramSetupLevel.CLASSARM || !caId) return;
+
+        this.classAll$.pipe(
+          filter(data => !!data && data.length > 0),
+          take(1)
+        ).subscribe(classes => {
+          const ca = classes?.find(c => c.id === caId);
+          if (!ca) return;
+          this.selectedClassArm = ca;
+          this.currentLevel = ProgramSetupLevel.CLASSSUBJECT;
+
+          if (level === ProgramSetupLevel.CLASSSUBJECT || !csId) return;
+
+          this.classSubjectAll$.pipe(
+            filter(data => !!data && data.length > 0),
+            take(1)
+          ).subscribe(subjects => {
+            const cs = subjects?.find(s => s.id === csId);
+            if (!cs) return;
+            this.selectedClassSubject = cs;
+            this.currentLevel = ProgramSetupLevel.CLASSSUBJECTASSESSMENT;
+          });
+        });
+      });
+    });
+  }
+
+  canDrillInto(item: any): boolean {
+    if (this.currentLevel === ProgramSetupLevel.CLASSSUBJECT) {
+      return this.getSubjectType(item.subjectId)?.value === 1;
+    }
+    return this.currentLevel !== ProgramSetupLevel.CLASSSUBJECTASSESSMENT;
+  }
+
+  // ── Dialog form ───────────────────────────────────────────────────────
+
+  openAddForm(): void {
+    this.openFormDialog(null);
+  }
+
+  openEditForm(item: any): void {
+    let initialValue: any;
+    switch (this.currentLevel) {
+      case ProgramSetupLevel.CLASSLEVEL:
+        initialValue = { id: item.id, level: item.level };
+        break;
+      case ProgramSetupLevel.CLASSARM:
+        initialValue = { id: item.id, name: item.name, staffId: item.staffId };
+        break;
+      case ProgramSetupLevel.CLASSSUBJECT:
+        initialValue = { id: item.id, subjectId: item.subjectId, staffId: item.staffId };
+        break;
+      case ProgramSetupLevel.CLASSSUBJECTASSESSMENT:
+        initialValue = { id: item.id, assessmentType: item.assessmentType, scoreWeigth: item.scoreWeigth };
+        break;
+    }
+    this.openFormDialog(initialValue);
+  }
+
+  private openFormDialog(initialValue: any): void {
+    const isEditMode = initialValue !== null;
+    const dialogRef = this.dialog.open(ProgramSetupFormDialogComponent, {
+      width: '500px',
+      data: {
+        level: this.currentLevel,
+        isEditMode,
+        initialValue,
+        subjects: this.getSubjectsForCurrentArm(isEditMode),
+        staffs: this.getStaffs()
+      } as ProgramSetupFormDialogData
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.handleDialogResult(result);
+      }
+    });
+  }
+
+  private handleDialogResult(formValue: any): void {
+    switch (this.currentLevel) {
+      case ProgramSetupLevel.CLASSLEVEL: {
+        const formData = formValue as ClassLevelFormInterface;
+        formData.programmeTypeId = this.selectedProgramType!.id;
+        formData.name = this.selectedProgramType!.name!;
+        formData.id ? this.classLevelFacade.updateClassLevel(formData) : this.classLevelFacade.createClassLevel(formData);
+        break;
+      }
+      case ProgramSetupLevel.CLASSARM: {
+        const formData = formValue as ClassFormInterface;
+        formData.classLevelId = this.selectedClassLevel!.id;
+        formData.id ? this.classFacade.updateClass(formData) : this.classFacade.createClass(formData);
+        break;
+      }
+      case ProgramSetupLevel.CLASSSUBJECT: {
+        const formData = formValue as ClassSubjectFormInterface;
+        formData.classId = this.selectedClassArm!.id;
+        formData.schoolTermSessionId = this.schoolTermSessionId;
+        formData.id ? this.classSubjectFacade.updateClassSubject(formData) : this.classSubjectFacade.createClassSubject(formData);
+        break;
+      }
+      case ProgramSetupLevel.CLASSSUBJECTASSESSMENT: {
+        const formData = formValue as ClassSubjectAssessmentFormInterface;
+        formData.classSubjectId = this.selectedClassSubject!.id;
+        formData.id ? this.classSubjectAssessmentFacade.updateClassSubjectAssessment(formData) : this.classSubjectAssessmentFacade.createClassSubjectAssessment(formData);
+        break;
+      }
+    }
+  }
+
+  closeForm(): void {
+    // No-op: dialogs close themselves; kept for drillInto/navigateToLevel call compatibility
+  }
+
+  hasChildren(item: any): boolean {
+    switch (this.currentLevel) {
+      case ProgramSetupLevel.PROGRAMTYPE:
+        return this.getClassLevels(item.id).length > 0;
+      case ProgramSetupLevel.CLASSLEVEL:
+        return this.getClasses(item.id).length > 0;
+      case ProgramSetupLevel.CLASSARM:
+        return this.getClassSubjects(item.id).length > 0;
+      case ProgramSetupLevel.CLASSSUBJECT:
+        return this.getClassSubjectAssessments(item.id).length > 0;
+      default:
+        return false;
+    }
+  }
+
+  deleteCurrentItem(item: any): void {
+    this.onDelete(item, this.currentLevel);
+  }
+
+  getSubjectsForCurrentArm(isEditMode: boolean = false): DropdownListInterface[] {
+    return this.selectedClassArm ? this.getSubjects(this.selectedClassArm.id, isEditMode) : this.subjectAllSnapShot;
+  }
+
+  // ── Card display helpers ──────────────────────────────────────────────
+
+  getItemDisplayName(item: any): string {
+    switch (this.currentLevel) {
+      case ProgramSetupLevel.PROGRAMTYPE: return item.name ?? '';
+      case ProgramSetupLevel.CLASSLEVEL: return `${item.name} ${item.level}`;
+      case ProgramSetupLevel.CLASSARM: return item.name ?? '';
+      case ProgramSetupLevel.CLASSSUBJECT: return this.getSubjectName(item.subjectId) ?? '';
+      case ProgramSetupLevel.CLASSSUBJECTASSESSMENT: return item.assessmentType ?? '';
+      default: return item.name ?? '';
+    }
+  }
+
+  updateGroupedSubjects(): void {
+    const subjects = this.currentItems as ClassSubjectListInterface[];
+    const search = this._subjectSearchText.toLowerCase().trim();
+    const filtered = search
+      ? subjects.filter(s => (this.getSubjectName(s.subjectId) ?? '').toLowerCase().includes(search))
+      : subjects;
+    const groups = new Map<string, ClassSubjectListInterface[]>();
+    for (const s of filtered) {
+      const typeName = this.getSubjectType(s.subjectId)?.name ?? 'Other';
+      if (!groups.has(typeName)) groups.set(typeName, []);
+      groups.get(typeName)!.push(s);
+    }
+    this.groupedCurrentSubjects = Array.from(groups.entries()).map(([type, items]) => ({ type, items }));
+  }
+
+  getItemSubtitle(item: any): string {
+    switch (this.currentLevel) {
+      case ProgramSetupLevel.PROGRAMTYPE:
+        return `${this.getClassLevels(item.id).length} level(s)`;
+      case ProgramSetupLevel.CLASSLEVEL:
+        return `${this.getClasses(item.id).length} class(es)`;
+      case ProgramSetupLevel.CLASSARM: {
+        const count = this.getClassSubjects(item.id).length;
+        const tutor = this.getStaffName(item.staffId);
+        return [tutor ? `Tutor: ${tutor}` : null, `${count} subject(s)`].filter(Boolean).join(' · ');
+      }
+      case ProgramSetupLevel.CLASSSUBJECT: {
+        const teacher = this.getStaffName(item.staffId);
+        return teacher ? `Teacher: ${teacher}` : '';
+      }
+      case ProgramSetupLevel.CLASSSUBJECTASSESSMENT:
+        return `Score weight: ${item.scoreWeigth}`;
+      default:
+        return '';
+    }
   }
 }

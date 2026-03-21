@@ -22,6 +22,7 @@ import {
   selectClassSubjectError,
   selectClassSubjectCreateSuccess,
   selectClassSubjectUpdateSuccess,
+  selectClassSubjectDeleteSuccess,
   selectAddSubjectToClassResult,
   selectDataImportTemplate,
 } from './class-subject.selector';
@@ -41,6 +42,7 @@ export class ClassSubjectFacade {
   error$: Observable<string | null>;
   createSuccess$: Observable<boolean>;
   updateSuccess$: Observable<boolean>;
+  deleteSuccess$: Observable<boolean>;
   addSubjectToClassResult$: Observable<string | null>;
   dataImportTemplate$: Observable<any | null>;
   currentPageQuery: PageQueryInterface = {
@@ -63,6 +65,7 @@ export class ClassSubjectFacade {
     this.error$ = this.store.select(selectClassSubjectError);
     this.createSuccess$ = this.store.select(selectClassSubjectCreateSuccess);
     this.updateSuccess$ = this.store.select(selectClassSubjectUpdateSuccess);
+    this.deleteSuccess$ = this.store.select(selectClassSubjectDeleteSuccess);
     this.addSubjectToClassResult$ = this.store.select(selectAddSubjectToClassResult);
     this.dataImportTemplate$ = this.store.select(selectDataImportTemplate);
   }

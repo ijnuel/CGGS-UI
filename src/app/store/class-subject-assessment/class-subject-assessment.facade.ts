@@ -20,6 +20,7 @@ import {
   selectClassSubjectAssessmentError,
   selectClassSubjectAssessmentCreateSuccess,
   selectClassSubjectAssessmentUpdateSuccess,
+  selectClassSubjectAssessmentDeleteSuccess,
 } from './class-subject-assessment.selector';
 import { ClassSubjectAssessmentState } from './class-subject-assessment.reducer';
 
@@ -37,6 +38,7 @@ export class ClassSubjectAssessmentFacade {
   error$: Observable<string | null>;
   createSuccess$: Observable<boolean>;
   updateSuccess$: Observable<boolean>;
+  deleteSuccess$: Observable<boolean>;
   currentPageQuery: PageQueryInterface = {
     start: 0,
     recordsPerPage: 10,
@@ -54,6 +56,7 @@ export class ClassSubjectAssessmentFacade {
     this.loading$ = this.store.select(selectClassSubjectAssessmentLoading);
     this.error$ = this.store.select(selectClassSubjectAssessmentError);
     this.createSuccess$ = this.store.select(selectClassSubjectAssessmentCreateSuccess);
+    this.deleteSuccess$ = this.store.select(selectClassSubjectAssessmentDeleteSuccess);
     this.updateSuccess$ = this.store.select(selectClassSubjectAssessmentUpdateSuccess);
   }
 

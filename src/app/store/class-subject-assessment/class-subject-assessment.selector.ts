@@ -63,3 +63,8 @@ export const selectClassSubjectAssessmentUpdateSuccess = createSelector(
     selectClassSubjectAssessmentState,
     (state) => state.updateSuccess
 );
+
+export const selectClassSubjectAssessmentDeleteSuccess = createSelector(
+    selectClassSubjectAssessmentState,
+    (state) => state.deleteSuccess
+);

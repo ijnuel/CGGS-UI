@@ -22,6 +22,7 @@ export interface ClassSubjectState {
   error: string | null;
   createSuccess: boolean;
   updateSuccess: boolean;
+  deleteSuccess: boolean;
 }
 
 export const initialState: ClassSubjectState = {
@@ -38,6 +39,7 @@ export const initialState: ClassSubjectState = {
   error: null,
   createSuccess: false,
   updateSuccess: false,
+  deleteSuccess: false,
 };
 
 export const reducer = createReducer(
@@ -49,6 +51,7 @@ export const reducer = createReducer(
     error: null,
     createSuccess: false,
     updateSuccess: false,
+    deleteSuccess: false,
   })),
   on(ClassSubjectAction.getClassSubjectAllSuccess, (state, { payload }) => ({
     ...state,
@@ -249,6 +252,7 @@ export const reducer = createReducer(
     ...state,
     loading: true,
     error: null,
+    deleteSuccess: false,
   })),
   on(ClassSubjectAction.deleteClassSubjectSuccess, (state) => ({
     ...state,
@@ -260,6 +264,7 @@ export const reducer = createReducer(
         }
       : null,
     loading: false,
+    deleteSuccess: true,
   })),
   on(ClassSubjectAction.deleteClassSubjectFail, (state, { error }) => ({
     ...state,

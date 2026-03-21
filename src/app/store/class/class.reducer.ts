@@ -20,6 +20,7 @@ export interface ClassState {
   error: string | null;
   createSuccess: boolean;
   updateSuccess: boolean;
+  deleteSuccess: boolean;
 }
 
 export const initialState: ClassState = {
@@ -34,6 +35,7 @@ export const initialState: ClassState = {
   error: null,
   createSuccess: false,
   updateSuccess: false,
+  deleteSuccess: false,
 };
 
 export const reducer = createReducer(
@@ -45,6 +47,7 @@ export const reducer = createReducer(
     error: null,
     createSuccess: false,
     updateSuccess: false,
+    deleteSuccess: false,
   })),
   on(ClassAction.getClassAllSuccess, (state, { payload }) => ({
     ...state,
@@ -210,6 +213,7 @@ export const reducer = createReducer(
     ...state,
     loading: true,
     error: null,
+    deleteSuccess: false,
   })),
   on(ClassAction.deleteClassSuccess, (state) => ({
     ...state,
@@ -221,6 +225,7 @@ export const reducer = createReducer(
         }
       : null,
     loading: false,
+    deleteSuccess: true,
   })),
   on(ClassAction.deleteClassFail, (state, { error }) => ({
     ...state,

@@ -20,6 +20,7 @@ import {
   selectClassError,
   selectClassCreateSuccess,
   selectClassUpdateSuccess,
+  selectClassDeleteSuccess,
 } from './class.selector';
 import { ClassState } from './class.reducer';
 
@@ -37,6 +38,7 @@ export class ClassFacade {
   error$: Observable<string | null>;
   createSuccess$: Observable<boolean>;
   updateSuccess$: Observable<boolean>;
+  deleteSuccess$: Observable<boolean>;
   currentPageQuery: PageQueryInterface = {
     start: 0,
     recordsPerPage: 10,
@@ -54,6 +56,7 @@ export class ClassFacade {
     this.loading$ = this.store.select(selectClassLoading);
     this.error$ = this.store.select(selectClassError);
     this.createSuccess$ = this.store.select(selectClassCreateSuccess);
+    this.deleteSuccess$ = this.store.select(selectClassDeleteSuccess);
     this.updateSuccess$ = this.store.select(selectClassUpdateSuccess);
   }
 

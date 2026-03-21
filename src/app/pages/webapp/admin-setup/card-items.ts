@@ -2,7 +2,7 @@ import { UserRolesEnum } from '../../../types/auth';
 
 export default [
   {
-    name: 'Program Types',
+    name: 'School Setup',
     icon: 'assets/icons/admin-setup-icon.svg',
     roles: [],
     url: '/app/program-type'

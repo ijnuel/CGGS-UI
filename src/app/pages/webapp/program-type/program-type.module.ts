@@ -8,11 +8,14 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatIconModule } from '@angular/material/icon';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatRadioModule } from '@angular/material/radio';
+import { MatButtonModule } from '@angular/material/button';
+import { MatTooltipModule } from '@angular/material/tooltip';
 import { ProgramTypeComponent } from './program-type.component';
 import { SharedModule } from '../../../shared/shared.module';
 import { CreateUpdateProgramTypeComponent } from './create-update-program-type/create-update-program-type.component';
 import { provideNativeDateAdapter } from '@angular/material/core';
 import { ViewProgramTypeComponent } from './view-program-type/view-program-type.component';
+import { ProgramSetupFormDialogComponent } from './program-setup-form-dialog/program-setup-form-dialog.component';
 
 const routes: Routes = [
     {
@@ -37,7 +40,7 @@ const routes: Routes = [
 ];
 
 @NgModule({
-    declarations: [ProgramTypeComponent, CreateUpdateProgramTypeComponent, ViewProgramTypeComponent],
+    declarations: [ProgramTypeComponent, CreateUpdateProgramTypeComponent, ViewProgramTypeComponent, ProgramSetupFormDialogComponent],
     imports: [
         CommonModule,
         SharedModule,
@@ -50,6 +53,8 @@ const routes: Routes = [
         MatDatepickerModule,
         MatSelectModule,
         MatRadioModule,
+        MatButtonModule,
+        MatTooltipModule,
     ],
     providers: [provideNativeDateAdapter()],
 })

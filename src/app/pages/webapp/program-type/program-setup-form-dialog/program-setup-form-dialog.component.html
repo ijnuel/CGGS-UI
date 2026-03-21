@@ -1,0 +1,78 @@
+<h2 mat-dialog-title>{{ data.isEditMode ? 'Edit' : 'Add' }} {{ getLevelTitle() }}</h2>
+
+<mat-dialog-content style="min-width: 420px;">
+
+  <!-- ClassLevel form -->
+  <div *ngIf="data.level === ProgramSetupLevel.CLASSLEVEL" [formGroup]="form"
+    class="grid gap-4 pt-2">
+    <mat-form-field appearance="outline" class="w-full">
+      <mat-label>Level Number (e.g. 1, 2, 3…)</mat-label>
+      <input matInput type="number" formControlName="level" required />
+      <mat-error *ngIf="form.get('level')?.hasError('required')">Level is required</mat-error>
+      <mat-error *ngIf="form.get('level')?.hasError('min')">Must be at least 1</mat-error>
+    </mat-form-field>
+  </div>
+
+  <!-- ClassArm form -->
+  <div *ngIf="data.level === ProgramSetupLevel.CLASSARM" [formGroup]="form"
+    class="grid gap-4 pt-2">
+    <mat-form-field appearance="outline" class="w-full">
+      <mat-label>Class Name (e.g. A, B, C…)</mat-label>
+      <input matInput type="text" formControlName="name" required />
+      <mat-error *ngIf="form.get('name')?.hasError('required')">Name is required</mat-error>
+    </mat-form-field>
+    <app-searchable-mat-select
+      [options]="data.staffs || []"
+      label="Form Tutor (optional)"
+      placeholder="Select staff"
+      valueKey="id"
+      [labelKeys]="['lastName', 'firstName', 'staffNo']"
+      [formControl]="$any(form.get('staffId'))">
+    </app-searchable-mat-select>
+  </div>
+
+  <!-- ClassSubject form -->
+  <div *ngIf="data.level === ProgramSetupLevel.CLASSSUBJECT" [formGroup]="form"
+    class="grid gap-4 pt-2">
+    <app-searchable-mat-select
+      [disabled]="data.isEditMode"
+      [options]="data.subjects || []"
+      label="Subject"
+      placeholder="Select subject"
+      [labelKeys]="['name']"
+      [formControl]="$any(form.get('subjectId'))">
+    </app-searchable-mat-select>
+    <app-searchable-mat-select
+      [options]="data.staffs || []"
+      label="Subject Teacher (optional)"
+      placeholder="Select staff"
+      valueKey="id"
+      [labelKeys]="['lastName', 'firstName', 'staffNo']"
+      [formControl]="$any(form.get('staffId'))">
+    </app-searchable-mat-select>
+  </div>
+
+  <!-- ClassSubjectAssessment form -->
+  <div *ngIf="data.level === ProgramSetupLevel.CLASSSUBJECTASSESSMENT" [formGroup]="form"
+    class="grid gap-4 pt-2">
+    <mat-form-field appearance="outline" class="w-full">
+      <mat-label>Assessment Type</mat-label>
+      <input matInput type="text" formControlName="assessmentType" required />
+      <mat-error *ngIf="form.get('assessmentType')?.hasError('required')">Type is required</mat-error>
+    </mat-form-field>
+    <mat-form-field appearance="outline" class="w-full">
+      <mat-label>Score Weight</mat-label>
+      <input matInput type="number" formControlName="scoreWeigth" required />
+      <mat-error *ngIf="form.get('scoreWeigth')?.hasError('required')">Score weight is required</mat-error>
+      <mat-error *ngIf="form.get('scoreWeigth')?.hasError('min')">Must be at least 1</mat-error>
+    </mat-form-field>
+  </div>
+
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button (click)="cancel()">Cancel</button>
+  <button mat-raised-button color="primary" (click)="submit()" [disabled]="form.invalid">
+    {{ data.isEditMode ? 'Update' : 'Save' }}
+  </button>
+</mat-dialog-actions>
