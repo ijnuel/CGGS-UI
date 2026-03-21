@@ -198,12 +198,10 @@ export class ViewClassComponent implements OnInit, OnDestroy {
 
   onView(row: StudentClassListInterface) {
     // Navigate to student view if needed
-    console.log('View student:', row);
   }
 
   onEdit(row: StudentClassListInterface) {
     // Navigate to student edit if needed
-    console.log('Edit student:', row);
   }
 
   onDelete(row: StudentClassListInterface) {

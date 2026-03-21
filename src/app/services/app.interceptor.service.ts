@@ -33,11 +33,9 @@ export class AppInterceptorService implements HttpInterceptor {
     return next.handle(modifiedRequest).pipe(
       tap((event: HttpEvent<any>) => {
         // Handle successful responses
-        // console.log('event', event)
         if (event instanceof HttpResponse) {
           const response = event.body;
 
-          console.log(response)
           if (response) {
             let messageToShow = '';
 
@@ -68,19 +66,16 @@ export class AppInterceptorService implements HttpInterceptor {
       }),
 
       catchError((error: HttpErrorResponse) => {
-        console.log('HTTP ERROR:', error);
 
         let errorMsg = 'An unexpected error occurred.';
 
         // ---------- CLIENT SIDE ERROR ----------
         if (error.error instanceof ErrorEvent) {
-          console.log('This is client side error');
           errorMsg = error.error.message ?? errorMsg;
         }
 
         // ---------- SERVER SIDE ERROR ----------
         else {
-          console.log('This is server side error');
 
           // Backend standard message
           errorMsg =

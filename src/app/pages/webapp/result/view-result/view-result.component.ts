@@ -102,7 +102,6 @@ export class ViewResultComponent implements OnInit, OnDestroy {
         takeUntil(this.destroy$)
       )
       .subscribe((blob) => {
-        console.log('blob', blob);
         const fileURL = URL.createObjectURL(blob);
         window.open(fileURL, '_blank');
         this.toastService.openToast('Broad sheet generated successfully', NotificationTypeEnums.SUCCESS);

@@ -10,7 +10,6 @@ export class WebsiteComponent {
 
   toggleMobileMenu() {
     this.isMobileMenuOpen = !this.isMobileMenuOpen;
-    console.log(this.isMobileMenuOpen);
   }
 
   smoothScroll(id: any) {

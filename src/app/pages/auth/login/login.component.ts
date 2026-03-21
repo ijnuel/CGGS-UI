@@ -37,7 +37,6 @@ export class LoginComponent {
       password: ['', [Validators.required]],
     });
     this.authFacade.selectedCurrentUserId$.subscribe((id) => {
-      console.log(id);
     });
   }
 

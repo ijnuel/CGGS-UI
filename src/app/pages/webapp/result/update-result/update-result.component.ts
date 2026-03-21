@@ -351,7 +351,6 @@ export class UpdateResultComponent implements OnInit, OnDestroy {
 
   saveChanges(): void {
     // Check if there are any invalid scores (only for subject type 1)
-    console.log(this.invalidScores);
     if (this.isNumericSubjectType() && this.invalidScores.size > 0) {
       // Don't save if there are invalid scores
       return;

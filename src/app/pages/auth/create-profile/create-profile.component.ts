@@ -84,7 +84,6 @@ export class CreateProfileComponent {
       phoneNumber: ['', [Validators.required]],
     });
     this.authFacade.selectedCurrentUserId$.subscribe((id) => {
-      console.log(id);
     });
   }
 

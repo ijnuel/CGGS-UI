@@ -154,7 +154,6 @@ export class ProgramTypeComponent implements OnInit {
   }
 
   showAddForm(propertyId: string, visibleFormIsEdit: boolean = false) {
-    console.log(visibleFormIsEdit)
     this.addFormVisibleFor = propertyId;
     this.visibleFormIsEdit = visibleFormIsEdit;
   }

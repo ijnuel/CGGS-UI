@@ -49,7 +49,6 @@ export class SharedFacade {
   }
 
   getStateList(countryId: string) {
-    console.log(countryId);
     this.store.dispatch(SharedActions.getStateList({ countryId }));
   }
 

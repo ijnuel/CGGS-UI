@@ -44,7 +44,6 @@ export class SearchableMatSelectComponent implements ControlValueAccessor {
   }
 
   ngOnChanges() {
-    console.log('Disabled:', this.disabled);
     this.filterOptions();
   }
 

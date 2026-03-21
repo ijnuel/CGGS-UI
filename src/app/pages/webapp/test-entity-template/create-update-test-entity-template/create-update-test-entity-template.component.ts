@@ -96,7 +96,6 @@ export class CreateUpdateTestEntityTemplateComponent implements OnInit, OnDestro
         if (!this.formGroup.valid) return;
 
         const formData = this.formGroup.value as TestEntityTemplateFormInterface;
-        console.log(this.isEditMode);
         if (this.isEditMode) {
             this.testEntityTemplateFacade.updateTestEntityTemplate({
                 ...formData,
