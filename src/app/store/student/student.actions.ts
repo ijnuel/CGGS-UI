@@ -8,6 +8,7 @@ import {
   StudentFormInterface,
 } from '../../types';
 
+
 // Get All (non-paginated)
 export const getStudentAll = createAction('[Student] Get All', props<{ query?: QueryInterface }>());
 
@@ -82,7 +83,7 @@ export const getStudentByIdFail = createAction(
 // Get By Properties
 export const getStudentByProperties = createAction(
   '[Student] Get By Properties',
-  props<{ properties: Partial<StudentFormInterface> }>()
+  props<{ query: QueryInterface }>()
 );
 
 export const getStudentByPropertiesSuccess = createAction(

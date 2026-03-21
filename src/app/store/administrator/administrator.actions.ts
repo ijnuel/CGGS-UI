@@ -64,7 +64,7 @@ export const getAdministratorByIdFail = createAction(
 // Get By Properties
 export const getAdministratorByProperties = createAction(
   '[Administrator] Get By Properties',
-  props<{ properties: Partial<AdministratorFormInterface> }>()
+  props<{ query: QueryInterface }>()
 );
 
 export const getAdministratorByPropertiesSuccess = createAction(

@@ -24,6 +24,7 @@ import { StudentClassFormInterface, StudentClassListInterface } from './student-
 import { SchoolTermSessionFormInterface, SchoolTermSessionListInterface } from './school-term-session';
 import { StaffFormInterface, StaffListInterface } from './staff';
 import { AdministratorFormInterface, AdministratorListInterface } from './administrator';
+import { AdministratorCompanyListInterface, AdministratorCompanyFormInterface } from './administrator-company';
 import { ProgramSetupLevel, ProgramSetupLevelConfig } from './program-setup-level';
 import { ResultMarkSheetInterface, ResultMarkSheetFormInterface, StudentAssessmentScoreInterface, AssessmentColumnInterface, StudentAssessmentRowInterface } from './result';
 import { StudentClassSubjectAssessmentScoreListInterface, StudentClassSubjectAssessmentScoreFormInterface } from './student-class-subject-assessment-score';
@@ -64,7 +65,7 @@ interface PageQueryInterface extends QueryInterface {
 
 interface NestedPropertyInterface {
   name: string;
-  innerNestedProperty?: NestedPropertyInterface;
+  innerNestedProperties?: NestedPropertyInterface[];
 }
 
 interface SortPropertyInterface {
@@ -110,6 +111,8 @@ export {
   LocalGovernmentAreaListInterface,
   CountryListInterface,
   CompanyListInterface,
+  AdministratorCompanyListInterface,
+  AdministratorCompanyFormInterface,
   StudentClassListInterface,
   SchoolTermSessionListInterface,
   StaffListInterface,

@@ -2,7 +2,7 @@ import { CountryListInterface } from "./country";
 import { LocalGovernmentAreaListInterface } from "./local-government-area";
 import { StateListInterface } from "./state";
 import { CurrentUserInterface } from "./user";
-import { CompanyListInterface } from "./company";
+import { AdministratorCompanyListInterface } from "./administrator-company";
 
 export interface AdministratorListInterface {
   id: string;
@@ -26,7 +26,7 @@ export interface AdministratorListInterface {
   nationality?: CountryListInterface;
   residentialState?: StateListInterface;
   user?: CurrentUserInterface;
-  administratorCompanies?: CompanyListInterface[];
+  administratorCompanies?: AdministratorCompanyListInterface[];
 }
 
 export interface AdministratorFormInterface {

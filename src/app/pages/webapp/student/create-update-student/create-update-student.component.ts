@@ -115,7 +115,7 @@ export class CreateUpdateStudentComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.familyFacade.getFamilyAll();
     this.classFacade.getClassAll({
-      nestedProperties: [{ name: 'classLevel', innerNestedProperty: { name: 'programmeType' } }]
+      nestedProperties: [{ name: 'classLevel', innerNestedProperties: [{ name: 'programmeType' }] }]
     });
     initUserProfileForm(this.sharedFacade, this.formControl, this.unsubscribe$, this.selectedCountryStateList$, this.selectedStateLgaList$);
     const studentId = this.route.snapshot.params['id'];

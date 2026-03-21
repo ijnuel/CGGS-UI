@@ -64,7 +64,7 @@ export const getStaffByIdFail = createAction(
 // Get By Properties
 export const getStaffByProperties = createAction(
   '[Staff] Get By Properties',
-  props<{ properties: Partial<StaffFormInterface> }>()
+  props<{ query: QueryInterface }>()
 );
 
 export const getStaffByPropertiesSuccess = createAction(

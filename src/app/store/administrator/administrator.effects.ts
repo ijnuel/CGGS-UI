@@ -106,16 +106,18 @@ export class AdministratorEffect {
   $administratorByProperties = createEffect(() =>
     this.actions$.pipe(
       ofType(AdministratorAction.getAdministratorByProperties),
-      switchMap(({ properties }) =>
+      switchMap(({ query }) =>
         this.http
-          .post<GenericResponseInterface<AdministratorListInterface[]>>(
+          .post<GenericResponseInterface<AdministratorListInterface>>(
             `${environment.baseUrl}/Administrator/GetByProperties`,
-            properties,
+            query,
             { withCredentials: true }
           )
           .pipe(
             map((payload) =>
-              AdministratorAction.getAdministratorByPropertiesSuccess({ payload })
+              AdministratorAction.getAdministratorByPropertiesSuccess({
+                payload: { ...payload, entity: payload.entity ? [payload.entity] : [] }
+              })
             ),
             catchError((error) => {
               return of(AdministratorAction.getAdministratorByPropertiesFail({ error }));

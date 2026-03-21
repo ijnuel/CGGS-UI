@@ -74,8 +74,8 @@ export class AdministratorFacade {
     this.store.dispatch(AdministratorAction.getAdministratorById({ administratorId }));
   }
 
-  getAdministratorByProperties(properties: Partial<AdministratorFormInterface>): void {
-    this.store.dispatch(AdministratorAction.getAdministratorByProperties({ properties }));
+  getAdministratorByProperties(query: QueryInterface): void {
+    this.store.dispatch(AdministratorAction.getAdministratorByProperties({ query }));
   }
 
   administratorExists(properties: Partial<AdministratorFormInterface>): void {

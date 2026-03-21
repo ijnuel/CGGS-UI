@@ -287,7 +287,7 @@ export class ProgramTypeComponent implements OnInit {
     return {
       nestedProperties: [
         {name: "subject"},
-        {name: "staff", innerNestedProperty: { name: "nationAlity" }},
+        {name: "staff", innerNestedProperties: [{ name: "nationAlity" }]},
       ],
       queryProperties: [{ name: 'schoolTermSessionId', value: this.schoolTermSessionId }]
     };
@@ -296,7 +296,7 @@ export class ProgramTypeComponent implements OnInit {
   getClassQueryParameters(): QueryInterface {
     return {
       nestedProperties: [
-        { name: 'classLevel', innerNestedProperty: { name: 'programmeType' } }
+        { name: 'classLevel', innerNestedProperties: [{ name: 'programmeType' }] }
       ]
     };
   }

@@ -47348,10 +47348,6 @@
             "type": "string",
             "nullable": true
           },
-          "description": {
-            "type": "string",
-            "nullable": true
-          },
           "classLevelId": {
             "type": "string",
             "format": "uuid"
@@ -47540,10 +47536,6 @@
         "type": "object",
         "properties": {
           "name": {
-            "type": "string",
-            "nullable": true
-          },
-          "description": {
             "type": "string",
             "nullable": true
           },
@@ -48057,10 +48049,6 @@
         "type": "object",
         "properties": {
           "name": {
-            "type": "string",
-            "nullable": true
-          },
-          "description": {
             "type": "string",
             "nullable": true
           },
@@ -49726,8 +49714,12 @@
             "type": "string",
             "nullable": true
           },
-          "innerNestedProperty": {
-            "$ref": "#/components/schemas/NestedProperty"
+          "innerNestedProperties": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/NestedProperty"
+            },
+            "nullable": true
           }
         },
         "additionalProperties": false
@@ -50515,16 +50507,12 @@
             "type": "string",
             "format": "uuid"
           },
-          "session": {
-            "type": "string",
-            "nullable": true
-          },
           "termString": {
             "type": "string",
             "nullable": true,
             "readOnly": true
           },
-          "sessionObject": {
+          "session": {
             "$ref": "#/components/schemas/SessionResponseDto"
           },
           "classSubjects": {
@@ -51423,14 +51411,6 @@
             "type": "string",
             "format": "uuid"
           },
-          "studentFullName": {
-            "type": "string",
-            "nullable": true
-          },
-          "studentNo": {
-            "type": "string",
-            "nullable": true
-          },
           "student": {
             "$ref": "#/components/schemas/StudentResponseDto"
           },
@@ -51805,10 +51785,6 @@
             "format": "uuid",
             "nullable": true
           },
-          "classId": {
-            "type": "string",
-            "format": "uuid"
-          },
           "studentNo": {
             "type": "string",
             "nullable": true
@@ -51816,6 +51792,10 @@
           "email": {
             "type": "string",
             "nullable": true
+          },
+          "classId": {
+            "type": "string",
+            "format": "uuid"
           }
         },
         "additionalProperties": false
@@ -51881,10 +51861,6 @@
             "type": "string",
             "format": "uuid"
           },
-          "classId": {
-            "type": "string",
-            "format": "uuid"
-          },
           "id": {
             "type": "string",
             "format": "uuid"
@@ -51896,6 +51872,11 @@
           "email": {
             "type": "string",
             "nullable": true
+          },
+          "classId": {
+            "type": "string",
+            "format": "uuid",
+            "readOnly": true
           },
           "originLGA": {
             "$ref": "#/components/schemas/LocalGovernmentAreaResponseDto"
@@ -52090,10 +52071,6 @@
             "nullable": true
           },
           "familyId": {
-            "type": "string",
-            "format": "uuid"
-          },
-          "classId": {
             "type": "string",
             "format": "uuid"
           },

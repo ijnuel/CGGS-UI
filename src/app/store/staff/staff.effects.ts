@@ -108,16 +108,18 @@ export class StaffEffect {
   $staffByProperties = createEffect(() =>
     this.actions$.pipe(
       ofType(StaffAction.getStaffByProperties),
-      switchMap(({ properties }) =>
+      switchMap(({ query }) =>
         this.http
-          .post<GenericResponseInterface<StaffListInterface[]>>(
+          .post<GenericResponseInterface<StaffListInterface>>(
             `${environment.baseUrl}/Staff/GetByProperties`,
-            properties,
+            query,
             { withCredentials: true }
           )
           .pipe(
             map((payload) =>
-              StaffAction.getStaffByPropertiesSuccess({ payload })
+              StaffAction.getStaffByPropertiesSuccess({
+                payload: { ...payload, entity: payload.entity ? [payload.entity] : [] }
+              })
             ),
             catchError((error) => {
               return of(StaffAction.getStaffByPropertiesFail({ error }));

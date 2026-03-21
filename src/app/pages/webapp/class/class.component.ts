@@ -35,7 +35,7 @@ export class ClassComponent {
   }
 
   private readonly nestedProperties = [
-    { name: 'classLevel', innerNestedProperty: { name: 'programmeType' } }
+    { name: 'classLevel', innerNestedProperties: [{ name: 'programmeType' }] }
   ];
 
   onQueryChange(query: PageQueryInterface) {

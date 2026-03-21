@@ -81,8 +81,8 @@ export class StudentFacade {
     this.store.dispatch(StudentAction.getStudentById({ studentId }));
   }
 
-  getStudentByProperties(properties: Partial<StudentFormInterface>): void {
-    this.store.dispatch(StudentAction.getStudentByProperties({ properties }));
+  getStudentByProperties(query: QueryInterface): void {
+    this.store.dispatch(StudentAction.getStudentByProperties({ query }));
   }
 
   studentExists(properties: Partial<StudentFormInterface>): void {

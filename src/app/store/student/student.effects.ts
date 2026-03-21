@@ -139,17 +139,17 @@ export class StudentEffect {
   $studentByProperties = createEffect(() =>
     this.actions$.pipe(
       ofType(StudentAction.getStudentByProperties),
-      switchMap(({ properties }) =>
+      switchMap(({ query }) =>
         this.http
-          .post<GenericResponseInterface<StudentListInterface[]>>(
+          .post<GenericResponseInterface<StudentListInterface>>(
             `${environment.baseUrl}/Student/GetByProperties`,
-            properties,
+            query,
             { withCredentials: true }
           )
           .pipe(
             map((payload) => {
-              return StudentAction.getStudentByPropertiesSuccess({ 
-                payload: { ...payload, entity: payload.entity }
+              return StudentAction.getStudentByPropertiesSuccess({
+                payload: { ...payload, entity: payload.entity ? [payload.entity] : [] }
               });
             }),
             catchError((error) => {

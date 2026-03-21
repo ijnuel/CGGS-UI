@@ -13,12 +13,12 @@
     (submit)="onSubmit()"
     class="flex flex-col gap-5"
   >
-    <mat-form-field hideRequiredMarker appearance="outline">
+    <mat-form-field hideRequiredMarker>
       <mat-label>Email / Username</mat-label>
       <input data-cy="email" matInput [formControl]="formControl.email" />
     </mat-form-field>
 
-    <mat-form-field hideRequiredMarker appearance="outline">
+    <mat-form-field hideRequiredMarker>
       <mat-label>Password</mat-label>
       <input
         data-cy="password"

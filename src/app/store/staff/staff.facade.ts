@@ -74,8 +74,8 @@ export class StaffFacade {
     this.store.dispatch(StaffAction.getStaffById({ staffId }));
   }
 
-  getStaffByProperties(properties: Partial<StaffFormInterface>): void {
-    this.store.dispatch(StaffAction.getStaffByProperties({ properties }));
+  getStaffByProperties(query: QueryInterface): void {
+    this.store.dispatch(StaffAction.getStaffByProperties({ query }));
   }
 
   staffExists(properties: Partial<StaffFormInterface>): void {

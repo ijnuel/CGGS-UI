@@ -1,18 +1,163 @@
 <div class="p-6">
-  <h3 class="text-xl font-semibold">View Administrator</h3>
-  <div class="flex justify-start mb-5 mt-4">
+
+  <!-- Header -->
+  <div class="flex items-center justify-between mb-6">
+    <h2 class="text-2xl font-bold text-gray-800">Administrator Profile</h2>
     <button mat-button routerLink="/app/administrator" class="flex items-center gap-1">
       <mat-icon>arrow_back</mat-icon>
       <span>Back</span>
     </button>
   </div>
-  <div *ngIf="administrator$ | async as administrator">
-    <p><strong>Full Name:</strong> {{ administrator.lastName }}</p>
-    <p><strong>Email:</strong> {{ administrator.email }}</p>
-    <p><strong>Phone Number:</strong> {{ administrator.phoneNumber }}</p>
-    <p><strong>Role:</strong> {{ administrator.userId }}</p>
-  </div>
-  <div *ngIf="!(administrator$ | async)">
-    <p>Loading...</p>
-  </div>
-</div> 
+
+  <!-- Skeleton Loader -->
+  <ng-container *ngIf="loading$ | async">
+
+    <!-- Profile Header Skeleton -->
+    <div class="bg-white rounded-lg shadow-md p-6 mb-6 flex flex-col sm:flex-row items-start sm:items-center gap-6 animate-pulse">
+      <div class="w-20 h-20 rounded-full bg-gray-200 flex-shrink-0"></div>
+      <div class="flex-1 min-w-0 space-y-3">
+        <div class="h-5 bg-gray-200 rounded w-48"></div>
+        <div class="h-3.5 bg-gray-200 rounded w-36"></div>
+        <div class="h-3.5 bg-gray-200 rounded w-44"></div>
+      </div>
+      <div class="h-9 w-20 bg-gray-200 rounded flex-shrink-0"></div>
+    </div>
+
+    <!-- Info Grid Skeleton -->
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      <div *ngFor="let card of [1,2,3,4]" class="bg-white rounded-lg shadow-md p-6 animate-pulse">
+        <div class="flex items-center gap-2 mb-4">
+          <div class="w-5 h-5 bg-gray-200 rounded"></div>
+          <div class="h-4 bg-gray-200 rounded w-40"></div>
+        </div>
+        <div class="space-y-4">
+          <div *ngFor="let row of [1,2,3]" class="flex gap-3 py-2 border-b border-gray-100">
+            <div class="h-3.5 bg-gray-200 rounded w-28 flex-shrink-0"></div>
+            <div class="h-3.5 bg-gray-200 rounded w-40"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </ng-container>
+
+  <ng-container *ngIf="!(loading$ | async) && (administrator$ | async) as administrator">
+
+    <!-- Profile Header Card -->
+    <div class="bg-white rounded-lg shadow-md p-6 mb-6 flex flex-col sm:flex-row items-start sm:items-center gap-6">
+      <div class="w-20 h-20 rounded-full bg-indigo-100 flex items-center justify-center flex-shrink-0">
+        <mat-icon style="font-size:40px;width:40px;height:40px;" class="text-indigo-400">person</mat-icon>
+      </div>
+      <div class="flex-1 min-w-0">
+        <h3 class="text-xl font-bold text-gray-800">
+          {{ administrator.firstName }} {{ administrator.middleName }} {{ administrator.lastName }}
+        </h3>
+        <p class="text-gray-500 text-sm mt-1">Email: <span class="font-medium text-gray-700">{{ administrator.email ?? '—' }}</span></p>
+        <p class="text-gray-500 text-sm">Phone: <span class="font-medium text-gray-700">{{ administrator.phoneNumber ?? '—' }}</span></p>
+      </div>
+      <button mat-raised-button color="primary" (click)="navigateToEdit()" class="flex-shrink-0">
+        <mat-icon>edit</mat-icon>
+        Edit
+      </button>
+    </div>
+
+    <!-- Info Grid -->
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+
+      <!-- Personal Information -->
+      <div class="bg-white rounded-lg shadow-md p-6">
+        <h4 class="text-base font-semibold text-gray-700 mb-4 flex items-center gap-2">
+          <mat-icon class="text-indigo-400">badge</mat-icon>
+          Personal Information
+        </h4>
+        <div class="space-y-3">
+          <div class="flex gap-3 py-2 border-b border-gray-100">
+            <span class="text-gray-500 w-36 flex-shrink-0 text-sm">Gender</span>
+            <span class="text-gray-800 text-sm font-medium">{{ getLabel(genderList$ | async, administrator.gender) }}</span>
+          </div>
+          <div class="flex gap-3 py-2 border-b border-gray-100">
+            <span class="text-gray-500 w-36 flex-shrink-0 text-sm">Religion</span>
+            <span class="text-gray-800 text-sm font-medium">{{ getLabel(religionList$ | async, administrator.religion) }}</span>
+          </div>
+          <div class="flex gap-3 py-2">
+            <span class="text-gray-500 w-36 flex-shrink-0 text-sm">Date of Birth</span>
+            <span class="text-gray-800 text-sm font-medium">{{ administrator.dateOfBirth | date:'dd MMMM yyyy' }}</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Contact Information -->
+      <div class="bg-white rounded-lg shadow-md p-6">
+        <h4 class="text-base font-semibold text-gray-700 mb-4 flex items-center gap-2">
+          <mat-icon class="text-green-400">contact_phone</mat-icon>
+          Contact Information
+        </h4>
+        <div class="space-y-3">
+          <div class="flex gap-3 py-2 border-b border-gray-100">
+            <span class="text-gray-500 w-36 flex-shrink-0 text-sm">Phone</span>
+            <span class="text-gray-800 text-sm font-medium">{{ administrator.phoneNumber ?? '—' }}</span>
+          </div>
+          <div class="flex gap-3 py-2 border-b border-gray-100">
+            <span class="text-gray-500 w-36 flex-shrink-0 text-sm">Home Address</span>
+            <span class="text-gray-800 text-sm font-medium">{{ administrator.homeAddress ?? '—' }}</span>
+          </div>
+          <div class="flex gap-3 py-2 border-b border-gray-100">
+            <span class="text-gray-500 w-36 flex-shrink-0 text-sm">City</span>
+            <span class="text-gray-800 text-sm font-medium">{{ administrator.residentialCity ?? '—' }}</span>
+          </div>
+          <div class="flex gap-3 py-2">
+            <span class="text-gray-500 w-36 flex-shrink-0 text-sm">Residential State</span>
+            <span class="text-gray-800 text-sm font-medium">{{ administrator.residentialState?.name ?? '—' }}</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Origin Information -->
+      <div class="bg-white rounded-lg shadow-md p-6">
+        <h4 class="text-base font-semibold text-gray-700 mb-4 flex items-center gap-2">
+          <mat-icon class="text-purple-400">public</mat-icon>
+          Origin Information
+        </h4>
+        <div class="space-y-3">
+          <div class="flex gap-3 py-2 border-b border-gray-100">
+            <span class="text-gray-500 w-36 flex-shrink-0 text-sm">Nationality</span>
+            <span class="text-gray-800 text-sm font-medium">{{ administrator.nationality?.name ?? '—' }}</span>
+          </div>
+          <div class="flex gap-3 py-2 border-b border-gray-100">
+            <span class="text-gray-500 w-36 flex-shrink-0 text-sm">State of Origin</span>
+            <span class="text-gray-800 text-sm font-medium">{{ administrator.stateOfOrigin?.name ?? '—' }}</span>
+          </div>
+          <div class="flex gap-3 py-2">
+            <span class="text-gray-500 w-36 flex-shrink-0 text-sm">LGA of Origin</span>
+            <span class="text-gray-800 text-sm font-medium">{{ administrator.originLGA?.name ?? '—' }}</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Companies -->
+      <div class="bg-white rounded-lg shadow-md p-6">
+        <h4 class="text-base font-semibold text-gray-700 mb-4 flex items-center gap-2">
+          <mat-icon class="text-orange-400">business</mat-icon>
+          Companies
+        </h4>
+        <ng-container *ngIf="administrator.administratorCompanies && administrator.administratorCompanies.length > 0; else noCompanies">
+          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+            <div *ngFor="let ac of administrator.administratorCompanies"
+                 class="border border-gray-100 rounded-lg px-4 py-3 flex justify-between items-center">
+              <p class="text-gray-800 text-sm font-medium">{{ ac.company?.name ?? '—' }}</p>
+              <span *ngIf="ac.company?.isCurrent"
+                    class="text-xs bg-green-100 text-green-700 px-2 py-0.5 rounded-full font-medium">
+                Current
+              </span>
+            </div>
+          </div>
+        </ng-container>
+        <ng-template #noCompanies>
+          <p class="text-gray-400 text-sm">No companies assigned.</p>
+        </ng-template>
+      </div>
+
+    </div>
+  </ng-container>
+
+</div>

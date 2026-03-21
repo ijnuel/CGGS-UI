@@ -123,7 +123,7 @@ export class ViewClassComponent implements OnInit, OnDestroy {
       this.classFacade.getClassAll({
         queryProperties: [{ name: 'id', value: classId }],
         nestedProperties: [
-          { name: 'classLevel', innerNestedProperty: { name: 'programmeType' } }
+          { name: 'classLevel', innerNestedProperties: [{ name: 'programmeType' }] }
         ]
       });
     }
