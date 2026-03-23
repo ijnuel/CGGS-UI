@@ -3,34 +3,33 @@
 // The list of file replacements can be found in `angular.json`.
 
 export const environment = {
-  production: false,
+  production: true,
   baseUrl: 'https://api.chosenschool.org/api',
-  // baseUrl: 'https://ijesudunsin-002-site1.ftempurl.com/api',
-  schoolName: 'Busco School',
-  schoolNameFull: 'Busco Nur and Primary School',
-  schoolAbbreviation: 'Busco',
-  logoUrl: 'assets/images/busco.png',
-  logoWhiteUrl: 'assets/images/busco.png',
+  schoolName: 'Chosen Generation',
+  schoolNameFull: 'Chosen Generation Schools',
+  schoolAbbreviation: 'CGGS',
+  logoUrl: 'assets/images/logo.png',
+  logoWhiteUrl: 'assets/images/logo-white.png',
   faviconUrl: 'favicon.ico',
-  heroBgUrl: 'assets/images/busco.png',
+  heroBgUrl: 'assets/images/cggs-building.jpg',
 
   // Contact info
-  address: 'No. 4 Molipa Estate, Off Irewon road, Ijebu Ode, Ogun state, Nigeria.',
-  phoneNumbers: ['08054849749'],
+  address: 'No. 47 Olorunsogo, Ijaregbe Road, Ilesa, Osun State, Nigeria.',
+  phoneNumbers: ['08062315427', '09037535756'],
   emails: [
-    { address: 'busarithienkie@gmail.com', note: 'responds faster' },
-    { address: 'buscoschool@gmail.com' },
+    { address: 'ijitonajesudunsin@gmail.com', note: 'responds faster' },
+    { address: 'Chosengenerationacad@gmail.com' },
   ],
   officeHours: 'Monday – Friday: 8:00 AM – 4:00 PM',
 
   // Theme colors
-  primaryColor: '#008000',
-  secondaryColor: '#eff4ff',
-  accentColor: '#654321',
+  primaryColor: '#0f0e17',
+  secondaryColor: '#c3c9d8',
+  accentColor: '#006efe',
   bgColor: '#eff4ff',
-  sidebarBg: '#008000',
-  sidebarMenuHover: '#008000',
-  buttonBg: '#654321',
-  buttonSecBg: '#008000',
-  tableBg: '#008000',
+  sidebarBg: '#0f0e17',
+  sidebarMenuHover: '#646177',
+  buttonBg: '#006efe',
+  buttonSecBg: '#0f0e17',
+  tableBg: '#0f0e17',
 };
