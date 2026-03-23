@@ -24,13 +24,13 @@ export const environment = {
   officeHours: 'Monday – Friday: 8:00 AM – 4:00 PM',
 
   // Theme colors
-  primaryColor: '#654321',
+  primaryColor: '#008000',
   secondaryColor: '#eff4ff',
-  accentColor: '#008000',
+  accentColor: '#654321',
   bgColor: '#eff4ff',
-  sidebarBg: '#0f0e17',
-  sidebarMenuHover: '#646177',
-  buttonBg: '#008000',
-  buttonSecBg: '#0f0e17',
-  tableBg: '#0f0e17',
+  sidebarBg: '#008000',
+  sidebarMenuHover: '#008000',
+  buttonBg: '#654321',
+  buttonSecBg: '#008000',
+  tableBg: '#008000',
 };
