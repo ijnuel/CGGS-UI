@@ -4,6 +4,7 @@ import {
   NotificationTypeEnums,
   ToastNotificationService,
 } from '../../services/toast-notification.service';
+import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'app-auth',
@@ -11,6 +12,7 @@ import {
   styleUrl: './auth.component.scss',
 })
 export class AuthComponent {
+  env = environment;
   globalLoading$ = this.globalLoadingFacade.selectGlobalLoading$;
   globalError$ = this.globalLoadingFacade.selectGlobalError$;
 

@@ -3,6 +3,7 @@ import SidebarMenuItems from './sidebar-items';
 import { SidebarItemsInterface } from '../../types/sidebar';
 import { AuthFacade } from '../../store/auth/auth.facade';
 import { UserRolesEnum } from '../../types';
+import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'app-layout-sidebar',
@@ -10,6 +11,7 @@ import { UserRolesEnum } from '../../types';
   styleUrl: './layout-sidebar.component.scss',
 })
 export class LayoutSidebarComponent implements OnInit {
+  env = environment;
   @Output() menuItemClickEvent = new EventEmitter();
 
   sidebarMenuItems: SidebarItemsInterface[] = [];

@@ -10,9 +10,9 @@
 
     <!-- Logo & School Name -->
     <div class="relative z-10 flex items-center gap-3 cursor-pointer" routerLink="/home">
-      <img src="assets/images/logo-white.png" class="w-12 h-12 object-contain" alt="CGGS Logo" />
+      <img [src]="env.logoWhiteUrl" class="w-12 h-12 object-contain" [alt]="env.schoolAbbreviation + ' Logo'" />
       <div class="leading-tight">
-        <p class="text-white font-bold text-base tracking-wide">Chosen Generation</p>
+        <p class="text-white font-bold text-base tracking-wide">{{ env.schoolName }}</p>
         <p class="text-[var(--app-secondary)]/60 text-xs tracking-widest uppercase">Schools Portal</p>
       </div>
     </div>
@@ -24,7 +24,7 @@
         "Shaping minds,<br />building futures."
       </h2>
       <p class="text-[var(--app-secondary)]/60 text-sm leading-relaxed max-w-xs">
-        The CGGS Portal connects every member of our school family — parents, students,
+        The {{ env.schoolAbbreviation }} Portal connects every member of our school family — parents, students,
         teachers, and administrators — in one seamless experience.
       </p>
     </div>
@@ -52,7 +52,7 @@
 
     <!-- Mobile logo (visible only on small screens) -->
     <div class="absolute top-5 left-5 sm:hidden cursor-pointer" routerLink="/home">
-      <img src="assets/images/logo.png" class="w-10 h-10 object-contain" alt="CGGS" />
+      <img [src]="env.logoUrl" class="w-10 h-10 object-contain" [alt]="env.schoolAbbreviation" />
     </div>
 
     <div class="w-full max-w-md">

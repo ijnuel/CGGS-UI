@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'app-website',
@@ -6,6 +7,7 @@ import { Component } from '@angular/core';
   styleUrl: './website.component.scss',
 })
 export class WebsiteComponent {
+  env = environment;
   isMobileMenuOpen = false;
 
   toggleMobileMenu() {

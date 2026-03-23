@@ -9,6 +9,7 @@ import { Subject, takeUntil } from 'rxjs';
 import { Router } from '@angular/router';
 import { AuthFacade } from '../../../store/auth/auth.facade';
 import { LoginPayloadInterface } from '../../../types';
+import { environment } from '../../../../environments/environment';
 
 @Component({
   selector: 'app-login',
@@ -16,6 +17,7 @@ import { LoginPayloadInterface } from '../../../types';
   styleUrl: './login.component.scss',
 })
 export class LoginComponent {
+  env = environment;
   formGroup!: FormGroup<{
     email: FormControl;
     password: FormControl;

@@ -6,10 +6,9 @@
     class="fixed top-0 left-0 w-full h-20 flex justify-between items-center px-6 md:px-14 z-50"
   >
     <div class="flex items-center gap-3">
-      <img src="assets/images/logo-white.png" class="w-11 h-11 object-contain" alt="CGGS Logo" />
+      <img [src]="env.logoWhiteUrl" class="w-11 h-11 object-contain" [alt]="env.schoolAbbreviation + ' Logo'" />
       <div class="hidden sm:block leading-tight">
-        <p class="text-white font-bold text-sm tracking-wide">Chosen Generation</p>
-        <p class="text-[var(--app-secondary)] text-xs tracking-widest uppercase">Schools</p>
+        <p class="text-white font-bold text-sm tracking-wide">{{ env.schoolName }}</p>
       </div>
     </div>
 
@@ -59,8 +58,7 @@
       </div>
 
       <h1 class="text-white font-bold leading-tight mb-6">
-        Chosen Generation<br />
-        <span class="text-[#006efe]">Schools</span>
+        {{ env.schoolNameFull }}<br />
       </h1>
 
       <p class="text-[var(--app-secondary)] text-lg md:text-xl leading-relaxed mb-10 max-w-2xl mx-auto opacity-90">
@@ -134,12 +132,12 @@
             <h3 class="text-[var(--app-primary)]">Our Mission</h3>
           </div>
           <p class="text-gray-500 leading-relaxed mb-4">
-            At Chosen Generation Schools, our mission is to raise a generation of critical thinkers,
+            At {{ env.schoolNameFull }}, our mission is to raise a generation of critical thinkers,
             compassionate leaders, and responsible global citizens. We believe every child carries
             extraordinary potential — our role is to ignite it.
           </p>
           <p class="text-gray-500 leading-relaxed">
-            Founded with a vision to bridge academic excellence with strong moral values, CGGS has
+            Founded with a vision to bridge academic excellence with strong moral values, {{ env.schoolAbbreviation }} has
             grown into one of the most trusted educational institutions in the region, nurturing
             students from nursery through secondary school.
           </p>
@@ -230,7 +228,7 @@
         <h2 class="text-[var(--app-primary)] mt-3 mb-4">News &amp; Events</h2>
         <div class="w-14 h-1 bg-[#006efe] mx-auto rounded-full"></div>
         <p class="text-gray-400 mt-5 max-w-xl mx-auto text-sm leading-relaxed">
-          Stay connected with the latest happenings, achievements, and upcoming events at Chosen Generation Schools.
+          Stay connected with the latest happenings, achievements, and upcoming events at {{ env.schoolNameFull }}.
         </p>
       </div>
 
@@ -248,7 +246,7 @@
             <h5 class="text-[var(--app-primary)] font-bold mb-3 leading-snug">Annual Graduation Ceremony</h5>
             <p class="text-gray-400 text-sm leading-relaxed">
               A landmark celebration as we honour our graduating class — students who have shown
-              remarkable dedication, growth, and excellence throughout their time at CGGS. Family
+              remarkable dedication, growth, and excellence throughout their time at {{ env.schoolAbbreviation }}. Family
               and friends are warmly invited to share in this special milestone.
             </p>
             <div class="mt-5 pt-4 border-t border-gray-100 flex items-center gap-2">
@@ -289,7 +287,7 @@
             </div>
             <h5 class="text-[var(--app-primary)] font-bold mb-3 leading-snug">Christmas Carol Service</h5>
             <p class="text-gray-400 text-sm leading-relaxed">
-              Usher in the festive season with the CGGS Christmas Carol Service — an enchanting
+              Usher in the festive season with the {{ env.schoolAbbreviation }} Christmas Carol Service — an enchanting
               evening of carols, dramatic performances, and heartfelt worship as our students
               celebrate the joy and spirit of Christmas together with family and the community.
             </p>
@@ -433,9 +431,9 @@
         <!-- Brand -->
         <div>
           <div class="flex items-center gap-3 mb-4">
-            <img src="assets/images/logo-white.png" class="w-10 h-10 object-contain" alt="CGGS" />
+            <img [src]="env.logoWhiteUrl" class="w-10 h-10 object-contain" [alt]="env.schoolAbbreviation" />
             <div class="leading-tight">
-              <p class="text-white font-bold text-sm">Chosen Generation</p>
+              <p class="text-white font-bold text-sm">{{ env.schoolName }}</p>
               <p class="text-xs text-[var(--app-secondary)]/60">Schools</p>
             </div>
           </div>
@@ -469,7 +467,7 @@
 
       <div class="border-t border-white/10 pt-6 text-center">
         <p class="text-xs text-[var(--app-secondary)]/40">
-          &copy; 2026 Chosen Generation Schools. All rights reserved.
+          &copy; 2026 {{ env.schoolNameFull }}. All rights reserved.
         </p>
       </div>
     </div>

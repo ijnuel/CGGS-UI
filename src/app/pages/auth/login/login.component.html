@@ -3,7 +3,7 @@
   <!-- Header -->
   <div class="mb-8">
     <h3 class="text-[var(--app-primary)] font-bold">Welcome Back</h3>
-    <p class="text-gray-400 text-sm mt-1">Sign in to your CGGS portal account to continue.</p>
+    <p class="text-gray-400 text-sm mt-1">Sign in to your {{ env.schoolAbbreviation }} portal account to continue.</p>
   </div>
 
   <!-- Form -->
@@ -47,7 +47,7 @@
 
   <!-- Footer link -->
   <div class="mt-8 pt-6 border-t border-gray-200 text-center space-y-2">
-    <p class="text-gray-400 text-sm">New to CGGS Portal?</p>
+    <p class="text-gray-400 text-sm">New to {{ env.schoolAbbreviation }} Portal?</p>
     <a
       routerLink="/auth/enroll"
       class="text-[#006efe] font-semibold text-sm hover:underline inline-block"
