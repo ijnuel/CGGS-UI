@@ -15,11 +15,11 @@ export const environment = {
   heroBgUrl: 'assets/images/busco.png',
 
   // Contact info
-  address: 'No. 47 Olorunsogo, Ijaregbe Road, Ilesa, Osun State, Nigeria.',
-  phoneNumbers: ['08054849749', '09037535756'],
+  address: 'No. 4 Molipa Estate, Off Irewon road, Ijebu Ode, Ogun state, Nigeria.',
+  phoneNumbers: ['08054849749'],
   emails: [
-    { address: 'ijitonajesudunsin@gmail.com', note: 'responds faster' },
-    { address: 'Chosengenerationacad@gmail.com' },
+    { address: 'busarithienkie@gmail.com', note: 'responds faster' },
+    { address: 'buscoschool@gmail.com' },
   ],
   officeHours: 'Monday – Friday: 8:00 AM – 4:00 PM',
 
