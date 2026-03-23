@@ -12,4 +12,16 @@ export const environment = {
   logoUrl: 'assets/images/busco.png',
   logoWhiteUrl: 'assets/images/busco.png',
   faviconUrl: 'favicon.ico',
+  heroBgUrl: 'assets/images/busco.png',
+
+  // Theme colors
+  primaryColor: '#654321',
+  secondaryColor: '#eff4ff',
+  accentColor: '#008000',
+  bgColor: '#eff4ff',
+  sidebarBg: '#0f0e17',
+  sidebarMenuHover: '#646177',
+  buttonBg: '#008000',
+  buttonSecBg: '#0f0e17',
+  tableBg: '#0f0e17',
 };

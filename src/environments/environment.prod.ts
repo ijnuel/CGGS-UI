@@ -11,4 +11,16 @@ export const environment = {
   logoUrl: 'assets/images/logo.png',
   logoWhiteUrl: 'assets/images/logo-white.png',
   faviconUrl: 'favicon.ico',
+  heroBgUrl: 'assets/images/cggs-building.jpg',
+
+  // Theme colors
+  primaryColor: '#0f0e17',
+  secondaryColor: '#c3c9d8',
+  accentColor: '#006efe',
+  bgColor: '#eff4ff',
+  sidebarBg: '#0f0e17',
+  sidebarMenuHover: '#646177',
+  buttonBg: '#006efe',
+  buttonSecBg: '#0f0e17',
+  tableBg: '#0f0e17',
 };
