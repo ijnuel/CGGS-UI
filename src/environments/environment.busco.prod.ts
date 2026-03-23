@@ -3,7 +3,7 @@
 // The list of file replacements can be found in `angular.json`.
 
 export const environment = {
-  production: false,
+  production: true,
   baseUrl: 'https://api.chosenschool.org/api',
   // baseUrl: 'https://ijesudunsin-002-site1.ftempurl.com/api',
   schoolName: 'Busco School',
