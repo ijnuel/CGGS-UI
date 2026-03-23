@@ -23,7 +23,7 @@ export class AppComponent {
 
     const favicon = this.document.querySelector<HTMLLinkElement>('link[rel="icon"]');
     if (favicon) {
-      favicon.href = environment.faviconUrl;
+      favicon.href = environment.faviconUrl + '?v=' + Date.now();
     }
 
     // Apply theme colors from environment
