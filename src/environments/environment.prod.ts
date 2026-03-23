@@ -13,6 +13,15 @@ export const environment = {
   faviconUrl: 'favicon.ico',
   heroBgUrl: 'assets/images/cggs-building.jpg',
 
+  // Contact info
+  address: 'No. 47 Olorunsogo, Ijaregbe Road, Ilesa, Osun State, Nigeria.',
+  phoneNumbers: ['08062315427', '09037535756'],
+  emails: [
+    { address: 'ijitonajesudunsin@gmail.com', note: 'responds faster' },
+    { address: 'Chosengenerationacad@gmail.com' },
+  ],
+  officeHours: 'Monday – Friday: 8:00 AM – 4:00 PM',
+
   // Theme colors
   primaryColor: '#0f0e17',
   secondaryColor: '#c3c9d8',

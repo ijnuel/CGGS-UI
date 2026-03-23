@@ -14,6 +14,15 @@ export const environment = {
   faviconUrl: 'favicon.ico',
   heroBgUrl: 'assets/images/busco.png',
 
+  // Contact info
+  address: 'No. 47 Olorunsogo, Ijaregbe Road, Ilesa, Osun State, Nigeria.',
+  phoneNumbers: ['08054849749', '09037535756'],
+  emails: [
+    { address: 'ijitonajesudunsin@gmail.com', note: 'responds faster' },
+    { address: 'Chosengenerationacad@gmail.com' },
+  ],
+  officeHours: 'Monday – Friday: 8:00 AM – 4:00 PM',
+
   // Theme colors
   primaryColor: '#654321',
   secondaryColor: '#eff4ff',

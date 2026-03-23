@@ -347,7 +347,7 @@
             </div>
             <div>
               <p class="font-semibold text-[var(--app-primary)] text-sm mb-1">Our Address</p>
-              <p class="text-gray-400 text-sm leading-relaxed">No. 47 Olorunsogo, Ijaregbe Road,<br />Ilesa, Osun State, Nigeria.</p>
+              <p class="text-gray-400 text-sm leading-relaxed">{{ env.address }}</p>
             </div>
           </div>
 
@@ -357,7 +357,11 @@
             </div>
             <div>
               <p class="font-semibold text-[var(--app-primary)] text-sm mb-1">Phone Numbers</p>
-              <p class="text-gray-400 text-sm leading-relaxed">08062315427<br />09037535756</p>
+              <p class="text-gray-400 text-sm leading-relaxed">
+                @for (phone of env.phoneNumbers; track phone; let last = $last) {
+                  {{ phone }}@if (!last) {<br />}
+                }
+              </p>
             </div>
           </div>
 
@@ -368,8 +372,9 @@
             <div>
               <p class="font-semibold text-[var(--app-primary)] text-sm mb-1">Email Address</p>
               <p class="text-gray-400 text-sm leading-relaxed break-all">
-                ijitonajesudunsin&#64;gmail.com <span class="text-[10px] text-[var(--app-accent)] font-semibold">(responds faster)</span><br />
-                Chosengenerationacad&#64;gmail.com
+                @for (email of env.emails; track email.address; let last = $last) {
+                  {{ email.address }}@if (email.note) { <span class="text-[10px] text-[var(--app-accent)] font-semibold">({{ email.note }})</span>}@if (!last) {<br />}
+                }
               </p>
             </div>
           </div>
@@ -381,7 +386,7 @@
             <div>
               <p class="font-semibold text-[var(--app-primary)] text-sm mb-1">Office Hours</p>
               <p class="text-gray-400 text-sm leading-relaxed">
-                Monday – Friday: 8:00 AM – 4:00 PM<br />
+                {{ env.officeHours }}
               </p>
             </div>
           </div>
