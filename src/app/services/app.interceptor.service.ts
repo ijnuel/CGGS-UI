@@ -99,6 +99,14 @@ export class AppInterceptorService implements HttpInterceptor {
           }
         }
 
+        if (error.status === 403) {
+          this.toastNotificationService.openToast(
+            'You have insufficient access to perform this operation',
+            NotificationTypeEnums.ERROR,
+          );
+          return throwError(() => error);
+        }
+
         this.toastNotificationService.openToast(
           errorMsg ?? 'Error occurred',
           NotificationTypeEnums.ERROR

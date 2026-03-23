@@ -165,6 +165,13 @@ export class AdministratorEffect {
               AdministratorAction.administratorCountSuccess({ payload })
             ),
             catchError((error) => {
+              if (error.status === 403) {
+                return of(
+                  AdministratorAction.administratorCountSuccess({
+                    payload: { entity: '—' } as any,
+                  })
+                );
+              }
               return of(AdministratorAction.administratorCountFail({ error }));
             })
           )
