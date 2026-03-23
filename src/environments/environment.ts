@@ -10,7 +10,7 @@ export const environment = {
   schoolAbbreviation: 'CGGS',
   logoUrl: 'assets/images/logo.png',
   logoWhiteUrl: 'assets/images/logo-white.png',
-  faviconUrl: 'favicon.ico',
+  faviconUrl: 'chosen.ico',
   heroBgUrl: 'assets/images/cggs-building.jpg',
 
   // Contact info

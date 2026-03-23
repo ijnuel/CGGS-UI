@@ -11,7 +11,7 @@ export const environment = {
   schoolAbbreviation: 'Busco',
   logoUrl: 'assets/images/busco.png',
   logoWhiteUrl: 'assets/images/busco.png',
-  faviconUrl: 'favicon.ico',
+  faviconUrl: 'busco.ico',
   heroBgUrl: 'assets/images/busco.png',
 
   // Contact info
