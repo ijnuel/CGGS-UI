@@ -4,6 +4,12 @@
 
 export const environment = {
   production: false,
-  baseUrl: 'https://localhost:7118/api',
+  baseUrl: 'https://api.chosenschool.org/api',
   // baseUrl: 'https://ijesudunsin-002-site1.ftempurl.com/api',
+  schoolName: 'Busco School',
+  schoolNameFull: 'Busco Nur and Primary School',
+  schoolAbbreviation: 'Busco',
+  logoUrl: 'assets/images/busco.png',
+  logoWhiteUrl: 'assets/images/busco.png',
+  faviconUrl: 'favicon.ico',
 };

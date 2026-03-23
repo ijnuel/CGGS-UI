@@ -5,4 +5,10 @@
 export const environment = {
   production: true,
   baseUrl: 'https://api.chosenschool.org/api',
+  schoolName: 'Chosen Generation',
+  schoolNameFull: 'Chosen Generation Schools',
+  schoolAbbreviation: 'CGGS',
+  logoUrl: 'assets/images/logo.png',
+  logoWhiteUrl: 'assets/images/logo-white.png',
+  faviconUrl: 'favicon.ico',
 };
