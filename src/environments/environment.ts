@@ -32,4 +32,6 @@ export const environment = {
   buttonBg: '#006efe',
   buttonSecBg: '#0f0e17',
   tableBg: '#0f0e17',
+  gradientFrom: '#0f0e17',
+  gradientTo: '#006efe',
 };

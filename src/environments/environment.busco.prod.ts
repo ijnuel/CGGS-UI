@@ -33,4 +33,6 @@ export const environment = {
   buttonBg: '#654321',
   buttonSecBg: '#008000',
   tableBg: '#008000',
+  gradientFrom: '#16a34a',
+  gradientTo: '#4ade80',
 };

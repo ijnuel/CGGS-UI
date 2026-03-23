@@ -42,5 +42,7 @@ export class AppComponent {
     root.setProperty('--app-table-header-color', environment.bgColor);
     root.setProperty('--app-sidebar-color', environment.bgColor);
     root.setProperty('--app-hero-bg', `url("${environment.heroBgUrl}")`);
+    root.setProperty('--app-gradient-from', environment.gradientFrom);
+    root.setProperty('--app-gradient-to', environment.gradientTo);
   }
 }

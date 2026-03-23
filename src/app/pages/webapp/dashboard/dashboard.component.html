@@ -2,7 +2,7 @@
 
   <!-- Welcome Banner -->
   <ng-container *ngIf="currentUser$ | async as user">
-    <div class="bg-gradient-to-r from-green-600 to-green-400 rounded-xl p-6 mb-8 text-white flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+    <div class="bg-gradient-to-r from-[var(--app-gradient-from)] to-[var(--app-gradient-to)] rounded-xl p-6 mb-8 text-white flex flex-col sm:flex-row sm:items-center justify-between gap-4">
       <div>
         <p class="text-indigo-100 text-sm mb-1">{{ today | date:'EEEE, d MMMM yyyy' }}</p>
         <h2 class="text-2xl font-bold">Welcome back, {{ user.firstName }} {{ user.lastName }}</h2>
