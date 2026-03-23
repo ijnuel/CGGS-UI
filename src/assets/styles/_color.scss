@@ -15,7 +15,8 @@
 
   --app-text-color: #0f0e17;
 
-  --app-button-bg: #006efe;
+  --app-accent: #006efe;
+  --app-button-bg: var(--app-accent);
   --app-button-sec-bg: #0f0e17;
   --app-button-color: var(--app-white);
   --app-button-radius: 0.25rem;

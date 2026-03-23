@@ -7,7 +7,7 @@
 
 /* ===== HERO SECTION ===== */
 #home {
-  background-image: url("../../../assets/images/cggs-building.jpg");
+  background-image: var(--app-hero-bg);
   background-size: cover;
   background-position: center;
   background-color: var(--app-primary);

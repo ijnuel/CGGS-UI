@@ -41,23 +41,23 @@
 .ring-outer {
   width: 7rem;
   height: 7rem;
-  border-top-color: #006efe;
-  border-right-color: #006efe;
+  border-top-color: var(--app-accent);
+  border-right-color: var(--app-accent);
   animation: spin-cw 1.1s linear infinite;
 }
 
 .ring-middle {
   width: 5.2rem;
   height: 5.2rem;
-  border-bottom-color: #0f0e17;
-  border-left-color: #0f0e17;
+  border-bottom-color: var(--app-primary);
+  border-left-color: var(--app-primary);
   animation: spin-ccw 0.9s linear infinite;
 }
 
 .ring-inner {
   width: 3.6rem;
   height: 3.6rem;
-  border-top-color: #006efe;
+  border-top-color: var(--app-accent);
   border-right-color: transparent;
   opacity: 0.5;
   animation: spin-cw 0.7s linear infinite;
@@ -84,7 +84,7 @@
 .loader-label {
   font-size: 0.8rem;
   font-weight: 600;
-  color: #0f0e17;
+  color: var(--app-primary);
   letter-spacing: 0.08em;
   text-transform: uppercase;
   margin: 0;
@@ -100,7 +100,7 @@
   width: 0.45rem;
   height: 0.45rem;
   border-radius: 50%;
-  background: #006efe;
+  background: var(--app-accent);
   animation: pulse-dot 1.2s ease-in-out infinite;
 }
 
