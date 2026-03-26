@@ -46,6 +46,13 @@ export class AuthEffect {
         )
     );
 
+    $loginSuccess = createEffect(() =>
+        this.actions$.pipe(
+            ofType(AuthAction.loginSuccess),
+            map(() => AuthAction.getCurrentUser())
+        )
+    );
+
     $getCurrentUser = createEffect(() =>
         this.actions$.pipe(
             ofType(AuthAction.getCurrentUser),

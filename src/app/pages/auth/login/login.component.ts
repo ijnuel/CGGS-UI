@@ -44,10 +44,10 @@ export class LoginComponent {
 
   ngOnInit() {
     this.authFacade
-      .loginSuccessAction()
+      .getCurrentUserSuccessAction()
       .pipe(takeUntil(this.unsubscribe$))
       .subscribe(() => {
-        this.router.navigateByUrl('app');
+        this.router.navigateByUrl('app/home');
       });
   }
 
