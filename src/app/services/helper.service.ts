@@ -3,6 +3,19 @@ import { SharedFacade } from '../store/shared/shared.facade';
 import { BehaviorSubject, Subject, takeUntil } from 'rxjs';
 import { DropdownListInterface } from '../types';
 
+/**
+ * Formats a Date as YYYY-MM-DD using LOCAL timezone methods, preventing the
+ * UTC shift that occurs when JSON.stringify() calls .toISOString() on a Date.
+ */
+export function toLocalDateString(date: Date | string | null | undefined): string | null {
+  if (!date) return null;
+  const d = date instanceof Date ? date : new Date(date);
+  const year = d.getFullYear();
+  const month = String(d.getMonth() + 1).padStart(2, '0');
+  const day = String(d.getDate()).padStart(2, '0');
+  return `${year}-${month}-${day}`;
+}
+
 export function getErrorMessageHelper(control: FormControl): string | null {
   if (control.errors && control.touched) {
     if (control.errors['required']) {

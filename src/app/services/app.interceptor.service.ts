@@ -9,6 +9,26 @@ import {
 import { catchError, Observable, throwError } from 'rxjs';
 import { GlobalLoadingFacade } from '../store/global-loading/global-loading.facade';
 
+function serializeDates(value: any): any {
+  if (value instanceof Date) {
+    const y = value.getFullYear();
+    const m = String(value.getMonth() + 1).padStart(2, '0');
+    const d = String(value.getDate()).padStart(2, '0');
+    return `${y}-${m}-${d}`;
+  }
+  if (Array.isArray(value)) {
+    return value.map(serializeDates);
+  }
+  if (value !== null && typeof value === 'object') {
+    const result: any = {};
+    for (const key of Object.keys(value)) {
+      result[key] = serializeDates(value[key]);
+    }
+    return result;
+  }
+  return value;
+}
+
 @Injectable({
   providedIn: 'root',
 })
@@ -19,7 +39,9 @@ export class AppInterceptorService implements HttpInterceptor {
     request: HttpRequest<any>,
     next: HttpHandler
   ): Observable<HttpEvent<any>> {
-    const modifiedRequest = request;
+    const modifiedRequest = request.body
+      ? request.clone({ body: serializeDates(request.body) })
+      : request;
 
     return next.handle(modifiedRequest).pipe(
       catchError((error: HttpErrorResponse) => {
