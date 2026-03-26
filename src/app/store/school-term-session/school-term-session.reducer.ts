@@ -290,7 +290,10 @@ export const reducer = createReducer(
     ...state,
     loading: false,
     error,
-  }))
+  })),
+  on(SchoolTermSessionAction.setSchoolTermSessionAsCurrent, (state) => ({ ...state, loading: true, error: null })),
+  on(SchoolTermSessionAction.setSchoolTermSessionAsCurrentSuccess, (state) => ({ ...state, loading: false })),
+  on(SchoolTermSessionAction.setSchoolTermSessionAsCurrentFail, (state, { error }) => ({ ...state, loading: false, error }))
 );
 
 export const selectSchoolTermSessionState = createFeatureSelector<SchoolTermSessionState>(

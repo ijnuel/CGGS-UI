@@ -290,7 +290,10 @@ export const reducer = createReducer(
     ...state,
     loading: false,
     error,
-  }))
+  })),
+  on(SessionAction.setSessionAsCurrent, (state) => ({ ...state, loading: true, error: null })),
+  on(SessionAction.setSessionAsCurrentSuccess, (state) => ({ ...state, loading: false })),
+  on(SessionAction.setSessionAsCurrentFail, (state, { error }) => ({ ...state, loading: false, error }))
 );
 
 export const selectSessionState = createFeatureSelector<SessionState>(

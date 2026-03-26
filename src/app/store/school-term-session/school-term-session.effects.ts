@@ -321,6 +321,25 @@ export class SchoolTermSessionEffect {
     )
   );
 
+  // Set As Current
+  $setSchoolTermSessionAsCurrent = createEffect(() =>
+    this.actions$.pipe(
+      ofType(SchoolTermSessionAction.setSchoolTermSessionAsCurrent),
+      switchMap(({ schoolTermSessionId }) =>
+        this.http
+          .put<GenericResponseInterface<boolean>>(
+            `${environment.baseUrl}/SchoolTermSession/SetAsCurrent`,
+            {},
+            { params: { id: schoolTermSessionId }, withCredentials: true }
+          )
+          .pipe(
+            map((payload) => SchoolTermSessionAction.setSchoolTermSessionAsCurrentSuccess({ payload })),
+            catchError((error) => of(SchoolTermSessionAction.setSchoolTermSessionAsCurrentFail({ error })))
+          )
+      )
+    )
+  );
+
   // Loading Effects
   $schoolTermSessionLoading = createEffect(
     () =>

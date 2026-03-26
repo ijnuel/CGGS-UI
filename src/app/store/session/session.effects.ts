@@ -314,6 +314,25 @@ export class SessionEffect {
     )
   );
 
+  // Set As Current
+  $setSessionAsCurrent = createEffect(() =>
+    this.actions$.pipe(
+      ofType(SessionAction.setSessionAsCurrent),
+      switchMap(({ sessionId }) =>
+        this.http
+          .put<GenericResponseInterface<boolean>>(
+            `${environment.baseUrl}/Session/SetAsCurrent`,
+            {},
+            { params: { id: sessionId }, withCredentials: true }
+          )
+          .pipe(
+            map((payload) => SessionAction.setSessionAsCurrentSuccess({ payload })),
+            catchError((error) => of(SessionAction.setSessionAsCurrentFail({ error })))
+          )
+      )
+    )
+  );
+
   // Loading Effects
   $sessionLoading = createEffect(
     () =>

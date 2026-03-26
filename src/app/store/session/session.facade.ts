@@ -109,4 +109,8 @@ export class SessionFacade {
   deleteManySessions(sessionIds: string[]): void {
     this.store.dispatch(SessionAction.deleteManySessions({ sessionIds }));
   }
+
+  setSessionAsCurrent(sessionId: string): void {
+    this.store.dispatch(SessionAction.setSessionAsCurrent({ sessionId }));
+  }
 }

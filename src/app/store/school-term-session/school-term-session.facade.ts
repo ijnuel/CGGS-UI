@@ -109,4 +109,8 @@ export class SchoolTermSessionFacade {
   deleteManySchoolTermSessions(schoolTermSessionIds: string[]): void {
     this.store.dispatch(SchoolTermSessionAction.deleteManySchoolTermSessions({ schoolTermSessionIds }));
   }
+
+  setSchoolTermSessionAsCurrent(schoolTermSessionId: string): void {
+    this.store.dispatch(SchoolTermSessionAction.setSchoolTermSessionAsCurrent({ schoolTermSessionId }));
+  }
 }

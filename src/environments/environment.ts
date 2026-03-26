@@ -4,7 +4,7 @@
 
 export const environment = {
   production: false,
-  baseUrl: 'https://api.chosenschool.org/api',
+  baseUrl: 'https://localhost:7118/api',
   schoolName: 'Chosen Generation',
   schoolNameFull: 'Chosen Generation Schools',
   schoolAbbreviation: 'CGGS',

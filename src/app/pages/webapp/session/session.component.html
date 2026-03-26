@@ -21,9 +21,11 @@
     [showSearch]="true"
     [showFilters]="true"
     [showActionColumn]="true"
+    [customActions]="customActions"
     (queryChange)="onQueryChange($event)"
     (view)="onView($event)"
     (edit)="onEdit($event)"
     (delete)="onDelete($event)"
+    (customAction)="onCustomAction($event)"
   ></app-table>
 </div>

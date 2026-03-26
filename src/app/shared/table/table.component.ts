@@ -8,7 +8,7 @@ import {
   OnDestroy,
 } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
-import { TableHeaderInterface } from '../../types/table';
+import { TableHeaderInterface, TableActionInterface } from '../../types/table';
 import { PageEvent } from '@angular/material/paginator';
 import { PageQueryInterface, QueryInterface, GenericResponseInterface } from '../../types';
 import { FormBuilder, FormGroup } from '@angular/forms';
@@ -51,6 +51,8 @@ export class TableComponent implements OnInit, OnChanges, OnDestroy {
   @Input() exportFileName = 'export';
   @Input() tableData: any[] | null = [];
   @Input() tableHeaderData: TableHeaderInterface[] = [];
+  @Input() customActions: TableActionInterface[] = [];
+  @Output() customAction = new EventEmitter<{ key: string; row: any }>();
 
   filterForm: FormGroup;
   searchForm: FormGroup;
@@ -247,6 +249,7 @@ export class TableComponent implements OnInit, OnChanges, OnDestroy {
   onView(row: any) { this.view.emit(row); }
   onEdit(row: any) { this.edit.emit(row); }
   onDelete(row: any) { this.delete.emit(row); }
+  onCustomAction(key: string, row: any) { this.customAction.emit({ key, row }); }
 
   exportToCsv() {
     if (!this.exportEndpoint || this.isExporting) return;

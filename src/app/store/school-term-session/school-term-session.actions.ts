@@ -219,3 +219,17 @@ export const deleteManySchoolTermSessionsFail = createAction(
   '[SchoolTermSession/API] Delete Many Fail',
   props<{ error: string }>()
 );
+
+// Set As Current
+export const setSchoolTermSessionAsCurrent = createAction(
+  '[SchoolTermSession] Set As Current',
+  props<{ schoolTermSessionId: string }>()
+);
+export const setSchoolTermSessionAsCurrentSuccess = createAction(
+  '[SchoolTermSession/API] Set As Current Success',
+  props<{ payload: GenericResponseInterface<boolean> }>()
+);
+export const setSchoolTermSessionAsCurrentFail = createAction(
+  '[SchoolTermSession/API] Set As Current Fail',
+  props<{ error: string }>()
+);

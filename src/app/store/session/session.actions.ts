@@ -8,6 +8,20 @@ import {
   SessionFormInterface,
 } from '../../types';
 
+// Set As Current
+export const setSessionAsCurrent = createAction(
+  '[Session] Set As Current',
+  props<{ sessionId: string }>()
+);
+export const setSessionAsCurrentSuccess = createAction(
+  '[Session/API] Set As Current Success',
+  props<{ payload: GenericResponseInterface<boolean> }>()
+);
+export const setSessionAsCurrentFail = createAction(
+  '[Session/API] Set As Current Fail',
+  props<{ error: string }>()
+);
+
 // Get All (non-paginated)
 export const getSessionAll = createAction('[Session] Get All', props<{ query?: QueryInterface }>());
 
