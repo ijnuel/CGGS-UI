@@ -1,13 +1,85 @@
+// ── Wrapper ───────────────────────────────────────────────────────────────────
+
+.table-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+// ── Toolbar ───────────────────────────────────────────────────────────────────
+
+.table-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.search-wrap {
+  flex: 1;
+  max-width: 320px;
+}
+
+.search-field {
+  width: 100%;
+}
+
+.search-prefix-icon {
+  font-size: 18px;
+  width: 18px;
+  height: 18px;
+  color: rgba(0, 0, 0, 0.35);
+  margin-right: 4px;
+}
+
+.clear-icon {
+  font-size: 16px;
+  width: 16px;
+  height: 16px;
+}
+
+.export-btn {
+  white-space: nowrap;
+  flex-shrink: 0;
+  color: rgba(0, 0, 0, 0.6) !important;
+  border-color: rgba(0, 0, 0, 0.15) !important;
+}
+
+// ── Card shell ────────────────────────────────────────────────────────────────
+
+.table-card {
+  background: #fff;
+  border: 1px solid #e8eaed;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+}
+
+.table-scroll {
+  overflow-x: auto;
+}
+
+// ── Table base ────────────────────────────────────────────────────────────────
+
 table {
   width: 100%;
 }
 
-// ── Header ───────────────────────────────────────────────────────────────────
+// ── Header row ────────────────────────────────────────────────────────────────
 
 tr.mat-mdc-header-row {
   height: 2.75rem;
   background-color: var(--app-table-header-bg) !important;
+}
+
+th.mat-mdc-header-cell {
+  font-size: 11px !important;
+  font-weight: 600 !important;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
   color: var(--app-table-header-color) !important;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1) !important;
 }
 
 .header-cell-content {
@@ -17,6 +89,27 @@ tr.mat-mdc-header-row {
   white-space: nowrap;
 }
 
+// ── Data rows ─────────────────────────────────────────────────────────────────
+
+tr.data-row {
+  height: 3rem;
+  transition: background 0.12s;
+
+  &:hover {
+    background-color: var(--app-bg) !important;
+  }
+
+  &:last-child td {
+    border-bottom: none !important;
+  }
+}
+
+td.mat-mdc-cell {
+  font-size: 13px;
+  color: rgba(0, 0, 0, 0.75);
+  border-bottom-color: #f0f0f0 !important;
+}
+
 // ── Sort ─────────────────────────────────────────────────────────────────────
 
 .sortable-header {
@@ -24,31 +117,32 @@ tr.mat-mdc-header-row {
   user-select: none;
 
   &:hover .sort-inactive {
-    opacity: 0.65;
+    opacity: 0.55;
   }
 }
 
 .sort-icon {
-  font-size: 16px;
-  width: 16px;
-  height: 16px;
+  font-size: 14px;
+  width: 14px;
+  height: 14px;
   flex-shrink: 0;
 }
 
 .sort-inactive {
-  opacity: 0.3;
+  opacity: 0.25;
 }
 
 .sort-active {
   opacity: 1;
+  color: var(--app-table-header-color);
 }
 
-// ── Filter row ───────────────────────────────────────────────────────────────
+// ── Filter row ────────────────────────────────────────────────────────────────
 
 tr.filter-row.mat-mdc-header-row {
   height: 2.5rem;
   background-color: #fafafa !important;
-  border-top: 1px solid rgba(0, 0, 0, 0.1);
+  border-top: 1px solid #efefef;
 }
 
 .filter-cell {
@@ -65,22 +159,22 @@ tr.filter-row.mat-mdc-header-row {
   padding: 4px 8px;
   font-size: 12px;
   font-family: inherit;
-  color: rgba(0, 0, 0, 0.87);
-  border: 1px solid rgba(0, 0, 0, 0.18);
-  border-radius: 4px;
+  color: rgba(0, 0, 0, 0.8);
+  border: 1px solid rgba(0, 0, 0, 0.15);
+  border-radius: 6px;
   background: #fff;
   outline: none;
   box-sizing: border-box;
-  height: 30px;
-  transition: border-color 0.15s;
+  height: 28px;
+  transition: border-color 0.15s, box-shadow 0.15s;
 
   &:focus {
-    border-color: var(--mdc-theme-primary, #3498db);
-    box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.15);
+    border-color: var(--app-accent);
+    box-shadow: 0 0 0 2px color-mix(in srgb, var(--app-accent) 15%, transparent);
   }
 
   &::placeholder {
-    color: rgba(0, 0, 0, 0.32);
+    color: rgba(0, 0, 0, 0.28);
     font-size: 11px;
   }
 }
@@ -93,20 +187,20 @@ tr.filter-row.mat-mdc-header-row {
 .col-filter-select {
   width: 100%;
   font-size: 12px;
-  line-height: 30px;
+  line-height: 28px;
 }
 
 .clear-filters-btn {
-  width: 30px;
-  height: 30px;
-  line-height: 30px;
-  color: rgba(0, 0, 0, 0.45);
+  width: 28px;
+  height: 28px;
+  line-height: 28px;
+  color: rgba(0, 0, 0, 0.38);
 
   &:hover {
-    color: rgba(0, 0, 0, 0.75);
+    color: rgba(0, 0, 0, 0.65);
   }
 
-  .mat-icon {
+  mat-icon {
     font-size: 16px;
     width: 16px;
     height: 16px;
@@ -114,7 +208,12 @@ tr.filter-row.mat-mdc-header-row {
   }
 }
 
-// ── Actions column ───────────────────────────────────────────────────────────
+// ── Alignment ─────────────────────────────────────────────────────────────────
+
+.col-center { text-align: center; }
+.col-right  { text-align: right; }
+
+// ── Actions column ────────────────────────────────────────────────────────────
 
 .actions-header,
 .actions-cell {
@@ -122,29 +221,52 @@ tr.filter-row.mat-mdc-header-row {
   white-space: nowrap;
 }
 
-// ── Alignment ────────────────────────────────────────────────────────────────
-
-.col-center {
-  text-align: center;
+.actions-group {
+  display: flex;
+  gap: 2px;
+  align-items: center;
 }
 
-.col-right {
-  text-align: right;
+// ── Boolean badge ─────────────────────────────────────────────────────────────
+
+.bool-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  padding: 2px 8px 2px 4px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 500;
+
+  &.bool-yes {
+    background: #ecfdf5;
+    color: #059669;
+  }
+
+  &.bool-no {
+    background: #fef2f2;
+    color: #dc2626;
+  }
 }
 
-// ── Skeleton rows ────────────────────────────────────────────────────────────
+.bool-icon {
+  font-size: 13px !important;
+  width: 13px !important;
+  height: 13px !important;
+}
+
+// ── Skeleton rows ─────────────────────────────────────────────────────────────
 
 .skeleton-row {
   pointer-events: none;
 }
 
 .skeleton-bar {
-  height: 14px;
+  height: 13px;
   border-radius: 6px;
-  background: linear-gradient(90deg, #e8e8e8 25%, #f4f4f4 50%, #e8e8e8 75%);
+  background: linear-gradient(90deg, #efefef 25%, #f8f8f8 50%, #efefef 75%);
   background-size: 200% 100%;
   animation: skeleton-shimmer 1.4s ease-in-out infinite;
-  margin: 2px 0;
   max-width: 80%;
 }
 
@@ -153,23 +275,45 @@ tr.filter-row.mat-mdc-header-row {
   100% { background-position: -200% 0; }
 }
 
-// ── Empty state ──────────────────────────────────────────────────────────────
+// ── Empty state ───────────────────────────────────────────────────────────────
 
-.no-data-message {
-  text-align: center;
-  padding: 2.5rem 1rem;
-  color: rgba(0, 0, 0, 0.45);
-  font-size: 14px;
-}
-
-// ── Search bar ───────────────────────────────────────────────────────────────
-
-.search-bar {
+.empty-state {
   display: flex;
-  justify-content: flex-end;
-  margin-bottom: 12px;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 48px 24px;
+  color: rgba(0, 0, 0, 0.3);
 }
 
-.search-field {
-  width: 260px;
+.empty-icon {
+  font-size: 44px !important;
+  width: 44px !important;
+  height: 44px !important;
+  margin-bottom: 12px;
+  opacity: 0.4;
+}
+
+.empty-title {
+  font-size: 14px;
+  font-weight: 600;
+  color: rgba(0, 0, 0, 0.45);
+  margin: 0;
+}
+
+.empty-sub {
+  font-size: 12px;
+  color: rgba(0, 0, 0, 0.28);
+  margin: 4px 0 0;
+}
+
+// ── Paginator ─────────────────────────────────────────────────────────────────
+
+.paginator-wrap {
+  border-top: 1px solid #f0f0f0;
+
+  .mat-mdc-paginator {
+    background: transparent;
+    font-size: 12px;
+  }
 }

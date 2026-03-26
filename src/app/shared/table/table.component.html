@@ -1,161 +1,153 @@
-<div class="table-container">
+<div class="table-wrap">
 
-  <!-- Global Search Bar -->
-  <div *ngIf="showSearch" class="search-bar" [formGroup]="searchForm">
-    <mat-form-field appearance="outline" subscriptSizing="dynamic" class="search-field">
-      <mat-label>Search</mat-label>
-      <input matInput formControlName="search" placeholder="Search...">
-      <mat-icon matSuffix>search</mat-icon>
-    </mat-form-field>
-  </div>
-
-  <div *ngIf="showExport" class="flex justify-end mb-2">
-    <button mat-stroked-button (click)="exportToCsv()" [disabled]="isExporting">
+  <!-- Toolbar: search + export -->
+  <div *ngIf="showSearch || showExport" class="table-toolbar">
+    <div *ngIf="showSearch" [formGroup]="searchForm" class="search-wrap">
+      <mat-form-field appearance="outline" subscriptSizing="dynamic" class="search-field">
+        <mat-icon matPrefix class="search-prefix-icon">search</mat-icon>
+        <input matInput formControlName="search" placeholder="Search…">
+        <button *ngIf="searchForm.get('search')?.value" matSuffix mat-icon-button
+          (click)="searchForm.get('search')!.setValue('')">
+          <mat-icon class="clear-icon">close</mat-icon>
+        </button>
+      </mat-form-field>
+    </div>
+    <button *ngIf="showExport" mat-stroked-button class="export-btn" (click)="exportToCsv()" [disabled]="isExporting">
       <mat-icon>download</mat-icon>
-      {{ isExporting ? 'Exporting...' : 'Export CSV' }}
+      {{ isExporting ? 'Exporting…' : 'Export CSV' }}
     </button>
   </div>
 
-  <div class="mat-elevation-z8" [formGroup]="filterForm">
-    <table mat-table [dataSource]="dataSource" class="w-full">
+  <!-- Table -->
+  <div class="table-card" [formGroup]="filterForm">
+    <div class="table-scroll">
+      <table mat-table [dataSource]="dataSource" class="w-full">
 
-      <!-- Dynamic Data Columns -->
-      <ng-container *ngFor="let header of tableHeaderData" [matColumnDef]="header.key">
-        <th mat-header-cell *matHeaderCellDef
-            [class.sortable-header]="header.sortable"
-            [class.col-center]="header.align === 'center'"
-            [class.col-right]="header.align === 'right'"
-            (click)="onSort(header)">
-          <div class="header-cell-content">
-            <span>{{ header.name }}</span>
-            <mat-icon *ngIf="header.sortable && sortColumn === header.key" class="sort-icon sort-active">
-              {{ sortDescending ? 'arrow_downward' : 'arrow_upward' }}
-            </mat-icon>
-            <mat-icon *ngIf="header.sortable && sortColumn !== header.key" class="sort-icon sort-inactive">
-              swap_vert
-            </mat-icon>
-          </div>
-        </th>
-        <td mat-cell *matCellDef="let row"
-            [class.col-center]="header.align === 'center'"
-            [class.col-right]="header.align === 'right'">
-          <ng-container *ngIf="header.format && header.type !== 'boolean' && header.type !== 'date'">
-            {{ header.format(getValue(row, header), row) }}
-          </ng-container>
-          <ng-container *ngIf="!header.format && header.type !== 'boolean' && header.type !== 'date'">
-            {{ getValue(row, header) }}
-          </ng-container>
-          <ng-container *ngIf="header.type === 'boolean'">
-            <mat-icon [color]="getValue(row, header) ? 'primary' : 'warn'">
-              {{ getValue(row, header) ? 'check' : 'close' }}
-            </mat-icon>
-          </ng-container>
-          <ng-container *ngIf="header.type === 'date'">
-            {{ getValue(row, header) | date:'dd/MM/yyyy' }}
-          </ng-container>
-        </td>
-      </ng-container>
+        <!-- Dynamic data columns -->
+        <ng-container *ngFor="let header of tableHeaderData" [matColumnDef]="header.key">
+          <th mat-header-cell *matHeaderCellDef
+              [class.sortable-header]="header.sortable"
+              [class.col-center]="header.align === 'center'"
+              [class.col-right]="header.align === 'right'"
+              (click)="onSort(header)">
+            <div class="header-cell-content">
+              <span>{{ header.name }}</span>
+              <mat-icon *ngIf="header.sortable && sortColumn === header.key" class="sort-icon sort-active">
+                {{ sortDescending ? 'arrow_downward' : 'arrow_upward' }}
+              </mat-icon>
+              <mat-icon *ngIf="header.sortable && sortColumn !== header.key" class="sort-icon sort-inactive">
+                swap_vert
+              </mat-icon>
+            </div>
+          </th>
+          <td mat-cell *matCellDef="let row"
+              [class.col-center]="header.align === 'center'"
+              [class.col-right]="header.align === 'right'">
+            <ng-container *ngIf="header.format && header.type !== 'boolean' && header.type !== 'date'">
+              {{ header.format(getValue(row, header), row) }}
+            </ng-container>
+            <ng-container *ngIf="!header.format && header.type !== 'boolean' && header.type !== 'date'">
+              {{ getValue(row, header) }}
+            </ng-container>
+            <ng-container *ngIf="header.type === 'boolean'">
+              <span class="bool-badge" [class.bool-yes]="getValue(row, header)" [class.bool-no]="!getValue(row, header)">
+                <mat-icon class="bool-icon">{{ getValue(row, header) ? 'check' : 'close' }}</mat-icon>
+                {{ getValue(row, header) ? 'Yes' : 'No' }}
+              </span>
+            </ng-container>
+            <ng-container *ngIf="header.type === 'date'">
+              {{ getValue(row, header) | date:'dd/MM/yyyy' }}
+            </ng-container>
+          </td>
+        </ng-container>
 
-      <!-- Skeleton Columns (one per data column) -->
-      <ng-container *ngFor="let header of tableHeaderData" [matColumnDef]="'skeleton_' + header.key">
-        <td mat-cell *matCellDef="let row">
-          <div class="skeleton-bar"></div>
-        </td>
-      </ng-container>
-      <ng-container matColumnDef="skeleton_actions">
-        <td mat-cell *matCellDef="let row"></td>
-      </ng-container>
+        <!-- Skeleton columns -->
+        <ng-container *ngFor="let header of tableHeaderData" [matColumnDef]="'skeleton_' + header.key">
+          <td mat-cell *matCellDef="let row"><div class="skeleton-bar"></div></td>
+        </ng-container>
+        <ng-container matColumnDef="skeleton_actions">
+          <td mat-cell *matCellDef="let row"></td>
+        </ng-container>
 
-      <!-- Filter Row Column Defs -->
-      <ng-container *ngFor="let header of tableHeaderData" [matColumnDef]="'filter_' + header.key">
-        <th mat-header-cell *matHeaderCellDef class="filter-cell">
-          <ng-container *ngIf="header.filterable">
-
-            <input *ngIf="!header.type || header.type === 'text'"
-              class="col-filter-input"
-              type="text"
-              [formControlName]="header.key"
-              [placeholder]="'Filter ' + header.name" />
-
-            <input *ngIf="header.type === 'number'"
-              class="col-filter-input"
-              type="number"
-              [formControlName]="header.key"
-              [placeholder]="'Filter ' + header.name" />
-
-            <input *ngIf="header.type === 'date'"
-              class="col-filter-input col-filter-date"
-              type="date"
-              [formControlName]="header.key" />
-
-            <mat-select *ngIf="header.type === 'boolean'"
-              class="col-filter-select"
-              [formControlName]="header.key">
-              <mat-option value="">All</mat-option>
-              <mat-option value="true">Yes</mat-option>
-              <mat-option value="false">No</mat-option>
-            </mat-select>
-
-          </ng-container>
-        </th>
-      </ng-container>
-
-      <!-- Filter cell for actions column -->
-      <ng-container matColumnDef="filter_actions">
-        <th mat-header-cell *matHeaderCellDef class="filter-cell filter-cell-actions">
-          <button mat-icon-button
-            class="clear-filters-btn"
-            matTooltip="Clear column filters"
-            (click)="clearColumnFilters()">
-            <mat-icon>filter_alt_off</mat-icon>
-          </button>
-        </th>
-      </ng-container>
-
-      <!-- Action Column -->
-      <ng-container matColumnDef="actions">
-        <th mat-header-cell *matHeaderCellDef class="actions-header">Actions</th>
-        <td mat-cell *matCellDef="let row" class="actions-cell">
-          <div class="flex gap-1">
-            <button *ngIf="showViewIcon" mat-icon-button color="primary" (click)="onView(row)" matTooltip="View">
-              <mat-icon>visibility</mat-icon>
+        <!-- Filter row columns -->
+        <ng-container *ngFor="let header of tableHeaderData" [matColumnDef]="'filter_' + header.key">
+          <th mat-header-cell *matHeaderCellDef class="filter-cell">
+            <ng-container *ngIf="header.filterable">
+              <input *ngIf="!header.type || header.type === 'text'"
+                class="col-filter-input" type="text"
+                [formControlName]="header.key"
+                [placeholder]="'Filter ' + header.name" />
+              <input *ngIf="header.type === 'number'"
+                class="col-filter-input" type="number"
+                [formControlName]="header.key"
+                [placeholder]="'Filter ' + header.name" />
+              <input *ngIf="header.type === 'date'"
+                class="col-filter-input col-filter-date" type="date"
+                [formControlName]="header.key" />
+              <mat-select *ngIf="header.type === 'boolean'"
+                class="col-filter-select" [formControlName]="header.key">
+                <mat-option value="">All</mat-option>
+                <mat-option value="true">Yes</mat-option>
+                <mat-option value="false">No</mat-option>
+              </mat-select>
+            </ng-container>
+          </th>
+        </ng-container>
+        <ng-container matColumnDef="filter_actions">
+          <th mat-header-cell *matHeaderCellDef class="filter-cell filter-cell-actions">
+            <button mat-icon-button class="clear-filters-btn" matTooltip="Clear filters" (click)="clearColumnFilters()">
+              <mat-icon>filter_alt_off</mat-icon>
             </button>
-            <button *ngIf="showEditIcon" mat-icon-button color="accent" (click)="onEdit(row)" matTooltip="Edit">
-              <mat-icon>edit</mat-icon>
-            </button>
-            <button *ngIf="showDeleteIcon" mat-icon-button color="warn" (click)="onDelete(row)" matTooltip="Delete">
-              <mat-icon>delete</mat-icon>
-            </button>
-          </div>
-        </td>
-      </ng-container>
+          </th>
+        </ng-container>
 
-      <!-- Header rows (always visible) -->
-      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-      <ng-container *ngIf="showFilters">
-        <tr mat-header-row *matHeaderRowDef="filterColumns" class="filter-row"></tr>
-      </ng-container>
+        <!-- Actions column -->
+        <ng-container matColumnDef="actions">
+          <th mat-header-cell *matHeaderCellDef class="actions-header">Actions</th>
+          <td mat-cell *matCellDef="let row" class="actions-cell">
+            <div class="actions-group">
+              <button *ngIf="showViewIcon" mat-icon-button (click)="onView(row)" matTooltip="View">
+                <mat-icon class="!text-blue-500">visibility</mat-icon>
+              </button>
+              <button *ngIf="showEditIcon" mat-icon-button (click)="onEdit(row)" matTooltip="Edit">
+                <mat-icon class="!text-indigo-500">edit</mat-icon>
+              </button>
+              <button *ngIf="showDeleteIcon" mat-icon-button (click)="onDelete(row)" matTooltip="Delete">
+                <mat-icon class="!text-red-400">delete</mat-icon>
+              </button>
+            </div>
+          </td>
+        </ng-container>
 
-      <!-- Skeleton rows (while loading) -->
-      <tr mat-row *matRowDef="let row; columns: skeletonColumns; when: skeletonPredicate" class="skeleton-row"></tr>
+        <!-- Row definitions -->
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <ng-container *ngIf="showFilters">
+          <tr mat-header-row *matHeaderRowDef="filterColumns" class="filter-row"></tr>
+        </ng-container>
+        <tr mat-row *matRowDef="let row; columns: skeletonColumns; when: skeletonPredicate" class="skeleton-row"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns; when: dataPredicate" class="data-row"></tr>
 
-      <!-- Data rows -->
-      <tr mat-row *matRowDef="let row; columns: displayedColumns; when: dataPredicate"></tr>
-
-    </table>
-
-    <div *ngIf="!isLoading && (!tableData || tableData.length === 0)" class="no-data-message">
-      No data available
+      </table>
     </div>
 
-    <mat-paginator *ngIf="showPaginator"
-      [length]="totalLength"
-      [pageSize]="internalPageSize"
-      [pageIndex]="internalPageIndex"
-      [pageSizeOptions]="[5, 10, 25, 100]"
-      (page)="onPageChange($event)"
-      aria-label="Select page">
-    </mat-paginator>
+    <!-- Empty state -->
+    <div *ngIf="!isLoading && (!tableData || tableData.length === 0)" class="empty-state">
+      <mat-icon class="empty-icon">inbox</mat-icon>
+      <p class="empty-title">No records found</p>
+      <p class="empty-sub">Try adjusting your search or filters</p>
+    </div>
+
+    <!-- Paginator -->
+    <div *ngIf="showPaginator" class="paginator-wrap">
+      <mat-paginator
+        [length]="totalLength"
+        [pageSize]="internalPageSize"
+        [pageIndex]="internalPageIndex"
+        [pageSizeOptions]="[5, 10, 25, 100]"
+        (page)="onPageChange($event)"
+        aria-label="Select page">
+      </mat-paginator>
+    </div>
   </div>
 
 </div>

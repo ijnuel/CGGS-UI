@@ -4,32 +4,32 @@
       @if(item.url) {
         <a
           [routerLink]="item.url"
-          routerLinkActive="ring-2 ring-indigo-400 border-indigo-200"
+          routerLinkActive="active-card"
           [routerLinkActiveOptions]="{ exact: false }"
           matRipple
-          class="bg-white border border-gray-100 rounded-xl p-5 flex flex-col gap-4 shadow-sm hover:shadow-md hover:border-indigo-200 transition-all cursor-pointer no-underline group"
+          class="nav-card"
         >
           <div class="flex items-start justify-between">
-            <div class="w-11 h-11 rounded-lg bg-indigo-50 group-hover:bg-indigo-100 flex items-center justify-center transition-colors flex-shrink-0">
+            <div class="nav-card-icon-box">
               @if(item.matIcon) {
-                <mat-icon class="!text-indigo-500">{{ item.matIcon }}</mat-icon>
+                <mat-icon class="nav-card-icon">{{ item.matIcon }}</mat-icon>
               } @else {
                 <img [src]="item.icon" alt="{{ item.name }} icon" class="w-5 h-5" />
               }
             </div>
-            <mat-icon class="text-gray-300 group-hover:text-indigo-400 transition-colors">arrow_forward</mat-icon>
+            <mat-icon class="nav-card-arrow">arrow_forward</mat-icon>
           </div>
           <div>
-            <p class="text-sm font-semibold text-gray-800">{{ item.name }}</p>
+            <p class="nav-card-name">{{ item.name }}</p>
             @if(item.description) {
-              <p class="text-xs text-gray-400 mt-0.5">{{ item.description }}</p>
+              <p class="nav-card-desc">{{ item.description }}</p>
             }
           </div>
         </a>
       } @else {
-        <div class="bg-gray-50 border border-gray-100 rounded-xl p-5 flex flex-col gap-4 cursor-not-allowed opacity-50">
+        <div class="nav-card-disabled">
           <div class="flex items-start justify-between">
-            <div class="w-11 h-11 rounded-lg bg-gray-100 flex items-center justify-center flex-shrink-0">
+            <div class="nav-card-icon-box">
               @if(item.matIcon) {
                 <mat-icon class="text-gray-400">{{ item.matIcon }}</mat-icon>
               } @else {
@@ -38,9 +38,9 @@
             </div>
           </div>
           <div>
-            <p class="text-sm font-semibold text-gray-500">{{ item.name }}</p>
+            <p class="nav-card-name">{{ item.name }}</p>
             @if(item.description) {
-              <p class="text-xs text-gray-400 mt-0.5">{{ item.description }}</p>
+              <p class="nav-card-desc">{{ item.description }}</p>
             }
           </div>
         </div>
