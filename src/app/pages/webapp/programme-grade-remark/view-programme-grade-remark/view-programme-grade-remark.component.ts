@@ -3,7 +3,7 @@ import { Location } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { ProgrammeGradeRemarkFacade } from '../../../../store/programme-grade-remark/programme-grade-remark.facade';
-import { ProgrammeGradeRemarkFormInterface } from '../../../../types';
+import { ProgrammeGradeRemarkListInterface } from '../../../../types';
 
 @Component({
   selector: 'app-view-programme-grade-remark',
@@ -11,7 +11,7 @@ import { ProgrammeGradeRemarkFormInterface } from '../../../../types';
   styleUrls: ['./view-programme-grade-remark.component.scss'],
 })
 export class ViewProgrammeGradeRemarkComponent implements OnInit {
-  programmeGradeRemark$: Observable<ProgrammeGradeRemarkFormInterface | null>;
+  programmeGradeRemark$: Observable<ProgrammeGradeRemarkListInterface | null>;
 
   constructor(
     private route: ActivatedRoute,

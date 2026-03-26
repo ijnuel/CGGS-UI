@@ -3,6 +3,7 @@ import { Store } from '@ngrx/store';
 import * as ClassSubjectResultActions from './class-subject-result.actions';
 import * as ClassSubjectResultSelectors from './class-subject-result.selector';
 import { ClassSubjectResultFormInterface } from '../../types/class-subject-result';
+import { PageQueryInterface } from '../../types';
 
 @Injectable({ providedIn: 'root' })
 export class ClassSubjectResultFacade {
@@ -18,8 +19,8 @@ export class ClassSubjectResultFacade {
     this.store.dispatch(ClassSubjectResultActions.loadClassSubjectResults());
   }
 
-  loadPaginated(page: number, pageSize: number) {
-    this.store.dispatch(ClassSubjectResultActions.loadClassSubjectResultsPaginated({ page, pageSize }));
+  loadPaginated(pageQuery: PageQueryInterface) {
+    this.store.dispatch(ClassSubjectResultActions.loadClassSubjectResultsPaginated({ pageQuery }));
   }
 
   getById(id: string) {

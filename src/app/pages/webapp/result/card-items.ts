@@ -17,4 +17,12 @@ export default [
     roles: [UserRolesEnum.SuperAdmin, UserRolesEnum.Admin],
     url: '/app/result/view'
   },
+  {
+    name: 'View My Result',
+    icon: 'assets/icons/result-icon.svg',
+    matIcon: 'assignment_ind',
+    description: 'View and download your personal result sheet',
+    roles: [UserRolesEnum.Student],
+    url: '/app/result/my-result'
+  },
 ];

@@ -46,7 +46,7 @@ export const classSubjectResultReducer = createReducer(
   })),
   on(ClassSubjectResultActions.loadClassSubjectResultsPaginatedSuccess, (state, { payload }) => ({
     ...state,
-    entities: payload.data,
+    entities: payload.entity.data,
     loading: false,
     error: null,
   })),

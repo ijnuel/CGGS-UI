@@ -11,6 +11,7 @@ import { MatRadioModule } from '@angular/material/radio';
 import { ResultComponent } from './result.component';
 import { UpdateResultComponent } from './update-result/update-result.component';
 import { ViewResultComponent } from './view-result/view-result.component';
+import { StudentResultComponent } from './student-result/student-result.component';
 import { SharedModule } from '../../../shared/shared.module';
 import { provideNativeDateAdapter } from '@angular/material/core';
 
@@ -26,11 +27,15 @@ const routes: Routes = [
     {
         path: 'update',
         component: UpdateResultComponent,
+    },
+    {
+        path: 'my-result',
+        component: StudentResultComponent,
     }
 ];
 
 @NgModule({
-    declarations: [ResultComponent, UpdateResultComponent, ViewResultComponent],
+    declarations: [ResultComponent, UpdateResultComponent, ViewResultComponent, StudentResultComponent],
     imports: [
         CommonModule,
         SharedModule,

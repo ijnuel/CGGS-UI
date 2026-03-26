@@ -35,7 +35,7 @@ const routes: Routes = [
       // ── Staff and above ───────────────────────────────────────────────────
       {
         path: 'result',
-        data: { roles: STAFF_AND_ABOVE },
+        data: { roles: [...STAFF_AND_ABOVE, UserRolesEnum.Student] },
         loadChildren: () => import('./result/result.module').then((m) => m.ResultModule),
       },
 

@@ -8,7 +8,7 @@ import {
     Validators,
 } from '@angular/forms';
 import { getErrorMessageHelper } from '../../../../services/helper.service';
-import { DropdownListInterface, ProgrammeGradeRemarkFormInterface } from '../../../../types';
+import { DropdownListInterface, ProgrammeGradeRemarkFormInterface, ProgrammeGradeRemarkListInterface } from '../../../../types';
 import { SharedFacade } from '../../../../store/shared/shared.facade';
 import { ActivatedRoute, Router } from '@angular/router';
 import { GlobalLoadingFacade } from '../../../../store/global-loading/global-loading.facade';
@@ -21,7 +21,7 @@ import { GlobalLoadingFacade } from '../../../../store/global-loading/global-loa
 export class CreateUpdateProgrammeGradeRemarkComponent implements OnInit, OnDestroy {
     loading$: Observable<boolean>;
     error$: Observable<string | null>;
-    programmeGradeRemarkById$: Observable<ProgrammeGradeRemarkFormInterface | null>;
+    programmeGradeRemarkById$: Observable<ProgrammeGradeRemarkListInterface | null>;
     dropdownLoading$: Observable<boolean>;
 
     formGroup: FormGroup<{
@@ -61,7 +61,7 @@ export class CreateUpdateProgrammeGradeRemarkComponent implements OnInit, OnDest
             this.programmeGradeRemarkById$.pipe(takeUntil(this.unsubscribe$)).subscribe((data) => {
                 if (data) {
                     this.formGroup.patchValue({
-                        name: data.name
+                        name: (data as any).name
                     });
                 }
             });

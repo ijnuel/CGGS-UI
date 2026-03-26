@@ -1,0 +1,52 @@
+<div class="p-6">
+
+  <!-- Page header -->
+  <h2 class="text-xl font-semibold text-gray-800 mb-6">My Result</h2>
+
+  <!-- Criteria card -->
+  <div class="view-card mb-5">
+    <p class="text-sm font-semibold text-gray-700 mb-1">Select Term</p>
+    <p class="text-xs text-gray-400 mb-5">Choose a school term session to view your result</p>
+
+    <form [formGroup]="form">
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-5">
+        <mat-form-field>
+          <mat-label>School Term Session</mat-label>
+          <mat-select formControlName="schoolTermSessionId" required>
+            <mat-option *ngFor="let session of schoolTermSessions$ | async" [value]="session.id">
+              {{ session.session?.name }}, {{ session.termString }} Term
+            </mat-option>
+          </mat-select>
+          <mat-error *ngIf="formControl.schoolTermSessionId?.hasError('required')">
+            School term session is required
+          </mat-error>
+        </mat-form-field>
+      </div>
+
+      <div class="flex items-center gap-2">
+        <mat-checkbox formControlName="hideOverallPosition">
+          <span class="text-sm text-gray-700">Hide overall position on result sheet</span>
+        </mat-checkbox>
+      </div>
+    </form>
+  </div>
+
+  <!-- Action card -->
+  <div class="action-card" [class.action-card-disabled]="form.invalid">
+    <div class="flex items-start justify-between mb-4">
+      <div class="action-icon-box">
+        <mat-icon class="action-icon">picture_as_pdf</mat-icon>
+      </div>
+      <mat-spinner *ngIf="generatingStudentResult$ | async" diameter="20"></mat-spinner>
+    </div>
+    <p class="action-title">Generate My Result Sheet</p>
+    <p class="action-desc">Produces a PDF result sheet for the selected term</p>
+    <button mat-raised-button color="primary" class="action-btn"
+      (click)="generateResult()"
+      [disabled]="form.invalid || (generatingStudentResult$ | async)">
+      <mat-spinner *ngIf="generatingStudentResult$ | async" diameter="16" class="inline-block"></mat-spinner>
+      {{ (generatingStudentResult$ | async) ? 'Generating…' : 'Generate' }}
+    </button>
+  </div>
+
+</div>
