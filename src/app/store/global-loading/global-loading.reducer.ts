@@ -61,6 +61,7 @@ export const reducer = createReducer(
 
 const getLoading = (state: GlobalLoadingState) => state.loading;
 const getErrorMessage = (state: GlobalLoadingState) => state.errorMessage;
+const getSuccessMessage = (state: GlobalLoadingState) => state.successMessage;
 export const selectGlobalLoadingState =
   createFeatureSelector<GlobalLoadingState>(globalLoadingFeatureKey);
 
@@ -72,4 +73,9 @@ export const selectGlobalLoading = createSelector(
 export const selectGlobalError = createSelector(
   selectGlobalLoadingState,
   getErrorMessage
+);
+
+export const selectGlobalSuccess = createSelector(
+  selectGlobalLoadingState,
+  getSuccessMessage
 );

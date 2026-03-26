@@ -13,6 +13,10 @@ export class GlobalLoadingFacade {
     select(GlobalLoadingSelectors.selectGlobalError)
   );
 
+  selectGlobalSuccess$ = this.store.pipe(
+    select(GlobalLoadingSelectors.selectGlobalSuccess)
+  );
+
   constructor(private readonly store: Store) {}
 
   globalLoadingShow(actionType: string, message?: string) {
