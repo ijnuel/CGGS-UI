@@ -47,7 +47,7 @@ jobs:
       run: npm ci --force
       
     - name: npm build
-      run: npm run build-prod
+      run: npm run build-prod-chosen
       
     - name: Copy web config
       run: |
