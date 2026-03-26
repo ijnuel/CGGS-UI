@@ -69,7 +69,7 @@
            <!-- Marksheet Display -->
     <div *ngIf="!(loading$ | async) && !(error$ | async) && (resultMarkSheet$ | async) as marksheet" class="bg-white rounded-lg shadow-md p-6">
       <div class="flex items-center justify-between mb-4">
-        <h3 class="text-lg font-semibold">Student Results ({{ marksheet.length }} records)</h3>
+        <h3 class="text-lg font-semibold">Student Results ({{ studentRows.length }} students)</h3>
         
         <!-- Edit Controls -->
         <div class="flex gap-2">

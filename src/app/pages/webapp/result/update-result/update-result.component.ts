@@ -316,7 +316,7 @@ export class UpdateResultComponent implements OnInit, OnDestroy {
         studentMap.set(student.id, {
           studentNo: student.studentNo,
           studentId: student.id,
-          studentName: `${student.firstName} ${student.lastName}`,
+          studentName: `${student.lastName} ${student.firstName}`,
           assessmentScores: {},
           skillGrades: {},
           comments: {},
