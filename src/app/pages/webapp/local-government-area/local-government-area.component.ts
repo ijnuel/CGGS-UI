@@ -1,7 +1,10 @@
-import { Component } from '@angular/core';
+import { Component, OnDestroy } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
-import { Observable } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
+import { Actions, ofType } from '@ngrx/effects';
 import { LocalGovernmentAreaFacade } from '../../../store/local-government-area/local-government-area.facade';
+import * as LocalGovernmentAreaAction from '../../../store/local-government-area/local-government-area.actions';
 import { LocalGovernmentAreaListInterface } from '../../../types/local-government-area';
 import { PaginatedResponseInterface, PageQueryInterface } from '../../../types';
 import { TableHeaderInterface } from '../../../types/table';
@@ -15,7 +18,8 @@ import { tableHeader } from './table-header';
   templateUrl: './local-government-area.component.html',
   styleUrls: ['./local-government-area.component.scss'],
 })
-export class LocalGovernmentAreaComponent {
+export class LocalGovernmentAreaComponent implements OnDestroy {
+  private destroy$ = new Subject<void>();
   localGovernmentAreaList$: Observable<PaginatedResponseInterface<LocalGovernmentAreaListInterface[]> | null>;
   loading$: Observable<boolean>;
   tableHeaderData: TableHeaderInterface[] = tableHeader;
@@ -25,11 +29,25 @@ export class LocalGovernmentAreaComponent {
     private router: Router,
     private route: ActivatedRoute,
     private localGovernmentAreaFacade: LocalGovernmentAreaFacade,
+    private actions$: Actions,
     private dialog: MatDialog,
     private toastService: ToastNotificationService
   ) {
     this.localGovernmentAreaList$ = this.localGovernmentAreaFacade.localGovernmentAreaList$;
     this.loading$ = this.localGovernmentAreaFacade.loading$;
+
+    this.actions$.pipe(
+      ofType(LocalGovernmentAreaAction.deleteLocalGovernmentAreaSuccess),
+      takeUntil(this.destroy$)
+    ).subscribe(() => {
+      this.toastService.openToast('Local Government Area deleted successfully', NotificationTypeEnums.SUCCESS);
+      this.localGovernmentAreaFacade.getLocalGovernmentAreaList(this.lastQuery);
+    });
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 
   onQueryChange(query: PageQueryInterface) {
@@ -63,8 +81,6 @@ export class LocalGovernmentAreaComponent {
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
         this.localGovernmentAreaFacade.deleteLocalGovernmentArea(row.id);
-        this.toastService.openToast('Local Government Area deleted successfully', NotificationTypeEnums.SUCCESS);
-        this.localGovernmentAreaFacade.getLocalGovernmentAreaList(this.lastQuery);
       }
     });
   }

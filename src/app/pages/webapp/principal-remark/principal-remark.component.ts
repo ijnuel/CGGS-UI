@@ -1,7 +1,9 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Observable, Subject } from 'rxjs';
 import { filter, takeUntil } from 'rxjs/operators';
+import { Actions, ofType } from '@ngrx/effects';
 import { PrincipalRemarkFacade } from '../../../store/principal-remark/principal-remark.facade';
+import * as PrincipalRemarkAction from '../../../store/principal-remark/principal-remark.actions';
 import { PrincipalRemarkListInterface } from '../../../types/principal-remark';
 import { PaginatedResponseInterface, PageQueryInterface, ProgramTypeListInterface } from '../../../types';
 import { TableHeaderInterface } from '../../../types/table';
@@ -37,6 +39,7 @@ export class PrincipalRemarkComponent implements OnInit, OnDestroy {
   constructor(
     private principalRemarkFacade: PrincipalRemarkFacade,
     private programTypeFacade: ProgramTypeFacade,
+    private actions$: Actions,
     private dialog: MatDialog,
     private toastService: ToastNotificationService,
     private fb: FormBuilder
@@ -58,20 +61,18 @@ export class PrincipalRemarkComponent implements OnInit, OnDestroy {
         this.currentRemarks = response?.data ?? [];
       });
 
-    this.principalRemarkFacade.deleteSuccess$
-      .pipe(
-        takeUntil(this.destroy$),
-        filter((success) => success)
-      )
-      .subscribe(() => {
-        this.toastService.openToast('Principal Remark deleted successfully', NotificationTypeEnums.SUCCESS);
-        this.loadPrincipalRemarks();
-      });
+    this.actions$.pipe(
+      ofType(PrincipalRemarkAction.deletePrincipalRemarkSuccess),
+      takeUntil(this.destroy$)
+    ).subscribe(() => {
+      this.toastService.openToast('Principal Remark deleted successfully', NotificationTypeEnums.SUCCESS);
+      this.loadPrincipalRemarks();
+    });
 
     this.principalRemarkFacade.createSuccess$
       .pipe(
         takeUntil(this.destroy$),
-        filter((success) => success)
+        filter((success: boolean) => success)
       )
       .subscribe(() => {
         this.loadPrincipalRemarks();
@@ -80,7 +81,7 @@ export class PrincipalRemarkComponent implements OnInit, OnDestroy {
     this.principalRemarkFacade.updateSuccess$
       .pipe(
         takeUntil(this.destroy$),
-        filter((success) => success)
+        filter((success: boolean) => success)
       )
       .subscribe(() => {
         this.loadPrincipalRemarks();

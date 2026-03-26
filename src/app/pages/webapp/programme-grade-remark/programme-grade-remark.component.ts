@@ -1,7 +1,9 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Observable, Subject } from 'rxjs';
-import { filter, takeUntil } from 'rxjs/operators';
+import { takeUntil } from 'rxjs/operators';
+import { Actions, ofType } from '@ngrx/effects';
 import { ProgrammeGradeRemarkFacade } from '../../../store/programme-grade-remark/programme-grade-remark.facade';
+import * as ProgrammeGradeRemarkAction from '../../../store/programme-grade-remark/programme-grade-remark.actions';
 import {
   PaginatedResponseInterface,
   PageQueryInterface,
@@ -41,6 +43,7 @@ export class ProgrammeGradeRemarkComponent implements OnInit, OnDestroy {
   constructor(
     private programmeGradeRemarkFacade: ProgrammeGradeRemarkFacade,
     private programTypeFacade: ProgramTypeFacade,
+    private actions$: Actions,
     private dialog: MatDialog,
     private toastService: ToastNotificationService,
     private fb: FormBuilder
@@ -62,15 +65,13 @@ export class ProgrammeGradeRemarkComponent implements OnInit, OnDestroy {
         this.currentRemarks = response?.data ?? [];
       });
 
-    this.programmeGradeRemarkFacade.deleteSuccess$
-      .pipe(
-        takeUntil(this.destroy$),
-        filter((success) => success)
-      )
-      .subscribe(() => {
-        this.toastService.openToast('Programme grade remark deleted successfully', NotificationTypeEnums.SUCCESS);
-        this.loadProgrammeGradeRemarks();
-      });
+    this.actions$.pipe(
+      ofType(ProgrammeGradeRemarkAction.deleteProgrammeGradeRemarkSuccess),
+      takeUntil(this.destroy$)
+    ).subscribe(() => {
+      this.toastService.openToast('Programme grade remark deleted successfully', NotificationTypeEnums.SUCCESS);
+      this.loadProgrammeGradeRemarks();
+    });
   }
 
   ngOnDestroy(): void {

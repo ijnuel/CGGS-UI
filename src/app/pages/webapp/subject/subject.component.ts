@@ -1,7 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
-import { Observable } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
+import { Actions, ofType } from '@ngrx/effects';
 import { SubjectFacade } from '../../../store/subject/subject.facade';
+import * as SubjectAction from '../../../store/subject/subject.actions';
 import { SubjectListInterface } from '../../../types/subject';
 import { DropdownListInterface, PaginatedResponseInterface } from '../../../types';
 import { PageQueryInterface } from '../../../types';
@@ -17,7 +20,8 @@ import { SharedFacade } from '../../../store/shared/shared.facade';
   templateUrl: './subject.component.html',
   styleUrls: ['./subject.component.scss'],
 })
-export class SubjectComponent implements OnInit {
+export class SubjectComponent implements OnInit, OnDestroy {
+  private destroy$ = new Subject<void>();
   subjectList$: Observable<PaginatedResponseInterface<SubjectListInterface[]> | null>;
   subjectTypeList$: Observable<DropdownListInterface[] | null>;
   loading$: Observable<boolean>;
@@ -32,12 +36,26 @@ export class SubjectComponent implements OnInit {
     private route: ActivatedRoute,
     private subjectFacade: SubjectFacade,
     private sharedFacade: SharedFacade,
+    private actions$: Actions,
     private dialog: MatDialog,
     private toastService: ToastNotificationService
   ) {
     this.subjectList$ = this.subjectFacade.subjectList$;
     this.subjectTypeList$ = this.sharedFacade.selectSubjectTypeList$;
     this.loading$ = this.subjectFacade.loading$;
+
+    this.actions$.pipe(
+      ofType(SubjectAction.deleteSubjectSuccess),
+      takeUntil(this.destroy$)
+    ).subscribe(() => {
+      this.toastService.openToast('Subject deleted successfully', NotificationTypeEnums.SUCCESS);
+      this.subjectFacade.getSubjectList(this.lastQuery);
+    });
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 
   ngOnInit() {
@@ -84,8 +102,6 @@ export class SubjectComponent implements OnInit {
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
         this.subjectFacade.deleteSubject(row.id);
-        this.toastService.openToast('Subject deleted successfully', NotificationTypeEnums.SUCCESS);
-        this.subjectFacade.getSubjectList(this.lastQuery);
       }
     });
   }

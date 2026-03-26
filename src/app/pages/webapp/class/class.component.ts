@@ -1,7 +1,10 @@
-import { Component } from '@angular/core';
+import { Component, OnDestroy } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
-import { Observable } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
+import { Actions, ofType } from '@ngrx/effects';
 import { ClassFacade } from '../../../store/class/class.facade';
+import * as ClassAction from '../../../store/class/class.actions';
 import { ClassListInterface } from '../../../types/class';
 import { PaginatedResponseInterface } from '../../../types';
 import { PageQueryInterface } from '../../../types';
@@ -16,7 +19,8 @@ import { tableHeader } from './table-header';
   templateUrl: './class.component.html',
   styleUrls: ['./class.component.scss'],
 })
-export class ClassComponent {
+export class ClassComponent implements OnDestroy {
+  private destroy$ = new Subject<void>();
   classList$: Observable<PaginatedResponseInterface<ClassListInterface[]> | null>;
   loading$: Observable<boolean>;
   tableHeaderData: TableHeaderInterface[] = tableHeader;
@@ -27,11 +31,25 @@ export class ClassComponent {
     private router: Router,
     private route: ActivatedRoute,
     private classFacade: ClassFacade,
+    private actions$: Actions,
     private dialog: MatDialog,
     private toastService: ToastNotificationService
   ) {
     this.classList$ = this.classFacade.classList$;
     this.loading$ = this.classFacade.loading$;
+
+    this.actions$.pipe(
+      ofType(ClassAction.deleteClassSuccess),
+      takeUntil(this.destroy$)
+    ).subscribe(() => {
+      this.toastService.openToast('Class deleted successfully', NotificationTypeEnums.SUCCESS);
+      this.classFacade.getClassList(this.lastQuery);
+    });
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 
   private readonly nestedProperties = [
@@ -69,8 +87,6 @@ export class ClassComponent {
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
         this.classFacade.deleteClass(row.id);
-        this.toastService.openToast('Class deleted successfully', NotificationTypeEnums.SUCCESS);
-        this.classFacade.getClassList(this.lastQuery);
       }
     });
   }

@@ -1,7 +1,10 @@
-import { Component } from '@angular/core';
+import { Component, OnDestroy } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
-import { Observable } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
+import { Actions, ofType } from '@ngrx/effects';
 import { ClassLevelFacade } from '../../../store/class-level/class-level.facade';
+import * as ClassLevelAction from '../../../store/class-level/class-level.actions';
 import { ClassLevelListInterface } from '../../../types/class-level';
 import { PaginatedResponseInterface, PageQueryInterface } from '../../../types';
 import { TableHeaderInterface } from '../../../types/table';
@@ -15,7 +18,8 @@ import { tableHeader } from './table-header';
   templateUrl: './class-level.component.html',
   styleUrls: ['./class-level.component.scss'],
 })
-export class ClassLevelComponent {
+export class ClassLevelComponent implements OnDestroy {
+  private destroy$ = new Subject<void>();
   classLevelList$: Observable<PaginatedResponseInterface<ClassLevelListInterface[]> | null>;
   loading$: Observable<boolean>;
   tableHeaderData: TableHeaderInterface[] = tableHeader;
@@ -25,11 +29,25 @@ export class ClassLevelComponent {
     private router: Router,
     private route: ActivatedRoute,
     private classLevelFacade: ClassLevelFacade,
+    private actions$: Actions,
     private dialog: MatDialog,
     private toastService: ToastNotificationService
   ) {
     this.classLevelList$ = this.classLevelFacade.classLevelList$;
     this.loading$ = this.classLevelFacade.loading$;
+
+    this.actions$.pipe(
+      ofType(ClassLevelAction.deleteClassLevelSuccess),
+      takeUntil(this.destroy$)
+    ).subscribe(() => {
+      this.toastService.openToast('Class Level deleted successfully', NotificationTypeEnums.SUCCESS);
+      this.classLevelFacade.getClassLevelList(this.lastQuery);
+    });
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 
   onQueryChange(query: PageQueryInterface) {
@@ -63,8 +81,6 @@ export class ClassLevelComponent {
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
         this.classLevelFacade.deleteClassLevel(row.id);
-        this.toastService.openToast('Class Level deleted successfully', NotificationTypeEnums.SUCCESS);
-        this.classLevelFacade.getClassLevelList(this.lastQuery);
       }
     });
   }

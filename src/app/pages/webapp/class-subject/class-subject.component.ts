@@ -1,7 +1,10 @@
-import { Component } from '@angular/core';
+import { Component, OnDestroy } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
-import { Observable } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
+import { Actions, ofType } from '@ngrx/effects';
 import { ClassSubjectFacade } from '../../../store/class-subject/class-subject.facade';
+import * as ClassSubjectAction from '../../../store/class-subject/class-subject.actions';
 import { ClassSubjectListInterface } from '../../../types/class-subject';
 import { PaginatedResponseInterface, PageQueryInterface } from '../../../types';
 import { TableHeaderInterface } from '../../../types/table';
@@ -15,7 +18,8 @@ import { tableHeader } from './table-header';
   templateUrl: './class-subject.component.html',
   styleUrls: ['./class-subject.component.scss'],
 })
-export class ClassSubjectComponent {
+export class ClassSubjectComponent implements OnDestroy {
+  private destroy$ = new Subject<void>();
   classSubjectList$: Observable<PaginatedResponseInterface<ClassSubjectListInterface[]> | null>;
   loading$: Observable<boolean>;
   tableHeaderData: TableHeaderInterface[] = tableHeader;
@@ -25,11 +29,25 @@ export class ClassSubjectComponent {
     private router: Router,
     private route: ActivatedRoute,
     private classSubjectFacade: ClassSubjectFacade,
+    private actions$: Actions,
     private dialog: MatDialog,
     private toastService: ToastNotificationService
   ) {
     this.classSubjectList$ = this.classSubjectFacade.classSubjectList$;
     this.loading$ = this.classSubjectFacade.loading$;
+
+    this.actions$.pipe(
+      ofType(ClassSubjectAction.deleteClassSubjectSuccess),
+      takeUntil(this.destroy$)
+    ).subscribe(() => {
+      this.toastService.openToast('Class Subject deleted successfully', NotificationTypeEnums.SUCCESS);
+      this.classSubjectFacade.getClassSubjectList(this.lastQuery);
+    });
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 
   onQueryChange(query: PageQueryInterface) {
@@ -63,8 +81,6 @@ export class ClassSubjectComponent {
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
         this.classSubjectFacade.deleteClassSubject(row.id);
-        this.toastService.openToast('Class Subject deleted successfully', NotificationTypeEnums.SUCCESS);
-        this.classSubjectFacade.getClassSubjectList(this.lastQuery);
       }
     });
   }

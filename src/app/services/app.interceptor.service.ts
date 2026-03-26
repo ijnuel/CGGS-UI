@@ -5,24 +5,15 @@ import {
   HttpHandler,
   HttpEvent,
   HttpErrorResponse,
-  HttpResponse,
 } from '@angular/common/http';
-import { catchError, tap, Observable, throwError } from 'rxjs';
-import { environment } from '../../environments/environment';
+import { catchError, Observable, throwError } from 'rxjs';
 import { GlobalLoadingFacade } from '../store/global-loading/global-loading.facade';
-import {
-  ToastNotificationService,
-  NotificationTypeEnums,
-} from './toast-notification.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AppInterceptorService implements HttpInterceptor {
-  constructor(
-    private globalLoadingFacade: GlobalLoadingFacade,
-    private toastNotificationService: ToastNotificationService
-  ) {}
+  constructor(private globalLoadingFacade: GlobalLoadingFacade) {}
 
   intercept(
     request: HttpRequest<any>,
@@ -31,40 +22,6 @@ export class AppInterceptorService implements HttpInterceptor {
     const modifiedRequest = request;
 
     return next.handle(modifiedRequest).pipe(
-      tap((event: HttpEvent<any>) => {
-        // Handle successful responses
-        if (event instanceof HttpResponse) {
-          const response = event.body;
-
-          if (response) {
-            let messageToShow = '';
-
-            // Read message from backend
-            if (response.message && response.message.trim()) {
-              messageToShow = response.message;
-            } else if (
-              response.messages &&
-              Array.isArray(response.messages) &&
-              response.messages.length > 0
-            ) {
-              messageToShow = response.messages.join(', ');
-            }
-
-            if (messageToShow && response.succeeded) {
-              const notificationType =
-                response.succeeded === false
-                  ? NotificationTypeEnums.ERROR
-                  : NotificationTypeEnums.SUCCESS;
-
-              this.toastNotificationService.openToast(
-                messageToShow,
-                notificationType
-              );
-            }
-          }
-        }
-      }),
-
       catchError((error: HttpErrorResponse) => {
 
         let errorMsg = 'An unexpected error occurred.';
@@ -99,19 +56,7 @@ export class AppInterceptorService implements HttpInterceptor {
           }
         }
 
-        if (error.status === 403) {
-          this.toastNotificationService.openToast(
-            'You have insufficient access to perform this operation',
-            NotificationTypeEnums.ERROR,
-          );
-          return throwError(() => error);
-        }
-
-        this.toastNotificationService.openToast(
-          errorMsg ?? 'Error occurred',
-          NotificationTypeEnums.ERROR
-        );
-        // Display error to user
+        // Display error to user (webapp.component shows the toast via globalError$)
         this.globalLoadingFacade.globalErrorShow(
           errorMsg ?? 'Error occurred',
           3500

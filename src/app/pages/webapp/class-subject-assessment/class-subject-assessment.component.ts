@@ -1,7 +1,10 @@
-import { Component } from '@angular/core';
+import { Component, OnDestroy } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
-import { Observable } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
+import { Actions, ofType } from '@ngrx/effects';
 import { ClassSubjectAssessmentFacade } from '../../../store/class-subject-assessment/class-subject-assessment.facade';
+import * as ClassSubjectAssessmentAction from '../../../store/class-subject-assessment/class-subject-assessment.actions';
 import { ClassSubjectAssessmentListInterface } from '../../../types/class-subject-assessment';
 import { PaginatedResponseInterface, PageQueryInterface } from '../../../types';
 import { TableHeaderInterface } from '../../../types/table';
@@ -15,7 +18,8 @@ import { tableHeader } from './table-header';
   templateUrl: './class-subject-assessment.component.html',
   styleUrls: ['./class-subject-assessment.component.scss'],
 })
-export class ClassSubjectAssessmentComponent {
+export class ClassSubjectAssessmentComponent implements OnDestroy {
+  private destroy$ = new Subject<void>();
   classSubjectAssessmentList$: Observable<PaginatedResponseInterface<ClassSubjectAssessmentListInterface[]> | null>;
   loading$: Observable<boolean>;
   tableHeaderData: TableHeaderInterface[] = tableHeader;
@@ -25,11 +29,25 @@ export class ClassSubjectAssessmentComponent {
     private router: Router,
     private route: ActivatedRoute,
     private classSubjectAssessmentFacade: ClassSubjectAssessmentFacade,
+    private actions$: Actions,
     private dialog: MatDialog,
     private toastService: ToastNotificationService
   ) {
     this.classSubjectAssessmentList$ = this.classSubjectAssessmentFacade.classSubjectAssessmentList$;
     this.loading$ = this.classSubjectAssessmentFacade.loading$;
+
+    this.actions$.pipe(
+      ofType(ClassSubjectAssessmentAction.deleteClassSubjectAssessmentSuccess),
+      takeUntil(this.destroy$)
+    ).subscribe(() => {
+      this.toastService.openToast('Class Subject Assessment deleted successfully', NotificationTypeEnums.SUCCESS);
+      this.classSubjectAssessmentFacade.getClassSubjectAssessmentList(this.lastQuery);
+    });
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 
   onQueryChange(query: PageQueryInterface) {
@@ -63,8 +81,6 @@ export class ClassSubjectAssessmentComponent {
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
         this.classSubjectAssessmentFacade.deleteClassSubjectAssessment(row.id);
-        this.toastService.openToast('Class Subject Assessment deleted successfully', NotificationTypeEnums.SUCCESS);
-        this.classSubjectAssessmentFacade.getClassSubjectAssessmentList(this.lastQuery);
       }
     });
   }

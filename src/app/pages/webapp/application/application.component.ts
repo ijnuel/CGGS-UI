@@ -1,7 +1,10 @@
-import { Component } from '@angular/core';
+import { Component, OnDestroy } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
-import { Observable } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
+import { Actions, ofType } from '@ngrx/effects';
 import { ApplicationFacade } from '../../../store/application/application.facade';
+import * as ApplicationAction from '../../../store/application/application.actions';
 import { ApplicationListInterface } from '../../../types/application';
 import { PaginatedResponseInterface, PageQueryInterface } from '../../../types';
 import { TableHeaderInterface } from '../../../types/table';
@@ -15,7 +18,8 @@ import { tableHeader } from './table-header';
   templateUrl: './application.component.html',
   styleUrls: ['./application.component.scss'],
 })
-export class ApplicationComponent {
+export class ApplicationComponent implements OnDestroy {
+  private destroy$ = new Subject<void>();
   applicationList$: Observable<PaginatedResponseInterface<ApplicationListInterface[]> | null>;
   loading$: Observable<boolean>;
   tableHeaderData: TableHeaderInterface[] = tableHeader;
@@ -25,11 +29,25 @@ export class ApplicationComponent {
     private router: Router,
     private route: ActivatedRoute,
     private applicationFacade: ApplicationFacade,
+    private actions$: Actions,
     private dialog: MatDialog,
     private toastService: ToastNotificationService
   ) {
     this.applicationList$ = this.applicationFacade.applicationList$;
     this.loading$ = this.applicationFacade.loading$;
+
+    this.actions$.pipe(
+      ofType(ApplicationAction.deleteApplicationSuccess),
+      takeUntil(this.destroy$)
+    ).subscribe(() => {
+      this.toastService.openToast('Application deleted successfully', NotificationTypeEnums.SUCCESS);
+      this.applicationFacade.getApplicationList(this.lastQuery);
+    });
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 
   onQueryChange(query: PageQueryInterface) {
@@ -63,8 +81,6 @@ export class ApplicationComponent {
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
         this.applicationFacade.deleteApplication(row.id);
-        this.toastService.openToast('Application deleted successfully', NotificationTypeEnums.SUCCESS);
-        this.applicationFacade.getApplicationList(this.lastQuery);
       }
     });
   }

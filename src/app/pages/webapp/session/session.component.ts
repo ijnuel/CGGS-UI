@@ -46,6 +46,14 @@ export class SessionComponent implements OnDestroy {
       this.toastService.openToast('Session set as current', NotificationTypeEnums.SUCCESS);
       this.sessionFacade.getSessionList(this.lastQuery);
     });
+
+    this.actions$.pipe(
+      ofType(SessionAction.deleteSessionSuccess),
+      takeUntil(this.destroy$)
+    ).subscribe(() => {
+      this.toastService.openToast('Session deleted successfully', NotificationTypeEnums.SUCCESS);
+      this.sessionFacade.getSessionList(this.lastQuery);
+    });
   }
 
   ngOnDestroy(): void {
@@ -90,8 +98,6 @@ export class SessionComponent implements OnDestroy {
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
         this.sessionFacade.deleteSession(row.id);
-        this.toastService.openToast('Session deleted successfully', NotificationTypeEnums.SUCCESS);
-        this.sessionFacade.getSessionList(this.lastQuery);
       }
     });
   }

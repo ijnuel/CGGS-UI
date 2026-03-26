@@ -1,7 +1,10 @@
-import { Component } from '@angular/core';
+import { Component, OnDestroy } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
-import { Observable } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
+import { Actions, ofType } from '@ngrx/effects';
 import { CountryFacade } from '../../../store/country/country.facade';
+import * as CountryAction from '../../../store/country/country.actions';
 import { CountryListInterface } from '../../../types/country';
 import { PaginatedResponseInterface, PageQueryInterface } from '../../../types';
 import { TableHeaderInterface } from '../../../types/table';
@@ -15,7 +18,8 @@ import { tableHeader } from './table-header';
   templateUrl: './country.component.html',
   styleUrls: ['./country.component.scss'],
 })
-export class CountryComponent {
+export class CountryComponent implements OnDestroy {
+  private destroy$ = new Subject<void>();
   countryList$: Observable<PaginatedResponseInterface<CountryListInterface[]> | null>;
   loading$: Observable<boolean>;
   tableHeaderData: TableHeaderInterface[] = tableHeader;
@@ -25,11 +29,25 @@ export class CountryComponent {
     private router: Router,
     private route: ActivatedRoute,
     private countryFacade: CountryFacade,
+    private actions$: Actions,
     private dialog: MatDialog,
     private toastService: ToastNotificationService
   ) {
     this.countryList$ = this.countryFacade.countryList$;
     this.loading$ = this.countryFacade.loading$;
+
+    this.actions$.pipe(
+      ofType(CountryAction.deleteCountrySuccess),
+      takeUntil(this.destroy$)
+    ).subscribe(() => {
+      this.toastService.openToast('Country deleted successfully', NotificationTypeEnums.SUCCESS);
+      this.countryFacade.getCountryList(this.lastQuery);
+    });
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 
   onQueryChange(query: PageQueryInterface) {
@@ -63,8 +81,6 @@ export class CountryComponent {
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
         this.countryFacade.deleteCountry(row.id);
-        this.toastService.openToast('Country deleted successfully', NotificationTypeEnums.SUCCESS);
-        this.countryFacade.getCountryList(this.lastQuery);
       }
     });
   }

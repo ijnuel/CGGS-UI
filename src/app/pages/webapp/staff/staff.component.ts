@@ -1,7 +1,10 @@
-import { Component } from '@angular/core';
+import { Component, OnDestroy } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
-import { Observable } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
+import { Actions, ofType } from '@ngrx/effects';
 import { StaffFacade } from '../../../store/staff/staff.facade';
+import * as StaffAction from '../../../store/staff/staff.actions';
 import { StaffListInterface } from '../../../types/staff';
 import { PaginatedResponseInterface, PageQueryInterface } from '../../../types';
 import { TableHeaderInterface } from '../../../types/table';
@@ -15,7 +18,8 @@ import { tableHeader } from './table-header';
   templateUrl: './staff.component.html',
   styleUrls: ['./staff.component.scss'],
 })
-export class StaffComponent {
+export class StaffComponent implements OnDestroy {
+  private destroy$ = new Subject<void>();
   staffList$: Observable<PaginatedResponseInterface<StaffListInterface[]> | null>;
   loading$: Observable<boolean>;
   tableHeaderData: TableHeaderInterface[] = tableHeader;
@@ -25,11 +29,25 @@ export class StaffComponent {
     private router: Router,
     private route: ActivatedRoute,
     private staffFacade: StaffFacade,
+    private actions$: Actions,
     private dialog: MatDialog,
     private toastService: ToastNotificationService
   ) {
     this.staffList$ = this.staffFacade.staffList$;
     this.loading$ = this.staffFacade.loading$;
+
+    this.actions$.pipe(
+      ofType(StaffAction.deleteStaffSuccess),
+      takeUntil(this.destroy$)
+    ).subscribe(() => {
+      this.toastService.openToast('Staff deleted successfully', NotificationTypeEnums.SUCCESS);
+      this.staffFacade.getStaffList(this.lastQuery);
+    });
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 
   onQueryChange(query: PageQueryInterface) {
@@ -63,8 +81,6 @@ export class StaffComponent {
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
         this.staffFacade.deleteStaff(row.id);
-        this.toastService.openToast('Staff deleted successfully', NotificationTypeEnums.SUCCESS);
-        this.staffFacade.getStaffList(this.lastQuery);
       }
     });
   }

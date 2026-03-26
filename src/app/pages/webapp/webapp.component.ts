@@ -5,6 +5,7 @@ import {
   ToastNotificationService,
 } from '../../services/toast-notification.service';
 import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 import { AuthFacade } from '../../store/auth/auth.facade';
 
 @Component({
@@ -23,7 +24,7 @@ export class WebappComponent implements OnInit, OnDestroy {
     private toastNotification: ToastNotificationService, 
     private authFacade: AuthFacade
   ) {
-    this.globalError$.subscribe((errorMessage) => {
+    this.globalError$.pipe(takeUntil(this.destroyed$)).subscribe((errorMessage) => {
       if (!errorMessage) return;
 
       this.toastNotification.openToast(

@@ -53,6 +53,14 @@ export class SchoolTermSessionComponent implements OnDestroy {
       this.toastService.openToast('School Term Session set as current', NotificationTypeEnums.SUCCESS);
       this.schoolTermSessionFacade.getSchoolTermSessionList(this.lastQuery);
     });
+
+    this.actions$.pipe(
+      ofType(SchoolTermSessionAction.deleteSchoolTermSessionSuccess),
+      takeUntil(this.destroy$)
+    ).subscribe(() => {
+      this.toastService.openToast('School Term Session deleted successfully', NotificationTypeEnums.SUCCESS);
+      this.schoolTermSessionFacade.getSchoolTermSessionList(this.lastQuery);
+    });
   }
 
   ngOnDestroy(): void {
@@ -97,8 +105,6 @@ export class SchoolTermSessionComponent implements OnDestroy {
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
         this.schoolTermSessionFacade.deleteSchoolTermSession(row.id);
-        this.toastService.openToast('School Term Session deleted successfully', NotificationTypeEnums.SUCCESS);
-        this.schoolTermSessionFacade.getSchoolTermSessionList(this.lastQuery);
       }
     });
   }

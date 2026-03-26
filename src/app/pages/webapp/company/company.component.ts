@@ -1,7 +1,10 @@
-import { Component } from '@angular/core';
+import { Component, OnDestroy } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
-import { Observable } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
+import { Actions, ofType } from '@ngrx/effects';
 import { CompanyFacade } from '../../../store/company/company.facade';
+import * as CompanyAction from '../../../store/company/company.actions';
 import { CompanyListInterface } from '../../../types/company';
 import { PaginatedResponseInterface, PageQueryInterface } from '../../../types';
 import { TableHeaderInterface } from '../../../types/table';
@@ -15,7 +18,8 @@ import { tableHeader } from './table-header';
   templateUrl: './company.component.html',
   styleUrls: ['./company.component.scss'],
 })
-export class CompanyComponent {
+export class CompanyComponent implements OnDestroy {
+  private destroy$ = new Subject<void>();
   companyList$: Observable<PaginatedResponseInterface<CompanyListInterface[]> | null>;
   loading$: Observable<boolean>;
   tableHeaderData: TableHeaderInterface[] = tableHeader;
@@ -25,11 +29,25 @@ export class CompanyComponent {
     private router: Router,
     private route: ActivatedRoute,
     private companyFacade: CompanyFacade,
+    private actions$: Actions,
     private dialog: MatDialog,
     private toastService: ToastNotificationService
   ) {
     this.companyList$ = this.companyFacade.companyList$;
     this.loading$ = this.companyFacade.loading$;
+
+    this.actions$.pipe(
+      ofType(CompanyAction.deleteCompanySuccess),
+      takeUntil(this.destroy$)
+    ).subscribe(() => {
+      this.toastService.openToast('Company deleted successfully', NotificationTypeEnums.SUCCESS);
+      this.companyFacade.getCompanyList(this.lastQuery);
+    });
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 
   onQueryChange(query: PageQueryInterface) {
@@ -63,8 +81,6 @@ export class CompanyComponent {
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
         this.companyFacade.deleteCompany(row.id);
-        this.toastService.openToast('Company deleted successfully', NotificationTypeEnums.SUCCESS);
-        this.companyFacade.getCompanyList(this.lastQuery);
       }
     });
   }

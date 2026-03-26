@@ -1,7 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
-import { Observable } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
+import { Actions, ofType } from '@ngrx/effects';
 import { StudentFacade } from '../../../store/student/student.facade';
+import * as StudentAction from '../../../store/student/student.actions';
 import { StudentListInterface } from '../../../types/student';
 import { PaginatedResponseInterface, PageQueryInterface } from '../../../types';
 import { TableHeaderInterface } from '../../../types/table';
@@ -15,23 +18,40 @@ import { tableHeader } from './table-header';
   templateUrl: './student.component.html',
   styleUrls: ['./student.component.scss'],
 })
-export class StudentComponent {
+export class StudentComponent implements OnDestroy {
+  private destroy$ = new Subject<void>();
   studentList$: Observable<PaginatedResponseInterface<StudentListInterface[]> | null>;
   loading$: Observable<boolean>;
   tableHeaderData: TableHeaderInterface[] = tableHeader;
+  private lastQuery: PageQueryInterface = { start: 0, recordsPerPage: 10, pageIndex: 0 };
 
   constructor(
     private router: Router,
     private route: ActivatedRoute,
     private studentFacade: StudentFacade,
+    private actions$: Actions,
     private dialog: MatDialog,
     private toastService: ToastNotificationService
   ) {
     this.studentList$ = this.studentFacade.studentList$;
     this.loading$ = this.studentFacade.loading$;
+
+    this.actions$.pipe(
+      ofType(StudentAction.deleteStudentSuccess),
+      takeUntil(this.destroy$)
+    ).subscribe(() => {
+      this.toastService.openToast('Student deleted successfully', NotificationTypeEnums.SUCCESS);
+      this.studentFacade.getStudentList(this.lastQuery);
+    });
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 
   onQueryChange(query: PageQueryInterface) {
+    this.lastQuery = query;
     this.studentFacade.getStudentList(query);
   }
 
@@ -57,7 +77,6 @@ export class StudentComponent {
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
         this.studentFacade.deleteStudent(row.id);
-        this.toastService.openToast('Student deleted successfully', NotificationTypeEnums.SUCCESS);
       }
     });
   }

@@ -1,7 +1,10 @@
-import { Component } from '@angular/core';
+import { Component, OnDestroy } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
-import { Observable } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
+import { Actions, ofType } from '@ngrx/effects';
 import { StateFacade } from '../../../store/state/state.facade';
+import * as StateAction from '../../../store/state/state.actions';
 import { StateListInterface } from '../../../types/state';
 import { PaginatedResponseInterface, PageQueryInterface } from '../../../types';
 import { TableHeaderInterface } from '../../../types/table';
@@ -15,7 +18,8 @@ import { tableHeader } from './table-header';
   templateUrl: './state.component.html',
   styleUrls: ['./state.component.scss'],
 })
-export class StateComponent {
+export class StateComponent implements OnDestroy {
+  private destroy$ = new Subject<void>();
   stateList$: Observable<PaginatedResponseInterface<StateListInterface[]> | null>;
   loading$: Observable<boolean>;
   tableHeaderData: TableHeaderInterface[] = tableHeader;
@@ -25,11 +29,25 @@ export class StateComponent {
     private router: Router,
     private route: ActivatedRoute,
     private stateFacade: StateFacade,
+    private actions$: Actions,
     private dialog: MatDialog,
     private toastService: ToastNotificationService
   ) {
     this.stateList$ = this.stateFacade.stateList$;
     this.loading$ = this.stateFacade.loading$;
+
+    this.actions$.pipe(
+      ofType(StateAction.deleteStateSuccess),
+      takeUntil(this.destroy$)
+    ).subscribe(() => {
+      this.toastService.openToast('State deleted successfully', NotificationTypeEnums.SUCCESS);
+      this.stateFacade.getStateList(this.lastQuery);
+    });
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 
   onQueryChange(query: PageQueryInterface) {
@@ -63,8 +81,6 @@ export class StateComponent {
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
         this.stateFacade.deleteState(row.id);
-        this.toastService.openToast('State deleted successfully', NotificationTypeEnums.SUCCESS);
-        this.stateFacade.getStateList(this.lastQuery);
       }
     });
   }

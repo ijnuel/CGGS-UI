@@ -1,7 +1,10 @@
-import { Component } from '@angular/core';
+import { Component, OnDestroy } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
-import { Observable } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
+import { Actions, ofType } from '@ngrx/effects';
 import { AdministratorFacade } from '../../../store/administrator/administrator.facade';
+import * as AdministratorAction from '../../../store/administrator/administrator.actions';
 import { AdministratorListInterface } from '../../../types/administrator';
 import { PaginatedResponseInterface, PageQueryInterface } from '../../../types';
 import { TableHeaderInterface } from '../../../types/table';
@@ -15,7 +18,8 @@ import { tableHeader } from './table-header';
   templateUrl: './administrator.component.html',
   styleUrls: ['./administrator.component.scss'],
 })
-export class AdministratorComponent {
+export class AdministratorComponent implements OnDestroy {
+  private destroy$ = new Subject<void>();
   administratorList$: Observable<PaginatedResponseInterface<AdministratorListInterface[]> | null>;
   loading$: Observable<boolean>;
   tableHeaderData: TableHeaderInterface[] = tableHeader;
@@ -25,11 +29,25 @@ export class AdministratorComponent {
     private router: Router,
     private route: ActivatedRoute,
     private administratorFacade: AdministratorFacade,
+    private actions$: Actions,
     private dialog: MatDialog,
     private toastService: ToastNotificationService
   ) {
     this.administratorList$ = this.administratorFacade.administratorList$;
     this.loading$ = this.administratorFacade.loading$;
+
+    this.actions$.pipe(
+      ofType(AdministratorAction.deleteAdministratorSuccess),
+      takeUntil(this.destroy$)
+    ).subscribe(() => {
+      this.toastService.openToast('Administrator deleted successfully', NotificationTypeEnums.SUCCESS);
+      this.administratorFacade.getAdministratorList(this.lastQuery);
+    });
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 
   onQueryChange(query: PageQueryInterface) {
@@ -63,8 +81,6 @@ export class AdministratorComponent {
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
         this.administratorFacade.deleteAdministrator(row.id);
-        this.toastService.openToast('Administrator deleted successfully', NotificationTypeEnums.SUCCESS);
-        this.administratorFacade.getAdministratorList(this.lastQuery);
       }
     });
   }

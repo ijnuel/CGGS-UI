@@ -1,7 +1,10 @@
-import { Component } from '@angular/core';
+import { Component, OnDestroy } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
-import { Observable } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
+import { Actions, ofType } from '@ngrx/effects';
 import { FamilyFacade } from '../../../store/family/family.facade';
+import * as FamilyAction from '../../../store/family/family.actions';
 import { FamilyListInterface } from '../../../types/family';
 import { PaginatedResponseInterface, PageQueryInterface } from '../../../types';
 import { TableHeaderInterface } from '../../../types/table';
@@ -15,7 +18,8 @@ import { tableHeader } from './table-header';
   templateUrl: './family.component.html',
   styleUrls: ['./family.component.scss'],
 })
-export class FamilyComponent {
+export class FamilyComponent implements OnDestroy {
+  private destroy$ = new Subject<void>();
   familyList$: Observable<PaginatedResponseInterface<FamilyListInterface[]> | null>;
   loading$: Observable<boolean>;
   tableHeaderData: TableHeaderInterface[] = tableHeader;
@@ -25,11 +29,25 @@ export class FamilyComponent {
     private router: Router,
     private route: ActivatedRoute,
     private familyFacade: FamilyFacade,
+    private actions$: Actions,
     private dialog: MatDialog,
     private toastService: ToastNotificationService
   ) {
     this.familyList$ = this.familyFacade.familyList$;
     this.loading$ = this.familyFacade.loading$;
+
+    this.actions$.pipe(
+      ofType(FamilyAction.deleteFamilySuccess),
+      takeUntil(this.destroy$)
+    ).subscribe(() => {
+      this.toastService.openToast('Family deleted successfully', NotificationTypeEnums.SUCCESS);
+      this.familyFacade.getFamilyList(this.lastQuery);
+    });
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 
   onQueryChange(query: PageQueryInterface) {
@@ -63,8 +81,6 @@ export class FamilyComponent {
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
         this.familyFacade.deleteFamily(row.id);
-        this.toastService.openToast('Family deleted successfully', NotificationTypeEnums.SUCCESS);
-        this.familyFacade.getFamilyList(this.lastQuery);
       }
     });
   }
