@@ -1,232 +1,190 @@
 <div class="p-6">
-  <div class="flex items-center justify-between mb-6">
-    <h2 class="text-2xl font-bold text-gray-800">Update Results</h2>
-  </div>
 
-     <!-- Form Section -->
-   <div class="bg-white rounded-lg shadow-md p-6 mb-6">
-     <div class="flex items-center justify-between mb-4">
-       <h3 class="text-lg font-semibold">Select Criteria</h3>
-       <button 
-         mat-raised-button 
-         color="primary" 
-         (click)="getMarksheet()"
-         [disabled]="updateResultForm.invalid || (loading$ | async)"
-         class="px-6 py-2">
-         <mat-icon *ngIf="loading$ | async" class="animate-spin mr-2">refresh</mat-icon>
-         {{ (loading$ | async) ? 'Loading...' : 'Get Marksheet' }}
-       </button>
-     </div>
-     
-     <form [formGroup]="updateResultForm" class="space-y-4">
-       <!-- School Term Session Dropdown -->
-       <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+  <!-- Page header -->
+  <h2 class="text-xl font-semibold text-gray-800 mb-6">Update Results</h2>
+
+  <!-- Criteria card -->
+  <div class="result-card mb-5">
+    <div class="flex items-center justify-between mb-5">
+      <div>
+        <p class="text-sm font-semibold text-gray-700">Select Criteria</p>
+        <p class="text-xs text-gray-400 mt-0.5">Choose session, class and subject to load the marksheet</p>
+      </div>
+      <button mat-raised-button color="primary"
+        (click)="getMarksheet()"
+        [disabled]="updateResultForm.invalid || (loading$ | async)">
+        <mat-icon *ngIf="loading$ | async" class="animate-spin">refresh</mat-icon>
+        <mat-icon *ngIf="!(loading$ | async)">download</mat-icon>
+        {{ (loading$ | async) ? 'Loading…' : 'Get Marksheet' }}
+      </button>
+    </div>
+
+    <form [formGroup]="updateResultForm">
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
         <mat-form-field>
           <mat-label>School Term Session</mat-label>
-          <mat-select 
-            formControlName="schoolTermSessionId" 
-            (selectionChange)="onSchoolTermSessionChange()"
-            required>
-                         <mat-option *ngFor="let session of schoolTermSessions$ | async" [value]="session.id">
-               {{ session.session?.name }}, {{session.termString}} Term
-             </mat-option>
+          <mat-select formControlName="schoolTermSessionId"
+            (selectionChange)="onSchoolTermSessionChange()" required>
+            <mat-option *ngFor="let session of schoolTermSessions$ | async" [value]="session.id">
+              {{ session.session?.name }}, {{ session.termString }} Term
+            </mat-option>
           </mat-select>
-          <mat-error *ngIf="updateResultForm.get('schoolTermSessionId')?.hasError('required')">
-            School Term Session is required
-          </mat-error>
+          <mat-error>School Term Session is required</mat-error>
         </mat-form-field>
 
-                 <!-- Class Dropdown -->
-         <app-searchable-mat-select
-           [options]="(classes$ | async) ?? []"
-           label="Class"
-           placeholder="Select Class"
-           valueKey="id"
-           [labelFn]="getClassName.bind(this)"
-           [formControl]="formControl.classId"
-           (selectionChange)="onClassChange()">
-         </app-searchable-mat-select>
+        <app-searchable-mat-select
+          [options]="(classes$ | async) ?? []"
+          label="Class" placeholder="Select Class"
+          valueKey="id" [labelFn]="getClassName.bind(this)"
+          [formControl]="formControl.classId"
+          (selectionChange)="onClassChange()">
+        </app-searchable-mat-select>
 
-         <!-- Subject Dropdown -->
-         <app-searchable-mat-select
-           [options]="(subjects$ | async) ?? []"
-           label="Subject"
-           placeholder="Select Subject"
-           valueKey="id"
-           [labelKeys]="['name']"
-           [formControl]="formControl.subjectId"
-           (selectionChange)="onSubjectChange()">
-         </app-searchable-mat-select>
-             </div>
-     </form>
-  </div>
-
-  <!-- Error Display -->
-  <div *ngIf="error$ | async as error" class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-6">
-    <strong>Error:</strong> Result update for selected criteria not allowed for user!
-  </div>
-
-           <!-- Marksheet Display -->
-    <div *ngIf="!(loading$ | async) && !(error$ | async) && (resultMarkSheet$ | async) as marksheet" class="bg-white rounded-lg shadow-md p-6">
-      <div class="flex items-center justify-between mb-4">
-        <h3 class="text-lg font-semibold">Student Results ({{ studentRows.length }} students)</h3>
-        
-        <!-- Edit Controls -->
-        <div class="flex gap-2">
-          <button 
-            *ngIf="!isEditMode" 
-            mat-raised-button 
-            color="primary" 
-            (click)="startEdit()"
-            class="px-4 py-2">
-            <mat-icon class="mr-2">edit</mat-icon>
-            Edit Scores
-          </button>
-          
-          <button 
-            *ngIf="isEditMode" 
-            mat-raised-button 
-            color="warn" 
-            (click)="cancelEdit()"
-            [disabled]="saving$ | async"
-            [class]="'px-4 py-2 ' + ((saving$ | async) ? 'opacity-50 cursor-not-allowed' : '')"
-            [title]="(saving$ | async) ? 'Cannot discard while saving' : 'Discard changes'">
-            <mat-icon class="mr-2">cancel</mat-icon>
-            Discard
-          </button>
-          
-          <button 
-            *ngIf="isEditMode" 
-            mat-raised-button 
-            color="accent" 
-            (click)="saveChanges()"
-            [disabled]="(isNumericSubjectType() && invalidScores.size > 0) || (saving$ | async)"
-            [class]="'px-4 py-2 ' + ((isNumericSubjectType() && invalidScores.size > 0) || (saving$ | async) ? 'opacity-50 cursor-not-allowed' : '')"
-            [title]="isNumericSubjectType() && invalidScores.size > 0 ? 'Cannot save: Some scores exceed their weight limits' : 'Save changes'">
-            <mat-spinner *ngIf="saving$ | async" diameter="20" class="inline-block mr-2"></mat-spinner>
-            <mat-icon *ngIf="!(saving$ | async)" class="mr-2">save</mat-icon>
-            {{ (saving$ | async) ? '' : 'Save' }}
-          </button>
-        </div>
+        <app-searchable-mat-select
+          [options]="(subjects$ | async) ?? []"
+          label="Subject" placeholder="Select Subject"
+          valueKey="id" [labelKeys]="['name']"
+          [formControl]="formControl.subjectId"
+          (selectionChange)="onSubjectChange()">
+        </app-searchable-mat-select>
       </div>
-     
-     <div class="overflow-x-auto">
-       <table class="min-w-full divide-y divide-gray-200">
-         <thead class="bg-gray-50">
-           <tr>
-             <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-               Student Name
-             </th>
-             <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-               Student No
-             </th>
-             <th *ngFor="let assessment of assessmentColumns" 
-                 class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
-               {{ assessment.name }}
-               <div class="text-xs text-gray-400">({{ assessment.scoreWeight }})</div>
-             </th>
-           </tr>
-         </thead>
-         <tbody class="bg-white divide-y divide-gray-200">
-           <tr *ngFor="let student of studentRows">
-             <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-               {{ student.studentName }}
-             </td>
-             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-               {{ student.studentNo }}
-             </td>
-             <td *ngFor="let assessment of assessmentColumns" 
-                 class="px-6 py-4 whitespace-nowrap text-center text-sm text-gray-500">
-               <ng-container *ngIf="!isEditMode; else editMode">
-                 <!-- Display mode -->
-                 <ng-container *ngIf="isNumericSubjectType(); else nonNumericDisplay">
-                   {{ student.assessmentScores[assessment.id] || '-' }}
-                 </ng-container>
-                 <ng-template #nonNumericDisplay>
-                   <ng-container *ngIf="isTextBasedSubjectType(); else gradeDisplay">
-                     {{ student.comments[assessment.id] || '-' }}
-                   </ng-container>
-                   <ng-template #gradeDisplay>
-                     {{ getSkillGradeLabel(student.skillGrades[assessment.id]) || '-' }}
-                   </ng-template>
-                 </ng-template>
-               </ng-container>
-               
-               <ng-template #editMode>
-                 <!-- Edit mode -->
-                 <ng-container *ngIf="isNumericSubjectType(); else nonNumericEdit">
-                   <!-- Numeric input for subject type 1 -->
-                   <div class="relative">
-                     <input 
-                       type="number" 
-                       [value]="student.assessmentScores[assessment.id] || ''"
-                       (input)="updateScore(student.studentId, assessment.id, $any($event.target).value ? +$any($event.target).value : null)"
-                       (blur)="validateScore($event, assessment.id)"
-                       [class]="'w-20 px-2 py-1 text-center border rounded focus:outline-none focus:ring-2 ' + 
-                                (isScoreInvalid(student.studentId, assessment.id) ? 
-                                 'border-red-500 focus:ring-red-500 bg-red-50' : 
-                                 'border-gray-300 focus:ring-blue-500')"
-                       min="0"
-                       [max]="getMaxScore(assessment.id)"
-                       [placeholder]="'0-' + getMaxScore(assessment.id)"
-                       [title]="'Max score: ' + getMaxScore(assessment.id)">
-                     
-                     <!-- Error indicator -->
-                     <div *ngIf="isScoreInvalid(student.studentId, assessment.id)" 
-                          class="absolute -top-6 left-0 right-0 text-xs text-red-600 bg-red-100 px-1 py-0.5 rounded border border-red-300 z-10">
-                       {{ getScoreErrorMessage(student.studentId, assessment.id) }}
-                     </div>
-                   </div>
-                 </ng-container>
-                 
-                 <ng-template #nonNumericEdit>
-                   <ng-container *ngIf="isTextBasedSubjectType(); else gradeEdit">
-                     <!-- Text input for subject type 4 (comments) -->
-                     <div class="w-full px-2">
-                       <input 
-                         type="text" 
-                         [value]="student.comments[assessment.id] || ''"
-                         (input)="updateComment(student.studentId, assessment.id, $any($event.target).value)"
-                         class="w-full px-2 py-1 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
-                         placeholder="Enter comment..."
-                         [title]="'Enter comment for ' + student.studentName">
-                     </div>
-                   </ng-container>
-                   
-                   <ng-template #gradeEdit>
-                     <!-- Radio buttons for skill grades from API for non-type-1 subjects -->
-                     <div class="flex flex-wrap gap-2 justify-center">
-                       <div *ngFor="let grade of skillGrades$ | async" 
-                            class="flex flex-col items-center cursor-pointer">
-                         <input 
-                           type="radio" 
-                           [name]="'grade_' + student.studentId + '_' + assessment.id"
-                           [value]="grade.value"
-                           [checked]="student.skillGrades[assessment.id] === grade.value"
-                           (change)="updateSkillGrade(student.studentId, assessment.id, grade.value)"
-                           class="text-blue-600 focus:ring-blue-500 mb-1">
-                         <span class="text-xs text-center">{{ grade.name }}</span>
-                       </div>
-                     </div>
-                   </ng-template>
-                 </ng-template>
-               </ng-template>
-             </td>
-           </tr>
-         </tbody>
-       </table>
-     </div>
-
-     <!-- No Results Message -->
-     <div *ngIf="studentRows.length === 0" class="text-center py-8 text-gray-500">
-       <mat-icon class="text-4xl mb-2">assignment</mat-icon>
-       <p>No student results found for the selected criteria.</p>
-     </div>
-   </div>
-
-  <!-- Loading State -->
-  <div *ngIf="loading$ | async" class="flex justify-center items-center py-8">
-    <mat-spinner diameter="40"></mat-spinner>
-    <span class="ml-3 text-gray-600">Loading marksheet...</span>
+    </form>
   </div>
-</div> 
+
+  <!-- Error alert -->
+  <div *ngIf="error$ | async" class="result-error mb-5">
+    <mat-icon class="result-error-icon">error_outline</mat-icon>
+    <span>Result update for the selected criteria is not allowed for your account.</span>
+  </div>
+
+  <!-- Loading state -->
+  <div *ngIf="loading$ | async" class="result-card flex items-center justify-center gap-3 py-12">
+    <mat-spinner diameter="36"></mat-spinner>
+    <span class="text-sm text-gray-500">Loading marksheet…</span>
+  </div>
+
+  <!-- Marksheet -->
+  <div *ngIf="!(loading$ | async) && !(error$ | async) && (resultMarkSheet$ | async) as marksheet"
+       class="result-card">
+
+    <!-- Marksheet header -->
+    <div class="flex items-center justify-between mb-5">
+      <div>
+        <p class="text-sm font-semibold text-gray-700">
+          Student Results
+          <span class="ml-2 text-xs font-normal text-gray-400 bg-gray-100 px-2 py-0.5 rounded-full">
+            {{ studentRows.length }} students
+          </span>
+        </p>
+      </div>
+      <div class="flex gap-2">
+        <button *ngIf="!isEditMode" mat-raised-button color="primary" (click)="startEdit()">
+          <mat-icon>edit</mat-icon> Edit Scores
+        </button>
+        <button *ngIf="isEditMode" mat-stroked-button color="warn"
+          (click)="cancelEdit()" [disabled]="saving$ | async">
+          <mat-icon>cancel</mat-icon> Discard
+        </button>
+        <button *ngIf="isEditMode" mat-raised-button color="primary"
+          (click)="saveChanges()"
+          [disabled]="(isNumericSubjectType() && invalidScores.size > 0) || (saving$ | async)"
+          [title]="isNumericSubjectType() && invalidScores.size > 0 ? 'Some scores exceed their weight limits' : 'Save changes'">
+          <mat-spinner *ngIf="saving$ | async" diameter="18" class="inline-block"></mat-spinner>
+          <mat-icon *ngIf="!(saving$ | async)">save</mat-icon>
+          {{ (saving$ | async) ? 'Saving…' : 'Save' }}
+        </button>
+      </div>
+    </div>
+
+    <!-- Table -->
+    <div class="overflow-x-auto">
+      <table class="marksheet-table">
+        <thead>
+          <tr>
+            <th class="text-left">Student Name</th>
+            <th class="text-left">Student No</th>
+            <th *ngFor="let assessment of assessmentColumns" class="text-center">
+              <span>{{ assessment.name }}</span>
+              <span class="block text-xs font-normal opacity-70">(max {{ assessment.scoreWeight }})</span>
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let student of studentRows" class="marksheet-row">
+            <td class="student-name">{{ student.studentName }}</td>
+            <td class="student-no">{{ student.studentNo }}</td>
+            <td *ngFor="let assessment of assessmentColumns" class="text-center">
+
+              <!-- Display mode -->
+              <ng-container *ngIf="!isEditMode; else editMode">
+                <ng-container *ngIf="isNumericSubjectType(); else nonNumericDisplay">
+                  <span class="score-badge" [class.score-empty]="!student.assessmentScores[assessment.id]">
+                    {{ student.assessmentScores[assessment.id] ?? '—' }}
+                  </span>
+                </ng-container>
+                <ng-template #nonNumericDisplay>
+                  <ng-container *ngIf="isTextBasedSubjectType(); else gradeDisplay">
+                    {{ student.comments[assessment.id] || '—' }}
+                  </ng-container>
+                  <ng-template #gradeDisplay>
+                    <span class="grade-chip">{{ getSkillGradeLabel(student.skillGrades[assessment.id]) || '—' }}</span>
+                  </ng-template>
+                </ng-template>
+              </ng-container>
+
+              <!-- Edit mode -->
+              <ng-template #editMode>
+                <ng-container *ngIf="isNumericSubjectType(); else nonNumericEdit">
+                  <div class="score-input-wrap">
+                    <input type="number"
+                      [value]="student.assessmentScores[assessment.id] || ''"
+                      (input)="updateScore(student.studentId, assessment.id, $any($event.target).value ? +$any($event.target).value : null)"
+                      (blur)="validateScore($event, assessment.id)"
+                      class="score-input"
+                      [class.score-input-error]="isScoreInvalid(student.studentId, assessment.id)"
+                      min="0" [max]="getMaxScore(assessment.id)"
+                      [placeholder]="'0–' + getMaxScore(assessment.id)">
+                    <div *ngIf="isScoreInvalid(student.studentId, assessment.id)" class="score-error-tip">
+                      {{ getScoreErrorMessage(student.studentId, assessment.id) }}
+                    </div>
+                  </div>
+                </ng-container>
+
+                <ng-template #nonNumericEdit>
+                  <ng-container *ngIf="isTextBasedSubjectType(); else gradeEdit">
+                    <input type="text"
+                      [value]="student.comments[assessment.id] || ''"
+                      (input)="updateComment(student.studentId, assessment.id, $any($event.target).value)"
+                      class="comment-input"
+                      placeholder="Enter comment…">
+                  </ng-container>
+                  <ng-template #gradeEdit>
+                    <div class="grade-radio-group">
+                      <label *ngFor="let grade of skillGrades$ | async" class="grade-radio-label">
+                        <input type="radio"
+                          [name]="'grade_' + student.studentId + '_' + assessment.id"
+                          [value]="grade.value"
+                          [checked]="student.skillGrades[assessment.id] === grade.value"
+                          (change)="updateSkillGrade(student.studentId, assessment.id, grade.value)">
+                        <span>{{ grade.name }}</span>
+                      </label>
+                    </div>
+                  </ng-template>
+                </ng-template>
+              </ng-template>
+
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Empty state -->
+    <div *ngIf="studentRows.length === 0" class="empty-state">
+      <mat-icon class="empty-icon">assignment</mat-icon>
+      <p class="empty-title">No student results found</p>
+      <p class="empty-sub">Try selecting a different class or subject</p>
+    </div>
+  </div>
+
+</div>

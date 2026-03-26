@@ -233,37 +233,32 @@ export class UpdateResultComponent implements OnInit, OnDestroy {
   }
 
   onSchoolTermSessionChange(): void {
-    // Reset class and subject when school term session changes
-    this.updateResultForm.patchValue({
-      classId: '',
-      subjectId: ''
-    });
-    this.selectedSubjectType = '1'; // Reset to default
-    
-    // Auto-fetch marksheet if all fields are selected
-    this.autoFetchMarksheetIfReady();
+    this.updateResultForm.patchValue({ classId: '', subjectId: '' });
+    this.selectedSubjectType = '1';
+    this.clearMarksheet();
   }
 
   onClassChange(): void {
-    // Reset subject when class changes
-    this.updateResultForm.patchValue({
-      subjectId: ''
-    });
-    this.selectedSubjectType = '1'; // Reset to default
-    
-    // Auto-fetch marksheet if all fields are selected
-    this.autoFetchMarksheetIfReady();
+    this.updateResultForm.patchValue({ subjectId: '' });
+    this.selectedSubjectType = '1';
+    this.clearMarksheet();
   }
 
   onSubjectChange(): void {
-    // Update selected subject type when subject changes
     const subjectId = this.updateResultForm.get('subjectId')?.value;
     if (subjectId) {
       this.updateSelectedSubjectType(subjectId);
     }
-    
-    // Auto-fetch marksheet if all fields are selected
-    this.autoFetchMarksheetIfReady();
+    this.clearMarksheet();
+  }
+
+  private clearMarksheet(): void {
+    this.resultFacade.clearResultMarkSheet();
+    this.assessmentColumns = [];
+    this.studentRows = [];
+    this.originalStudentRows = [];
+    this.isEditMode = false;
+    this.invalidScores.clear();
   }
 
   private updateSelectedSubjectType(subjectId: string): void {
@@ -517,23 +512,4 @@ export class UpdateResultComponent implements OnInit, OnDestroy {
   }
 
   // Method to automatically fetch marksheet when all required fields are selected
-  private autoFetchMarksheetIfReady(): void {
-    const { schoolTermSessionId, classId, subjectId } = this.updateResultForm.value;
-    
-    if (schoolTermSessionId && classId && subjectId) {
-      // Update URL with query parameters
-      this.router.navigate([], {
-        relativeTo: this.route,
-        queryParams: {
-          schoolTermSessionId,
-          classId,
-          subjectId
-        },
-        queryParamsHandling: 'merge'
-      });
-
-      // Get marksheet data
-      // this.resultFacade.getResultMarkSheet(schoolTermSessionId, classId, subjectId);
-    }
-  }
 } 

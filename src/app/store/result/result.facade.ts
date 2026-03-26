@@ -62,6 +62,10 @@ export class ResultFacade {
   }
 
   // Actions
+  clearResultMarkSheet(): void {
+    this.store.dispatch(ResultActions.clearResultMarkSheet());
+  }
+
   getResultMarkSheet(schoolTermSessionId: string, classId: string, subjectId: string): void {
     this.store.dispatch(ResultActions.getResultMarkSheet({ schoolTermSessionId, classId, subjectId }));
   }

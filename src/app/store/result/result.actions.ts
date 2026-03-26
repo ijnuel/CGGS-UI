@@ -2,6 +2,11 @@ import { createAction, props } from '@ngrx/store';
 import { StudentAssessmentScoreInterface, ResultMarkSheetFormInterface } from '../../types/result';
 import { GenericResponseInterface } from '../../types';
 
+// Clear Result MarkSheet
+export const clearResultMarkSheet = createAction(
+  '[Result] Clear MarkSheet'
+);
+
 // Get Result MarkSheet
 export const getResultMarkSheet = createAction(
   '[Result] Get MarkSheet',

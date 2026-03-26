@@ -37,6 +37,13 @@ export const initialState: ResultState = {
 export const resultReducer = createReducer(
   initialState,
   
+  // Clear Result MarkSheet
+  on(ResultActions.clearResultMarkSheet, (state) => ({
+    ...state,
+    resultMarkSheet: null,
+    error: null,
+  })),
+
   // Get Result MarkSheet
   on(ResultActions.getResultMarkSheet, (state) => ({
     ...state,
