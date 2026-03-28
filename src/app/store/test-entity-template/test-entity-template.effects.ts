@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { createEffect, ofType, Actions } from '@ngrx/effects';
 import { of } from 'rxjs';
-import { catchError, map, switchMap, tap } from 'rxjs/operators';
+import { catchError, map, switchMap, tap, retry } from 'rxjs/operators';
 import { environment } from '../../../environments/environment';
 import * as TestEntityTemplateAction from './test-entity-template.actions';
 import { TestEntityTemplateListInterface, PaginatedResponseInterface, GenericResponseInterface, TestEntityTemplateFormInterface } from '../../types';
@@ -98,6 +98,7 @@ export class TestEntityTemplateEffect {
             }
           )
           .pipe(
+            retry(1),
             map((payload) =>
               TestEntityTemplateAction.getTestEntityTemplateByIdSuccess({ payload })
             ),
@@ -143,6 +144,7 @@ export class TestEntityTemplateEffect {
             { params: { id }, withCredentials: true }
           )
           .pipe(
+            retry(1),
             map((payload) =>
               TestEntityTemplateAction.testEntityTemplateExistsSuccess({ payload })
             ),
@@ -165,6 +167,7 @@ export class TestEntityTemplateEffect {
             { withCredentials: true }
           )
           .pipe(
+            retry(1),
             map((payload) =>
               TestEntityTemplateAction.testEntityTemplateCountSuccess({ payload })
             ),
@@ -363,6 +366,7 @@ export class TestEntityTemplateEffect {
         this.http
           .get<any>(`${environment.baseUrl}/TestEntityTemplate/GetDataImportTemplate`, { withCredentials: true })
           .pipe(
+            retry(1),
             map((payload) => getTestEntityTemplateDataImportTemplateSuccess({ payload })),
             catchError((error) => of(getTestEntityTemplateDataImportTemplateFail({ error })))
           )

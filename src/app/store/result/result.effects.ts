@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { of } from 'rxjs';
-import { map, mergeMap, catchError } from 'rxjs/operators';
+import { map, mergeMap, catchError, retry } from 'rxjs/operators';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { environment } from '../../../environments/environment';
 import { StudentAssessmentScoreInterface } from '../../types/result';
@@ -9,7 +9,7 @@ import { GenericResponseInterface } from '../../types';
 import * as ResultActions from './result.actions';
 
 @Injectable()
-export class ResultEffects {
+export class ResultEffect {
   constructor(
     private actions$: Actions,
     private http: HttpClient
@@ -30,8 +30,9 @@ export class ResultEffects {
             { params, withCredentials: true }
           )
           .pipe(
+            retry(1),
             map((response) => ResultActions.getResultMarkSheetSuccess({ payload: response })),
-            catchError((error) => of(ResultActions.getResultMarkSheetFail({ error: error.message })))
+            catchError((error) => of(ResultActions.getResultMarkSheetFail({ error: error?.message ?? String(error) })))
           );
       })
     )
@@ -49,7 +50,7 @@ export class ResultEffects {
           )
           .pipe(
             map((response) => ResultActions.updateResultMarkSheetSuccess({ payload: response })),
-            catchError((error) => of(ResultActions.updateResultMarkSheetFail({ error: error.message })))
+            catchError((error) => of(ResultActions.updateResultMarkSheetFail({ error: error?.message ?? String(error) })))
           )
       )
     )
@@ -73,7 +74,7 @@ export class ResultEffects {
           .pipe(
             map((blob) => ResultActions.generateStudentResultSuccess({ payload: blob })),
             catchError((error) =>
-              of(ResultActions.generateStudentResultFail({ error: error.message }))
+              of(ResultActions.generateStudentResultFail({ error: error?.message ?? String(error) }))
             )
           );
       })
@@ -98,7 +99,7 @@ export class ResultEffects {
           .pipe(
             map((blob) => ResultActions.generateClassResultSuccess({ payload: blob })),
             catchError((error) =>
-              of(ResultActions.generateClassResultFail({ error: error.message }))
+              of(ResultActions.generateClassResultFail({ error: error?.message ?? String(error) }))
             )
           );
       })
@@ -122,10 +123,10 @@ export class ResultEffects {
           .pipe(
             map((blob) => ResultActions.generateBroadSheetSuccess({ payload: blob })),
             catchError((error) =>
-              of(ResultActions.generateBroadSheetFail({ error: error.message }))
+              of(ResultActions.generateBroadSheetFail({ error: error?.message ?? String(error) }))
             )
           );
       })
     )
   );
-} 
+}

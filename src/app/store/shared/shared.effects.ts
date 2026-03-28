@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { createEffect, ofType, Actions } from '@ngrx/effects';
 import { of } from 'rxjs';
-import { catchError, map, switchMap } from 'rxjs/operators';
+import { catchError, map, switchMap, retry } from 'rxjs/operators';
 import * as SharedAction from './shared.actions';
 import { environment } from '../../../environments/environment';
 import { GenericResponseInterface, DropdownListInterface } from '../../types';
@@ -21,6 +21,7 @@ export class SharedEffect {
             }
           )
           .pipe(
+            retry(1),
             map((payload) => SharedAction.getGenderListSuccess({ payload })),
             catchError((error) => {
               return of(SharedAction.getGenderListFail({ error }));
@@ -42,6 +43,7 @@ export class SharedEffect {
             }
           )
           .pipe(
+            retry(1),
             map((payload) => SharedAction.getTermListSuccess({ payload })),
             catchError((error) => {
               return of(SharedAction.getTermListFail({ error }));
@@ -63,6 +65,7 @@ export class SharedEffect {
             }
           )
           .pipe(
+            retry(1),
             map((payload) => SharedAction.getReligionListSuccess({ payload })),
             catchError((error) => {
               return of(SharedAction.getReligionListFail({ error }));
@@ -117,6 +120,7 @@ export class SharedEffect {
             }
           )
           .pipe(
+            retry(1),
             map((payload) => {
               let modifiedPayload = { ...payload };
               modifiedPayload.entity = payload.entity.map((item) => {
@@ -150,6 +154,7 @@ export class SharedEffect {
             }
           )
           .pipe(
+            retry(1),
             map((payload) => {
               let modifiedPayload = { ...payload };
               modifiedPayload.entity = payload.entity.map((item) => {
@@ -183,6 +188,7 @@ export class SharedEffect {
             }
           )
           .pipe(
+            retry(1),
             map((payload) => SharedAction.getUserTypeListSuccess({ payload })),
             catchError((error) => {
               return of(SharedAction.getUserTypeListFail({ error }));
@@ -204,6 +210,7 @@ export class SharedEffect {
             }
           )
           .pipe(
+            retry(1),
             map((payload) => SharedAction.getSubjectTypeListSuccess({ payload })),
             catchError((error) => {
               return of(SharedAction.getSubjectTypeListFail({ error }));
@@ -225,6 +232,7 @@ export class SharedEffect {
             }
           )
           .pipe(
+            retry(1),
             map((payload) => SharedAction.getSkillGradeListSuccess({ payload })),
             catchError((error) => {
               return of(SharedAction.getSkillGradeListFail({ error }));

@@ -11,13 +11,12 @@ import {
 } from '@angular/router';
 import { routes } from './app.routes';
 import { provideAnimations } from '@angular/platform-browser/animations';
-import { provideHttpClient } from '@angular/common/http';
+import { provideHttpClient, withInterceptorsFromDi, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { EffectsModule } from '@ngrx/effects';
 import { StoreModule } from '@ngrx/store';
 import { reducers } from './store/app.reducer';
 import { AuthEffect } from './store/auth/auth.effects';
 import { AuthFacade } from './store/auth/auth.facade';
-import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { AppInterceptorService } from './services/app.interceptor.service';
 import { GlobalLoadingFacade } from './store/global-loading/global-loading.facade';
 import { provideHotToastConfig } from '@ngneat/hot-toast';
@@ -67,8 +66,8 @@ import { StudentClassEffect } from './store/student-class/student-class.effects'
 import { SchoolTermSessionEffect } from './store/school-term-session/school-term-session.effects';
 import { ProgramTypeEffect } from './store/program-type/program-type.effects';
 import { StaffEffect } from './store/staff/staff.effects';
-import { ResultEffects } from './store/result/result.effects';
-import { StudentClassSubjectAssessmentScoreEffects } from './store/student-class-subject-assessment-score/student-class-subject-assessment-score.effects';
+import { ResultEffect } from './store/result/result.effects';
+import { StudentClassSubjectAssessmentScoreEffect } from './store/student-class-subject-assessment-score/student-class-subject-assessment-score.effects';
 import { DataImportEffect } from './store/data-import/data-import.effects';
 import { DataImportFacade } from './store/data-import/data-import.facade';
 // import { provideStoreDevtools } from '@ngrx/store-devtools';
@@ -101,11 +100,10 @@ export const appConfig: ApplicationConfig = {
         SchoolTermSessionEffect,
         ProgramTypeEffect,
         StaffEffect,
-        ResultEffects,
-        StudentClassSubjectAssessmentScoreEffects,
+        ResultEffect,
+        StudentClassSubjectAssessmentScoreEffect,
         DataImportEffect,
       ]),
-      HttpClientModule
     ),
     provideAnimations(),
     provideHotToastConfig({
@@ -123,7 +121,7 @@ export const appConfig: ApplicationConfig = {
         minWidth: '260px',
       },
     }),
-    provideHttpClient(),
+    provideHttpClient(withInterceptorsFromDi()),
     provideRouter(
       routes,
       withPreloading(PreloadAllModules),

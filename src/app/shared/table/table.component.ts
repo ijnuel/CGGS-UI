@@ -9,7 +9,6 @@ import {
 } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
 import { TableHeaderInterface, TableActionInterface } from '../../types/table';
-import { PageEvent } from '@angular/material/paginator';
 import { PageQueryInterface, QueryInterface, GenericResponseInterface } from '../../types';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
@@ -163,9 +162,62 @@ export class TableComponent implements OnInit, OnChanges, OnDestroy {
     this.updateUrlAndEmit();
   }
 
-  onPageChange(event: PageEvent) {
-    this.internalPageIndex = event.pageIndex;
-    this.internalPageSize = event.pageSize;
+  get totalPages(): number {
+    return Math.ceil(this.totalLength / this.internalPageSize) || 1;
+  }
+
+  getVisiblePages(): (number | '...')[] {
+    const total = this.totalPages;
+    const current = this.internalPageIndex + 1; // 1-based
+
+    if (total <= 7) {
+      return Array.from({ length: total }, (_, i) => i + 1);
+    }
+
+    const pages: (number | '...')[] = [1];
+
+    if (current > 3) {
+      pages.push('...');
+    }
+
+    const rangeStart = Math.max(2, current - 1);
+    const rangeEnd = Math.min(total - 1, current + 1);
+    for (let i = rangeStart; i <= rangeEnd; i++) {
+      pages.push(i);
+    }
+
+    if (current < total - 2) {
+      pages.push('...');
+    }
+
+    pages.push(total);
+
+    return pages;
+  }
+
+  goToPage(page: number) {
+    const p = page - 1; // convert to 0-based
+    if (p < 0 || p >= this.totalPages || p === this.internalPageIndex) return;
+    this.internalPageIndex = p;
+    this.updateUrlAndEmit();
+  }
+
+  jumpToPage(value: string) {
+    const page = parseInt(value, 10);
+    if (!isNaN(page)) this.goToPage(page);
+  }
+
+  prevPage() {
+    if (this.internalPageIndex > 0) this.goToPage(this.internalPageIndex);
+  }
+
+  nextPage() {
+    if (this.internalPageIndex < this.totalPages - 1) this.goToPage(this.internalPageIndex + 2);
+  }
+
+  onPageSizeChange(size: number) {
+    this.internalPageSize = size;
+    this.internalPageIndex = 0;
     this.updateUrlAndEmit();
   }
 

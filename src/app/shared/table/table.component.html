@@ -159,15 +159,41 @@
     </div>
 
     <!-- Paginator -->
-    <div *ngIf="showPaginator" class="paginator-wrap">
-      <mat-paginator
-        [length]="totalLength"
-        [pageSize]="internalPageSize"
-        [pageIndex]="internalPageIndex"
-        [pageSizeOptions]="[5, 10, 25, 100]"
-        (page)="onPageChange($event)"
-        aria-label="Select page">
-      </mat-paginator>
+    <div *ngIf="showPaginator && totalLength > 0" class="paginator-wrap">
+      <div class="paginator-left">
+        <span class="paginator-info">
+          {{ internalPageIndex * internalPageSize + 1 }}–{{ (internalPageIndex + 1) * internalPageSize > totalLength ? totalLength : (internalPageIndex + 1) * internalPageSize }} of {{ totalLength }}
+        </span>
+        <span class="paginator-size-label">Rows:</span>
+        <select class="paginator-size-select" (change)="onPageSizeChange(+$any($event.target).value)">
+          <option *ngFor="let s of [5, 10, 25, 100]" [value]="s" [selected]="s === internalPageSize">{{ s }}</option>
+        </select>
+      </div>
+
+      <div class="paginator-pages">
+        <button class="pg-btn pg-nav" (click)="prevPage()" [disabled]="internalPageIndex === 0">
+          <mat-icon>chevron_left</mat-icon>
+        </button>
+
+        <ng-container *ngFor="let p of getVisiblePages()">
+          <span *ngIf="p === '...'" class="pg-ellipsis">…</span>
+          <button *ngIf="p !== '...'" class="pg-btn"
+            [class.pg-active]="p === internalPageIndex + 1"
+            (click)="goToPage(+p)">{{ p }}</button>
+        </ng-container>
+
+        <button class="pg-btn pg-nav" (click)="nextPage()" [disabled]="internalPageIndex >= totalPages - 1">
+          <mat-icon>chevron_right</mat-icon>
+        </button>
+      </div>
+
+      <div class="paginator-jump">
+        <span class="paginator-size-label">Go to</span>
+        <input class="paginator-jump-input" type="number" min="1" [max]="totalPages"
+          [placeholder]="internalPageIndex + 1"
+          (keydown.enter)="jumpToPage($any($event.target).value); $any($event.target).value = ''"
+          (blur)="jumpToPage($any($event.target).value); $any($event.target).value = ''" />
+      </div>
     </div>
   </div>
 

@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { createEffect, ofType, Actions } from '@ngrx/effects';
 import { of } from 'rxjs';
-import { catchError, map, switchMap, tap } from 'rxjs/operators';
+import { catchError, map, switchMap, tap, retry } from 'rxjs/operators';
 import * as ProgramTypeAction from './program-type.actions';
 import { environment } from '../../../environments/environment';
 import {
@@ -75,6 +75,7 @@ export class ProgramTypeEffect {
             }
           )
           .pipe(
+            retry(1),
             map((payload) =>
               ProgramTypeAction.getProgramTypeByIdSuccess({ payload })
             ),
@@ -119,6 +120,7 @@ export class ProgramTypeEffect {
             { withCredentials: true }
           )
           .pipe(
+            retry(1),
             map((payload) =>
               ProgramTypeAction.getProgramTypeDataImportTemplateSuccess({ payload })
             ),
@@ -141,6 +143,7 @@ export class ProgramTypeEffect {
             { params: { id }, withCredentials: true }
           )
           .pipe(
+            retry(1),
             map((payload) =>
               ProgramTypeAction.programTypeExistsSuccess({ payload })
             ),
@@ -163,6 +166,7 @@ export class ProgramTypeEffect {
             { withCredentials: true }
           )
           .pipe(
+            retry(1),
             map((payload) =>
               ProgramTypeAction.programTypeCountSuccess({ payload })
             ),

@@ -64,7 +64,7 @@ export class LayoutTopbarComponent implements OnInit, OnDestroy {
   }
 
   navigateToProfile() {
-    // TODO: Navigate to profile page when implemented
+    this.router.navigate(['app/profile']);
   }
 
   logout() {

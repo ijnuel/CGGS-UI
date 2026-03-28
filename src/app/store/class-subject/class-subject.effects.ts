@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { createEffect, ofType, Actions } from '@ngrx/effects';
 import { of } from 'rxjs';
-import { catchError, map, switchMap, tap } from 'rxjs/operators';
+import { catchError, map, switchMap, tap, retry } from 'rxjs/operators';
 import * as ClassSubjectAction from './class-subject.actions';
 import { environment } from '../../../environments/environment';
 import {
@@ -90,6 +90,7 @@ export class ClassSubjectEffect {
             }
           )
           .pipe(
+            retry(1),
             map((payload) =>
               ClassSubjectAction.getClassSubjectByIdSuccess({ payload })
             ),
@@ -115,6 +116,7 @@ export class ClassSubjectEffect {
             }
           )
           .pipe(
+            retry(1),
             map((payload) =>
               ClassSubjectAction.getClassSubjectByPropertiesSuccess({ payload })
             ),
@@ -159,6 +161,7 @@ export class ClassSubjectEffect {
             { withCredentials: true }
           )
           .pipe(
+            retry(1),
             map((payload) =>
               ClassSubjectAction.getClassSubjectDataImportTemplateSuccess({ payload })
             ),
@@ -204,6 +207,7 @@ export class ClassSubjectEffect {
             { withCredentials: true }
           )
           .pipe(
+            retry(1),
             map((payload) =>
               ClassSubjectAction.classSubjectCountSuccess({ payload })
             ),

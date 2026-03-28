@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { createEffect, ofType, Actions } from '@ngrx/effects';
 import { of } from 'rxjs';
-import { catchError, map, switchMap, tap } from 'rxjs/operators';
+import { catchError, map, switchMap, tap, retry } from 'rxjs/operators';
 import * as FamilyAction from './family.actions';
 import { environment } from '../../../environments/environment';
 import {
@@ -93,6 +93,7 @@ export class FamilyEffect {
             }
           )
           .pipe(
+            retry(1),
             map((payload) =>
               FamilyAction.getFamilyByIdSuccess({ payload })
             ),
@@ -161,6 +162,7 @@ export class FamilyEffect {
             { withCredentials: true }
           )
           .pipe(
+            retry(1),
             map((payload) =>
               FamilyAction.familyCountSuccess({ payload })
             ),

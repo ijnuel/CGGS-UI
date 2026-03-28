@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { createEffect, ofType, Actions } from '@ngrx/effects';
 import { of } from 'rxjs';
-import { catchError, map, switchMap } from 'rxjs/operators';
+import { catchError, map, switchMap, retry } from 'rxjs/operators';
 import * as DataImportAction from './data-import.actions';
 import { environment } from '../../../environments/environment';
 import { GenericResponseInterface, ImportEntityInterface } from '../../types';
@@ -24,6 +24,7 @@ export class DataImportEffect {
             { withCredentials: true }
           )
           .pipe(
+            retry(1),
             map((payload) => DataImportAction.getImportEntitiesSuccess({ payload })),
             catchError((error) =>
               of(DataImportAction.getImportEntitiesFail({ error: error?.message ?? 'Failed to load import entities' }))
@@ -42,6 +43,7 @@ export class DataImportEffect {
         return this.http
           .get(url, { responseType: 'blob', withCredentials: true })
           .pipe(
+            retry(1),
             map((blob) => {
               const anchor = document.createElement('a');
               anchor.href = URL.createObjectURL(blob);

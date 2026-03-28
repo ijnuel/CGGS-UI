@@ -31,6 +31,11 @@ const routes: Routes = [
         data: { roles: ALL_AUTHENTICATED },
         loadChildren: () => import('./change-password/change-password.module').then((m) => m.ChangePasswordModule),
       },
+      {
+        path: 'profile',
+        data: { roles: ALL_AUTHENTICATED },
+        loadChildren: () => import('./profile/profile.module').then((m) => m.ProfileModule),
+      },
 
       // ── Staff and above ───────────────────────────────────────────────────
       {

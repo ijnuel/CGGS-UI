@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { of } from 'rxjs';
-import { map, mergeMap, catchError, switchMap } from 'rxjs/operators';
+import { map, mergeMap, catchError, switchMap, retry } from 'rxjs/operators';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { environment } from '../../../environments/environment';
 import { 
@@ -12,7 +12,7 @@ import { GenericResponseInterface, PaginatedResponseInterface, PageQueryInterfac
 import * as StudentClassSubjectAssessmentScoreActions from './student-class-subject-assessment-score.actions';
 
 @Injectable()
-export class StudentClassSubjectAssessmentScoreEffects {
+export class StudentClassSubjectAssessmentScoreEffect {
   constructor(
     private actions$: Actions,
     private http: HttpClient
@@ -94,6 +94,7 @@ export class StudentClassSubjectAssessmentScoreEffects {
             { params, withCredentials: true }
           )
           .pipe(
+            retry(1),
             map((response) => StudentClassSubjectAssessmentScoreActions.getStudentClassSubjectAssessmentScoreByIdSuccess({ payload: response })),
             catchError((error) => of(StudentClassSubjectAssessmentScoreActions.getStudentClassSubjectAssessmentScoreByIdFail({ error: error.message })))
           );
@@ -113,6 +114,7 @@ export class StudentClassSubjectAssessmentScoreEffects {
             { params, withCredentials: true }
           )
           .pipe(
+            retry(1),
             map((response) => StudentClassSubjectAssessmentScoreActions.getStudentClassSubjectAssessmentScoreByPropertiesSuccess({ payload: response })),
             catchError((error) => of(StudentClassSubjectAssessmentScoreActions.getStudentClassSubjectAssessmentScoreByPropertiesFail({ error: error.message })))
           );
@@ -132,6 +134,7 @@ export class StudentClassSubjectAssessmentScoreEffects {
             { params, withCredentials: true }
           )
           .pipe(
+            retry(1),
             map((response) => StudentClassSubjectAssessmentScoreActions.studentClassSubjectAssessmentScoreExistsSuccess({ payload: response })),
             catchError((error) => of(StudentClassSubjectAssessmentScoreActions.studentClassSubjectAssessmentScoreExistsFail({ error: error.message })))
           );
@@ -151,6 +154,7 @@ export class StudentClassSubjectAssessmentScoreEffects {
             { params, withCredentials: true }
           )
           .pipe(
+            retry(1),
             map((response) => StudentClassSubjectAssessmentScoreActions.studentClassSubjectAssessmentScoreCountSuccess({ payload: response })),
             catchError((error) => of(StudentClassSubjectAssessmentScoreActions.studentClassSubjectAssessmentScoreCountFail({ error: error.message })))
           );

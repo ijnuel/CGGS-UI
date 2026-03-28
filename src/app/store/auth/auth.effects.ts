@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { createEffect, ofType, Actions } from '@ngrx/effects';
 import { of } from 'rxjs';
-import { catchError, map, switchMap, tap } from 'rxjs/operators';
+import { catchError, map, switchMap, tap, retry } from 'rxjs/operators';
 import * as AuthAction from './auth.actions';
 import { environment } from '../../../environments/environment';
 import { LoginResponseInterface, ChangePasswordDto } from '../../types/auth';
@@ -63,6 +63,7 @@ export class AuthEffect {
                         { withCredentials: true }
                     )
                     .pipe(
+                        retry(1),
                         map((payload) => {
                             // if (payload.entity.userId) {
                             //     this.router.navigate(['app/home']);
@@ -139,6 +140,7 @@ export class AuthEffect {
                         { withCredentials: true }
                     )
                     .pipe(
+                        retry(1),
                         map((payload) => {
                             // this.toast.openToast('Companies retrieved successfully!', NotificationTypeEnums.SUCCESS);
                             return AuthAction.getUserCompaniesSuccess({ payload });

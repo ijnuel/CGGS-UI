@@ -1,9 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { Observable } from 'rxjs';
-import {
-  PageQueryInterface,
-  PaginatedResponseInterface
-} from '../../../types';
 import CardMenuItems from './card-items';
 import { SidebarItemsInterface } from '../../../types/sidebar';
 

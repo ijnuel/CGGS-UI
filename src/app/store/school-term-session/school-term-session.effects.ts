@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { createEffect, ofType, Actions } from '@ngrx/effects';
 import { of } from 'rxjs';
-import { catchError, map, switchMap, tap } from 'rxjs/operators';
+import { catchError, map, switchMap, tap, retry } from 'rxjs/operators';
 import * as SchoolTermSessionAction from './school-term-session.actions';
 import { environment } from '../../../environments/environment';
 import {
@@ -100,6 +100,7 @@ export class SchoolTermSessionEffect {
             }
           )
           .pipe(
+            retry(1),
             map((payload) =>
               SchoolTermSessionAction.getSchoolTermSessionByIdSuccess({ payload })
             ),
@@ -168,6 +169,7 @@ export class SchoolTermSessionEffect {
             { withCredentials: true }
           )
           .pipe(
+            retry(1),
             map((payload) =>
               SchoolTermSessionAction.schoolTermSessionCountSuccess({ payload })
             ),

@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { createEffect, ofType, Actions } from '@ngrx/effects';
 import { of } from 'rxjs';
-import { catchError, map, switchMap, tap } from 'rxjs/operators';
+import { catchError, map, switchMap, tap, retry } from 'rxjs/operators';
 import * as ApplicationAction from './application.actions';
 import { environment } from '../../../environments/environment';
 import {
@@ -91,6 +91,7 @@ export class ApplicationEffect {
             }
           )
           .pipe(
+            retry(1),
             map((payload) =>
               ApplicationAction.getApplicationByIdSuccess({ payload })
             ),
@@ -159,6 +160,7 @@ export class ApplicationEffect {
             { withCredentials: true }
           )
           .pipe(
+            retry(1),
             map((payload) =>
               ApplicationAction.applicationCountSuccess({ payload })
             ),
