@@ -18,3 +18,6 @@ export const globalSuccessShow = createAction(
   '[GlobalSuccess] Global Success',
   props<{ message: string; messageDuration: number }>()
 );
+
+export const globalErrorClear = createAction('[GlobalError] Clear');
+export const globalSuccessClear = createAction('[GlobalSuccess] Clear');

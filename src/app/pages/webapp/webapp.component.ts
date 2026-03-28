@@ -27,11 +27,13 @@ export class WebappComponent implements OnInit, OnDestroy {
     this.globalError$.pipe(takeUntil(this.destroyed$)).subscribe((errorMessage) => {
       if (!errorMessage) return;
       this.toastNotification.openToast(errorMessage, NotificationTypeEnums.ERROR);
+      this.globalLoadingFacade.globalErrorClear();
     });
 
     this.globalLoadingFacade.selectGlobalSuccess$.pipe(takeUntil(this.destroyed$)).subscribe((successMessage) => {
       if (!successMessage) return;
       this.toastNotification.openToast(successMessage, NotificationTypeEnums.SUCCESS);
+      this.globalLoadingFacade.globalSuccessClear();
     });
   }
   

@@ -40,4 +40,12 @@ export class GlobalLoadingFacade {
       GlobalLoadingActions.globalSuccessShow({ message, messageDuration })
     );
   }
+
+  globalErrorClear() {
+    this.store.dispatch(GlobalLoadingActions.globalErrorClear());
+  }
+
+  globalSuccessClear() {
+    this.store.dispatch(GlobalLoadingActions.globalSuccessClear());
+  }
 }

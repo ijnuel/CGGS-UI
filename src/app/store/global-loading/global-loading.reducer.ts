@@ -56,7 +56,15 @@ export const reducer = createReducer(
       successMessage: action.message,
       successDuration: action.messageDuration,
     };
-  })
+  }),
+  on(LoadingActions.globalErrorClear, (state) => ({
+    ...state,
+    errorMessage: null,
+  })),
+  on(LoadingActions.globalSuccessClear, (state) => ({
+    ...state,
+    successMessage: null,
+  }))
 );
 
 const getLoading = (state: GlobalLoadingState) => state.loading;
