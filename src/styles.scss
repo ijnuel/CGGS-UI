@@ -24,3 +24,34 @@ body {
   color: var(--app-text-color);
   background-color: var(--app-bg);
 }
+
+// ── Toast overrides ────────────────────────────────────────────────────────────
+.app-toast {
+  // Ensure border-radius from config is applied
+  border-radius: 10px !important;
+}
+
+hot-toast-container {
+  // Tighten the gap between stacked toasts
+  gap: 8px !important;
+}
+
+.hot-toast-bar-base {
+  border-radius: 10px !important;
+  align-items: flex-start !important;
+}
+
+.hot-toast-message {
+  line-height: 1.5 !important;
+  word-break: break-word;
+}
+
+.hot-toast-close-btn {
+  opacity: 0.5;
+  transition: opacity 0.15s;
+  margin-top: 1px;
+
+  &:hover {
+    opacity: 1;
+  }
+}

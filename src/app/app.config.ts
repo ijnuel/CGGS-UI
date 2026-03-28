@@ -108,7 +108,21 @@ export const appConfig: ApplicationConfig = {
       HttpClientModule
     ),
     provideAnimations(),
-    provideHotToastConfig(),
+    provideHotToastConfig({
+      position: 'top-right',
+      duration: 4000,
+      dismissible: true,
+      style: {
+        borderRadius: '10px',
+        fontFamily: '"Nunito", sans-serif',
+        fontSize: '13px',
+        fontWeight: '600',
+        padding: '12px 16px',
+        boxShadow: '0 4px 24px rgba(0,0,0,0.10)',
+        maxWidth: '380px',
+        minWidth: '260px',
+      },
+    }),
     provideHttpClient(),
     provideRouter(
       routes,
