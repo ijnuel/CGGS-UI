@@ -105,7 +105,7 @@
             <th class="text-left">Student No</th>
             <th *ngFor="let assessment of assessmentColumns" class="text-center">
               <span>{{ assessment.name }}</span>
-              <span class="block text-xs font-normal opacity-70">(max {{ assessment.scoreWeight }})</span>
+              <span *ngIf="isNumericSubjectType()" class="block text-xs font-normal opacity-70">(max {{ assessment.scoreWeight }})</span>
             </th>
           </tr>
         </thead>
