@@ -17,7 +17,7 @@
 # For more information on the Azure Web Apps Deploy action: https://github.com/Azure/webapps-deploy
 # For more samples to get started with GitHub Action workflows to deploy to Azure: https://github.com/Azure/actions-workflow-samples
 
-name: Angular UI
+name: Busco UI deployment
 on:
   push:
     branches:
@@ -47,7 +47,7 @@ jobs:
       run: npm ci --force
       
     - name: npm build
-      run: npm run build-prod-chosen
+      run: npm run build-prod-busco
       
     - name: Copy web config
       run: |
@@ -64,8 +64,8 @@ jobs:
     - name: Deploy to Simply        
       uses: talunzhang/auto-web-deploy@v1.0.1
       with:
-        website-name: ${{ secrets.WEBSITE_NAME }}
-        server-computer-name: ${{ secrets.SERVER_COMPUTER_NAME }}
+        website-name: ${{ secrets.WEBSITE_NAME_BUSCO }}
+        server-computer-name: ${{ secrets.SERVER_COMPUTER_NAME_BUSCO }}
         server-username: ${{ secrets.SERVER_USERNAME }}
         server-password: ${{ secrets.SERVER_PASSWORD }}
         source-path: ${{ env.WEBAPP_PACKAGE_PATH }}
