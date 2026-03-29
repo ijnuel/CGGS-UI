@@ -1,10 +1,12 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Location } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { Observable, Subject } from 'rxjs';
+import { map, takeUntil } from 'rxjs/operators';
 import { StaffFacade } from '../../../../store/staff/staff.facade';
 import { SharedFacade } from '../../../../store/shared/shared.facade';
+import { GlobalLoadingFacade } from '../../../../store/global-loading/global-loading.facade';
+import { ProfileImageFacade } from '../../../../store/profile-image/profile-image.facade';
 import { StaffListInterface, DropdownListInterface, ClassSubjectListInterface } from '../../../../types';
 
 @Component({
@@ -12,20 +14,27 @@ import { StaffListInterface, DropdownListInterface, ClassSubjectListInterface } 
   templateUrl: './view-staff.component.html',
   styleUrls: ['./view-staff.component.scss'],
 })
-export class ViewStaffComponent implements OnInit {
+export class ViewStaffComponent implements OnInit, OnDestroy {
   staff$: Observable<StaffListInterface | null>;
   genderList$: Observable<DropdownListInterface[] | null>;
   religionList$: Observable<DropdownListInterface[] | null>;
   loading$: Observable<boolean>;
 
+  photoUrl: string | null = null;
+  photoUploading = false;
+  entityInitials = 'U';
+
   private staffId = '';
+  private unsubscribe$ = new Subject<void>();
 
   constructor(
     private route: ActivatedRoute,
     private router: Router,
     private location: Location,
     private staffFacade: StaffFacade,
-    private sharedFacade: SharedFacade
+    private sharedFacade: SharedFacade,
+    private globalLoadingFacade: GlobalLoadingFacade,
+    private profileImageFacade: ProfileImageFacade,
   ) {
     this.staff$ = this.staffFacade.staffByProperties$.pipe(
       map(staff => staff?.[0] ?? null)
@@ -38,6 +47,11 @@ export class ViewStaffComponent implements OnInit {
   ngOnInit() {
     this.staffId = this.route.snapshot.params['id'];
     if (this.staffId) {
+      this.profileImageFacade.loadCachedPhotoUrl(this.staffId);
+      this.profileImageFacade.getPhotoUrl$(this.staffId)
+        .pipe(takeUntil(this.unsubscribe$))
+        .subscribe(url => this.photoUrl = url);
+
       this.staffFacade.getStaffByProperties({
         queryProperties: [{ name: 'id', value: this.staffId }],
         nestedProperties: [
@@ -60,8 +74,40 @@ export class ViewStaffComponent implements OnInit {
         ]
       });
     }
+
+    this.staff$.pipe(takeUntil(this.unsubscribe$)).subscribe(staff => {
+      if (staff) {
+        this.entityInitials = `${staff.firstName?.charAt(0) ?? ''}${staff.lastName?.charAt(0) ?? ''}`.toUpperCase() || 'U';
+      }
+    });
+
+    this.profileImageFacade.uploading$
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe(uploading => this.photoUploading = uploading);
+
     this.sharedFacade.getGenderList();
     this.sharedFacade.getReligionList();
+  }
+
+  onPhotoSelected(event: Event) {
+    const input = event.target as HTMLInputElement;
+    const file = input.files?.[0];
+    if (!file || !this.staffId) return;
+
+    const allowed = ['image/jpeg', 'image/png', 'image/webp'];
+    if (!allowed.includes(file.type)) {
+      this.globalLoadingFacade.globalErrorShow('Only JPEG, PNG, or WebP images are allowed', 3000);
+      input.value = '';
+      return;
+    }
+    if (file.size > 5 * 1024 * 1024) {
+      this.globalLoadingFacade.globalErrorShow('Image must be smaller than 5MB', 3000);
+      input.value = '';
+      return;
+    }
+
+    this.profileImageFacade.uploadProfileImage('Staff', this.staffId, file);
+    input.value = '';
   }
 
   getLabel(list: DropdownListInterface[] | null, value: number | undefined): string {
@@ -80,5 +126,10 @@ export class ViewStaffComponent implements OnInit {
 
   navigateToEdit() {
     this.router.navigate(['/app/staff/edit', this.staffId]);
+  }
+
+  ngOnDestroy() {
+    this.unsubscribe$.next();
+    this.unsubscribe$.complete();
   }
 }

@@ -8,6 +8,8 @@ import { StaffFacade } from '../../../store/staff/staff.facade';
 import { StudentFacade } from '../../../store/student/student.facade';
 import { SharedFacade } from '../../../store/shared/shared.facade';
 import { GlobalLoadingFacade } from '../../../store/global-loading/global-loading.facade';
+import { ProfileImageFacade } from '../../../store/profile-image/profile-image.facade';
+import { ProfileImageEntityType } from '../../../store/profile-image/profile-image.actions';
 import { getErrorMessageHelper, initUserProfileForm } from '../../../services/helper.service';
 import { CurrentUserInterface } from '../../../types/user';
 import { UserRolesEnum } from '../../../types/auth';
@@ -26,6 +28,9 @@ export class UpdateProfileComponent implements OnInit, OnDestroy {
   entityId: string | null = null;
   entityData: AdministratorListInterface | StaffListInterface | StudentListInterface | null = null;
   fetchLoading$!: Observable<boolean>;
+
+  photoUrl: string | null = null;
+  photoUploading = false;
 
   unsubscribe$ = new Subject<void>();
 
@@ -67,6 +72,7 @@ export class UpdateProfileComponent implements OnInit, OnDestroy {
     private studentFacade: StudentFacade,
     private sharedFacade: SharedFacade,
     private globalLoadingFacade: GlobalLoadingFacade,
+    private profileImageFacade: ProfileImageFacade,
   ) {
     this.genderList$ = this.sharedFacade.selectGenderList$;
     this.religionList$ = this.sharedFacade.selectReligionList$;
@@ -97,6 +103,10 @@ export class UpdateProfileComponent implements OnInit, OnDestroy {
       this.selectedCountryStateList$, this.selectedStateLgaList$
     );
 
+    this.profileImageFacade.uploading$
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe(uploading => this.photoUploading = uploading);
+
     this.authFacade.selectedCurrentUser$
       .pipe(takeUntil(this.unsubscribe$))
       .subscribe(user => {
@@ -117,10 +127,11 @@ export class UpdateProfileComponent implements OnInit, OnDestroy {
       this.administratorFacade.administratorByProperties$
         .pipe(takeUntil(this.unsubscribe$))
         .subscribe(list => {
-          if (list && list.length > 0) {
+          if (list && list.length > 0 && !this.entityId) {
             this.entityId = list[0].id;
             this.entityData = list[0];
             this.formGroup.patchValue(list[0]);
+            this.initPhotoUrl(this.entityId);
           }
         });
       this.administratorFacade.updateSuccess$
@@ -137,10 +148,11 @@ export class UpdateProfileComponent implements OnInit, OnDestroy {
       this.staffFacade.staffByProperties$
         .pipe(takeUntil(this.unsubscribe$))
         .subscribe(list => {
-          if (list && list.length > 0) {
+          if (list && list.length > 0 && !this.entityId) {
             this.entityId = list[0].id;
             this.entityData = list[0];
             this.formGroup.patchValue(list[0]);
+            this.initPhotoUrl(this.entityId);
           }
         });
       this.staffFacade.updateSuccess$
@@ -157,10 +169,11 @@ export class UpdateProfileComponent implements OnInit, OnDestroy {
       this.studentFacade.studentByProperties$
         .pipe(takeUntil(this.unsubscribe$))
         .subscribe(list => {
-          if (list && list.length > 0) {
+          if (list && list.length > 0 && !this.entityId) {
             this.entityId = list[0].id;
             this.entityData = list[0];
             this.formGroup.patchValue(list[0]);
+            this.initPhotoUrl(this.entityId);
           }
         });
       this.studentFacade.updateSuccess$
@@ -171,6 +184,49 @@ export class UpdateProfileComponent implements OnInit, OnDestroy {
           }
         });
     }
+  }
+
+  private initPhotoUrl(entityId: string) {
+    this.profileImageFacade.loadCachedPhotoUrl(entityId);
+    this.profileImageFacade.getPhotoUrl$(entityId)
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe(url => this.photoUrl = url);
+  }
+
+  get entityType(): ProfileImageEntityType | null {
+    if (!this.currentUser) return null;
+    const t = this.currentUser.userType;
+    if (t === UserRolesEnum.SuperAdmin || t === UserRolesEnum.Admin) return 'Administrator';
+    if (t === UserRolesEnum.Staff) return 'Staff';
+    if (t === UserRolesEnum.Student) return 'Student';
+    return null;
+  }
+
+  get initials(): string {
+    const first = this.formControl.firstName.value || this.currentUser?.firstName || '';
+    const last = this.formControl.lastName.value || this.currentUser?.lastName || '';
+    return `${first.charAt(0)}${last.charAt(0)}`.toUpperCase() || 'U';
+  }
+
+  onPhotoSelected(event: Event) {
+    const input = event.target as HTMLInputElement;
+    const file = input.files?.[0];
+    if (!file || !this.entityId || !this.entityType) return;
+
+    const allowed = ['image/jpeg', 'image/png', 'image/webp'];
+    if (!allowed.includes(file.type)) {
+      this.globalLoadingFacade.globalErrorShow('Only JPEG, PNG, or WebP images are allowed', 3000);
+      input.value = '';
+      return;
+    }
+    if (file.size > 5 * 1024 * 1024) {
+      this.globalLoadingFacade.globalErrorShow('Image must be smaller than 5MB', 3000);
+      input.value = '';
+      return;
+    }
+
+    this.profileImageFacade.uploadProfileImage(this.entityType, this.entityId, file);
+    input.value = '';
   }
 
   getErrorMessage(controlName: string): string | null {
@@ -187,26 +243,20 @@ export class UpdateProfileComponent implements OnInit, OnDestroy {
 
     if (user.userType === UserRolesEnum.SuperAdmin || user.userType === UserRolesEnum.Admin) {
       this.administratorFacade.updateAdministrator({
-        ...formData,
-        id: this.entityId,
-        userId: user.userId,
+        ...formData, id: this.entityId, userId: user.userId,
       } as any);
 
     } else if (user.userType === UserRolesEnum.Staff) {
       const staff = this.entityData as StaffListInterface;
       this.staffFacade.updateStaff({
-        ...formData,
-        id: this.entityId,
-        userId: user.userId,
+        ...formData, id: this.entityId, userId: user.userId,
         staffNo: staff?.staffNo ?? '',
       } as any);
 
     } else if (user.userType === UserRolesEnum.Student) {
       const student = this.entityData as StudentListInterface;
       this.studentFacade.updateStudent({
-        ...formData,
-        id: this.entityId,
-        userId: user.userId,
+        ...formData, id: this.entityId, userId: user.userId,
         studentNo: student?.studentNo ?? '',
         familyId: student?.familyId,
         classId: student?.classId,

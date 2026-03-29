@@ -10,131 +10,176 @@
   };
   as obs
 ) {
-<div class="form-page">
+<div class="pl-8 pr-9 pt-6">
 
-  <div class="form-page-header">
-    <a class="form-back-btn" routerLink="/app/home">
-      <mat-icon>arrow_back</mat-icon>
-    </a>
-    <h1 class="form-page-title">Update Profile</h1>
+  <div class="flex items-center justify-between">
+    <div class="text-xl font-bold">Update Profile</div>
   </div>
 
-  <div class="form-card">
+  <!-- Avatar upload -->
+  <div class="avatar-section mt-6">
+    <div class="avatar-wrap" (click)="!photoUploading && photoInput.click()" [class.uploading]="photoUploading">
+      <img *ngIf="photoUrl && !photoUploading" [src]="photoUrl" alt="Profile photo" class="avatar-img" />
+      <span *ngIf="!photoUrl && !photoUploading" class="avatar-initials">{{ initials }}</span>
+      <div *ngIf="photoUploading" class="avatar-spinner">
+        <mat-spinner diameter="32"></mat-spinner>
+      </div>
+      <div class="avatar-overlay">
+        <mat-icon class="avatar-camera-icon">photo_camera</mat-icon>
+      </div>
+    </div>
+    <div class="avatar-meta">
+      <p class="avatar-name">{{ formControl.firstName.value }} {{ formControl.lastName.value }}</p>
+      <p class="avatar-hint">Click photo to upload · JPEG, PNG or WebP · max 5 MB</p>
+    </div>
+    <input #photoInput type="file" accept="image/jpeg,image/png,image/webp" class="hidden-file-input"
+      (change)="onPhotoSelected($event)" />
+  </div>
+
+  <div class="mt-8">
     <form [formGroup]="formGroup">
 
-      <div class="form-row">
-        <mat-form-field class="form-input">
-          <mat-label>First Name</mat-label>
-          <input type="text" autocomplete="off" matInput [formControl]="formControl.firstName" />
-          <mat-error>{{ getErrorMessage("firstName") }}</mat-error>
-        </mat-form-field>
-        <mat-form-field class="form-input">
-          <mat-label>Last Name</mat-label>
-          <input type="text" autocomplete="off" matInput [formControl]="formControl.lastName" />
-          <mat-error>{{ getErrorMessage("lastName") }}</mat-error>
-        </mat-form-field>
+      <div class="grid grid-cols-2 gap-x-4 mt-2">
+        <div>
+          <mat-form-field class="form-input">
+            <mat-label>First Name</mat-label>
+            <input type="text" autocomplete="off" matInput [formControl]="formControl.firstName" />
+            <mat-error>{{ getErrorMessage("firstName") }}</mat-error>
+          </mat-form-field>
+        </div>
+        <div>
+          <mat-form-field class="form-input">
+            <mat-label>Last Name</mat-label>
+            <input type="text" autocomplete="off" matInput [formControl]="formControl.lastName" />
+            <mat-error>{{ getErrorMessage("lastName") }}</mat-error>
+          </mat-form-field>
+        </div>
       </div>
 
-      <div class="form-row">
-        <mat-form-field class="form-input">
-          <mat-label>Middle Name</mat-label>
-          <input type="text" autocomplete="off" matInput [formControl]="formControl.middleName" />
-          <mat-error>{{ getErrorMessage("middleName") }}</mat-error>
-        </mat-form-field>
-        <mat-form-field class="form-input">
-          <mat-label>Date of Birth</mat-label>
-          <input matInput [matDatepicker]="dobPicker" [formControl]="formControl.dateOfBirth" [max]="today" />
-          <mat-datepicker-toggle matIconSuffix [for]="dobPicker" class="small-datepicker-toggle"></mat-datepicker-toggle>
-          <mat-datepicker #dobPicker></mat-datepicker>
-          <mat-error>{{ getErrorMessage("dateOfBirth") }}</mat-error>
-        </mat-form-field>
+      <div class="grid grid-cols-2 gap-x-4 mt-2">
+        <div>
+          <mat-form-field class="form-input">
+            <mat-label>Middle Name</mat-label>
+            <input type="text" autocomplete="off" matInput [formControl]="formControl.middleName" />
+            <mat-error>{{ getErrorMessage("middleName") }}</mat-error>
+          </mat-form-field>
+        </div>
+        <div>
+          <mat-form-field class="form-input">
+            <mat-label>Date of Birth</mat-label>
+            <input matInput [matDatepicker]="dobPicker" [formControl]="formControl.dateOfBirth" [max]="today" />
+            <mat-datepicker-toggle matIconSuffix [for]="dobPicker"></mat-datepicker-toggle>
+            <mat-datepicker #dobPicker></mat-datepicker>
+            <mat-error>{{ getErrorMessage("dateOfBirth") }}</mat-error>
+          </mat-form-field>
+        </div>
       </div>
 
-      <div class="form-row">
-        <mat-form-field class="form-input">
-          <mat-label>Phone Number</mat-label>
-          <input type="text" autocomplete="off" matInput [formControl]="formControl.phoneNumber" />
-          <mat-error>{{ getErrorMessage("phoneNumber") }}</mat-error>
-        </mat-form-field>
-        <mat-form-field class="form-input">
-          <mat-label>Email Address</mat-label>
-          <input type="text" autocomplete="off" matInput [formControl]="formControl.email" />
-          <mat-error>{{ getErrorMessage("email") }}</mat-error>
-        </mat-form-field>
+      <div class="grid grid-cols-2 gap-x-4 mt-2">
+        <div>
+          <mat-form-field class="form-input">
+            <mat-label>Phone Number</mat-label>
+            <input type="text" autocomplete="off" matInput [formControl]="formControl.phoneNumber" />
+            <mat-error>{{ getErrorMessage("phoneNumber") }}</mat-error>
+          </mat-form-field>
+        </div>
+        <div>
+          <mat-form-field class="form-input">
+            <mat-label>Email Address</mat-label>
+            <input type="text" autocomplete="off" matInput [formControl]="formControl.email" />
+            <mat-error>{{ getErrorMessage("email") }}</mat-error>
+          </mat-form-field>
+        </div>
       </div>
 
-      <div class="form-row">
-        <app-searchable-mat-select
-          [options]="obs.genderList!"
-          label="Gender" placeholder="Select gender"
-          [required]="true"
-          [formControl]="formControl.gender"
-          [error]="getErrorMessage('gender')">
-        </app-searchable-mat-select>
-        <app-searchable-mat-select
-          [options]="obs.religionList!"
-          label="Religion" placeholder="Select religion"
-          [required]="true"
-          [formControl]="formControl.religion"
-          [error]="getErrorMessage('religion')">
-        </app-searchable-mat-select>
+      <div class="grid grid-cols-2 gap-x-4 mt-2">
+        <div>
+          <app-searchable-mat-select
+            [options]="obs.genderList!"
+            label="Gender" placeholder="Select gender"
+            [required]="true"
+            [formControl]="formControl.gender"
+            [error]="getErrorMessage('gender')">
+          </app-searchable-mat-select>
+        </div>
+        <div>
+          <app-searchable-mat-select
+            [options]="obs.religionList!"
+            label="Religion" placeholder="Select religion"
+            [required]="true"
+            [formControl]="formControl.religion"
+            [error]="getErrorMessage('religion')">
+          </app-searchable-mat-select>
+        </div>
       </div>
 
-      <div class="form-row">
-        <app-searchable-mat-select
-          [options]="obs.countryList!"
-          label="Nationality" placeholder="Select nationality"
-          [labelKeys]="['name']" [valueKey]="'id'"
-          [formControl]="formControl.nationalityId"
-          [error]="getErrorMessage('nationalityId')">
-        </app-searchable-mat-select>
-        <app-searchable-mat-select
-          [options]="obs.selectedCountryStateList!"
-          label="State of Origin" placeholder="Select state of origin"
-          [labelKeys]="['name']" [valueKey]="'id'"
-          [formControl]="formControl.stateOfOriginId"
-          [error]="getErrorMessage('stateOfOriginId')">
-        </app-searchable-mat-select>
+      <div class="grid grid-cols-2 gap-x-4 mt-2">
+        <div>
+          <app-searchable-mat-select
+            [options]="obs.countryList!"
+            label="Nationality" placeholder="Select nationality"
+            [labelKeys]="['name']" [valueKey]="'id'"
+            [formControl]="formControl.nationalityId"
+            [error]="getErrorMessage('nationalityId')">
+          </app-searchable-mat-select>
+        </div>
+        <div>
+          <app-searchable-mat-select
+            [options]="obs.selectedCountryStateList!"
+            label="State of Origin" placeholder="Select state of origin"
+            [labelKeys]="['name']" [valueKey]="'id'"
+            [formControl]="formControl.stateOfOriginId"
+            [error]="getErrorMessage('stateOfOriginId')">
+          </app-searchable-mat-select>
+        </div>
       </div>
 
-      <div class="form-row">
-        <app-searchable-mat-select
-          [options]="obs.selectedStateLgaList!"
-          label="Local Government" placeholder="Select local government"
-          [labelKeys]="['name']" [valueKey]="'id'"
-          [formControl]="formControl.originLGAId"
-          [error]="getErrorMessage('originLGAId')">
-        </app-searchable-mat-select>
-        <mat-form-field class="form-input">
-          <mat-label>Home Address</mat-label>
-          <input type="text" autocomplete="off" matInput [formControl]="formControl.homeAddress" />
-          <mat-error>{{ getErrorMessage("homeAddress") }}</mat-error>
-        </mat-form-field>
+      <div class="grid grid-cols-2 gap-x-4 mt-2">
+        <div>
+          <app-searchable-mat-select
+            [options]="obs.selectedStateLgaList!"
+            label="Local Government" placeholder="Select local government"
+            [labelKeys]="['name']" [valueKey]="'id'"
+            [formControl]="formControl.originLGAId"
+            [error]="getErrorMessage('originLGAId')">
+          </app-searchable-mat-select>
+        </div>
+        <div>
+          <mat-form-field class="form-input">
+            <mat-label>Home Address</mat-label>
+            <input type="text" autocomplete="off" matInput [formControl]="formControl.homeAddress" />
+            <mat-error>{{ getErrorMessage("homeAddress") }}</mat-error>
+          </mat-form-field>
+        </div>
       </div>
 
-      <div class="form-row">
-        <app-searchable-mat-select
-          [options]="obs.selectedCountryStateList!"
-          label="Residential State" placeholder="Select residential state"
-          [labelKeys]="['name']" [valueKey]="'id'"
-          [formControl]="formControl.residentialStateId"
-          [error]="getErrorMessage('residentialStateId')">
-        </app-searchable-mat-select>
-        <mat-form-field class="form-input">
-          <mat-label>Residential City</mat-label>
-          <input type="text" autocomplete="off" matInput [formControl]="formControl.residentialCity" />
-          <mat-error>{{ getErrorMessage("residentialCity") }}</mat-error>
-        </mat-form-field>
+      <div class="grid grid-cols-2 gap-x-4 mt-2">
+        <div>
+          <app-searchable-mat-select
+            [options]="obs.selectedCountryStateList!"
+            label="Residential State" placeholder="Select residential state"
+            [labelKeys]="['name']" [valueKey]="'id'"
+            [formControl]="formControl.residentialStateId"
+            [error]="getErrorMessage('residentialStateId')">
+          </app-searchable-mat-select>
+        </div>
+        <div>
+          <mat-form-field class="form-input">
+            <mat-label>Residential City</mat-label>
+            <input type="text" autocomplete="off" matInput [formControl]="formControl.residentialCity" />
+            <mat-error>{{ getErrorMessage("residentialCity") }}</mat-error>
+          </mat-form-field>
+        </div>
       </div>
 
     </form>
+  </div>
 
-    <div class="form-actions">
-      <button class="form-cancel-btn" routerLink="/app/home">Cancel</button>
-      <button class="form-submit-btn" (click)="submit()" [disabled]="obs.loading">
-        Update Profile
-      </button>
-    </div>
+  <div class="actions-btn flex justify-end mt-10 gap-5">
+    <button class="cancel-btn" routerLink="/app/home">Cancel</button>
+    <button class="sec-btn" (click)="submit()" [disabled]="obs.loading">
+      Update Profile
+    </button>
   </div>
 
 </div>

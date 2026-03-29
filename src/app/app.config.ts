@@ -70,6 +70,8 @@ import { ResultEffect } from './store/result/result.effects';
 import { StudentClassSubjectAssessmentScoreEffect } from './store/student-class-subject-assessment-score/student-class-subject-assessment-score.effects';
 import { DataImportEffect } from './store/data-import/data-import.effects';
 import { DataImportFacade } from './store/data-import/data-import.facade';
+import { ProfileImageEffect } from './store/profile-image/profile-image.effects';
+import { ProfileImageFacade } from './store/profile-image/profile-image.facade';
 // import { provideStoreDevtools } from '@ngrx/store-devtools';
 
 export const appConfig: ApplicationConfig = {
@@ -103,6 +105,7 @@ export const appConfig: ApplicationConfig = {
         ResultEffect,
         StudentClassSubjectAssessmentScoreEffect,
         DataImportEffect,
+        ProfileImageEffect,
       ]),
     ),
     provideAnimations(),
@@ -171,5 +174,6 @@ export const appConfig: ApplicationConfig = {
     ResultFacade,
     StudentClassSubjectAssessmentScoreFacade,
     DataImportFacade,
+    ProfileImageFacade,
   ],
 };

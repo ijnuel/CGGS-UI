@@ -24,6 +24,7 @@ export interface StudentListInterface {
     residentialCity?: string;
     residentialStateId: string;
     phoneNumber?: string;
+    photoKey?: string;
     familyId: string;
     classId: string;
     originLGA?: LocalGovernmentAreaListInterface;

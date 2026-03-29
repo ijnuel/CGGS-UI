@@ -8,6 +8,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatIconModule } from '@angular/material/icon';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatRadioModule } from '@angular/material/radio';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { AdministratorComponent } from './administrator.component';
 import { SharedModule } from '../../../shared/shared.module';
 import { CreateUpdateAdministratorComponent } from './create-update-administrator/create-update-administrator.component';
@@ -50,6 +51,7 @@ const routes: Routes = [
         MatDatepickerModule,
         MatSelectModule,
         MatRadioModule,
+        MatProgressSpinnerModule,
     ],
     providers: [provideNativeDateAdapter()],
 })

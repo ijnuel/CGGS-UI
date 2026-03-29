@@ -45,9 +45,26 @@
 
     <!-- Profile Header Card -->
     <div class="bg-white rounded-lg shadow-md p-6 mb-6 flex flex-col sm:flex-row items-start sm:items-center gap-6">
-      <div class="w-20 h-20 rounded-full bg-teal-100 flex items-center justify-center flex-shrink-0">
-        <mat-icon style="font-size:40px;width:40px;height:40px;" class="text-teal-400">person</mat-icon>
+      <div class="group relative w-20 h-20 rounded-full flex-shrink-0 cursor-pointer"
+           [class.cursor-default]="photoUploading"
+           (click)="!photoUploading && photoInput.click()">
+        <img *ngIf="photoUrl && !photoUploading" [src]="photoUrl" alt="Profile photo"
+             class="w-full h-full rounded-full object-cover" />
+        <div *ngIf="!photoUrl && !photoUploading"
+             class="w-full h-full rounded-full bg-teal-100 flex items-center justify-center text-2xl font-bold text-teal-400">
+          {{ entityInitials }}
+        </div>
+        <div *ngIf="photoUploading"
+             class="absolute inset-0 rounded-full bg-white/60 flex items-center justify-center">
+          <mat-spinner diameter="32"></mat-spinner>
+        </div>
+        <div *ngIf="!photoUploading"
+             class="absolute inset-0 rounded-full flex items-center justify-center transition-all duration-200 group-hover:bg-black/40">
+          <mat-icon class="text-white opacity-0 group-hover:opacity-100 transition-opacity duration-200">photo_camera</mat-icon>
+        </div>
       </div>
+      <input #photoInput type="file" accept="image/jpeg,image/png,image/webp" class="hidden"
+             (change)="onPhotoSelected($event)" />
       <div class="flex-1 min-w-0">
         <h3 class="text-xl font-bold text-gray-800">
           {{ staff.firstName }} {{ staff.middleName }} {{ staff.lastName }}

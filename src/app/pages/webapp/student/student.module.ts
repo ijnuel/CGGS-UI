@@ -8,6 +8,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatIconModule } from '@angular/material/icon';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatRadioModule } from '@angular/material/radio';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { StudentComponent } from './student.component';
 import { SharedModule } from '../../../shared/shared.module';
 import { CreateUpdateStudentComponent } from './create-update-student/create-update-student.component';
@@ -50,6 +51,7 @@ const routes: Routes = [
         MatDatepickerModule,
         MatSelectModule,
         MatRadioModule,
+        MatProgressSpinnerModule,
     ],
     providers: [provideNativeDateAdapter()],
 })

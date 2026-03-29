@@ -27,6 +27,7 @@ import * as fromResult from './result/result.reducer';
 import * as fromStudentClassSubjectAssessmentScore from './student-class-subject-assessment-score/student-class-subject-assessment-score.reducer';
 import * as fromGlobalLoading from './global-loading/global-loading.reducer';
 import * as fromDataImport from './data-import/data-import.reducer';
+import * as fromProfileImage from './profile-image/profile-image.reducer';
 
 export const appFeatureKey = 'appFeatureKey';
 
@@ -58,6 +59,7 @@ export interface AppState {
   [fromStudentClassSubjectAssessmentScore.studentClassSubjectAssessmentScoreFeatureKey]: fromStudentClassSubjectAssessmentScore.StudentClassSubjectAssessmentScoreState;
   [fromGlobalLoading.globalLoadingFeatureKey]: fromGlobalLoading.GlobalLoadingState;
   [fromDataImport.dataImportFeatureKey]: fromDataImport.DataImportState;
+  [fromProfileImage.profileImageFeatureKey]: fromProfileImage.ProfileImageState;
 }
 
 export const reducers = {
@@ -88,6 +90,7 @@ export const reducers = {
   [fromStudentClassSubjectAssessmentScore.studentClassSubjectAssessmentScoreFeatureKey]: fromStudentClassSubjectAssessmentScore.studentClassSubjectAssessmentScoreReducer,
   [fromGlobalLoading.globalLoadingFeatureKey]: fromGlobalLoading.reducer,
   [fromDataImport.dataImportFeatureKey]: fromDataImport.reducer,
+  [fromProfileImage.profileImageFeatureKey]: fromProfileImage.reducer,
 };
 
 export const selectAppState = createFeatureSelector<AppState>(appFeatureKey);

@@ -6,6 +6,8 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatIconModule } from '@angular/material/icon';
 import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatDividerModule } from '@angular/material/divider';
 import { SharedModule } from '../../../shared/shared.module';
 import { UpdateProfileComponent } from './update-profile.component';
 import { provideNativeDateAdapter } from '@angular/material/core';
@@ -25,6 +27,8 @@ const routes: Routes = [
     MatInputModule,
     MatIconModule,
     MatDatepickerModule,
+    MatProgressSpinnerModule,
+    MatDividerModule,
   ],
   providers: [provideNativeDateAdapter()],
 })

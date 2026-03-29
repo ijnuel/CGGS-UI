@@ -21,6 +21,7 @@ export interface AdministratorListInterface {
   residentialCity?: string;
   residentialStateId: string;
   phoneNumber?: string;
+  photoKey?: string;
   originLGA?: LocalGovernmentAreaListInterface;
   stateOfOrigin?: StateListInterface;
   nationality?: CountryListInterface;
