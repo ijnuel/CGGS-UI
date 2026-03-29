@@ -65,7 +65,7 @@ jobs:
       uses: talunzhang/auto-web-deploy@v1.0.1
       with:
         website-name: ${{ secrets.WEBSITE_NAME_BUSCO }}
-        server-computer-name: ${{ secrets.SERVER_COMPUTER_NAME_BUSCO }}
+        server-computer-name: ${{ secrets.SERVER_COMPUTER_NAME }}
         server-username: ${{ secrets.SERVER_USERNAME }}
         server-password: ${{ secrets.SERVER_PASSWORD_BUSCO }}
         source-path: ${{ env.WEBAPP_PACKAGE_PATH }}
