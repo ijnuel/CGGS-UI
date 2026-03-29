@@ -45,23 +45,30 @@
 
     <!-- Profile Header Card -->
     <div class="bg-white rounded-lg shadow-md p-6 mb-6 flex flex-col sm:flex-row items-start sm:items-center gap-6">
-      <div class="group relative w-20 h-20 rounded-full flex-shrink-0 cursor-pointer"
-           [class.cursor-default]="photoUploading"
-           (click)="!photoUploading && photoInput.click()">
-        <img *ngIf="photoUrl && !photoUploading" [src]="photoUrl" alt="Profile photo"
-             class="w-full h-full rounded-full object-cover" />
-        <div *ngIf="!photoUrl && !photoUploading"
-             class="w-full h-full rounded-full bg-blue-100 flex items-center justify-center text-2xl font-bold text-blue-400">
-          {{ entityInitials }}
+      <div class="flex flex-col items-center gap-1">
+        <div class="group relative w-20 h-20 rounded-full cursor-pointer"
+             [class.cursor-default]="photoUploading || photoDeleting"
+             (click)="!photoUploading && !photoDeleting && photoInput.click()">
+          <img *ngIf="photoUrl && !photoUploading && !photoDeleting" [src]="photoUrl" alt="Profile photo"
+               class="w-full h-full rounded-full object-cover" />
+          <div *ngIf="!photoUrl && !photoUploading && !photoDeleting"
+               class="w-full h-full rounded-full bg-blue-100 flex items-center justify-center text-2xl font-bold text-blue-400">
+            {{ entityInitials }}
+          </div>
+          <div *ngIf="photoUploading || photoDeleting"
+               class="absolute inset-0 rounded-full bg-white/60 flex items-center justify-center">
+            <mat-spinner diameter="32"></mat-spinner>
+          </div>
+          <div *ngIf="!photoUploading && !photoDeleting"
+               class="absolute inset-0 rounded-full flex items-center justify-center transition-all duration-200 group-hover:bg-black/40">
+            <mat-icon class="text-white opacity-0 group-hover:opacity-100 transition-opacity duration-200">photo_camera</mat-icon>
+          </div>
         </div>
-        <div *ngIf="photoUploading"
-             class="absolute inset-0 rounded-full bg-white/60 flex items-center justify-center">
-          <mat-spinner diameter="32"></mat-spinner>
-        </div>
-        <div *ngIf="!photoUploading"
-             class="absolute inset-0 rounded-full flex items-center justify-center transition-all duration-200 group-hover:bg-black/40">
-          <mat-icon class="text-white opacity-0 group-hover:opacity-100 transition-opacity duration-200">photo_camera</mat-icon>
-        </div>
+        <button *ngIf="photoUrl && !photoUploading && !photoDeleting"
+                class="text-xs text-red-500 hover:text-red-700 underline bg-transparent border-none cursor-pointer p-0"
+                (click)="deletePhoto()">
+          Remove
+        </button>
       </div>
       <input #photoInput type="file" accept="image/jpeg,image/png,image/webp" class="hidden"
              (change)="onPhotoSelected($event)" />

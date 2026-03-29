@@ -99,3 +99,18 @@
 .hidden-file-input {
   display: none;
 }
+
+.avatar-remove-btn {
+  margin-top: 2px;
+  padding: 0;
+  border: none;
+  background: transparent;
+  font-size: 11px;
+  color: #e03131;
+  cursor: pointer;
+  text-decoration: underline;
+
+  &:hover {
+    color: #c92a2a;
+  }
+}

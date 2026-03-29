@@ -2,10 +2,11 @@ import { createAction, props } from '@ngrx/store';
 
 export type ProfileImageEntityType = 'Administrator' | 'Staff' | 'Student';
 
-// Upload
-export const uploadProfileImage = createAction(
-  '[ProfileImage] Upload',
-  props<{ entityType: ProfileImageEntityType; entityId: string; file: File }>()
+// Upload — HTTP is handled in the facade to avoid putting a File object in the store.
+// Only serializable state-transition actions go through the reducer/effects.
+export const uploadProfileImageStart = createAction(
+  '[ProfileImage] Upload Start',
+  props<{ entityId: string }>()
 );
 
 export const uploadProfileImageSuccess = createAction(
@@ -18,7 +19,23 @@ export const uploadProfileImageFail = createAction(
   props<{ error: string }>()
 );
 
-// Load cached URL from localStorage into store
+// Delete
+export const deleteProfileImage = createAction(
+  '[ProfileImage] Delete',
+  props<{ entityType: ProfileImageEntityType; entityId: string }>()
+);
+
+export const deleteProfileImageSuccess = createAction(
+  '[ProfileImage/API] Delete Success',
+  props<{ entityId: string }>()
+);
+
+export const deleteProfileImageFail = createAction(
+  '[ProfileImage/API] Delete Fail',
+  props<{ error: string }>()
+);
+
+// Cache
 export const loadCachedPhotoUrl = createAction(
   '[ProfileImage] Load Cached Photo Url',
   props<{ entityId: string }>()

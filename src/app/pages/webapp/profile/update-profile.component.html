@@ -18,10 +18,10 @@
 
   <!-- Avatar upload -->
   <div class="avatar-section mt-6">
-    <div class="avatar-wrap" (click)="!photoUploading && photoInput.click()" [class.uploading]="photoUploading">
+    <div class="avatar-wrap" (click)="!photoUploading && !photoDeleting && photoInput.click()" [class.uploading]="photoUploading || photoDeleting">
       <img *ngIf="photoUrl && !photoUploading" [src]="photoUrl" alt="Profile photo" class="avatar-img" />
       <span *ngIf="!photoUrl && !photoUploading" class="avatar-initials">{{ initials }}</span>
-      <div *ngIf="photoUploading" class="avatar-spinner">
+      <div *ngIf="photoUploading || photoDeleting" class="avatar-spinner">
         <mat-spinner diameter="32"></mat-spinner>
       </div>
       <div class="avatar-overlay">
@@ -31,6 +31,10 @@
     <div class="avatar-meta">
       <p class="avatar-name">{{ formControl.firstName.value }} {{ formControl.lastName.value }}</p>
       <p class="avatar-hint">Click photo to upload · JPEG, PNG or WebP · max 5 MB</p>
+      <button *ngIf="photoUrl && !photoUploading && !photoDeleting"
+              class="avatar-remove-btn" (click)="deletePhoto()">
+        Remove photo
+      </button>
     </div>
     <input #photoInput type="file" accept="image/jpeg,image/png,image/webp" class="hidden-file-input"
       (change)="onPhotoSelected($event)" />

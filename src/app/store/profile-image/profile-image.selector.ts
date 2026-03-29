@@ -2,6 +2,8 @@ import { createSelector } from '@ngrx/store';
 import {
   getUploading,
   getUploadSuccess,
+  getDeleting,
+  getDeleteSuccess,
   getError,
   getPhotoUrls,
   ProfileImageState,
@@ -12,6 +14,8 @@ export const selectProfileImageState = (state: { profileImage: ProfileImageState
 
 export const selectUploading = createSelector(selectProfileImageState, getUploading);
 export const selectUploadSuccess = createSelector(selectProfileImageState, getUploadSuccess);
+export const selectDeleting = createSelector(selectProfileImageState, getDeleting);
+export const selectDeleteSuccess = createSelector(selectProfileImageState, getDeleteSuccess);
 export const selectError = createSelector(selectProfileImageState, getError);
 export const selectPhotoUrls = createSelector(selectProfileImageState, getPhotoUrls);
 

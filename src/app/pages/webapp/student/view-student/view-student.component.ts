@@ -22,6 +22,7 @@ export class ViewStudentComponent implements OnInit, OnDestroy {
 
   photoUrl: string | null = null;
   photoUploading = false;
+  photoDeleting = false;
   entityInitials = 'U';
 
   private studentId = '';
@@ -86,8 +87,17 @@ export class ViewStudentComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this.unsubscribe$))
       .subscribe(uploading => this.photoUploading = uploading);
 
+    this.profileImageFacade.deleting$
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe(deleting => this.photoDeleting = deleting);
+
     this.sharedFacade.getGenderList();
     this.sharedFacade.getReligionList();
+  }
+
+  deletePhoto() {
+    if (!this.studentId) return;
+    this.profileImageFacade.deleteProfileImage('Student', this.studentId);
   }
 
   onPhotoSelected(event: Event) {

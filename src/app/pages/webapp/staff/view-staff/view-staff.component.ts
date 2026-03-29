@@ -22,6 +22,7 @@ export class ViewStaffComponent implements OnInit, OnDestroy {
 
   photoUrl: string | null = null;
   photoUploading = false;
+  photoDeleting = false;
   entityInitials = 'U';
 
   private staffId = '';
@@ -85,8 +86,17 @@ export class ViewStaffComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this.unsubscribe$))
       .subscribe(uploading => this.photoUploading = uploading);
 
+    this.profileImageFacade.deleting$
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe(deleting => this.photoDeleting = deleting);
+
     this.sharedFacade.getGenderList();
     this.sharedFacade.getReligionList();
+  }
+
+  deletePhoto() {
+    if (!this.staffId) return;
+    this.profileImageFacade.deleteProfileImage('Staff', this.staffId);
   }
 
   onPhotoSelected(event: Event) {

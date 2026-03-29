@@ -22,6 +22,7 @@ export class ViewAdministratorComponent implements OnInit, OnDestroy {
 
   photoUrl: string | null = null;
   photoUploading = false;
+  photoDeleting = false;
   entityInitials = 'U';
 
   private administratorId = '';
@@ -74,8 +75,17 @@ export class ViewAdministratorComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this.unsubscribe$))
       .subscribe(uploading => this.photoUploading = uploading);
 
+    this.profileImageFacade.deleting$
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe(deleting => this.photoDeleting = deleting);
+
     this.sharedFacade.getGenderList();
     this.sharedFacade.getReligionList();
+  }
+
+  deletePhoto() {
+    if (!this.administratorId) return;
+    this.profileImageFacade.deleteProfileImage('Administrator', this.administratorId);
   }
 
   onPhotoSelected(event: Event) {

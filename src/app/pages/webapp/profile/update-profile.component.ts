@@ -31,6 +31,7 @@ export class UpdateProfileComponent implements OnInit, OnDestroy {
 
   photoUrl: string | null = null;
   photoUploading = false;
+  photoDeleting = false;
 
   unsubscribe$ = new Subject<void>();
 
@@ -106,6 +107,10 @@ export class UpdateProfileComponent implements OnInit, OnDestroy {
     this.profileImageFacade.uploading$
       .pipe(takeUntil(this.unsubscribe$))
       .subscribe(uploading => this.photoUploading = uploading);
+
+    this.profileImageFacade.deleting$
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe(deleting => this.photoDeleting = deleting);
 
     this.authFacade.selectedCurrentUser$
       .pipe(takeUntil(this.unsubscribe$))
@@ -206,6 +211,11 @@ export class UpdateProfileComponent implements OnInit, OnDestroy {
     const first = this.formControl.firstName.value || this.currentUser?.firstName || '';
     const last = this.formControl.lastName.value || this.currentUser?.lastName || '';
     return `${first.charAt(0)}${last.charAt(0)}`.toUpperCase() || 'U';
+  }
+
+  deletePhoto() {
+    if (!this.entityId || !this.entityType) return;
+    this.profileImageFacade.deleteProfileImage(this.entityType, this.entityId);
   }
 
   onPhotoSelected(event: Event) {
