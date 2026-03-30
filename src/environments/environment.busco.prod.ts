@@ -12,7 +12,7 @@ export const environment = {
   logoUrl: 'assets/images/busco.png',
   logoWhiteUrl: 'assets/images/busco.png',
   faviconUrl: 'busco.ico',
-  heroBgUrl: 'assets/images/busco.png',
+  heroBgUrl: 'assets/images/assembly.jpeg',
 
   // Contact info
   address: 'No. 4 Molipa Estate, Off Irewon road, Ijebu Ode, Ogun state, Nigeria.',
