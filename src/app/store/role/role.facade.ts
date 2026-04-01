@@ -7,6 +7,7 @@ import {
   RoleUpdateInterface,
   PermissionInterface,
   RolePermissionAssignInterface,
+  UserRoleInterface,
 } from '../../types';
 import * as RoleAction from './role.actions';
 import {
@@ -18,6 +19,7 @@ import {
   selectRoleCreateSuccess,
   selectRoleUpdateSuccess,
   selectAssignPermissionsSuccess,
+  selectUserRoles,
 } from './role.selector';
 import { RoleState } from './role.reducer';
 
@@ -33,6 +35,7 @@ export class RoleFacade {
   createSuccess$: Observable<boolean>;
   updateSuccess$: Observable<boolean>;
   assignPermissionsSuccess$: Observable<boolean>;
+  userRoles$: Observable<string[] | null>;
 
   constructor(private store: Store<{ role: RoleState }>) {
     this.roleAll$ = this.store.select(selectRoleAll);
@@ -43,6 +46,7 @@ export class RoleFacade {
     this.createSuccess$ = this.store.select(selectRoleCreateSuccess);
     this.updateSuccess$ = this.store.select(selectRoleUpdateSuccess);
     this.assignPermissionsSuccess$ = this.store.select(selectAssignPermissionsSuccess);
+    this.userRoles$ = this.store.select(selectUserRoles);
   }
 
   getRoleAll(): void {
@@ -75,5 +79,17 @@ export class RoleFacade {
 
   removePermissions(payload: RolePermissionAssignInterface): void {
     this.store.dispatch(RoleAction.removePermissions({ payload }));
+  }
+
+  getUserRoles(userId: string): void {
+    this.store.dispatch(RoleAction.getUserRoles({ userId }));
+  }
+
+  assignRole(payload: UserRoleInterface): void {
+    this.store.dispatch(RoleAction.assignRole({ payload }));
+  }
+
+  removeRole(payload: UserRoleInterface): void {
+    this.store.dispatch(RoleAction.removeRole({ payload }));
   }
 }

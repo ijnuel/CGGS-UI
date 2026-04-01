@@ -6,6 +6,7 @@ import {
   RoleUpdateInterface,
   PermissionInterface,
   RolePermissionAssignInterface,
+  UserRoleInterface,
 } from '../../types';
 
 // Get All Roles
@@ -143,5 +144,53 @@ export const removePermissionsSuccess = createAction(
 
 export const removePermissionsFail = createAction(
   '[Role/API] Remove Permissions Fail',
+  props<{ error: string }>()
+);
+
+// Get User Roles
+export const getUserRoles = createAction(
+  '[Role] Get User Roles',
+  props<{ userId: string }>()
+);
+
+export const getUserRolesSuccess = createAction(
+  '[Role/API] Get User Roles Success',
+  props<{ payload: GenericResponseInterface<string[]> }>()
+);
+
+export const getUserRolesFail = createAction(
+  '[Role/API] Get User Roles Fail',
+  props<{ error: string }>()
+);
+
+// Assign Role to User
+export const assignRole = createAction(
+  '[Role] Assign Role',
+  props<{ payload: UserRoleInterface }>()
+);
+
+export const assignRoleSuccess = createAction(
+  '[Role/API] Assign Role Success',
+  props<{ payload: GenericResponseInterface<boolean> }>()
+);
+
+export const assignRoleFail = createAction(
+  '[Role/API] Assign Role Fail',
+  props<{ error: string }>()
+);
+
+// Remove Role from User
+export const removeRole = createAction(
+  '[Role] Remove Role',
+  props<{ payload: UserRoleInterface }>()
+);
+
+export const removeRoleSuccess = createAction(
+  '[Role/API] Remove Role Success',
+  props<{ payload: GenericResponseInterface<boolean> }>()
+);
+
+export const removeRoleFail = createAction(
+  '[Role/API] Remove Role Fail',
   props<{ error: string }>()
 );

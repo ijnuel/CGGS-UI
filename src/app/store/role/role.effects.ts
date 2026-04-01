@@ -170,6 +170,62 @@ export class RoleEffect {
     )
   );
 
+  // Get User Roles
+  $getUserRoles = createEffect(() =>
+    this.actions$.pipe(
+      ofType(RoleAction.getUserRoles),
+      switchMap(({ userId }) =>
+        this.http
+          .get<GenericResponseInterface<string[]>>(
+            `${environment.baseUrl}/Role/UserRoles/${userId}`,
+            { withCredentials: true }
+          )
+          .pipe(
+            map((payload) => RoleAction.getUserRolesSuccess({ payload })),
+            catchError((error) => of(RoleAction.getUserRolesFail({ error })))
+          )
+      )
+    )
+  );
+
+  // Assign Role to User
+  $assignRole = createEffect(() =>
+    this.actions$.pipe(
+      ofType(RoleAction.assignRole),
+      switchMap(({ payload }) =>
+        this.http
+          .post<GenericResponseInterface<boolean>>(
+            `${environment.baseUrl}/Role/AssignRole`,
+            payload,
+            { withCredentials: true }
+          )
+          .pipe(
+            map((response) => RoleAction.assignRoleSuccess({ payload: response })),
+            catchError((error) => of(RoleAction.assignRoleFail({ error })))
+          )
+      )
+    )
+  );
+
+  // Remove Role from User
+  $removeRole = createEffect(() =>
+    this.actions$.pipe(
+      ofType(RoleAction.removeRole),
+      switchMap(({ payload }) =>
+        this.http
+          .post<GenericResponseInterface<boolean>>(
+            `${environment.baseUrl}/Role/RemoveRole`,
+            payload,
+            { withCredentials: true }
+          )
+          .pipe(
+            map((response) => RoleAction.removeRoleSuccess({ payload: response })),
+            catchError((error) => of(RoleAction.removeRoleFail({ error })))
+          )
+      )
+    )
+  );
+
   // Loading Effects
   $roleLoading = createEffect(
     () =>
@@ -179,7 +235,9 @@ export class RoleEffect {
           RoleAction.updateRole,
           RoleAction.deleteRole,
           RoleAction.assignPermissions,
-          RoleAction.removePermissions
+          RoleAction.removePermissions,
+          RoleAction.assignRole,
+          RoleAction.removeRole
         ),
         tap((action) => {
           this.errorLoadingFacade.globalLoadingShow(action.type);
@@ -201,7 +259,11 @@ export class RoleEffect {
           RoleAction.assignPermissionsSuccess,
           RoleAction.assignPermissionsFail,
           RoleAction.removePermissionsSuccess,
-          RoleAction.removePermissionsFail
+          RoleAction.removePermissionsFail,
+          RoleAction.assignRoleSuccess,
+          RoleAction.assignRoleFail,
+          RoleAction.removeRoleSuccess,
+          RoleAction.removeRoleFail
         ),
         tap(() => {
           this.errorLoadingFacade.globalLoadingHide();

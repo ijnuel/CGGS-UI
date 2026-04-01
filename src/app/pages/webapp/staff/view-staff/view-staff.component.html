@@ -178,6 +178,50 @@
         </ng-template>
       </div>
 
+      <!-- Roles -->
+      <div class="bg-white rounded-lg shadow-md p-6">
+        <div class="flex items-center justify-between mb-4">
+          <h4 class="text-base font-semibold text-gray-700 flex items-center gap-2">
+            <mat-icon style="color: var(--app-primary);">shield</mat-icon>
+            Roles
+          </h4>
+          <div class="flex gap-2">
+            <button mat-stroked-button class="!text-xs" style="color: var(--app-primary); border-color: var(--app-primary);"
+                    (click)="openAssignRoleDialog()">
+              <mat-icon class="!text-base !mr-1">add</mat-icon> Assign
+            </button>
+            <button mat-stroked-button class="!text-xs !text-red-500 !border-red-300"
+                    [disabled]="userRoles.length === 0"
+                    (click)="openRemoveRoleDialog()">
+              <mat-icon class="!text-base !mr-1">remove_circle_outline</mat-icon> Remove
+            </button>
+          </div>
+        </div>
+        <div *ngIf="rolesLoading" class="flex justify-center py-4">
+          <mat-spinner diameter="24"></mat-spinner>
+        </div>
+        <ng-container *ngIf="!rolesLoading">
+          <ng-container *ngIf="userRoles.length > 0; else noRoles">
+            <div class="flex flex-wrap gap-2">
+              <div *ngFor="let role of userRoles"
+                   class="inline-flex items-center gap-2 px-3 py-2 rounded-lg border border-gray-200 bg-gray-50">
+                <div class="w-7 h-7 rounded-full flex items-center justify-center"
+                     style="background: linear-gradient(135deg, var(--app-gradient-from), var(--app-gradient-to));">
+                  <mat-icon class="!text-sm text-white">shield</mat-icon>
+                </div>
+                <div>
+                  <p class="text-sm font-medium text-gray-800">{{ role.name }}</p>
+                  <p class="text-xs text-gray-400">{{ role.permissions?.length || 0 }} permissions</p>
+                </div>
+              </div>
+            </div>
+          </ng-container>
+          <ng-template #noRoles>
+            <p class="text-gray-400 text-sm">No roles assigned.</p>
+          </ng-template>
+        </ng-container>
+      </div>
+
     </div>
   </ng-container>
 

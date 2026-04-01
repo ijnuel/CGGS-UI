@@ -7,9 +7,12 @@ import { AdministratorFacade } from '../../../store/administrator/administrator.
 import * as AdministratorAction from '../../../store/administrator/administrator.actions';
 import { AdministratorListInterface } from '../../../types/administrator';
 import { PaginatedResponseInterface, PageQueryInterface } from '../../../types';
-import { TableHeaderInterface } from '../../../types/table';
+import { TableHeaderInterface, TableActionInterface } from '../../../types/table';
 import { MatDialog } from '@angular/material/dialog';
 import { ConfirmDialogComponent } from '../../../shared/confirm-dialog/confirm-dialog.component';
+import { RoleDialogComponent, RoleDialogData } from '../../../shared/role-dialog/role-dialog.component';
+import { RoleFacade } from '../../../store/role/role.facade';
+import * as RoleAction from '../../../store/role/role.actions';
 import { ToastNotificationService, NotificationTypeEnums } from '../../../services/toast-notification.service';
 import { tableHeader } from './table-header';
 
@@ -25,10 +28,26 @@ export class AdministratorComponent implements OnDestroy {
   tableHeaderData: TableHeaderInterface[] = tableHeader;
   private lastQuery: PageQueryInterface = { start: 0, recordsPerPage: 10, pageIndex: 0 };
 
+  roleActions: TableActionInterface[] = [
+    {
+      key: 'assign-role',
+      label: 'Assign Role',
+      icon: 'person_add',
+      iconClass: '!text-green-600',
+    },
+    {
+      key: 'remove-role',
+      label: 'Remove Role',
+      icon: 'person_remove',
+      iconClass: '!text-orange-500',
+    },
+  ];
+
   constructor(
     private router: Router,
     private route: ActivatedRoute,
     private administratorFacade: AdministratorFacade,
+    private roleFacade: RoleFacade,
     private actions$: Actions,
     private dialog: MatDialog,
     private toastService: ToastNotificationService
@@ -42,6 +61,20 @@ export class AdministratorComponent implements OnDestroy {
     ).subscribe(() => {
       this.toastService.openToast('Administrator deleted successfully', NotificationTypeEnums.SUCCESS);
       this.administratorFacade.getAdministratorList(this.lastQuery);
+    });
+
+    this.actions$.pipe(
+      ofType(RoleAction.assignRoleSuccess),
+      takeUntil(this.destroy$)
+    ).subscribe(() => {
+      this.toastService.openToast('Role assigned successfully', NotificationTypeEnums.SUCCESS);
+    });
+
+    this.actions$.pipe(
+      ofType(RoleAction.removeRoleSuccess),
+      takeUntil(this.destroy$)
+    ).subscribe(() => {
+      this.toastService.openToast('Role removed successfully', NotificationTypeEnums.SUCCESS);
     });
   }
 
@@ -81,6 +114,39 @@ export class AdministratorComponent implements OnDestroy {
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
         this.administratorFacade.deleteAdministrator(row.id);
+      }
+    });
+  }
+
+  onCustomAction(event: { key: string; row: any }) {
+    const row = event.row as AdministratorListInterface;
+    const userName = `${row.firstName} ${row.lastName}`;
+
+    if (event.key === 'assign-role') {
+      this.openRoleDialog('assign', row.userId!, userName);
+    } else if (event.key === 'remove-role') {
+      this.openRoleDialog('remove', row.userId!, userName);
+    }
+  }
+
+  private openRoleDialog(mode: 'assign' | 'remove', userId: string, userName: string) {
+    const dialogRef = this.dialog.open(RoleDialogComponent, {
+      width: '420px',
+      data: {
+        title: mode === 'assign' ? 'Assign Role' : 'Remove Role',
+        userName,
+        userId,
+        mode,
+      } as RoleDialogData,
+    });
+
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result) {
+        if (mode === 'assign') {
+          this.roleFacade.assignRole(result);
+        } else {
+          this.roleFacade.removeRole(result);
+        }
       }
     });
   }

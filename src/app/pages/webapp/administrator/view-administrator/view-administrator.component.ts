@@ -1,13 +1,16 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Location } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Observable, Subject } from 'rxjs';
+import { Observable, Subject, combineLatest } from 'rxjs';
 import { map, takeUntil } from 'rxjs/operators';
+import { MatDialog } from '@angular/material/dialog';
 import { AdministratorFacade } from '../../../../store/administrator/administrator.facade';
 import { SharedFacade } from '../../../../store/shared/shared.facade';
 import { GlobalLoadingFacade } from '../../../../store/global-loading/global-loading.facade';
 import { ProfileImageFacade } from '../../../../store/profile-image/profile-image.facade';
-import { AdministratorListInterface, DropdownListInterface } from '../../../../types';
+import { RoleFacade } from '../../../../store/role/role.facade';
+import { AdministratorListInterface, DropdownListInterface, RoleWithPermissionsInterface } from '../../../../types';
+import { RoleDialogComponent, RoleDialogData } from '../../../../shared/role-dialog/role-dialog.component';
 
 @Component({
   selector: 'app-view-administrator',
@@ -24,18 +27,23 @@ export class ViewAdministratorComponent implements OnInit, OnDestroy {
   photoUploading = false;
   photoDeleting = false;
   entityInitials = 'U';
+  userRoles: RoleWithPermissionsInterface[] = [];
+  rolesLoading = true;
 
   private administratorId = '';
+  private userId = '';
   private unsubscribe$ = new Subject<void>();
 
   constructor(
     private route: ActivatedRoute,
     private router: Router,
     private location: Location,
+    private dialog: MatDialog,
     private administratorFacade: AdministratorFacade,
     private sharedFacade: SharedFacade,
     private globalLoadingFacade: GlobalLoadingFacade,
     private profileImageFacade: ProfileImageFacade,
+    private roleFacade: RoleFacade,
   ) {
     this.administrator$ = this.administratorFacade.administratorByProperties$.pipe(
       map(admins => admins?.[0] ?? null)
@@ -68,6 +76,10 @@ export class ViewAdministratorComponent implements OnInit, OnDestroy {
     this.administrator$.pipe(takeUntil(this.unsubscribe$)).subscribe(admin => {
       if (admin) {
         this.entityInitials = `${admin.firstName?.charAt(0) ?? ''}${admin.lastName?.charAt(0) ?? ''}`.toUpperCase() || 'U';
+        if (admin.userId) {
+          this.userId = admin.userId;
+          this.loadUserRoles();
+        }
       }
     });
 
@@ -118,6 +130,65 @@ export class ViewAdministratorComponent implements OnInit, OnDestroy {
 
   navigateToEdit() {
     this.router.navigate(['/app/administrator/edit', this.administratorId]);
+  }
+
+  loadUserRoles() {
+    if (!this.userId) return;
+    this.rolesLoading = true;
+    this.roleFacade.getRoleAll();
+    this.roleFacade.getUserRoles(this.userId);
+
+    combineLatest([this.roleFacade.roleAll$, this.roleFacade.userRoles$])
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe(([allRoles, userRoleNames]) => {
+        if (allRoles && userRoleNames) {
+          const nameSet = new Set(userRoleNames);
+          this.userRoles = allRoles.filter(r => nameSet.has(r.name));
+          this.rolesLoading = false;
+        }
+      });
+  }
+
+  openAssignRoleDialog() {
+    this.administrator$.pipe(takeUntil(this.unsubscribe$)).subscribe(admin => {
+      if (!admin) return;
+      const dialogRef = this.dialog.open(RoleDialogComponent, {
+        width: '440px',
+        data: {
+          title: 'Assign Role',
+          userName: `${admin.firstName} ${admin.lastName}`,
+          userId: this.userId,
+          mode: 'assign',
+        } as RoleDialogData,
+      });
+      dialogRef.afterClosed().subscribe(result => {
+        if (result) {
+          this.roleFacade.assignRole(result);
+          setTimeout(() => this.loadUserRoles(), 1000);
+        }
+      });
+    }).unsubscribe();
+  }
+
+  openRemoveRoleDialog() {
+    this.administrator$.pipe(takeUntil(this.unsubscribe$)).subscribe(admin => {
+      if (!admin) return;
+      const dialogRef = this.dialog.open(RoleDialogComponent, {
+        width: '440px',
+        data: {
+          title: 'Remove Role',
+          userName: `${admin.firstName} ${admin.lastName}`,
+          userId: this.userId,
+          mode: 'remove',
+        } as RoleDialogData,
+      });
+      dialogRef.afterClosed().subscribe(result => {
+        if (result) {
+          this.roleFacade.removeRole(result);
+          setTimeout(() => this.loadUserRoles(), 1000);
+        }
+      });
+    }).unsubscribe();
   }
 
   ngOnDestroy() {

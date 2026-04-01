@@ -44,7 +44,7 @@ export default [
   },
   {
     name: 'Roles',
-    icon: 'assets/icons/admin-icon.svg',
+    icon: 'assets/icons/roles.svg',
     roles: [UserRolesEnum.SuperAdmin],
     url: '/app/role'
   },

@@ -1,13 +1,16 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Location } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Observable, Subject } from 'rxjs';
+import { Observable, Subject, combineLatest } from 'rxjs';
 import { map, takeUntil } from 'rxjs/operators';
+import { MatDialog } from '@angular/material/dialog';
 import { StaffFacade } from '../../../../store/staff/staff.facade';
 import { SharedFacade } from '../../../../store/shared/shared.facade';
 import { GlobalLoadingFacade } from '../../../../store/global-loading/global-loading.facade';
 import { ProfileImageFacade } from '../../../../store/profile-image/profile-image.facade';
-import { StaffListInterface, DropdownListInterface, ClassSubjectListInterface } from '../../../../types';
+import { RoleFacade } from '../../../../store/role/role.facade';
+import { StaffListInterface, DropdownListInterface, ClassSubjectListInterface, RoleWithPermissionsInterface } from '../../../../types';
+import { RoleDialogComponent, RoleDialogData } from '../../../../shared/role-dialog/role-dialog.component';
 
 @Component({
   selector: 'app-view-staff',
@@ -24,18 +27,23 @@ export class ViewStaffComponent implements OnInit, OnDestroy {
   photoUploading = false;
   photoDeleting = false;
   entityInitials = 'U';
+  userRoles: RoleWithPermissionsInterface[] = [];
+  rolesLoading = true;
 
   private staffId = '';
+  private userId = '';
   private unsubscribe$ = new Subject<void>();
 
   constructor(
     private route: ActivatedRoute,
     private router: Router,
     private location: Location,
+    private dialog: MatDialog,
     private staffFacade: StaffFacade,
     private sharedFacade: SharedFacade,
     private globalLoadingFacade: GlobalLoadingFacade,
     private profileImageFacade: ProfileImageFacade,
+    private roleFacade: RoleFacade,
   ) {
     this.staff$ = this.staffFacade.staffByProperties$.pipe(
       map(staff => staff?.[0] ?? null)
@@ -79,6 +87,10 @@ export class ViewStaffComponent implements OnInit, OnDestroy {
     this.staff$.pipe(takeUntil(this.unsubscribe$)).subscribe(staff => {
       if (staff) {
         this.entityInitials = `${staff.firstName?.charAt(0) ?? ''}${staff.lastName?.charAt(0) ?? ''}`.toUpperCase() || 'U';
+        if (staff.userId) {
+          this.userId = staff.userId;
+          this.loadUserRoles();
+        }
       }
     });
 
@@ -136,6 +148,65 @@ export class ViewStaffComponent implements OnInit, OnDestroy {
 
   navigateToEdit() {
     this.router.navigate(['/app/staff/edit', this.staffId]);
+  }
+
+  loadUserRoles() {
+    if (!this.userId) return;
+    this.rolesLoading = true;
+    this.roleFacade.getRoleAll();
+    this.roleFacade.getUserRoles(this.userId);
+
+    combineLatest([this.roleFacade.roleAll$, this.roleFacade.userRoles$])
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe(([allRoles, userRoleNames]) => {
+        if (allRoles && userRoleNames) {
+          const nameSet = new Set(userRoleNames);
+          this.userRoles = allRoles.filter(r => nameSet.has(r.name));
+          this.rolesLoading = false;
+        }
+      });
+  }
+
+  openAssignRoleDialog() {
+    this.staff$.pipe(takeUntil(this.unsubscribe$)).subscribe(staff => {
+      if (!staff) return;
+      const dialogRef = this.dialog.open(RoleDialogComponent, {
+        width: '440px',
+        data: {
+          title: 'Assign Role',
+          userName: `${staff.firstName} ${staff.lastName}`,
+          userId: this.userId,
+          mode: 'assign',
+        } as RoleDialogData,
+      });
+      dialogRef.afterClosed().subscribe(result => {
+        if (result) {
+          this.roleFacade.assignRole(result);
+          setTimeout(() => this.loadUserRoles(), 1000);
+        }
+      });
+    }).unsubscribe();
+  }
+
+  openRemoveRoleDialog() {
+    this.staff$.pipe(takeUntil(this.unsubscribe$)).subscribe(staff => {
+      if (!staff) return;
+      const dialogRef = this.dialog.open(RoleDialogComponent, {
+        width: '440px',
+        data: {
+          title: 'Remove Role',
+          userName: `${staff.firstName} ${staff.lastName}`,
+          userId: this.userId,
+          mode: 'remove',
+        } as RoleDialogData,
+      });
+      dialogRef.afterClosed().subscribe(result => {
+        if (result) {
+          this.roleFacade.removeRole(result);
+          setTimeout(() => this.loadUserRoles(), 1000);
+        }
+      });
+    }).unsubscribe();
   }
 
   ngOnDestroy() {

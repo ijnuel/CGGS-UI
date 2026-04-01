@@ -18,6 +18,7 @@ import { MatExpansionModule } from '@angular/material/expansion';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { ProgramSetupLevelPanelComponent } from './program-setup-level-panel/program-setup-level-panel.component';
 import { SearchableMatSelectComponent } from './searchable-mat-select/searchable-mat-select.component';
+import { RoleDialogComponent } from './role-dialog/role-dialog.component';
 import { FormsModule } from '@angular/forms';
 import { MatSelectModule } from '@angular/material/select';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -35,7 +36,8 @@ import { MatInputModule } from '@angular/material/input';
     LoadingSpinnerDirective,
     ConfirmDialogComponent,
     ProgramSetupLevelPanelComponent,
-    SearchableMatSelectComponent
+    SearchableMatSelectComponent,
+    RoleDialogComponent
   ],
   imports: [
     RouterModule,
@@ -70,7 +72,8 @@ import { MatInputModule } from '@angular/material/input';
     ReactiveFormsModule,
     ProgramSetupLevelPanelComponent,
     MatCheckboxModule,
-    SearchableMatSelectComponent
+    SearchableMatSelectComponent,
+    RoleDialogComponent
   ],
 })
 export class SharedModule {}

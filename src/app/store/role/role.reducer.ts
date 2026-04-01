@@ -11,6 +11,7 @@ export interface RoleState {
   roleAll: RoleWithPermissionsInterface[] | null;
   roleById: RoleWithPermissionsInterface | null;
   permissions: PermissionInterface[] | null;
+  userRoles: string[] | null;
   loading: boolean;
   error: string | null;
   createSuccess: boolean;
@@ -22,6 +23,7 @@ export const initialState: RoleState = {
   roleAll: null,
   roleById: null,
   permissions: null,
+  userRoles: null,
   loading: false,
   error: null,
   createSuccess: false,
@@ -179,6 +181,53 @@ export const reducer = createReducer(
     loading: false,
     error,
     assignPermissionsSuccess: false,
+  })),
+
+  // Get User Roles
+  on(RoleAction.getUserRoles, (state) => ({
+    ...state,
+    userRoles: null,
+    error: null,
+  })),
+  on(RoleAction.getUserRolesSuccess, (state, { payload }) => ({
+    ...state,
+    userRoles: payload.entity,
+  })),
+  on(RoleAction.getUserRolesFail, (state, { error }) => ({
+    ...state,
+    error,
+  })),
+
+  // Assign Role
+  on(RoleAction.assignRole, (state) => ({
+    ...state,
+    loading: true,
+    error: null,
+  })),
+  on(RoleAction.assignRoleSuccess, (state) => ({
+    ...state,
+    loading: false,
+  })),
+  on(RoleAction.assignRoleFail, (state, { error }) => ({
+    ...state,
+    loading: false,
+    error,
+  })),
+
+  // Remove Role
+  on(RoleAction.removeRole, (state) => ({
+    ...state,
+    loading: true,
+    error: null,
+  })),
+  on(RoleAction.removeRoleSuccess, (state) => ({
+    ...state,
+    loading: false,
+  })),
+  on(RoleAction.removeRoleFail, (state, { error }) => ({
+    ...state,
+    loading: false,
+    error,
   }))
 );
 
@@ -191,4 +240,5 @@ export const getLoading = (state: RoleState) => state.loading;
 export const getError = (state: RoleState) => state.error;
 export const getCreateSuccess = (state: RoleState) => state.createSuccess;
 export const getUpdateSuccess = (state: RoleState) => state.updateSuccess;
+export const getUserRoles = (state: RoleState) => state.userRoles;
 export const getAssignPermissionsSuccess = (state: RoleState) => state.assignPermissionsSuccess;

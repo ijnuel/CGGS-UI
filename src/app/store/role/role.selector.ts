@@ -3,6 +3,7 @@ import {
   getRoleAll,
   getRoleById,
   getPermissions,
+  getUserRoles,
   getLoading,
   getError,
   RoleState,
@@ -15,6 +16,8 @@ export const selectRoleAll = createSelector(selectRoleState, getRoleAll);
 export const selectRoleById = createSelector(selectRoleState, getRoleById);
 
 export const selectPermissions = createSelector(selectRoleState, getPermissions);
+
+export const selectUserRoles = createSelector(selectRoleState, getUserRoles);
 
 export const selectRoleLoading = createSelector(selectRoleState, getLoading);
 
