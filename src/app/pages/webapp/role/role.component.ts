@@ -49,6 +49,14 @@ export class RoleComponent implements OnDestroy {
       this.toastService.openToast('Role deleted successfully', NotificationTypeEnums.SUCCESS);
       this.roleFacade.getRoleAll();
     });
+
+    this.actions$.pipe(
+      ofType(RoleAction.invalidateCacheSuccess),
+      takeUntil(this.destroy$)
+    ).subscribe(() => {
+      this.toastService.openToast('Cache invalidated successfully', NotificationTypeEnums.SUCCESS);
+      this.roleFacade.getRoleAll();
+    });
   }
 
   ngOnDestroy(): void {
@@ -73,6 +81,10 @@ export class RoleComponent implements OnDestroy {
 
   onRefresh() {
     this.roleFacade.getRoleAll();
+  }
+
+  onInvalidateCache() {
+    this.roleFacade.invalidateCache();
   }
 
   onView(role: RoleWithPermissionsInterface) {

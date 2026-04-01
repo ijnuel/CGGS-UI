@@ -49,6 +49,10 @@ export class RoleFacade {
     this.userRoles$ = this.store.select(selectUserRoles);
   }
 
+  invalidateCache(): void {
+    this.store.dispatch(RoleAction.invalidateCache());
+  }
+
   getRoleAll(): void {
     this.store.dispatch(RoleAction.getRoleAll());
   }

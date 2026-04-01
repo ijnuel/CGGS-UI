@@ -33,6 +33,21 @@ export const initialState: RoleState = {
 
 export const reducer = createReducer(
   initialState,
+  // Invalidate Cache
+  on(RoleAction.invalidateCache, (state) => ({
+    ...state,
+    loading: true,
+    error: null,
+  })),
+  on(RoleAction.invalidateCacheSuccess, () => ({
+    ...initialState,
+  })),
+  on(RoleAction.invalidateCacheFail, (state, { error }) => ({
+    ...state,
+    loading: false,
+    error,
+  })),
+
   // Get All
   on(RoleAction.getRoleAll, (state) => ({
     ...state,

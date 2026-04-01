@@ -14,6 +14,25 @@ import { GlobalLoadingFacade } from '../global-loading/global-loading.facade';
 
 @Injectable()
 export class RoleEffect {
+  // Invalidate Cache
+  $invalidateCache = createEffect(() =>
+    this.actions$.pipe(
+      ofType(RoleAction.invalidateCache),
+      switchMap(() =>
+        this.http
+          .post<GenericResponseInterface<any>>(
+            `${environment.baseUrl}/Role/InvalidateCache`,
+            {},
+            { withCredentials: true }
+          )
+          .pipe(
+            map((payload) => RoleAction.invalidateCacheSuccess({ payload })),
+            catchError((error) => of(RoleAction.invalidateCacheFail({ error })))
+          )
+      )
+    )
+  );
+
   // Get All
   $roleAll = createEffect(() =>
     this.actions$.pipe(
@@ -237,7 +256,8 @@ export class RoleEffect {
           RoleAction.assignPermissions,
           RoleAction.removePermissions,
           RoleAction.assignRole,
-          RoleAction.removeRole
+          RoleAction.removeRole,
+          RoleAction.invalidateCache
         ),
         tap((action) => {
           this.errorLoadingFacade.globalLoadingShow(action.type);
@@ -263,7 +283,9 @@ export class RoleEffect {
           RoleAction.assignRoleSuccess,
           RoleAction.assignRoleFail,
           RoleAction.removeRoleSuccess,
-          RoleAction.removeRoleFail
+          RoleAction.removeRoleFail,
+          RoleAction.invalidateCacheSuccess,
+          RoleAction.invalidateCacheFail
         ),
         tap(() => {
           this.errorLoadingFacade.globalLoadingHide();

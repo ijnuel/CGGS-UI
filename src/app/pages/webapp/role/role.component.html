@@ -10,6 +10,11 @@
         <mat-icon>refresh</mat-icon>
         <span>Refresh</span>
       </button>
+      <button mat-raised-button (click)="onInvalidateCache()" class="flex items-center"
+        style="background-color: #ef4444; color: white;">
+        <mat-icon>cached</mat-icon>
+        <span>Invalidate Cache</span>
+      </button>
       <button mat-raised-button routerLink="create" class="flex items-center"
         style="background-color: var(--app-button-bg); color: white;">
         <mat-icon>add</mat-icon>

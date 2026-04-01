@@ -9,6 +9,17 @@ import {
   UserRoleInterface,
 } from '../../types';
 
+// Invalidate Cache
+export const invalidateCache = createAction('[Role] Invalidate Cache');
+export const invalidateCacheSuccess = createAction(
+  '[Role/API] Invalidate Cache Success',
+  props<{ payload: GenericResponseInterface<any> }>()
+);
+export const invalidateCacheFail = createAction(
+  '[Role/API] Invalidate Cache Fail',
+  props<{ error: string }>()
+);
+
 // Get All Roles
 export const getRoleAll = createAction('[Role] Get All');
 
