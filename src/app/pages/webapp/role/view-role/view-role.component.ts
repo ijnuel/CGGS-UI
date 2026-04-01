@@ -126,6 +126,40 @@ export class ViewRoleComponent implements OnInit, OnDestroy {
     }
   }
 
+  isGroupAllAssigned(group: PermissionGroup): boolean {
+    return group.permissions.every(p => p.assigned);
+  }
+
+  isGroupPartiallyAssigned(group: PermissionGroup): boolean {
+    const assigned = group.permissions.filter(p => p.assigned).length;
+    return assigned > 0 && assigned < group.permissions.length;
+  }
+
+  toggleGroup(group: PermissionGroup) {
+    if (!this.role || this.toggling) return;
+
+    this.toggling = true;
+    const allAssigned = this.isGroupAllAssigned(group);
+
+    if (allAssigned) {
+      // Remove all permissions in this group
+      const permsToRemove = group.permissions.map(p => p.permission);
+      group.permissions.forEach(p => p.assigned = false);
+      this.roleFacade.removePermissions({
+        roleId: this.role.id,
+        permissions: permsToRemove,
+      });
+    } else {
+      // Assign all unassigned permissions in this group
+      const permsToAssign = group.permissions.filter(p => !p.assigned).map(p => p.permission);
+      group.permissions.forEach(p => p.assigned = true);
+      this.roleFacade.assignPermissions({
+        roleId: this.role.id,
+        permissions: permsToAssign,
+      });
+    }
+  }
+
   getAssignedCount(): number {
     let count = 0;
     this.permissionGroups.forEach((g) =>

@@ -71,12 +71,26 @@
       <!-- Permission Groups -->
       <div *ngFor="let group of permissionGroups; let last = last"
         class="px-6 py-4" [class.border-b]="!last" [class.border-gray-100]="!last">
-        <div class="flex items-center gap-2 mb-3">
-          <mat-icon class="!text-lg text-gray-400">folder</mat-icon>
-          <h4 class="text-sm font-semibold text-gray-700 uppercase tracking-wide">{{ group.group }}</h4>
-          <span class="text-xs text-gray-400 ml-1">
-            ({{ group.permissions.length }})
-          </span>
+        <div class="flex items-center justify-between mb-3">
+          <div class="flex items-center gap-2">
+            <mat-icon class="!text-lg text-gray-400">folder</mat-icon>
+            <h4 class="text-sm font-semibold text-gray-700 uppercase tracking-wide">{{ group.group }}</h4>
+            <span class="text-xs text-gray-400 ml-1">
+              ({{ group.permissions.length }})
+            </span>
+          </div>
+          <div class="flex items-center gap-2 cursor-pointer" (click)="toggleGroup(group)">
+            <span class="text-xs font-medium"
+              [ngClass]="isGroupAllAssigned(group) ? 'text-green-600' : 'text-gray-500'">
+              {{ isGroupAllAssigned(group) ? 'All enabled' : 'Enable all' }}
+            </span>
+            <mat-slide-toggle
+              [checked]="isGroupAllAssigned(group)"
+              (click)="$event.stopPropagation()"
+              (change)="toggleGroup(group)"
+              color="primary">
+            </mat-slide-toggle>
+          </div>
         </div>
 
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2">
