@@ -1,0 +1,51 @@
+@if (
+  {
+    loading: loading$ | async,
+    error: error$ | async
+  };
+  as obs
+) {
+<div class="pl-8 pr-9 pt-6">
+  <div class="flex items-center gap-3 mb-2">
+    <button mat-icon-button routerLink="/app/role" style="color: var(--app-primary);">
+      <mat-icon>arrow_back</mat-icon>
+    </button>
+    <div>
+      <h3 class="text-xl font-bold" style="color: var(--app-primary)">
+        {{ isEditMode ? 'Edit' : 'Create' }} Role
+      </h3>
+      <p class="text-sm text-gray-500">{{ isEditMode ? 'Update role details' : 'Set up a new role' }}</p>
+    </div>
+  </div>
+
+  <div class="mt-6 bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+    <form [formGroup]="formGroup">
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-2">
+        <div>
+          <mat-form-field class="form-input w-full" appearance="outline">
+            <mat-label>Role Name</mat-label>
+            <input
+              type="text"
+              autocomplete="off"
+              matInput
+              [formControl]="formControl.name"
+              placeholder="e.g. Administrator, Editor, Viewer"
+            />
+            <mat-icon matPrefix class="mr-2 text-gray-400">badge</mat-icon>
+            <mat-error>
+              {{ getErrorMessage("name") }}
+            </mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+    </form>
+
+    <div class="actions-btn flex justify-end mt-8 gap-4">
+      <button class="cancel-btn" routerLink="/app/role">Cancel</button>
+      <button class="sec-btn" (click)="submit()" [disabled]="obs.loading">
+        {{ isEditMode ? 'Update Role' : 'Create Role' }}
+      </button>
+    </div>
+  </div>
+</div>
+}

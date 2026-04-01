@@ -72,6 +72,8 @@ import { DataImportEffect } from './store/data-import/data-import.effects';
 import { DataImportFacade } from './store/data-import/data-import.facade';
 import { ProfileImageEffect } from './store/profile-image/profile-image.effects';
 import { ProfileImageFacade } from './store/profile-image/profile-image.facade';
+import { RoleEffect } from './store/role/role.effects';
+import { RoleFacade } from './store/role/role.facade';
 // import { provideStoreDevtools } from '@ngrx/store-devtools';
 
 export const appConfig: ApplicationConfig = {
@@ -106,6 +108,7 @@ export const appConfig: ApplicationConfig = {
         StudentClassSubjectAssessmentScoreEffect,
         DataImportEffect,
         ProfileImageEffect,
+        RoleEffect,
       ]),
     ),
     provideAnimations(),
@@ -175,5 +178,6 @@ export const appConfig: ApplicationConfig = {
     StudentClassSubjectAssessmentScoreFacade,
     DataImportFacade,
     ProfileImageFacade,
+    RoleFacade,
   ],
 };

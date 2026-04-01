@@ -135,6 +135,11 @@ const routes: Routes = [
 
       // ── SuperAdmin only ───────────────────────────────────────────────────
       {
+        path: 'role',
+        data: { roles: SUPERADMIN_ONLY },
+        loadChildren: () => import('./role/role.module').then((m) => m.RoleModule),
+      },
+      {
         path: 'administrator',
         data: { roles: SUPERADMIN_ONLY },
         loadChildren: () => import('./administrator/administrator.module').then((m) => m.AdministratorModule),

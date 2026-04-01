@@ -32,6 +32,14 @@ import { ImportEntityInterface } from './data-import';
 import {
   CurrentUserInterface,
 } from './user';
+import {
+  RoleWithPermissionsInterface,
+  RoleCreateInterface,
+  RoleUpdateInterface,
+  PermissionInterface,
+  RolePermissionAssignInterface,
+  UserRoleInterface,
+} from './role';
 
 interface GenericResponseInterface<T> {
   error: string;
@@ -145,4 +153,10 @@ export {
   ProgramSetupLevel,
   ProgramSetupLevelConfig,
   ImportEntityInterface,
+  RoleWithPermissionsInterface,
+  RoleCreateInterface,
+  RoleUpdateInterface,
+  PermissionInterface,
+  RolePermissionAssignInterface,
+  UserRoleInterface,
 };
