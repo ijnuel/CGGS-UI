@@ -53,6 +53,11 @@ const routes: Routes = [
 
       // ── Admin and above ───────────────────────────────────────────────────
       {
+        path: 'people',
+        data: { roles: ADMIN_AND_ABOVE },
+        loadChildren: () => import('./people/people.module').then((m) => m.PeopleModule),
+      },
+      {
         path: 'student',
         data: { roles: ADMIN_AND_ABOVE },
         loadChildren: () => import('./student/student.module').then((m) => m.StudentModule),

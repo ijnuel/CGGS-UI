@@ -83,6 +83,12 @@ export class DashboardComponent implements OnInit {
         roles: [UserRolesEnum.Student],
       },
       {
+        label: 'My Payments', count$: of(null),
+        icon: 'receipt_long', color: 'text-purple-500', bg: 'bg-purple-50',
+        route: '/app/payment', hideCount: true,
+        roles: [UserRolesEnum.Student],
+      },
+      {
         label: 'Classes', count$: this.classFacade.count$,
         icon: 'school', color: 'text-orange-500', bg: 'bg-orange-50',
         route: '/app/class',
@@ -114,6 +120,11 @@ export class DashboardComponent implements OnInit {
       {
         label: 'My Result', icon: 'assignment_ind', route: '/app/result/my-result',
         description: 'View your personal result sheet',
+        roles: [UserRolesEnum.Student],
+      },
+      {
+        label: 'My Payments', icon: 'receipt_long', route: '/app/payment',
+        description: 'View fees and make payments',
         roles: [UserRolesEnum.Student],
       },
       {
