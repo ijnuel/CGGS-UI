@@ -25,7 +25,7 @@
 
   <!-- Search Bar -->
   <div class="mb-4">
-    <mat-form-field class="w-full md:w-96" appearance="outline">
+    <mat-form-field class="w-full md:w-96">
       <mat-label>Search roles...</mat-label>
       <input matInput (input)="onSearch($any($event.target).value)" [value]="searchText" />
       <mat-icon matPrefix class="mr-2 text-gray-400">search</mat-icon>

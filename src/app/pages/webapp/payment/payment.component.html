@@ -1,7 +1,44 @@
 <div class="p-6">
-  <div class="mb-6">
-    <h3 class="text-2xl font-bold" style="color: var(--app-primary)">My Fees &amp; Payments</h3>
-    <p class="text-sm text-gray-500 mt-1">View your school fees and make payments</p>
+
+  <!-- Page Header -->
+  <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
+    <div>
+      <h3 class="text-2xl font-bold" style="color: var(--app-primary)">My Fees &amp; Payments</h3>
+      <p class="text-sm text-gray-500 mt-1">View your school fees and make payments</p>
+    </div>
+    <button mat-raised-button color="primary" (click)="openFundWalletDialog()" [disabled]="initiatingPayment">
+      <mat-icon class="!mr-1">account_balance_wallet</mat-icon>
+      Fund Wallet
+    </button>
+  </div>
+
+  <!-- Wallet Balance Card -->
+  <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-5 mb-6 flex items-center gap-4">
+    <div class="w-12 h-12 rounded-full flex items-center justify-center flex-shrink-0"
+         style="background: linear-gradient(135deg, var(--app-gradient-from), var(--app-gradient-to));">
+      <mat-icon class="text-white">account_balance_wallet</mat-icon>
+    </div>
+    <div>
+      <p class="text-xs text-gray-500 uppercase tracking-wide">Wallet Balance</p>
+      <p class="text-2xl font-bold mt-0.5"
+         [class.text-green-600]="walletBalance > 0"
+         [class.text-gray-400]="walletBalance === 0">
+        ₦{{ walletBalance | number:'1.2-2' }}
+      </p>
+    </div>
+  </div>
+
+  <!-- Term Session Filter -->
+  <div class="mb-5">
+    <mat-form-field class="w-full max-w-xs">
+      <mat-label>Filter by Term</mat-label>
+      <mat-select (selectionChange)="onTermSessionChange($event.value)" [value]="null">
+        <mat-option [value]="null">All Terms</mat-option>
+        <mat-option *ngFor="let ts of schoolTermSessionAll$ | async" [value]="ts.id">
+          {{ getTermSessionLabel(ts) }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
   </div>
 
   <!-- Loading -->
@@ -11,7 +48,7 @@
 
   <!-- Content -->
   <ng-container *ngIf="!(loading$ | async)">
-    <ng-container *ngIf="(fees$ | async) as fees">
+    <ng-container *ngIf="filteredFees$ | async as fees">
 
       <!-- Empty State -->
       <div *ngIf="fees.length === 0" class="flex flex-col items-center justify-center py-16 text-gray-400">
@@ -26,10 +63,10 @@
              class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
 
           <!-- Fee Header -->
-          <div class="px-6 py-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-gray-100"
+          <div class="px-6 py-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3"
                style="background: linear-gradient(135deg, var(--app-gradient-from), var(--app-gradient-to));">
             <div>
-              <p class="text-white font-semibold text-base">{{ getClassLabel(fee) }}</p>
+              <p class="text-white font-semibold text-base">{{ getClassLabel(fee) || '—' }}</p>
               <p class="text-white/80 text-sm">{{ getTermLabel(fee) }}</p>
             </div>
             <div class="text-right">
@@ -39,14 +76,16 @@
           </div>
 
           <!-- Summary Row -->
-          <div class="px-6 py-3 bg-gray-50 flex flex-wrap gap-6 text-sm border-b border-gray-100">
+          <div class="px-6 py-3 bg-gray-50 flex flex-wrap items-center gap-6 text-sm border-b border-gray-100">
             <div>
               <span class="text-gray-500">Paid: </span>
               <span class="font-medium text-green-600">₦{{ getFeePaid(fee) | number:'1.2-2' }}</span>
             </div>
             <div>
               <span class="text-gray-500">Balance: </span>
-              <span class="font-medium" [class.text-red-600]="getFeeBalance(fee) > 0" [class.text-green-600]="getFeeBalance(fee) <= 0">
+              <span class="font-medium"
+                    [class.text-red-600]="getFeeBalance(fee) > 0"
+                    [class.text-green-600]="getFeeBalance(fee) <= 0">
                 ₦{{ getFeeBalance(fee) | number:'1.2-2' }}
               </span>
             </div>
@@ -55,65 +94,69 @@
                 <mat-icon class="!text-xs !w-3 !h-3">check_circle</mat-icon> Fully Paid
               </span>
             </div>
+            <!-- Pay button -->
+            <div *ngIf="!isFeePaid(fee)" class="ml-auto">
+              <button mat-raised-button color="primary"
+                      class="!text-sm"
+                      (click)="openPayFeeDialog(fee)"
+                      [disabled]="initiatingPayment">
+                <mat-spinner *ngIf="initiatingPayment" diameter="14" class="!mr-1 inline-block"></mat-spinner>
+                <mat-icon *ngIf="!initiatingPayment" class="!text-base !mr-1">payment</mat-icon>
+                Pay
+              </button>
+            </div>
           </div>
 
           <!-- Fee Lines -->
           <div class="px-6 py-4">
-            <mat-expansion-panel class="!shadow-none !border !border-gray-100 !rounded-lg" *ngIf="fee.feeLines && fee.feeLines.length > 0">
-              <mat-expansion-panel-header>
-                <mat-panel-title class="text-sm font-medium text-gray-700">
-                  Fee Breakdown ({{ fee.feeLines.length }} item{{ fee.feeLines.length !== 1 ? 's' : '' }})
-                </mat-panel-title>
-              </mat-expansion-panel-header>
-              <div class="overflow-x-auto">
-                <table class="w-full text-sm">
-                  <thead>
-                    <tr class="text-gray-500 text-xs uppercase border-b border-gray-100">
-                      <th class="text-left py-2 pr-4">Fee Type</th>
-                      <th class="text-right py-2 pr-4">Amount</th>
-                      <th class="text-right py-2 pr-4">Paid</th>
-                      <th class="text-right py-2">Balance</th>
-                      <th class="text-center py-2">Status</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr *ngFor="let fl of fee.feeLines" class="border-b border-gray-50">
-                      <td class="py-2 pr-4 text-gray-700">{{ fl.feeType?.name ?? '—' }}</td>
-                      <td class="py-2 pr-4 text-right text-gray-700">₦{{ fl.amount | number:'1.2-2' }}</td>
-                      <td class="py-2 pr-4 text-right text-green-600">₦{{ fl.settledAmount | number:'1.2-2' }}</td>
-                      <td class="py-2 text-right" [class.text-red-500]="fl.amount - fl.settledAmount > 0">₦{{ (fl.amount - fl.settledAmount) | number:'1.2-2' }}</td>
-                      <td class="py-2 text-center">
-                        <span class="inline-block px-2 py-0.5 rounded-full text-xs font-medium" [ngClass]="getStatusClass(fl.status)">
-                          {{ getStatusLabel(fl.status) }}
-                        </span>
-                      </td>
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
-            </mat-expansion-panel>
-
-            <!-- Payment Action -->
-            <div *ngIf="!isFeePaid(fee)" class="mt-4">
-              <p class="text-sm font-medium text-gray-700 mb-2">Pay Now</p>
-              <div class="flex flex-wrap gap-2">
-                <button
-                  *ngFor="let gw of gateways"
-                  mat-stroked-button
-                  (click)="initiatePayment(fee, gw.value)"
-                  [disabled]="initiatingPayment"
-                  class="!text-sm"
-                  style="border-color: var(--app-primary); color: var(--app-primary);"
-                >
-                  <mat-spinner *ngIf="initiatingPayment" diameter="14" class="!mr-1 inline-block"></mat-spinner>
-                  <mat-icon *ngIf="!initiatingPayment" class="!text-base !mr-1">payment</mat-icon>
-                  Pay via {{ gw.label }}
-                </button>
-              </div>
-            </div>
+            <ng-container *ngIf="fee.feeLines && fee.feeLines.length > 0; else noLines">
+              <mat-expansion-panel class="!shadow-none !border !border-gray-100 !rounded-lg">
+                <mat-expansion-panel-header>
+                  <mat-panel-title class="text-sm font-medium text-gray-700">
+                    Fee Breakdown ({{ fee.feeLines.length }} item{{ fee.feeLines.length !== 1 ? 's' : '' }})
+                  </mat-panel-title>
+                </mat-expansion-panel-header>
+                <div class="overflow-x-auto">
+                  <table class="w-full text-sm">
+                    <thead>
+                      <tr class="text-gray-500 text-xs uppercase border-b border-gray-100">
+                        <th class="text-left py-2 pr-4">Fee Type</th>
+                        <th class="text-right py-2 pr-4">Amount</th>
+                        <th class="text-right py-2 pr-4">Paid</th>
+                        <th class="text-right py-2 pr-4">Balance</th>
+                        <th class="text-center py-2">Status</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr *ngFor="let fl of fee.feeLines" class="border-b border-gray-50 last:border-0">
+                        <td class="py-2 pr-4 text-gray-700">{{ fl.feeType?.name ?? '—' }}</td>
+                        <td class="py-2 pr-4 text-right text-gray-700">₦{{ fl.amount | number:'1.2-2' }}</td>
+                        <td class="py-2 pr-4 text-right text-green-600">₦{{ fl.settledAmount | number:'1.2-2' }}</td>
+                        <td class="py-2 pr-4 text-right"
+                            [class.text-red-500]="(fl.amount - fl.settledAmount) > 0"
+                            [class.text-green-600]="(fl.amount - fl.settledAmount) <= 0">
+                          ₦{{ (fl.amount - fl.settledAmount) | number:'1.2-2' }}
+                        </td>
+                        <td class="py-2 text-center">
+                          <span class="inline-block px-2 py-0.5 rounded-full text-xs font-medium"
+                                [ngClass]="getStatusClass(fl.status)">
+                            {{ getStatusLabel(fl.status) }}
+                          </span>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </mat-expansion-panel>
+            </ng-container>
+            <ng-template #noLines>
+              <p class="text-sm text-gray-400">No fee line items available.</p>
+            </ng-template>
           </div>
+
         </div>
       </div>
+
     </ng-container>
   </ng-container>
 </div>

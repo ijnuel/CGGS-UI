@@ -1,35 +1,25 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Location } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Observable, Subject } from 'rxjs';
+import { Observable, Subject, combineLatest } from 'rxjs';
 import { map, takeUntil } from 'rxjs/operators';
+import { MatDialog } from '@angular/material/dialog';
 import { StudentFacade } from '../../../../store/student/student.facade';
 import { SharedFacade } from '../../../../store/shared/shared.facade';
 import { GlobalLoadingFacade } from '../../../../store/global-loading/global-loading.facade';
 import { ProfileImageFacade } from '../../../../store/profile-image/profile-image.facade';
+import { RoleFacade } from '../../../../store/role/role.facade';
 import {
   StudentListInterface,
   DropdownListInterface,
   StudentClassListInterface,
   FeeListInterface,
   PaymentStatusEnum,
+  RoleWithPermissionsInterface,
 } from '../../../../types';
+import { RoleDialogComponent, RoleDialogData } from '../../../../shared/role-dialog/role-dialog.component';
+import { StudentFeesDialogComponent, StudentFeesDialogData, FeeGroup } from './student-fees-dialog.component';
 import { getClassLabel } from '../../../../services/helper.service';
-
-interface FeeEntry {
-  fee: FeeListInterface;
-  className: string;
-}
-
-interface FeeGroup {
-  sessionName: string;
-  termLabel: string;
-  sortKey: string;
-  fees: FeeEntry[];
-  total: number;
-  paid: number;
-  balance: number;
-}
 
 @Component({
   selector: 'app-view-student',
@@ -42,6 +32,8 @@ export class ViewStudentComponent implements OnInit, OnDestroy {
   religionList$: Observable<DropdownListInterface[] | null>;
   loading$: Observable<boolean>;
   feeGroups: FeeGroup[] = [];
+  userRoles: RoleWithPermissionsInterface[] = [];
+  rolesLoading = true;
 
   photoUrl: string | null = null;
   photoUploading = false;
@@ -51,16 +43,19 @@ export class ViewStudentComponent implements OnInit, OnDestroy {
   readonly PaymentStatusEnum = PaymentStatusEnum;
 
   private studentId = '';
+  private userId = '';
   private unsubscribe$ = new Subject<void>();
 
   constructor(
     private route: ActivatedRoute,
     private router: Router,
     private location: Location,
+    private dialog: MatDialog,
     private studentFacade: StudentFacade,
     private sharedFacade: SharedFacade,
     private globalLoadingFacade: GlobalLoadingFacade,
     private profileImageFacade: ProfileImageFacade,
+    private roleFacade: RoleFacade,
   ) {
     this.student$ = this.studentFacade.studentByProperties$.pipe(
       map(students => students?.[0] ?? null)
@@ -104,7 +99,8 @@ export class ViewStudentComponent implements OnInit, OnDestroy {
           { name: 'residentialState' },
           { name: 'nationality' },
           { name: 'stateOfOrigin' },
-          { name: 'originLGA' }
+          { name: 'originLGA' },
+          { name: 'studentWallet' }
         ]
       });
     }
@@ -113,6 +109,10 @@ export class ViewStudentComponent implements OnInit, OnDestroy {
       if (student) {
         this.entityInitials = `${student.firstName?.charAt(0) ?? ''}${student.lastName?.charAt(0) ?? ''}`.toUpperCase() || 'U';
         this.computeFeeGroups(student);
+        if (student.userId) {
+          this.userId = student.userId;
+          this.loadUserRoles();
+        }
       }
     });
 
@@ -159,6 +159,80 @@ export class ViewStudentComponent implements OnInit, OnDestroy {
 
     this.feeGroups = Array.from(groupMap.values())
       .sort((a, b) => b.sessionName.localeCompare(a.sessionName) || a.termLabel.localeCompare(b.termLabel));
+  }
+
+  loadUserRoles() {
+    if (!this.userId) return;
+    this.rolesLoading = true;
+    this.roleFacade.getRoleAll();
+    this.roleFacade.getUserRoles(this.userId);
+
+    combineLatest([this.roleFacade.roleAll$, this.roleFacade.userRoles$])
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe(([allRoles, userRoleNames]) => {
+        if (allRoles && userRoleNames) {
+          const nameSet = new Set(userRoleNames);
+          this.userRoles = allRoles.filter(r => nameSet.has(r.name));
+          this.rolesLoading = false;
+        }
+      });
+  }
+
+  openFeesDialog() {
+    this.student$.pipe(takeUntil(this.unsubscribe$)).subscribe(student => {
+      if (!student) return;
+      this.dialog.open(StudentFeesDialogComponent, {
+        width: '680px',
+        maxWidth: '95vw',
+        data: {
+          studentName: `${student.firstName} ${student.lastName}`,
+          feeGroups: this.feeGroups,
+          walletBalance: student.studentWallet?.balance ?? 0,
+        } as StudentFeesDialogData,
+      });
+    }).unsubscribe();
+  }
+
+  openAssignRoleDialog() {
+    this.student$.pipe(takeUntil(this.unsubscribe$)).subscribe(student => {
+      if (!student) return;
+      const dialogRef = this.dialog.open(RoleDialogComponent, {
+        width: '440px',
+        data: {
+          title: 'Assign Role',
+          userName: `${student.firstName} ${student.lastName}`,
+          userId: this.userId,
+          mode: 'assign',
+        } as RoleDialogData,
+      });
+      dialogRef.afterClosed().subscribe(result => {
+        if (result) {
+          this.roleFacade.assignRole(result);
+          setTimeout(() => this.loadUserRoles(), 1000);
+        }
+      });
+    }).unsubscribe();
+  }
+
+  openRemoveRoleDialog() {
+    this.student$.pipe(takeUntil(this.unsubscribe$)).subscribe(student => {
+      if (!student) return;
+      const dialogRef = this.dialog.open(RoleDialogComponent, {
+        width: '440px',
+        data: {
+          title: 'Remove Role',
+          userName: `${student.firstName} ${student.lastName}`,
+          userId: this.userId,
+          mode: 'remove',
+        } as RoleDialogData,
+      });
+      dialogRef.afterClosed().subscribe(result => {
+        if (result) {
+          this.roleFacade.removeRole(result);
+          setTimeout(() => this.loadUserRoles(), 1000);
+        }
+      });
+    }).unsubscribe();
   }
 
   deletePhoto() {

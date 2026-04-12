@@ -61,3 +61,8 @@ export const selectSkillGradeList = createSelector(
   fromShared.selectSharedState,
   fromShared.getSkillGradeList
 );
+
+export const selectPaymentGatewayList = createSelector(
+  fromShared.selectSharedState,
+  fromShared.getPaymentGatewayList
+);

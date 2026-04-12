@@ -56,12 +56,16 @@ export class FeeEffect {
     this.actions$.pipe(
       ofType(FeeAction.getFeeByProperties),
       switchMap(({ query }) =>
-        this.http.post<GenericResponseInterface<FeeListInterface[]>>(
+        this.http.post<GenericResponseInterface<any>>(
           `${environment.baseUrl}/Fee/GetByProperties`,
           query,
           { withCredentials: true }
         ).pipe(
-          map((payload) => FeeAction.getFeeByPropertiesSuccess({ payload })),
+          map((response) => {
+            // GetByProperties returns a paginated response; extract the data array
+            const entity: FeeListInterface[] = response.entity?.data ?? response.entity ?? [];
+            return FeeAction.getFeeByPropertiesSuccess({ payload: { ...response, entity } });
+          }),
           catchError((error) => of(FeeAction.getFeeByPropertiesFail({ error })))
         )
       )

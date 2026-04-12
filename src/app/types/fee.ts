@@ -10,10 +10,10 @@ export enum PaymentStatusEnum {
 }
 
 export enum PaymentGatewayEnum {
-  None = 0,
-  Paystack = 1,
-  Flutterwave = 2,
-  Monnify = 3,
+  Paystack = 0,
+  Flutterwave = 1,
+  Monnify = 2,
+  Interswitch = 3,
 }
 
 export enum TermEnum {
@@ -123,6 +123,7 @@ export interface InitiatePaymentRequest {
   amount: number;
   email: string;
   name: string;
+  studentId: string;
   phone?: string;
   callbackUrl?: string;
   narration?: string;

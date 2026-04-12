@@ -35,17 +35,17 @@
             "content": {
               "text/plain": {
                 "schema": {
-                  "$ref": "#/components/schemas/UserResponseDtoResult"
+                  "$ref": "#/components/schemas/UserManagerResponseDtoResult"
                 }
               },
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/UserResponseDtoResult"
+                  "$ref": "#/components/schemas/UserManagerResponseDtoResult"
                 }
               },
               "text/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/UserResponseDtoResult"
+                  "$ref": "#/components/schemas/UserManagerResponseDtoResult"
                 }
               }
             }
@@ -75,17 +75,17 @@
             "content": {
               "text/plain": {
                 "schema": {
-                  "$ref": "#/components/schemas/UserResponseDtoResult"
+                  "$ref": "#/components/schemas/UserManagerResponseDtoResult"
                 }
               },
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/UserResponseDtoResult"
+                  "$ref": "#/components/schemas/UserManagerResponseDtoResult"
                 }
               },
               "text/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/UserResponseDtoResult"
+                  "$ref": "#/components/schemas/UserManagerResponseDtoResult"
                 }
               }
             }
@@ -95,17 +95,17 @@
             "content": {
               "text/plain": {
                 "schema": {
-                  "$ref": "#/components/schemas/UserResponseDtoResult"
+                  "$ref": "#/components/schemas/UserManagerResponseDtoResult"
                 }
               },
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/UserResponseDtoResult"
+                  "$ref": "#/components/schemas/UserManagerResponseDtoResult"
                 }
               },
               "text/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/UserResponseDtoResult"
+                  "$ref": "#/components/schemas/UserManagerResponseDtoResult"
                 }
               }
             }
@@ -124,17 +124,17 @@
             "content": {
               "text/plain": {
                 "schema": {
-                  "$ref": "#/components/schemas/UserResponseDtoResult"
+                  "$ref": "#/components/schemas/UserManagerResponseDtoResult"
                 }
               },
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/UserResponseDtoResult"
+                  "$ref": "#/components/schemas/UserManagerResponseDtoResult"
                 }
               },
               "text/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/UserResponseDtoResult"
+                  "$ref": "#/components/schemas/UserManagerResponseDtoResult"
                 }
               }
             }
@@ -164,17 +164,17 @@
             "content": {
               "text/plain": {
                 "schema": {
-                  "$ref": "#/components/schemas/UserResponseDtoResult"
+                  "$ref": "#/components/schemas/UserManagerResponseDtoResult"
                 }
               },
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/UserResponseDtoResult"
+                  "$ref": "#/components/schemas/UserManagerResponseDtoResult"
                 }
               },
               "text/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/UserResponseDtoResult"
+                  "$ref": "#/components/schemas/UserManagerResponseDtoResult"
                 }
               }
             }
@@ -184,17 +184,17 @@
             "content": {
               "text/plain": {
                 "schema": {
-                  "$ref": "#/components/schemas/UserResponseDtoResult"
+                  "$ref": "#/components/schemas/UserManagerResponseDtoResult"
                 }
               },
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/UserResponseDtoResult"
+                  "$ref": "#/components/schemas/UserManagerResponseDtoResult"
                 }
               },
               "text/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/UserResponseDtoResult"
+                  "$ref": "#/components/schemas/UserManagerResponseDtoResult"
                 }
               }
             }
@@ -15575,6 +15575,95 @@
       }
     },
     "/api/Enums/GetSkillGrade": {
+      "get": {
+        "tags": [
+          "Enums"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/GenericResponseModelListResult"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GenericResponseModelListResult"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GenericResponseModelListResult"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/Enums/GetPaymentGateway": {
       "get": {
         "tags": [
           "Enums"
@@ -55354,9 +55443,6 @@
           "residentialState": {
             "$ref": "#/components/schemas/StateResponseDto"
           },
-          "user": {
-            "$ref": "#/components/schemas/UserResponseDto"
-          },
           "administratorCompanies": {
             "type": "array",
             "items": {
@@ -58176,6 +58262,10 @@
       "InitiateTransactionRequestDto": {
         "type": "object",
         "properties": {
+          "studentId": {
+            "type": "string",
+            "format": "uuid"
+          },
           "gateway": {
             "$ref": "#/components/schemas/PaymentGateway"
           },
@@ -60121,9 +60211,6 @@
           "residentialState": {
             "$ref": "#/components/schemas/StateResponseDto"
           },
-          "user": {
-            "$ref": "#/components/schemas/UserResponseDto"
-          },
           "classSubjects": {
             "type": "array",
             "items": {
@@ -61017,9 +61104,6 @@
           "residentialState": {
             "$ref": "#/components/schemas/StateResponseDto"
           },
-          "user": {
-            "$ref": "#/components/schemas/UserResponseDto"
-          },
           "family": {
             "$ref": "#/components/schemas/FamilyResponseDto"
           },
@@ -61904,6 +61988,11 @@
             "format": "uuid",
             "nullable": true
           },
+          "studentId": {
+            "type": "string",
+            "format": "uuid",
+            "nullable": true
+          },
           "paidAt": {
             "type": "string",
             "format": "date-time",
@@ -61965,6 +62054,11 @@
             "nullable": true
           },
           "feeId": {
+            "type": "string",
+            "format": "uuid",
+            "nullable": true
+          },
+          "studentId": {
             "type": "string",
             "format": "uuid",
             "nullable": true
@@ -62150,6 +62244,11 @@
             "format": "uuid",
             "nullable": true
           },
+          "studentId": {
+            "type": "string",
+            "format": "uuid",
+            "nullable": true
+          },
           "paidAt": {
             "type": "string",
             "format": "date-time",
@@ -62201,6 +62300,43 @@
             "nullable": true
           },
           "password": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "UserManagerResponseDto": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string",
+            "nullable": true
+          },
+          "token": {
+            "type": "string",
+            "nullable": true
+          },
+          "currentUser": {
+            "$ref": "#/components/schemas/UserDto"
+          }
+        },
+        "additionalProperties": false
+      },
+      "UserManagerResponseDtoResult": {
+        "type": "object",
+        "properties": {
+          "succeeded": {
+            "type": "boolean"
+          },
+          "entity": {
+            "$ref": "#/components/schemas/UserManagerResponseDto"
+          },
+          "exceptionError": {
+            "type": "string",
+            "nullable": true
+          },
+          "message": {
             "type": "string",
             "nullable": true
           }
@@ -62283,43 +62419,6 @@
           },
           "entity": {
             "$ref": "#/components/schemas/UserProfileDto"
-          },
-          "exceptionError": {
-            "type": "string",
-            "nullable": true
-          },
-          "message": {
-            "type": "string",
-            "nullable": true
-          }
-        },
-        "additionalProperties": false
-      },
-      "UserResponseDto": {
-        "type": "object",
-        "properties": {
-          "message": {
-            "type": "string",
-            "nullable": true
-          },
-          "token": {
-            "type": "string",
-            "nullable": true
-          },
-          "currentUser": {
-            "$ref": "#/components/schemas/UserDto"
-          }
-        },
-        "additionalProperties": false
-      },
-      "UserResponseDtoResult": {
-        "type": "object",
-        "properties": {
-          "succeeded": {
-            "type": "boolean"
-          },
-          "entity": {
-            "$ref": "#/components/schemas/UserResponseDto"
           },
           "exceptionError": {
             "type": "string",

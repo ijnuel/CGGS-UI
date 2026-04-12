@@ -6,9 +6,16 @@ import { StudentClassListInterface } from "./student-class";
 import { StudentClassSubjectAssessmentScoreListInterface } from "./student-class-subject-assessment-score";
 import { CurrentUserInterface } from "./user";
 
+export interface StudentWalletInterface {
+    id: string;
+    studentId: string;
+    balance: number;
+}
+
 export interface StudentListInterface {
     id: string;
     studentNo?: string;
+    studentWallet?: StudentWalletInterface;
     userId?: string;
     email?: string;
     firstName?: string;

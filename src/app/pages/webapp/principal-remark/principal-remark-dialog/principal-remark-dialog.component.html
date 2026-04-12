@@ -2,7 +2,7 @@
 
 <mat-dialog-content [formGroup]="form" class="dialog-content">
   <div class="grid grid-cols-1 gap-4">
-    <mat-form-field appearance="outline">
+    <mat-form-field>
       <mat-label>Remark</mat-label>
       <textarea matInput formControlName="remark" rows="2" maxlength="255"></textarea>
       <mat-error *ngIf="formControl.remark.hasError('required')">
@@ -14,7 +14,7 @@
     </mat-form-field>
 
     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-      <mat-form-field appearance="outline">
+      <mat-form-field>
         <mat-label>Minimum Score</mat-label>
         <input
           matInput
@@ -31,7 +31,7 @@
         </mat-error>
       </mat-form-field>
 
-      <mat-form-field appearance="outline">
+      <mat-form-field>
         <mat-label>Maximum Score</mat-label>
         <input
           matInput

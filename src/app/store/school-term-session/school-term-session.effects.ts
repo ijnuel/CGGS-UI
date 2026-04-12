@@ -25,15 +25,20 @@ export class SchoolTermSessionEffect {
           nestedProperties: [{ name: 'session' }, ...(query?.nestedProperties ?? [])]
         };
         return this.http
-          .post<GenericResponseInterface<SchoolTermSessionListInterface[]>>(
+          .post<GenericResponseInterface<any>>(
             `${environment.baseUrl}/SchoolTermSession/GetAll`,
             body,
             { withCredentials: true }
           )
           .pipe(
-            map((payload) =>
-              SchoolTermSessionAction.getSchoolTermSessionAllSuccess({ payload })
-            ),
+            map((response) => {
+              // GetAll may return a paginated wrapper; extract data array if present
+              const entity: SchoolTermSessionListInterface[] =
+                response.entity?.data ?? (Array.isArray(response.entity) ? response.entity : []);
+              return SchoolTermSessionAction.getSchoolTermSessionAllSuccess({
+                payload: { ...response, entity }
+              });
+            }),
             catchError((error) => {
               return of(SchoolTermSessionAction.getSchoolTermSessionAllFail({ error }));
             })

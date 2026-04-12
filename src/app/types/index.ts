@@ -7,7 +7,7 @@ import { TestEntityTemplateFormInterface, TestEntityTemplateListInterface } from
 import { PrincipalRemarkFormInterface, PrincipalRemarkListInterface } from './principal-remark';
 import { ProgrammeGradeRemarkFormInterface, ProgrammeGradeRemarkListInterface } from './programme-grade-remark';
 import { FamilyFormInterface, FamilyListInterface } from './family';
-import { StudentFormInterface, StudentListInterface } from './student';
+import { StudentFormInterface, StudentListInterface, StudentWalletInterface } from './student';
 import { ClassSubjectAssessmentFormInterface, ClassSubjectAssessmentListInterface } from './class-subject-assessment';
 import { ClassSubjectFormInterface, ClassSubjectListInterface } from './class-subject';
 import { ClassLevelFormInterface, ClassLevelListInterface } from './class-level';
@@ -124,6 +124,7 @@ export {
   ProgrammeGradeRemarkListInterface,
   FamilyListInterface,
   StudentListInterface,
+  StudentWalletInterface,
   ClassSubjectAssessmentListInterface,
   ClassSubjectListInterface,
   ClassLevelListInterface,

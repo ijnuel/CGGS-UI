@@ -15,6 +15,7 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { SharedModule } from '../../../shared/shared.module';
 import { PaymentComponent } from './payment.component';
 import { PaymentSuccessComponent } from './payment-success/payment-success.component';
+import { PaymentDialogComponent } from './payment-dialog/payment-dialog.component';
 
 const routes: Routes = [
   { path: '', component: PaymentComponent },
@@ -22,7 +23,7 @@ const routes: Routes = [
 ];
 
 @NgModule({
-  declarations: [PaymentComponent, PaymentSuccessComponent],
+  declarations: [PaymentComponent, PaymentSuccessComponent, PaymentDialogComponent],
   imports: [
     CommonModule,
     SharedModule,

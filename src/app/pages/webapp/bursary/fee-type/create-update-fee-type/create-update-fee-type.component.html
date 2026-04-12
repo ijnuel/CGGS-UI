@@ -16,7 +16,7 @@
     <form [formGroup]="formGroup">
       <div class="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-2">
         <div>
-          <mat-form-field class="form-input w-full" appearance="outline">
+          <mat-form-field class="form-input w-full">
             <mat-label>Name</mat-label>
             <input type="text" matInput [formControl]="formControl.name" placeholder="e.g. Tuition, Books" />
             <mat-icon matPrefix class="mr-2 text-gray-400">label</mat-icon>
@@ -24,7 +24,7 @@
           </mat-form-field>
         </div>
         <div>
-          <mat-form-field class="form-input w-full" appearance="outline">
+          <mat-form-field class="form-input w-full">
             <mat-label>Description</mat-label>
             <input type="text" matInput [formControl]="formControl.description" placeholder="Optional description" />
             <mat-icon matPrefix class="mr-2 text-gray-400">description</mat-icon>
