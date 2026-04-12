@@ -1,0 +1,54 @@
+@if ({ loading: loading$ | async, error: error$ | async }; as obs) {
+<div class="pl-8 pr-9 pt-6">
+  <div class="flex items-center gap-3 mb-2">
+    <button mat-icon-button routerLink="/app/bursary/fee-type" style="color: var(--app-primary);">
+      <mat-icon>arrow_back</mat-icon>
+    </button>
+    <div>
+      <h3 class="text-xl font-bold" style="color: var(--app-primary)">
+        {{ isEditMode ? 'Edit' : 'Create' }} Fee Type
+      </h3>
+      <p class="text-sm text-gray-500">{{ isEditMode ? 'Update fee type details' : 'Set up a new fee type' }}</p>
+    </div>
+  </div>
+
+  <div class="mt-6 bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+    <form [formGroup]="formGroup">
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-2">
+        <div>
+          <mat-form-field class="form-input w-full" appearance="outline">
+            <mat-label>Name</mat-label>
+            <input type="text" matInput [formControl]="formControl.name" placeholder="e.g. Tuition, Books" />
+            <mat-icon matPrefix class="mr-2 text-gray-400">label</mat-icon>
+            <mat-error>{{ getErrorMessage('name') }}</mat-error>
+          </mat-form-field>
+        </div>
+        <div>
+          <mat-form-field class="form-input w-full" appearance="outline">
+            <mat-label>Description</mat-label>
+            <input type="text" matInput [formControl]="formControl.description" placeholder="Optional description" />
+            <mat-icon matPrefix class="mr-2 text-gray-400">description</mat-icon>
+          </mat-form-field>
+        </div>
+        <div class="flex items-center gap-6 py-2">
+          <label class="flex items-center gap-2 cursor-pointer">
+            <mat-slide-toggle [formControl]="formControl.createdByDefault" color="primary"></mat-slide-toggle>
+            <span class="text-sm text-gray-700">Created by Default</span>
+          </label>
+          <label class="flex items-center gap-2 cursor-pointer">
+            <mat-slide-toggle [formControl]="formControl.compulsory" color="primary"></mat-slide-toggle>
+            <span class="text-sm text-gray-700">Compulsory</span>
+          </label>
+        </div>
+      </div>
+    </form>
+
+    <div class="actions-btn flex justify-end mt-8 gap-4">
+      <button class="cancel-btn" routerLink="/app/bursary/fee-type">Cancel</button>
+      <button class="sec-btn" (click)="submit()" [disabled]="obs.loading">
+        {{ isEditMode ? 'Update' : 'Create' }} Fee Type
+      </button>
+    </div>
+  </div>
+</div>
+}

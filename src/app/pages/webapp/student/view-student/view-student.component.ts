@@ -7,7 +7,29 @@ import { StudentFacade } from '../../../../store/student/student.facade';
 import { SharedFacade } from '../../../../store/shared/shared.facade';
 import { GlobalLoadingFacade } from '../../../../store/global-loading/global-loading.facade';
 import { ProfileImageFacade } from '../../../../store/profile-image/profile-image.facade';
-import { StudentListInterface, DropdownListInterface, StudentClassListInterface } from '../../../../types';
+import {
+  StudentListInterface,
+  DropdownListInterface,
+  StudentClassListInterface,
+  FeeListInterface,
+  PaymentStatusEnum,
+} from '../../../../types';
+import { getClassLabel } from '../../../../services/helper.service';
+
+interface FeeEntry {
+  fee: FeeListInterface;
+  className: string;
+}
+
+interface FeeGroup {
+  sessionName: string;
+  termLabel: string;
+  sortKey: string;
+  fees: FeeEntry[];
+  total: number;
+  paid: number;
+  balance: number;
+}
 
 @Component({
   selector: 'app-view-student',
@@ -19,11 +41,14 @@ export class ViewStudentComponent implements OnInit, OnDestroy {
   genderList$: Observable<DropdownListInterface[] | null>;
   religionList$: Observable<DropdownListInterface[] | null>;
   loading$: Observable<boolean>;
+  feeGroups: FeeGroup[] = [];
 
   photoUrl: string | null = null;
   photoUploading = false;
   photoDeleting = false;
   entityInitials = 'U';
+
+  readonly PaymentStatusEnum = PaymentStatusEnum;
 
   private studentId = '';
   private unsubscribe$ = new Subject<void>();
@@ -65,7 +90,14 @@ export class ViewStudentComponent implements OnInit, OnDestroy {
                   { name: 'classLevel', innerNestedProperties: [{ name: 'programmeType' }] }
                 ]
               },
-              { name: 'session' }
+              { name: 'session' },
+              {
+                name: 'fees',
+                innerNestedProperties: [
+                  { name: 'schoolTermSession', innerNestedProperties: [{ name: 'session' }] },
+                  { name: 'feeLines', innerNestedProperties: [{ name: 'feeType' }, { name: 'feeSetup' }] }
+                ]
+              }
             ]
           },
           { name: 'family' },
@@ -80,6 +112,7 @@ export class ViewStudentComponent implements OnInit, OnDestroy {
     this.student$.pipe(takeUntil(this.unsubscribe$)).subscribe(student => {
       if (student) {
         this.entityInitials = `${student.firstName?.charAt(0) ?? ''}${student.lastName?.charAt(0) ?? ''}`.toUpperCase() || 'U';
+        this.computeFeeGroups(student);
       }
     });
 
@@ -93,6 +126,39 @@ export class ViewStudentComponent implements OnInit, OnDestroy {
 
     this.sharedFacade.getGenderList();
     this.sharedFacade.getReligionList();
+  }
+
+  private computeFeeGroups(student: StudentListInterface) {
+    const groupMap = new Map<string, FeeGroup>();
+
+    for (const sc of (student.studentClasses ?? [])) {
+      const fees = (sc.fees ?? []) as FeeListInterface[];
+      const className = getClassLabel(sc.class) || sc.class?.name || '—';
+
+      for (const fee of fees) {
+        const ts = fee.schoolTermSession;
+        if (!ts) continue;
+
+        const sessionName = ts.session?.name ?? ts.sessionId;
+        const termLabel = ts.termString ?? `Term ${ts.term}`;
+        const sortKey = `${sessionName}_${termLabel}`;
+
+        if (!groupMap.has(sortKey)) {
+          groupMap.set(sortKey, { sessionName, termLabel, sortKey, fees: [], total: 0, paid: 0, balance: 0 });
+        }
+
+        const group = groupMap.get(sortKey)!;
+        const total = this.getFeeTotal(fee);
+        const paid = this.getFeePaid(fee);
+        group.fees.push({ fee, className });
+        group.total += total;
+        group.paid += paid;
+        group.balance += total - paid;
+      }
+    }
+
+    this.feeGroups = Array.from(groupMap.values())
+      .sort((a, b) => b.sessionName.localeCompare(a.sessionName) || a.termLabel.localeCompare(b.termLabel));
   }
 
   deletePhoto() {
@@ -131,6 +197,33 @@ export class ViewStudentComponent implements OnInit, OnDestroy {
     const level = sc.class?.classLevel?.level ?? '';
     const name = sc.class?.name ?? sc.classId;
     return [programmeType, level, name].filter(Boolean).join(' ');
+  }
+
+  getFeeTotal(fee: FeeListInterface): number {
+    return fee.feeLines?.reduce((s, fl) => s + (fl.amount || 0), 0) ?? 0;
+  }
+
+  getFeePaid(fee: FeeListInterface): number {
+    return fee.feeLines?.reduce((s, fl) => s + (fl.settledAmount || 0), 0) ?? 0;
+  }
+
+  getFeeBalance(fee: FeeListInterface): number {
+    return this.getFeeTotal(fee) - this.getFeePaid(fee);
+  }
+
+  getStatusLabel(status: PaymentStatusEnum): string {
+    const map: Record<number, string> = { 0: 'Pending', 1: 'Partially Paid', 2: 'Paid', 3: 'Overpaid' };
+    return map[status] ?? 'Unknown';
+  }
+
+  getStatusClass(status: PaymentStatusEnum): string {
+    const map: Record<number, string> = {
+      0: 'bg-yellow-100 text-yellow-700',
+      1: 'bg-blue-100 text-blue-700',
+      2: 'bg-green-100 text-green-700',
+      3: 'bg-purple-100 text-purple-700',
+    };
+    return map[status] ?? 'bg-gray-100 text-gray-600';
   }
 
   goBack(): void { this.location.back(); }

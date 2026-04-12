@@ -74,6 +74,12 @@ import { ProfileImageEffect } from './store/profile-image/profile-image.effects'
 import { ProfileImageFacade } from './store/profile-image/profile-image.facade';
 import { RoleEffect } from './store/role/role.effects';
 import { RoleFacade } from './store/role/role.facade';
+import { FeeTypeEffect } from './store/fee-type/fee-type.effects';
+import { FeeTypeFacade } from './store/fee-type/fee-type.facade';
+import { FeeSetupEffect } from './store/fee-setup/fee-setup.effects';
+import { FeeSetupFacade } from './store/fee-setup/fee-setup.facade';
+import { FeeEffect } from './store/fee/fee.effects';
+import { FeeFacade } from './store/fee/fee.facade';
 // import { provideStoreDevtools } from '@ngrx/store-devtools';
 
 export const appConfig: ApplicationConfig = {
@@ -109,6 +115,9 @@ export const appConfig: ApplicationConfig = {
         DataImportEffect,
         ProfileImageEffect,
         RoleEffect,
+        FeeTypeEffect,
+        FeeSetupEffect,
+        FeeEffect,
       ]),
     ),
     provideAnimations(),
@@ -179,5 +188,8 @@ export const appConfig: ApplicationConfig = {
     DataImportFacade,
     ProfileImageFacade,
     RoleFacade,
+    FeeTypeFacade,
+    FeeSetupFacade,
+    FeeFacade,
   ],
 };

@@ -23,6 +23,8 @@ export class ViewRoleComponent implements OnInit, OnDestroy {
 
   role: RoleWithPermissionsInterface | null = null;
   permissionGroups: PermissionGroup[] = [];
+  collapsedGroups = new Set<string>();
+  private seenGroups = new Set<string>();
   private allPerms: PermissionInterface[] = [];
   private destroy$ = new Subject<void>();
   private toggling = false;
@@ -105,6 +107,15 @@ export class ViewRoleComponent implements OnInit, OnDestroy {
     this.permissionGroups = Array.from(groupMap.entries())
       .map(([group, permissions]) => ({ group, permissions }))
       .sort((a, b) => a.group.localeCompare(b.group));
+
+    // Collapse only groups that haven't been seen before (first load),
+    // so that groups the user manually expanded stay open across rebuilds.
+    this.permissionGroups.forEach(g => {
+      if (!this.seenGroups.has(g.group)) {
+        this.seenGroups.add(g.group);
+        this.collapsedGroups.add(g.group);
+      }
+    });
   }
 
   togglePermission(permission: PermissionInterface & { assigned: boolean }) {
@@ -158,6 +169,22 @@ export class ViewRoleComponent implements OnInit, OnDestroy {
         permissions: permsToAssign,
       });
     }
+  }
+
+  getGroupAssignedCount(group: PermissionGroup): number {
+    return group.permissions.filter(p => p.assigned).length;
+  }
+
+  toggleCollapse(groupName: string) {
+    if (this.collapsedGroups.has(groupName)) {
+      this.collapsedGroups.delete(groupName);
+    } else {
+      this.collapsedGroups.add(groupName);
+    }
+  }
+
+  isCollapsed(groupName: string): boolean {
+    return this.collapsedGroups.has(groupName);
   }
 
   getAssignedCount(): number {

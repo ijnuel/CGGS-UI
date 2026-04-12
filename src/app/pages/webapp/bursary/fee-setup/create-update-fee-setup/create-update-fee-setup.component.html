@@ -1,0 +1,105 @@
+@if ({ loading: loading$ | async, error: error$ | async }; as obs) {
+<div class="pl-8 pr-9 pt-6">
+  <div class="flex items-center gap-3 mb-2">
+    <button mat-icon-button routerLink="/app/bursary/fee-setup" style="color: var(--app-primary);">
+      <mat-icon>arrow_back</mat-icon>
+    </button>
+    <div>
+      <h3 class="text-xl font-bold" style="color: var(--app-primary)">
+        {{ isEditMode ? 'Edit' : 'Create' }} Fee Setup
+      </h3>
+      <p class="text-sm text-gray-500">{{ isEditMode ? 'Update fee setup amount' : 'Configure a new fee setup' }}</p>
+    </div>
+  </div>
+
+  <div class="mt-6 bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+    <form [formGroup]="formGroup">
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-2">
+
+        <!-- Fee Type -->
+        <div *ngIf="!isEditMode">
+          <mat-form-field class="form-input w-full" appearance="outline">
+            <mat-label>Fee Type</mat-label>
+            <mat-select [formControl]="formControl.feeTypeId">
+              <mat-option *ngFor="let ft of feeTypeAll$ | async" [value]="ft.id">{{ ft.name }}</mat-option>
+            </mat-select>
+            <mat-error>{{ getErrorMessage('feeTypeId') }}</mat-error>
+          </mat-form-field>
+        </div>
+        <div *ngIf="isEditMode" class="flex flex-col justify-center py-1">
+          <span class="text-xs text-gray-400 mb-0.5">Fee Type</span>
+          <span class="text-sm font-medium text-gray-700">
+            {{ (feeSetupById$ | async)?.feeType?.name ?? '—' }}
+          </span>
+        </div>
+
+        <!-- Class -->
+        <div *ngIf="!isEditMode">
+          <mat-form-field class="form-input w-full" appearance="outline">
+            <mat-label>Class</mat-label>
+            <mat-select [formControl]="formControl.classId">
+              <mat-option *ngFor="let c of classList$ | async" [value]="c.id">{{ getClassLabel(c) }}</mat-option>
+            </mat-select>
+            <mat-error>{{ getErrorMessage('classId') }}</mat-error>
+          </mat-form-field>
+        </div>
+        <div *ngIf="isEditMode" class="flex flex-col justify-center py-1">
+          <span class="text-xs text-gray-400 mb-0.5">Class</span>
+          <span class="text-sm font-medium text-gray-700">
+            {{ (feeSetupById$ | async)?.class?.name ?? '—' }}
+          </span>
+        </div>
+
+        <!-- Term / Session -->
+        <div *ngIf="!isEditMode">
+          <mat-form-field class="form-input w-full" appearance="outline">
+            <mat-label>Term / Session</mat-label>
+            <mat-select [formControl]="formControl.schoolTermSessionId">
+              <mat-option *ngFor="let ts of schoolTermSessionAll$ | async" [value]="ts.id">
+                {{ getTermLabel(ts) }}
+              </mat-option>
+            </mat-select>
+            <mat-error>{{ getErrorMessage('schoolTermSessionId') }}</mat-error>
+          </mat-form-field>
+        </div>
+        <div *ngIf="isEditMode" class="flex flex-col justify-center py-1">
+          <span class="text-xs text-gray-400 mb-0.5">Term / Session</span>
+          <span class="text-sm font-medium text-gray-700">
+            {{ (feeSetupById$ | async)?.schoolTermSession ? getTermLabel((feeSetupById$ | async)!.schoolTermSession!) : '—' }}
+          </span>
+        </div>
+
+        <!-- Amount (always editable) -->
+        <div>
+          <mat-form-field class="form-input w-full" appearance="outline">
+            <mat-label>Amount (₦)</mat-label>
+            <input type="number" min="0" matInput [formControl]="formControl.amount" placeholder="0.00" />
+            <mat-icon matPrefix class="mr-2 text-gray-400">payments</mat-icon>
+            <mat-error>{{ getErrorMessage('amount') }}</mat-error>
+          </mat-form-field>
+        </div>
+
+        <!-- In Use -->
+        <div *ngIf="!isEditMode" class="flex items-center gap-2 py-2">
+          <mat-slide-toggle [formControl]="formControl.inUse" color="primary"></mat-slide-toggle>
+          <span class="text-sm text-gray-700">Mark as In Use</span>
+        </div>
+        <div *ngIf="isEditMode" class="flex flex-col justify-center py-1">
+          <span class="text-xs text-gray-400 mb-0.5">In Use</span>
+          <span class="text-sm font-medium text-gray-700">
+            {{ (feeSetupById$ | async)?.inUse ? 'Yes' : 'No' }}
+          </span>
+        </div>
+
+      </div>
+    </form>
+
+    <div class="actions-btn flex justify-end mt-8 gap-4">
+      <button class="cancel-btn" routerLink="/app/bursary/fee-setup">Cancel</button>
+      <button class="sec-btn" (click)="submit()" [disabled]="obs.loading">
+        {{ isEditMode ? 'Update' : 'Create' }} Fee Setup
+      </button>
+    </div>
+  </div>
+</div>
+}

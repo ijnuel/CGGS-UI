@@ -1,0 +1,27 @@
+<div>
+  <div class="flex justify-between items-center mb-4">
+    <h4 class="text-lg font-semibold text-gray-700">Fee Types</h4>
+    <div class="flex gap-2">
+      <button mat-raised-button color="primary" (click)="onRefresh()">
+        <mat-icon>refresh</mat-icon> Refresh
+      </button>
+      <button mat-raised-button [routerLink]="['../fee-type/create']" style="background-color: var(--app-button-bg); color: white;">
+        <mat-icon>add</mat-icon> Create New
+      </button>
+    </div>
+  </div>
+
+  <app-table
+    [tableData]="(feeTypeList$ | async)?.data ?? []"
+    [tableHeaderData]="tableHeaderData"
+    [isLoading]="(loading$ | async) ?? false"
+    [totalLength]="(feeTypeList$ | async)?.totalCount ?? 0"
+    [showSearch]="true"
+    [showFilters]="true"
+    [showActionColumn]="true"
+    [showViewIcon]="false"
+    [showDeleteIcon]="false"
+    (queryChange)="onQueryChange($event)"
+    (edit)="onEdit($event)"
+  ></app-table>
+</div>

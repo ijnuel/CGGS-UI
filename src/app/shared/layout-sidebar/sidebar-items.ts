@@ -35,6 +35,18 @@ export default [
     roles: [UserRolesEnum.SuperAdmin, UserRolesEnum.Admin,UserRolesEnum.Staff],
     url: '/app/result'
   },
+  {
+    name: 'Bursary',
+    icon: 'assets/icons/result-icon.svg',
+    roles: [UserRolesEnum.SuperAdmin, UserRolesEnum.Admin],
+    url: '/app/bursary'
+  },
+  {
+    name: 'Payments',
+    icon: 'assets/icons/result-icon.svg',
+    roles: [UserRolesEnum.Student],
+    url: '/app/payment'
+  },
 
   {
     name: 'Staff',

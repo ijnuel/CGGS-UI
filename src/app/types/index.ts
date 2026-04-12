@@ -40,6 +40,23 @@ import {
   RolePermissionAssignInterface,
   UserRoleInterface,
 } from './role';
+import {
+  FeeTypeListInterface,
+  FeeTypeFormInterface,
+  FeeSetupListInterface,
+  FeeSetupFormInterface,
+  FeeListInterface,
+  FeeLineListInterface,
+  PaymentListInterface,
+  PaymentStatusEnum,
+  PaymentGatewayEnum,
+  TermEnum,
+  GenerateFeesByTermSessionRequest,
+  GenerateFeesBySessionAndTermRequest,
+  GenerateFeesByTermSessionForStudentRequest,
+  GenerateFeesBySessionAndTermForStudentRequest,
+  InitiatePaymentRequest,
+} from './fee';
 
 interface GenericResponseInterface<T> {
   error: string;
@@ -159,4 +176,19 @@ export {
   PermissionInterface,
   RolePermissionAssignInterface,
   UserRoleInterface,
+  FeeTypeListInterface,
+  FeeTypeFormInterface,
+  FeeSetupListInterface,
+  FeeSetupFormInterface,
+  FeeListInterface,
+  FeeLineListInterface,
+  PaymentListInterface,
+  PaymentStatusEnum,
+  PaymentGatewayEnum,
+  TermEnum,
+  GenerateFeesByTermSessionRequest,
+  GenerateFeesBySessionAndTermRequest,
+  GenerateFeesByTermSessionForStudentRequest,
+  GenerateFeesBySessionAndTermForStudentRequest,
+  InitiatePaymentRequest,
 };
