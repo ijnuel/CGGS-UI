@@ -181,14 +181,49 @@ export class ViewStudentComponent implements OnInit, OnDestroy {
   openFeesDialog() {
     this.student$.pipe(takeUntil(this.unsubscribe$)).subscribe(student => {
       if (!student) return;
-      this.dialog.open(StudentFeesDialogComponent, {
+      const dialogRef = this.dialog.open(StudentFeesDialogComponent, {
         width: '680px',
         maxWidth: '95vw',
         data: {
+          studentId: this.studentId,
           studentName: `${student.firstName} ${student.lastName}`,
           feeGroups: this.feeGroups,
           walletBalance: student.studentWallet?.balance ?? 0,
         } as StudentFeesDialogData,
+      });
+      dialogRef.afterClosed().subscribe(result => {
+        if (result?.refresh) {
+          this.studentFacade.getStudentByProperties({
+            queryProperties: [{ name: 'id', value: this.studentId }],
+            nestedProperties: [
+              {
+                name: 'studentClasses',
+                innerNestedProperties: [
+                  {
+                    name: 'class',
+                    innerNestedProperties: [
+                      { name: 'classLevel', innerNestedProperties: [{ name: 'programmeType' }] }
+                    ]
+                  },
+                  { name: 'session' },
+                  {
+                    name: 'fees',
+                    innerNestedProperties: [
+                      { name: 'schoolTermSession', innerNestedProperties: [{ name: 'session' }] },
+                      { name: 'feeLines', innerNestedProperties: [{ name: 'feeType' }, { name: 'feeSetup' }] }
+                    ]
+                  }
+                ]
+              },
+              { name: 'family' },
+              { name: 'residentialState' },
+              { name: 'nationality' },
+              { name: 'stateOfOrigin' },
+              { name: 'originLGA' },
+              { name: 'studentWallet' }
+            ]
+          });
+        }
       });
     }).unsubscribe();
   }

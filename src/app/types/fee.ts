@@ -118,6 +118,24 @@ export interface GenerateFeesBySessionAndTermForStudentRequest {
   studentId: string;
 }
 
+export interface PostManualFeePaymentRequest {
+  feeId: string;
+  amount: number;
+  paymentDate: string;
+  paymentMethod?: string;
+  transactionId?: string;
+  narration?: string;
+}
+
+export interface PostManualFeeLinePaymentRequest {
+  feeLineId: string;
+  amount: number;
+  paymentDate: string;
+  paymentMethod?: string;
+  transactionId?: string;
+  narration?: string;
+}
+
 export interface InitiatePaymentRequest {
   gateway: PaymentGatewayEnum;
   amount: number;
