@@ -1,0 +1,61 @@
+<div class="pl-8 pr-9 pt-6">
+  <div class="flex items-center gap-3 mb-6">
+    <button mat-icon-button routerLink="/app/bursary" style="color: var(--app-primary);">
+      <mat-icon>arrow_back</mat-icon>
+    </button>
+    <div>
+      <h3 class="text-xl font-bold" style="color: var(--app-primary)">Payments</h3>
+      <p class="text-sm text-gray-500">View all fee payments recorded in the system</p>
+    </div>
+  </div>
+
+  <div class="flex flex-wrap items-center justify-between gap-3 mb-4">
+    <div class="flex flex-wrap gap-3">
+      <mat-form-field class="w-full md:w-64" subscriptSizing="dynamic">
+        <mat-label>Filter by Term / Session</mat-label>
+        <mat-icon matPrefix class="mr-1 text-gray-400">filter_list</mat-icon>
+        <mat-select [value]="selectedTermSessionId" (selectionChange)="onTermSessionChange($event.value)">
+          <mat-option value="">All Terms</mat-option>
+          <mat-option *ngFor="let ts of schoolTermSessionAll$ | async" [value]="ts.id">
+            {{ getTermLabel(ts) }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field class="w-full md:w-64" subscriptSizing="dynamic">
+        <mat-label>Filter by Student</mat-label>
+        <mat-icon matPrefix class="mr-1 text-gray-400">person_search</mat-icon>
+        <mat-select [value]="selectedStudentId" (selectionChange)="onStudentChange($event.value)">
+          <mat-option disabled class="!h-10 !py-0">
+            <input
+              class="w-full h-full border-none outline-none text-sm bg-transparent"
+              placeholder="Search student..."
+              [formControl]="studentSearchControl"
+              (click)="$event.stopPropagation()"
+              (keydown)="$event.stopPropagation()"
+            />
+          </mat-option>
+          <mat-option value="">All Students</mat-option>
+          <mat-option *ngFor="let s of filteredStudents" [value]="s.id">
+            {{ getStudentLabel(s) }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+
+    <button mat-raised-button color="primary" (click)="onRefresh()">
+      <mat-icon>refresh</mat-icon> Refresh
+    </button>
+  </div>
+
+  <app-table
+    [tableData]="(paymentList$ | async)?.data ?? []"
+    [tableHeaderData]="tableHeaderData"
+    [isLoading]="(loading$ | async) ?? false"
+    [totalLength]="(paymentList$ | async)?.totalCount ?? 0"
+    [showSearch]="false"
+    [showFilters]="false"
+    [showActionColumn]="false"
+    (queryChange)="onQueryChange($event)"
+  ></app-table>
+</div>

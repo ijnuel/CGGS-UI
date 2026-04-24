@@ -32,5 +32,21 @@ export class BursaryComponent {
       roles: [],
       url: '/app/bursary/generate-fees',
     },
+    {
+      name: 'Payments',
+      icon: '',
+      matIcon: 'payments',
+      description: 'View and track all fee payments',
+      roles: [],
+      url: '/app/bursary/payments',
+    },
+    {
+      name: 'Transactions',
+      icon: '',
+      matIcon: 'account_balance_wallet',
+      description: 'View gateway transactions and verify pending ones',
+      roles: [],
+      url: '/app/bursary/transactions',
+    },
   ];
 }

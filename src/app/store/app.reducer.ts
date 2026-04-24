@@ -32,6 +32,8 @@ import * as fromRole from './role/role.reducer';
 import * as fromFeeType from './fee-type/fee-type.reducer';
 import * as fromFeeSetup from './fee-setup/fee-setup.reducer';
 import * as fromFee from './fee/fee.reducer';
+import * as fromPayment from './payment/payment.reducer';
+import * as fromTransaction from './transaction/transaction.reducer';
 
 export const appFeatureKey = 'appFeatureKey';
 
@@ -68,6 +70,8 @@ export interface AppState {
   [fromFeeType.feeTypeFeatureKey]: fromFeeType.FeeTypeState;
   [fromFeeSetup.feeSetupFeatureKey]: fromFeeSetup.FeeSetupState;
   [fromFee.feeFeatureKey]: fromFee.FeeState;
+  [fromPayment.paymentFeatureKey]: fromPayment.PaymentState;
+  [fromTransaction.transactionFeatureKey]: fromTransaction.TransactionState;
 }
 
 export const reducers = {
@@ -103,6 +107,8 @@ export const reducers = {
   [fromFeeType.feeTypeFeatureKey]: fromFeeType.reducer,
   [fromFeeSetup.feeSetupFeatureKey]: fromFeeSetup.reducer,
   [fromFee.feeFeatureKey]: fromFee.reducer,
+  [fromPayment.paymentFeatureKey]: fromPayment.reducer,
+  [fromTransaction.transactionFeatureKey]: fromTransaction.reducer,
 };
 
 export const selectAppState = createFeatureSelector<AppState>(appFeatureKey);

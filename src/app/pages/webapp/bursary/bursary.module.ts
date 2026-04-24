@@ -21,12 +21,18 @@ import { CreateUpdateFeeTypeComponent } from './fee-type/create-update-fee-type/
 import { FeeSetupComponent } from './fee-setup/fee-setup.component';
 import { CreateUpdateFeeSetupComponent } from './fee-setup/create-update-fee-setup/create-update-fee-setup.component';
 import { GenerateFeesComponent } from './generate-fees/generate-fees.component';
+import { PaymentsComponent } from './payments/payments.component';
+import { TransactionsComponent } from './transactions/transactions.component';
+import { ViewTransactionComponent } from './transactions/view-transaction/view-transaction.component';
 
 const routes: Routes = [
   { path: '', component: BursaryComponent },
   { path: 'fee-type', component: FeeTypeComponent },
   { path: 'fee-setup', component: FeeSetupComponent },
   { path: 'generate-fees', component: GenerateFeesComponent },
+  { path: 'payments', component: PaymentsComponent },
+  { path: 'transactions', component: TransactionsComponent },
+  { path: 'transactions/:id', component: ViewTransactionComponent },
 ];
 
 @NgModule({
@@ -37,6 +43,9 @@ const routes: Routes = [
     FeeSetupComponent,
     CreateUpdateFeeSetupComponent,
     GenerateFeesComponent,
+    PaymentsComponent,
+    TransactionsComponent,
+    ViewTransactionComponent,
   ],
   imports: [
     CommonModule,

@@ -1,6 +1,7 @@
 import { SchoolTermSessionListInterface } from './school-term-session';
 import { StudentClassListInterface } from './student-class';
 import { ClassListInterface } from './class';
+import { LoggedUserInterface } from './auth';
 
 export enum PaymentStatusEnum {
   Pending = 0,
@@ -72,6 +73,7 @@ export interface FeeLineListInterface {
   status: PaymentStatusEnum;
   feeType?: FeeTypeListInterface;
   feeSetup?: FeeSetupListInterface;
+  fee?: FeeListInterface;
   payments?: PaymentListInterface[];
 }
 
@@ -92,6 +94,8 @@ export interface PaymentListInterface {
   paymentMethod?: string;
   paymentReversed: boolean;
   transactionId?: string;
+  createdBy?: LoggedUserInterface;
+  feeLine?: FeeLineListInterface;
 }
 
 export interface GenerateFeesByTermSessionRequest {

@@ -80,6 +80,10 @@ import { FeeSetupEffect } from './store/fee-setup/fee-setup.effects';
 import { FeeSetupFacade } from './store/fee-setup/fee-setup.facade';
 import { FeeEffect } from './store/fee/fee.effects';
 import { FeeFacade } from './store/fee/fee.facade';
+import { PaymentEffect } from './store/payment/payment.effects';
+import { PaymentFacade } from './store/payment/payment.facade';
+import { TransactionEffect } from './store/transaction/transaction.effects';
+import { TransactionFacade } from './store/transaction/transaction.facade';
 // import { provideStoreDevtools } from '@ngrx/store-devtools';
 
 export const appConfig: ApplicationConfig = {
@@ -118,6 +122,8 @@ export const appConfig: ApplicationConfig = {
         FeeTypeEffect,
         FeeSetupEffect,
         FeeEffect,
+        PaymentEffect,
+        TransactionEffect,
       ]),
     ),
     provideAnimations(),
@@ -191,5 +197,7 @@ export const appConfig: ApplicationConfig = {
     FeeTypeFacade,
     FeeSetupFacade,
     FeeFacade,
+    PaymentFacade,
+    TransactionFacade,
   ],
 };

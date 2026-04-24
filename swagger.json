@@ -58769,6 +58769,9 @@
           },
           "transaction": {
             "$ref": "#/components/schemas/TransactionResponseDto"
+          },
+          "createdBy": {
+            "$ref": "#/components/schemas/UserResponseDto"
           }
         },
         "additionalProperties": false
@@ -62235,6 +62238,21 @@
           "id": {
             "type": "string",
             "format": "uuid"
+          },
+          "statusString": {
+            "type": "string",
+            "nullable": true,
+            "readOnly": true
+          },
+          "gatewayString": {
+            "type": "string",
+            "nullable": true,
+            "readOnly": true
+          },
+          "transactionTypeString": {
+            "type": "string",
+            "nullable": true,
+            "readOnly": true
           }
         },
         "additionalProperties": false
@@ -62589,6 +62607,31 @@
             "nullable": true
           },
           "message": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "UserResponseDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "userType": {
+            "$ref": "#/components/schemas/UserType"
+          },
+          "email": {
+            "type": "string",
+            "nullable": true
+          },
+          "userName": {
+            "type": "string",
+            "nullable": true
+          },
+          "phoneNumber": {
             "type": "string",
             "nullable": true
           }
