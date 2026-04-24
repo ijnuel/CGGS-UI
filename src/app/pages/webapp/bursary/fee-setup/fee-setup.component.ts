@@ -1,8 +1,8 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { Router, ActivatedRoute } from '@angular/router';
 import { Observable, Subject } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
+import { filter, take, takeUntil } from 'rxjs/operators';
 import { Actions, ofType } from '@ngrx/effects';
+import { MatDialog } from '@angular/material/dialog';
 import { FeeSetupFacade } from '../../../../store/fee-setup/fee-setup.facade';
 import { SchoolTermSessionFacade } from '../../../../store/school-term-session/school-term-session.facade';
 import * as FeeSetupAction from '../../../../store/fee-setup/fee-setup.actions';
@@ -13,13 +13,14 @@ import {
   SchoolTermSessionListInterface,
 } from '../../../../types';
 import { TableHeaderInterface } from '../../../../types/table';
-import { MatDialog } from '@angular/material/dialog';
 import { ConfirmDialogComponent } from '../../../../shared/confirm-dialog/confirm-dialog.component';
 import { ToastNotificationService, NotificationTypeEnums } from '../../../../services/toast-notification.service';
+import { CreateUpdateFeeSetupComponent, FeeSetupDialogData } from './create-update-fee-setup/create-update-fee-setup.component';
+import { getClassLabel } from '../../../../services/helper.service';
 
 const tableHeader: TableHeaderInterface[] = [
   { key: 'feeTypeName', nestedKey: 'feeType.name', type: 'text', name: 'Fee Type', sortable: false, filterable: false, align: 'left' },
-  { key: 'className', nestedKey: 'class.name', type: 'text', name: 'Class', sortable: false, filterable: false, align: 'left' },
+  { key: 'className', nestedKey: 'class.name', type: 'text', name: 'Class', sortable: false, filterable: false, align: 'left', format: (_: any, row: any) => getClassLabel(row?.class) || row?.class?.name || '—' },
   { key: 'sessionName', nestedKey: 'schoolTermSession.session.name', type: 'text', name: 'Session', sortable: false, filterable: false, align: 'left' },
   { key: 'termString', nestedKey: 'schoolTermSession.termString', type: 'text', name: 'Term', sortable: false, filterable: false, align: 'left' },
   { key: 'amount', type: 'text', name: 'Amount (₦)', sortable: true, filterable: false, align: 'right', format: (v: number) => v?.toLocaleString('en-NG', { minimumFractionDigits: 2 }) ?? '0.00' },
@@ -41,7 +42,7 @@ export class FeeSetupComponent implements OnInit, OnDestroy {
 
   private baseNestedProperties = [
     { name: 'feeType' },
-    { name: 'class' },
+    { name: 'class', innerNestedProperties: [{ name: 'classLevel', innerNestedProperties: [{ name: 'programmeType' }] }] },
     { name: 'schoolTermSession', innerNestedProperties: [{ name: 'session' }] },
   ];
   private lastQuery: PageQueryInterface = {
@@ -51,13 +52,11 @@ export class FeeSetupComponent implements OnInit, OnDestroy {
   };
 
   constructor(
-    private router: Router,
-    private route: ActivatedRoute,
     private feeSetupFacade: FeeSetupFacade,
     private schoolTermSessionFacade: SchoolTermSessionFacade,
     private actions$: Actions,
     private dialog: MatDialog,
-    private toastService: ToastNotificationService
+    private toastService: ToastNotificationService,
   ) {
     this.feeSetupList$ = this.feeSetupFacade.feeSetupList$;
     this.loading$ = this.feeSetupFacade.loading$;
@@ -70,13 +69,20 @@ export class FeeSetupComponent implements OnInit, OnDestroy {
       });
 
     this.actions$.pipe(ofType(FeeSetupAction.deleteFeeSetupFail), takeUntil(this.destroy$))
-      .subscribe(() => {
-        this.toastService.openToast('Failed to delete Fee Setup', NotificationTypeEnums.ERROR);
-      });
+      .subscribe(() => this.toastService.openToast('Failed to delete Fee Setup', NotificationTypeEnums.ERROR));
   }
 
   ngOnInit() {
     this.schoolTermSessionFacade.getSchoolTermSessionAll({ nestedProperties: [{ name: 'session' }] });
+
+    this.schoolTermSessionAll$.pipe(
+      filter(sessions => !!sessions && sessions!.length > 0),
+      take(1),
+      takeUntil(this.destroy$),
+    ).subscribe(sessions => {
+      const current = sessions!.find(s => s.isCurrent);
+      if (current) this.onTermSessionChange(current.id);
+    });
   }
 
   ngOnDestroy() { this.destroy$.next(); this.destroy$.complete(); }
@@ -92,15 +98,9 @@ export class FeeSetupComponent implements OnInit, OnDestroy {
     this.lastQuery = {
       ...this.lastQuery,
       start: 0, pageIndex: 0,
-      queryProperties: termSessionId
-        ? [{ name: 'schoolTermSessionId', value: termSessionId }]
-        : [],
+      queryProperties: termSessionId ? [{ name: 'schoolTermSessionId', value: termSessionId }] : [],
     };
     this.feeSetupFacade.getFeeSetupList(this.lastQuery);
-  }
-
-  canDelete(row: FeeSetupListInterface): boolean {
-    return !row.inUse;
   }
 
   onQueryChange(query: PageQueryInterface) {
@@ -115,8 +115,19 @@ export class FeeSetupComponent implements OnInit, OnDestroy {
 
   onRefresh() { this.feeSetupFacade.getFeeSetupList(this.lastQuery); }
 
-  onEdit(row: FeeSetupListInterface) {
-    this.router.navigate(['fee-setup/edit', row.id], { relativeTo: this.route.parent });
+  openCreate() { this.openDialog(); }
+
+  onEdit(row: FeeSetupListInterface) { this.openDialog(row.id); }
+
+  private openDialog(id?: string) {
+    const ref = this.dialog.open(CreateUpdateFeeSetupComponent, {
+      width: '560px',
+      maxWidth: '95vw',
+      data: { id } as FeeSetupDialogData,
+    });
+    ref.afterClosed().subscribe(result => {
+      if (result?.success) this.feeSetupFacade.getFeeSetupList(this.lastQuery);
+    });
   }
 
   onDelete(row: FeeSetupListInterface) {
@@ -126,12 +137,7 @@ export class FeeSetupComponent implements OnInit, OnDestroy {
     }
     const dialogRef = this.dialog.open(ConfirmDialogComponent, {
       width: '400px',
-      data: {
-        title: 'Delete Fee Setup',
-        message: `Are you sure you want to delete this fee setup?`,
-        confirmText: 'Delete',
-        cancelText: 'Cancel'
-      }
+      data: { title: 'Delete Fee Setup', message: 'Are you sure you want to delete this fee setup?', confirmText: 'Delete', cancelText: 'Cancel' },
     });
     dialogRef.afterClosed().subscribe(result => {
       if (result) this.feeSetupFacade.deleteFeeSetup(row.id);

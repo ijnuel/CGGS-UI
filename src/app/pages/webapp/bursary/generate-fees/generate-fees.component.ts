@@ -1,6 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Observable, Subject } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
+import { filter, take, takeUntil } from 'rxjs/operators';
 import { Actions, ofType } from '@ngrx/effects';
 import { FeeFacade } from '../../../../store/fee/fee.facade';
 import { ClassFacade } from '../../../../store/class/class.facade';
@@ -46,6 +46,15 @@ export class GenerateFeesComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.classFacade.getClassAll({ nestedProperties: [{ name: 'classLevel', innerNestedProperties: [{ name: 'programmeType' }] }] });
     this.schoolTermSessionFacade.getSchoolTermSessionAll({ nestedProperties: [{ name: 'session' }] });
+
+    this.schoolTermSessionAll$.pipe(
+      filter(sessions => !!sessions && sessions!.length > 0),
+      take(1),
+      takeUntil(this.destroy$),
+    ).subscribe(sessions => {
+      const current = sessions!.find(s => s.isCurrent);
+      if (current) this.form.controls.schoolTermSessionId.setValue(current.id);
+    });
 
     this.actions$.pipe(
       ofType(FeeAction.generateFeesByTermSessionSuccess),

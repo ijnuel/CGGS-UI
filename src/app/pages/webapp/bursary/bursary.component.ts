@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { Router, ActivatedRoute } from '@angular/router';
+import { SidebarItemsInterface } from '../../../types/sidebar';
 
 @Component({
   selector: 'app-bursary',
@@ -7,19 +7,30 @@ import { Router, ActivatedRoute } from '@angular/router';
   styleUrls: ['./bursary.component.scss'],
 })
 export class BursaryComponent {
-  tabs = [
-    { label: 'Fee Types', path: 'fee-type', icon: 'category' },
-    { label: 'Fee Setup', path: 'fee-setup', icon: 'settings' },
-    { label: 'Generate Fees', path: 'generate-fees', icon: 'receipt_long' },
+  cards: SidebarItemsInterface[] = [
+    {
+      name: 'Fee Types',
+      icon: '',
+      matIcon: 'label',
+      description: 'Manage fee type categories',
+      roles: [],
+      url: '/app/bursary/fee-type',
+    },
+    {
+      name: 'Fee Setup',
+      icon: '',
+      matIcon: 'tune',
+      description: 'Configure fee amounts per class and term',
+      roles: [],
+      url: '/app/bursary/fee-setup',
+    },
+    {
+      name: 'Generate Fees',
+      icon: '',
+      matIcon: 'receipt_long',
+      description: 'Generate fees for students by term and class',
+      roles: [],
+      url: '/app/bursary/generate-fees',
+    },
   ];
-
-  constructor(private router: Router, private route: ActivatedRoute) {}
-
-  isActive(path: string): boolean {
-    return this.router.url.includes(`/bursary/${path}`);
-  }
-
-  navigate(path: string) {
-    this.router.navigate([path], { relativeTo: this.route });
-  }
 }

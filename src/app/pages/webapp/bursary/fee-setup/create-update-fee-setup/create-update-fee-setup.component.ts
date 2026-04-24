@@ -1,15 +1,27 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
-import { Observable, Subject } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
+import { Component, Inject, OnDestroy, OnInit } from '@angular/core';
+import { Observable, Subject, combineLatest } from 'rxjs';
+import { catchError, filter, take, takeUntil } from 'rxjs/operators';
+import { of } from 'rxjs';
+import { HttpClient } from '@angular/common/http';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { FeeSetupFacade } from '../../../../../store/fee-setup/fee-setup.facade';
 import { FeeTypeFacade } from '../../../../../store/fee-type/fee-type.facade';
 import { ClassFacade } from '../../../../../store/class/class.facade';
 import { SchoolTermSessionFacade } from '../../../../../store/school-term-session/school-term-session.facade';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { getErrorMessageHelper, getClassLabel } from '../../../../../services/helper.service';
-import { FeeSetupListInterface, FeeTypeListInterface, ClassListInterface, SchoolTermSessionListInterface } from '../../../../../types';
-import { ActivatedRoute, Router } from '@angular/router';
+import {
+  FeeSetupListInterface,
+  FeeTypeListInterface,
+  ClassListInterface,
+  SchoolTermSessionListInterface,
+} from '../../../../../types';
 import { GlobalLoadingFacade } from '../../../../../store/global-loading/global-loading.facade';
+import { environment } from '../../../../../../environments/environment';
+
+export interface FeeSetupDialogData {
+  id?: string;
+}
 
 @Component({
   selector: 'app-create-update-fee-setup',
@@ -18,11 +30,12 @@ import { GlobalLoadingFacade } from '../../../../../store/global-loading/global-
 })
 export class CreateUpdateFeeSetupComponent implements OnInit, OnDestroy {
   loading$: Observable<boolean>;
-  error$: Observable<string | null>;
   feeSetupById$: Observable<FeeSetupListInterface | null>;
-  feeTypeAll$: Observable<FeeTypeListInterface[] | null>;
   classList$: Observable<ClassListInterface[] | null>;
   schoolTermSessionAll$: Observable<SchoolTermSessionListInterface[] | null>;
+
+  filteredFeeTypes: FeeTypeListInterface[] = [];
+  feeTypesLoading = false;
 
   formGroup: FormGroup<{
     feeTypeId: FormControl;
@@ -38,20 +51,24 @@ export class CreateUpdateFeeSetupComponent implements OnInit, OnDestroy {
   isEditMode = false;
   unsubscribe$ = new Subject<void>();
 
+  amountReadOnly = false;
+
+  private allFeeTypes: FeeTypeListInterface[] = [];
+  private existingFeeTypeIds = new Set<string>();
+
   constructor(
     private feeSetupFacade: FeeSetupFacade,
     private feeTypeFacade: FeeTypeFacade,
     private classFacade: ClassFacade,
     private schoolTermSessionFacade: SchoolTermSessionFacade,
+    private http: HttpClient,
     private fb: FormBuilder,
-    private route: ActivatedRoute,
-    private router: Router,
-    private globalLoadingFacade: GlobalLoadingFacade
+    private globalLoadingFacade: GlobalLoadingFacade,
+    public dialogRef: MatDialogRef<CreateUpdateFeeSetupComponent>,
+    @Inject(MAT_DIALOG_DATA) public data: FeeSetupDialogData,
   ) {
     this.loading$ = this.feeSetupFacade.loading$;
-    this.error$ = this.feeSetupFacade.error$;
     this.feeSetupById$ = this.feeSetupFacade.feeSetupById$;
-    this.feeTypeAll$ = this.feeTypeFacade.feeTypeAll$;
     this.classList$ = this.classFacade.classAll$;
     this.schoolTermSessionAll$ = this.schoolTermSessionFacade.schoolTermSessionAll$;
 
@@ -69,41 +86,109 @@ export class CreateUpdateFeeSetupComponent implements OnInit, OnDestroy {
     this.classFacade.getClassAll({ nestedProperties: [{ name: 'classLevel', innerNestedProperties: [{ name: 'programmeType' }] }] });
     this.schoolTermSessionFacade.getSchoolTermSessionAll({ nestedProperties: [{ name: 'session' }] });
 
-    const id = this.route.snapshot.params['id'];
-    if (id) {
+    this.feeTypeFacade.feeTypeAll$.pipe(takeUntil(this.unsubscribe$)).subscribe(types => {
+      this.allFeeTypes = types ?? [];
+      this.recomputeFilteredTypes();
+    });
+
+    if (this.data?.id) {
       this.isEditMode = true;
-      this.feeSetupFacade.getFeeSetupById(id);
-      this.feeSetupById$.pipe(takeUntil(this.unsubscribe$)).subscribe((data) => {
-        if (data) {
-          this.formGroup.patchValue({
-            feeTypeId: data.feeTypeId,
-            classId: data.classId,
-            schoolTermSessionId: data.schoolTermSessionId,
-            amount: data.amount,
-            inUse: data.inUse,
-          });
-          // In edit mode, only amount is editable
-          this.formControl.feeTypeId.disable();
-          this.formControl.classId.disable();
-          this.formControl.schoolTermSessionId.disable();
-          this.formControl.inUse.disable();
+      this.feeSetupFacade.getFeeSetupById(this.data.id);
+      combineLatest([
+        this.feeSetupById$.pipe(filter(d => !!d)),
+        this.schoolTermSessionAll$.pipe(filter(s => !!s && s!.length > 0)),
+      ]).pipe(take(1), takeUntil(this.unsubscribe$)).subscribe(([data, sessions]) => {
+        this.formGroup.patchValue({
+          feeTypeId: data!.feeTypeId,
+          classId: data!.classId,
+          schoolTermSessionId: data!.schoolTermSessionId,
+          amount: data!.amount,
+          inUse: data!.inUse,
+        });
+        this.formControl.feeTypeId.disable();
+        this.formControl.classId.disable();
+        this.formControl.schoolTermSessionId.disable();
+        this.formControl.inUse.disable();
+
+        if (data!.inUse) {
+          const ts = sessions!.find(s => s.id === data!.schoolTermSessionId);
+          if (!ts?.isCurrent) {
+            this.formControl.amount.disable();
+            this.amountReadOnly = true;
+          }
         }
+      });
+    } else {
+      // Create mode: fee type disabled until term + class selected
+      this.formControl.feeTypeId.disable();
+
+      // Pre-select current term session
+      this.schoolTermSessionAll$.pipe(takeUntil(this.unsubscribe$)).subscribe(sessions => {
+        if (!sessions || this.formControl.schoolTermSessionId.value) return;
+        const current = sessions.find(s => s.isCurrent);
+        if (current) this.formControl.schoolTermSessionId.setValue(current.id);
+      });
+
+      this.formControl.schoolTermSessionId.valueChanges.pipe(takeUntil(this.unsubscribe$)).subscribe(() => {
+        this.formControl.feeTypeId.setValue('');
+        this.refreshExistingSetups();
+      });
+
+      this.formControl.classId.valueChanges.pipe(takeUntil(this.unsubscribe$)).subscribe(() => {
+        this.formControl.feeTypeId.setValue('');
+        this.refreshExistingSetups();
       });
     }
 
     this.feeSetupFacade.createSuccess$.pipe(takeUntil(this.unsubscribe$)).subscribe((success) => {
       if (success && !this.isEditMode && this.formGroup.touched) {
-        this.router.navigate(['/app/bursary/fee-setup']);
         this.globalLoadingFacade.globalSuccessShow('Fee Setup created successfully', 3000);
+        this.dialogRef.close({ success: true });
       }
     });
 
     this.feeSetupFacade.updateSuccess$.pipe(takeUntil(this.unsubscribe$)).subscribe((success) => {
       if (success && this.isEditMode && this.formGroup.touched) {
-        this.router.navigate(['/app/bursary/fee-setup']);
         this.globalLoadingFacade.globalSuccessShow('Fee Setup updated successfully', 3000);
+        this.dialogRef.close({ success: true });
       }
     });
+  }
+
+  private refreshExistingSetups() {
+    const termId = this.formControl.schoolTermSessionId.value;
+    const classId = this.formControl.classId.value;
+
+    if (!termId || !classId) {
+      this.existingFeeTypeIds = new Set();
+      this.recomputeFilteredTypes();
+      this.formControl.feeTypeId.disable();
+      return;
+    }
+
+    this.feeTypesLoading = true;
+    this.formControl.feeTypeId.disable();
+
+    this.http.post<any>(
+      `${environment.baseUrl}/FeeSetup/GetAll`,
+      { queryProperties: [
+        { name: 'classId', value: classId },
+        { name: 'schoolTermSessionId', value: termId },
+      ]},
+      { withCredentials: true }
+    ).pipe(
+      catchError(() => of({ entity: [] }))
+    ).subscribe(response => {
+      const existing: FeeSetupListInterface[] = response?.entity ?? [];
+      this.existingFeeTypeIds = new Set(existing.map((s: FeeSetupListInterface) => s.feeTypeId));
+      this.recomputeFilteredTypes();
+      this.feeTypesLoading = false;
+      if (this.filteredFeeTypes.length > 0) this.formControl.feeTypeId.enable();
+    });
+  }
+
+  private recomputeFilteredTypes() {
+    this.filteredFeeTypes = this.allFeeTypes.filter(ft => !this.existingFeeTypeIds.has(ft.id));
   }
 
   getErrorMessage(controlName: string): string | null {
@@ -120,10 +205,11 @@ export class CreateUpdateFeeSetupComponent implements OnInit, OnDestroy {
   submit() {
     this.formGroup.markAllAsTouched();
     if (!this.formGroup.valid) return;
+    if (!this.isEditMode && !this.formGroup.getRawValue().feeTypeId) return;
 
     const formData = this.formGroup.getRawValue();
     if (this.isEditMode) {
-      this.feeSetupFacade.updateFeeSetup({ ...formData, id: this.route.snapshot.params['id'] } as any);
+      this.feeSetupFacade.updateFeeSetup({ ...formData, id: this.data.id } as any);
     } else {
       this.feeSetupFacade.createFeeSetup(formData as any);
     }

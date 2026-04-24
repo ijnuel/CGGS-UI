@@ -1,9 +1,10 @@
 import { Component, OnDestroy } from '@angular/core';
-import { Router, ActivatedRoute } from '@angular/router';
 import { Observable, Subject } from 'rxjs';
+import { MatDialog } from '@angular/material/dialog';
 import { FeeTypeFacade } from '../../../../store/fee-type/fee-type.facade';
 import { FeeTypeListInterface, PaginatedResponseInterface, PageQueryInterface } from '../../../../types';
 import { TableHeaderInterface } from '../../../../types/table';
+import { CreateUpdateFeeTypeComponent, FeeTypeDialogData } from './create-update-fee-type/create-update-fee-type.component';
 
 const tableHeader: TableHeaderInterface[] = [
   { key: 'name', type: 'text', name: 'Name', sortable: true, filterable: true, align: 'left' },
@@ -25,9 +26,8 @@ export class FeeTypeComponent implements OnDestroy {
   private lastQuery: PageQueryInterface = { start: 0, recordsPerPage: 10, pageIndex: 0 };
 
   constructor(
-    private router: Router,
-    private route: ActivatedRoute,
     private feeTypeFacade: FeeTypeFacade,
+    private dialog: MatDialog,
   ) {
     this.feeTypeList$ = this.feeTypeFacade.feeTypeList$;
     this.loading$ = this.feeTypeFacade.loading$;
@@ -42,7 +42,18 @@ export class FeeTypeComponent implements OnDestroy {
 
   onRefresh() { this.feeTypeFacade.getFeeTypeList(this.lastQuery); }
 
-  onEdit(row: FeeTypeListInterface) {
-    this.router.navigate(['fee-type/edit', row.id], { relativeTo: this.route.parent });
+  onEdit(row: FeeTypeListInterface) { this.openDialog(row.id); }
+
+  openCreate() { this.openDialog(); }
+
+  private openDialog(id?: string) {
+    const ref = this.dialog.open(CreateUpdateFeeTypeComponent, {
+      width: '480px',
+      maxWidth: '95vw',
+      data: { id } as FeeTypeDialogData,
+    });
+    ref.afterClosed().subscribe(result => {
+      if (result?.success) this.feeTypeFacade.getFeeTypeList(this.lastQuery);
+    });
   }
 }

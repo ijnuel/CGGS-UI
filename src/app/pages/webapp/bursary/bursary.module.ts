@@ -13,6 +13,7 @@ import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatCardModule } from '@angular/material/card';
 import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatDialogModule } from '@angular/material/dialog';
 import { SharedModule } from '../../../shared/shared.module';
 import { BursaryComponent } from './bursary.component';
 import { FeeTypeComponent } from './fee-type/fee-type.component';
@@ -22,20 +23,10 @@ import { CreateUpdateFeeSetupComponent } from './fee-setup/create-update-fee-set
 import { GenerateFeesComponent } from './generate-fees/generate-fees.component';
 
 const routes: Routes = [
-  {
-    path: '',
-    component: BursaryComponent,
-    children: [
-      { path: '', redirectTo: 'fee-type', pathMatch: 'full' },
-      { path: 'fee-type', component: FeeTypeComponent },
-      { path: 'fee-type/create', component: CreateUpdateFeeTypeComponent },
-      { path: 'fee-type/edit/:id', component: CreateUpdateFeeTypeComponent },
-      { path: 'fee-setup', component: FeeSetupComponent },
-      { path: 'fee-setup/create', component: CreateUpdateFeeSetupComponent },
-      { path: 'fee-setup/edit/:id', component: CreateUpdateFeeSetupComponent },
-      { path: 'generate-fees', component: GenerateFeesComponent },
-    ]
-  }
+  { path: '', component: BursaryComponent },
+  { path: 'fee-type', component: FeeTypeComponent },
+  { path: 'fee-setup', component: FeeSetupComponent },
+  { path: 'generate-fees', component: GenerateFeesComponent },
 ];
 
 @NgModule({
@@ -64,6 +55,7 @@ const routes: Routes = [
     MatCardModule,
     MatCheckboxModule,
     MatSelectModule,
+    MatDialogModule,
   ],
 })
 export class BursaryModule {}

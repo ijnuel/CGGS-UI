@@ -1,31 +1,34 @@
-<div>
-  <div class="flex justify-between items-center mb-4">
-    <h4 class="text-lg font-semibold text-gray-700">Fee Setup</h4>
-    <div class="flex gap-2">
-      <button mat-raised-button color="primary" (click)="onRefresh()">
-        <mat-icon>refresh</mat-icon> Refresh
-      </button>
-      <button mat-raised-button [routerLink]="['../fee-setup/create']" style="background-color: var(--app-button-bg); color: white;">
-        <mat-icon>add</mat-icon> Create New
-      </button>
+<div class="pl-8 pr-9 pt-6">
+  <div class="flex items-center gap-3 mb-6">
+    <button mat-icon-button routerLink="/app/bursary" style="color: var(--app-primary);">
+      <mat-icon>arrow_back</mat-icon>
+    </button>
+    <div>
+      <h3 class="text-xl font-bold" style="color: var(--app-primary)">Fee Setup</h3>
+      <p class="text-sm text-gray-500">Configure fee amounts per class and term</p>
     </div>
   </div>
 
-  <!-- Term Session Filter -->
-  <div class="mb-4">
+  <div class="flex flex-wrap items-center justify-between gap-3 mb-4">
     <mat-form-field class="w-full md:w-72" subscriptSizing="dynamic">
       <mat-label>Filter by Term / Session</mat-label>
       <mat-icon matPrefix class="mr-1 text-gray-400">filter_list</mat-icon>
-      <mat-select
-        [value]="selectedTermSessionId"
-        (selectionChange)="onTermSessionChange($event.value)"
-      >
+      <mat-select [value]="selectedTermSessionId" (selectionChange)="onTermSessionChange($event.value)">
         <mat-option value="">All Terms</mat-option>
         <mat-option *ngFor="let ts of schoolTermSessionAll$ | async" [value]="ts.id">
           {{ getTermLabel(ts) }}
         </mat-option>
       </mat-select>
     </mat-form-field>
+
+    <div class="flex gap-2">
+      <button mat-raised-button color="primary" (click)="onRefresh()">
+        <mat-icon>refresh</mat-icon> Refresh
+      </button>
+      <button mat-raised-button (click)="openCreate()" style="background-color: var(--app-button-bg); color: white;">
+        <mat-icon>add</mat-icon> Create New
+      </button>
+    </div>
   </div>
 
   <app-table

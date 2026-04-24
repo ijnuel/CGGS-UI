@@ -1,12 +1,16 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, Inject, OnDestroy, OnInit } from '@angular/core';
 import { Observable, Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { FeeTypeFacade } from '../../../../../store/fee-type/fee-type.facade';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { getErrorMessageHelper } from '../../../../../services/helper.service';
 import { FeeTypeListInterface } from '../../../../../types';
-import { ActivatedRoute, Router } from '@angular/router';
 import { GlobalLoadingFacade } from '../../../../../store/global-loading/global-loading.facade';
+
+export interface FeeTypeDialogData {
+  id?: string;
+}
 
 @Component({
   selector: 'app-create-update-fee-type',
@@ -15,7 +19,6 @@ import { GlobalLoadingFacade } from '../../../../../store/global-loading/global-
 })
 export class CreateUpdateFeeTypeComponent implements OnInit, OnDestroy {
   loading$: Observable<boolean>;
-  error$: Observable<string | null>;
   feeTypeById$: Observable<FeeTypeListInterface | null>;
 
   formGroup: FormGroup<{
@@ -33,12 +36,11 @@ export class CreateUpdateFeeTypeComponent implements OnInit, OnDestroy {
   constructor(
     private feeTypeFacade: FeeTypeFacade,
     private fb: FormBuilder,
-    private route: ActivatedRoute,
-    private router: Router,
-    private globalLoadingFacade: GlobalLoadingFacade
+    private globalLoadingFacade: GlobalLoadingFacade,
+    public dialogRef: MatDialogRef<CreateUpdateFeeTypeComponent>,
+    @Inject(MAT_DIALOG_DATA) public data: FeeTypeDialogData,
   ) {
     this.loading$ = this.feeTypeFacade.loading$;
-    this.error$ = this.feeTypeFacade.error$;
     this.feeTypeById$ = this.feeTypeFacade.feeTypeById$;
 
     this.formGroup = this.fb.group({
@@ -50,10 +52,9 @@ export class CreateUpdateFeeTypeComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    const id = this.route.snapshot.params['id'];
-    if (id) {
+    if (this.data?.id) {
       this.isEditMode = true;
-      this.feeTypeFacade.getFeeTypeById(id);
+      this.feeTypeFacade.getFeeTypeById(this.data.id);
       this.feeTypeById$.pipe(takeUntil(this.unsubscribe$)).subscribe((data) => {
         if (data) {
           this.formGroup.patchValue({
@@ -68,15 +69,15 @@ export class CreateUpdateFeeTypeComponent implements OnInit, OnDestroy {
 
     this.feeTypeFacade.createSuccess$.pipe(takeUntil(this.unsubscribe$)).subscribe((success) => {
       if (success && !this.isEditMode && this.formGroup.touched) {
-        this.router.navigate(['/app/bursary/fee-type']);
         this.globalLoadingFacade.globalSuccessShow('Fee Type created successfully', 3000);
+        this.dialogRef.close({ success: true });
       }
     });
 
     this.feeTypeFacade.updateSuccess$.pipe(takeUntil(this.unsubscribe$)).subscribe((success) => {
       if (success && this.isEditMode && this.formGroup.touched) {
-        this.router.navigate(['/app/bursary/fee-type']);
         this.globalLoadingFacade.globalSuccessShow('Fee Type updated successfully', 3000);
+        this.dialogRef.close({ success: true });
       }
     });
   }
@@ -92,7 +93,7 @@ export class CreateUpdateFeeTypeComponent implements OnInit, OnDestroy {
 
     const formData = this.formGroup.value;
     if (this.isEditMode) {
-      this.feeTypeFacade.updateFeeType({ ...formData, id: this.route.snapshot.params['id'] } as any);
+      this.feeTypeFacade.updateFeeType({ ...formData, id: this.data.id } as any);
     } else {
       this.feeTypeFacade.createFeeType(formData as any);
     }
