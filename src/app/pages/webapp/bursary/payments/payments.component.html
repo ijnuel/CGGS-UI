@@ -11,36 +11,25 @@
 
   <div class="flex flex-wrap items-center justify-between gap-3 mb-4">
     <div class="flex flex-wrap gap-3">
-      <mat-form-field class="w-full md:w-64" subscriptSizing="dynamic">
-        <mat-label>Filter by Term / Session</mat-label>
-        <mat-icon matPrefix class="mr-1 text-gray-400">filter_list</mat-icon>
-        <mat-select [value]="selectedTermSessionId" (selectionChange)="onTermSessionChange($event.value)">
-          <mat-option value="">All Terms</mat-option>
-          <mat-option *ngFor="let ts of schoolTermSessionAll$ | async" [value]="ts.id">
-            {{ getTermLabel(ts) }}
-          </mat-option>
-        </mat-select>
-      </mat-form-field>
+      <app-searchable-mat-select
+        label="Term / Session"
+        [options]="schoolTermSessions"
+        [labelFn]="getTermLabel"
+        valueKey="id"
+        formInputClass="form-input w-64"
+        [formControl]="termSessionFilterControl"
+        (selectionChange)="onTermSessionChange($event)"
+      ></app-searchable-mat-select>
 
-      <mat-form-field class="w-full md:w-64" subscriptSizing="dynamic">
-        <mat-label>Filter by Student</mat-label>
-        <mat-icon matPrefix class="mr-1 text-gray-400">person_search</mat-icon>
-        <mat-select [value]="selectedStudentId" (selectionChange)="onStudentChange($event.value)">
-          <mat-option disabled class="!h-10 !py-0">
-            <input
-              class="w-full h-full border-none outline-none text-sm bg-transparent"
-              placeholder="Search student..."
-              [formControl]="studentSearchControl"
-              (click)="$event.stopPropagation()"
-              (keydown)="$event.stopPropagation()"
-            />
-          </mat-option>
-          <mat-option value="">All Students</mat-option>
-          <mat-option *ngFor="let s of filteredStudents" [value]="s.id">
-            {{ getStudentLabel(s) }}
-          </mat-option>
-        </mat-select>
-      </mat-form-field>
+      <app-searchable-mat-select
+        label="Student"
+        [options]="allStudents"
+        [labelFn]="getStudentLabel"
+        valueKey="id"
+        formInputClass="form-input w-64"
+        [formControl]="studentFilterControl"
+        (selectionChange)="onStudentChange($event)"
+      ></app-searchable-mat-select>
     </div>
 
     <button mat-raised-button color="primary" (click)="onRefresh()">

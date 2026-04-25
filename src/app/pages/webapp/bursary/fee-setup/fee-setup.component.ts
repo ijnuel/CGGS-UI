@@ -1,12 +1,15 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
+import { FormControl } from '@angular/forms';
 import { Observable, Subject } from 'rxjs';
 import { filter, take, takeUntil } from 'rxjs/operators';
 import { Actions, ofType } from '@ngrx/effects';
 import { MatDialog } from '@angular/material/dialog';
 import { FeeSetupFacade } from '../../../../store/fee-setup/fee-setup.facade';
 import { SchoolTermSessionFacade } from '../../../../store/school-term-session/school-term-session.facade';
+import { ClassFacade } from '../../../../store/class/class.facade';
 import * as FeeSetupAction from '../../../../store/fee-setup/fee-setup.actions';
 import {
+  ClassListInterface,
   FeeSetupListInterface,
   PaginatedResponseInterface,
   PageQueryInterface,
@@ -36,9 +39,21 @@ export class FeeSetupComponent implements OnInit, OnDestroy {
   private destroy$ = new Subject<void>();
   feeSetupList$: Observable<PaginatedResponseInterface<FeeSetupListInterface[]> | null>;
   loading$: Observable<boolean>;
-  schoolTermSessionAll$: Observable<SchoolTermSessionListInterface[] | null>;
   tableHeaderData: TableHeaderInterface[] = tableHeader;
-  selectedTermSessionId = '';
+
+  termSessionFilterControl = new FormControl('');
+  classFilterControl = new FormControl('');
+
+  schoolTermSessions: SchoolTermSessionListInterface[] = [];
+  allClasses: ClassListInterface[] = [];
+
+  getTermLabel = (ts: SchoolTermSessionListInterface): string => {
+    const term = ts.termString ?? `Term ${ts.term}`;
+    const session = ts.session?.name ?? '';
+    return `${session} - ${term}`;
+  };
+
+  getClassLabel = (c: ClassListInterface): string => getClassLabel(c) || c?.name || '';
 
   private baseNestedProperties = [
     { name: 'feeType' },
@@ -54,13 +69,13 @@ export class FeeSetupComponent implements OnInit, OnDestroy {
   constructor(
     private feeSetupFacade: FeeSetupFacade,
     private schoolTermSessionFacade: SchoolTermSessionFacade,
+    private classFacade: ClassFacade,
     private actions$: Actions,
     private dialog: MatDialog,
     private toastService: ToastNotificationService,
   ) {
     this.feeSetupList$ = this.feeSetupFacade.feeSetupList$;
     this.loading$ = this.feeSetupFacade.loading$;
-    this.schoolTermSessionAll$ = this.schoolTermSessionFacade.schoolTermSessionAll$;
 
     this.actions$.pipe(ofType(FeeSetupAction.deleteFeeSetupSuccess), takeUntil(this.destroy$))
       .subscribe(() => {
@@ -74,32 +89,46 @@ export class FeeSetupComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.schoolTermSessionFacade.getSchoolTermSessionAll({ nestedProperties: [{ name: 'session' }] });
+    this.classFacade.getClassAll({ nestedProperties: [{ name: 'classLevel', innerNestedProperties: [{ name: 'programmeType' }] }] });
 
-    this.schoolTermSessionAll$.pipe(
+    this.classFacade.classAll$.pipe(takeUntil(this.destroy$)).subscribe(classes => {
+      this.allClasses = classes ?? [];
+    });
+
+    this.schoolTermSessionFacade.schoolTermSessionAll$.pipe(
       filter(sessions => !!sessions && sessions!.length > 0),
       take(1),
       takeUntil(this.destroy$),
     ).subscribe(sessions => {
+      this.schoolTermSessions = sessions!;
       const current = sessions!.find(s => s.isCurrent);
-      if (current) this.onTermSessionChange(current.id);
+      if (current) {
+        this.termSessionFilterControl.setValue(current.id, { emitEvent: false });
+        this.onTermSessionChange(current.id);
+      } else {
+        this.feeSetupFacade.getFeeSetupList(this.lastQuery);
+      }
     });
   }
 
   ngOnDestroy() { this.destroy$.next(); this.destroy$.complete(); }
 
-  getTermLabel(ts: SchoolTermSessionListInterface): string {
-    const term = ts.termString ?? `Term ${ts.term}`;
-    const session = ts.session?.name ?? '';
-    return `${session} - ${term}`;
+  private buildQueryProperties(): { name: string; value: string }[] {
+    const props: { name: string; value: string }[] = [];
+    const termId = this.termSessionFilterControl.value;
+    const classId = this.classFilterControl.value;
+    if (termId) props.push({ name: 'schoolTermSessionId', value: termId });
+    if (classId) props.push({ name: 'classId', value: classId });
+    return props;
   }
 
   onTermSessionChange(termSessionId: string) {
-    this.selectedTermSessionId = termSessionId;
-    this.lastQuery = {
-      ...this.lastQuery,
-      start: 0, pageIndex: 0,
-      queryProperties: termSessionId ? [{ name: 'schoolTermSessionId', value: termSessionId }] : [],
-    };
+    this.lastQuery = { ...this.lastQuery, start: 0, pageIndex: 0, queryProperties: this.buildQueryProperties() };
+    this.feeSetupFacade.getFeeSetupList(this.lastQuery);
+  }
+
+  onClassChange(classId: string) {
+    this.lastQuery = { ...this.lastQuery, start: 0, pageIndex: 0, queryProperties: this.buildQueryProperties() };
     this.feeSetupFacade.getFeeSetupList(this.lastQuery);
   }
 

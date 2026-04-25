@@ -31,8 +31,9 @@ export interface FeeSetupDialogData {
 export class CreateUpdateFeeSetupComponent implements OnInit, OnDestroy {
   loading$: Observable<boolean>;
   feeSetupById$: Observable<FeeSetupListInterface | null>;
-  classList$: Observable<ClassListInterface[] | null>;
-  schoolTermSessionAll$: Observable<SchoolTermSessionListInterface[] | null>;
+
+  allClasses: ClassListInterface[] = [];
+  allTermSessions: SchoolTermSessionListInterface[] = [];
 
   filteredFeeTypes: FeeTypeListInterface[] = [];
   feeTypesLoading = false;
@@ -47,7 +48,14 @@ export class CreateUpdateFeeSetupComponent implements OnInit, OnDestroy {
 
   get formControl() { return this.formGroup.controls; }
 
-  readonly getClassLabel = getClassLabel;
+  getTermLabel = (ts: SchoolTermSessionListInterface): string => {
+    const term = ts.termString ?? `Term ${ts.term}`;
+    const session = ts.session?.name ?? '';
+    return `${session} - ${term}`;
+  };
+
+  getClassLabelFn = (c: ClassListInterface): string => getClassLabel(c) || c?.name || '';
+
   isEditMode = false;
   unsubscribe$ = new Subject<void>();
 
@@ -69,8 +77,6 @@ export class CreateUpdateFeeSetupComponent implements OnInit, OnDestroy {
   ) {
     this.loading$ = this.feeSetupFacade.loading$;
     this.feeSetupById$ = this.feeSetupFacade.feeSetupById$;
-    this.classList$ = this.classFacade.classAll$;
-    this.schoolTermSessionAll$ = this.schoolTermSessionFacade.schoolTermSessionAll$;
 
     this.formGroup = this.fb.group({
       feeTypeId: ['', Validators.required],
@@ -86,6 +92,14 @@ export class CreateUpdateFeeSetupComponent implements OnInit, OnDestroy {
     this.classFacade.getClassAll({ nestedProperties: [{ name: 'classLevel', innerNestedProperties: [{ name: 'programmeType' }] }] });
     this.schoolTermSessionFacade.getSchoolTermSessionAll({ nestedProperties: [{ name: 'session' }] });
 
+    this.classFacade.classAll$.pipe(takeUntil(this.unsubscribe$)).subscribe(classes => {
+      this.allClasses = classes ?? [];
+    });
+
+    this.schoolTermSessionFacade.schoolTermSessionAll$.pipe(takeUntil(this.unsubscribe$)).subscribe(sessions => {
+      this.allTermSessions = sessions ?? [];
+    });
+
     this.feeTypeFacade.feeTypeAll$.pipe(takeUntil(this.unsubscribe$)).subscribe(types => {
       this.allFeeTypes = types ?? [];
       this.recomputeFilteredTypes();
@@ -96,7 +110,7 @@ export class CreateUpdateFeeSetupComponent implements OnInit, OnDestroy {
       this.feeSetupFacade.getFeeSetupById(this.data.id);
       combineLatest([
         this.feeSetupById$.pipe(filter(d => !!d)),
-        this.schoolTermSessionAll$.pipe(filter(s => !!s && s!.length > 0)),
+        this.schoolTermSessionFacade.schoolTermSessionAll$.pipe(filter(s => !!s && s!.length > 0)),
       ]).pipe(take(1), takeUntil(this.unsubscribe$)).subscribe(([data, sessions]) => {
         this.formGroup.patchValue({
           feeTypeId: data!.feeTypeId,
@@ -119,11 +133,9 @@ export class CreateUpdateFeeSetupComponent implements OnInit, OnDestroy {
         }
       });
     } else {
-      // Create mode: fee type disabled until term + class selected
       this.formControl.feeTypeId.disable();
 
-      // Pre-select current term session
-      this.schoolTermSessionAll$.pipe(takeUntil(this.unsubscribe$)).subscribe(sessions => {
+      this.schoolTermSessionFacade.schoolTermSessionAll$.pipe(takeUntil(this.unsubscribe$)).subscribe(sessions => {
         if (!sessions || this.formControl.schoolTermSessionId.value) return;
         const current = sessions.find(s => s.isCurrent);
         if (current) this.formControl.schoolTermSessionId.setValue(current.id);
@@ -194,12 +206,6 @@ export class CreateUpdateFeeSetupComponent implements OnInit, OnDestroy {
   getErrorMessage(controlName: string): string | null {
     const control = this.formGroup.get(controlName) as FormControl;
     return getErrorMessageHelper(control);
-  }
-
-  getTermLabel(ts: SchoolTermSessionListInterface): string {
-    const term = ts.termString ?? `Term ${ts.term}`;
-    const session = ts.session?.name ?? '';
-    return `${session} - ${term}`;
   }
 
   submit() {

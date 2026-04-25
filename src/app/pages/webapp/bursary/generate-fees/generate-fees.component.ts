@@ -19,9 +19,17 @@ import { getErrorMessageHelper, getClassLabel } from '../../../../services/helpe
 export class GenerateFeesComponent implements OnInit, OnDestroy {
   private destroy$ = new Subject<void>();
   generating$: Observable<boolean>;
-  classList$: Observable<ClassListInterface[] | null>;
-  schoolTermSessionAll$: Observable<SchoolTermSessionListInterface[] | null>;
-  readonly getClassLabel = getClassLabel;
+
+  allClasses: ClassListInterface[] = [];
+  allTermSessions: SchoolTermSessionListInterface[] = [];
+
+  getTermLabel = (ts: SchoolTermSessionListInterface): string => {
+    const term = ts.termString ?? `Term ${ts.term}`;
+    const session = ts.session?.name ?? '';
+    return `${session} - ${term}`;
+  };
+
+  getClassLabelFn = (c: ClassListInterface): string => getClassLabel(c) || c?.name || '';
 
   form: FormGroup<{ schoolTermSessionId: FormControl; classId: FormControl }>;
 
@@ -34,8 +42,6 @@ export class GenerateFeesComponent implements OnInit, OnDestroy {
     private toastService: ToastNotificationService
   ) {
     this.generating$ = this.feeFacade.generating$;
-    this.classList$ = this.classFacade.classAll$;
-    this.schoolTermSessionAll$ = this.schoolTermSessionFacade.schoolTermSessionAll$;
 
     this.form = this.fb.group({
       schoolTermSessionId: ['', Validators.required],
@@ -47,7 +53,15 @@ export class GenerateFeesComponent implements OnInit, OnDestroy {
     this.classFacade.getClassAll({ nestedProperties: [{ name: 'classLevel', innerNestedProperties: [{ name: 'programmeType' }] }] });
     this.schoolTermSessionFacade.getSchoolTermSessionAll({ nestedProperties: [{ name: 'session' }] });
 
-    this.schoolTermSessionAll$.pipe(
+    this.classFacade.classAll$.pipe(takeUntil(this.destroy$)).subscribe(classes => {
+      this.allClasses = classes ?? [];
+    });
+
+    this.schoolTermSessionFacade.schoolTermSessionAll$.pipe(takeUntil(this.destroy$)).subscribe(sessions => {
+      this.allTermSessions = sessions ?? [];
+    });
+
+    this.schoolTermSessionFacade.schoolTermSessionAll$.pipe(
       filter(sessions => !!sessions && sessions!.length > 0),
       take(1),
       takeUntil(this.destroy$),
@@ -70,12 +84,6 @@ export class GenerateFeesComponent implements OnInit, OnDestroy {
     ).subscribe(() => {
       this.toastService.openToast('Failed to generate fees', NotificationTypeEnums.ERROR);
     });
-  }
-
-  getTermLabel(ts: SchoolTermSessionListInterface): string {
-    const term = ts.termString ?? `Term ${ts.term}`;
-    const session = ts.session?.name ?? '';
-    return `${session} - ${term}`;
   }
 
   getErrorMessage(controlName: string): string | null {

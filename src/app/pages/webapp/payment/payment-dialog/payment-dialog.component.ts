@@ -37,7 +37,7 @@ export interface PaymentDialogResult {
       <form [formGroup]="form" class="space-y-5">
 
         <!-- Amount -->
-        <mat-form-field appearance="outline" class="w-full">
+        <mat-form-field class="w-full">
           <mat-label>Amount (₦)</mat-label>
           <input matInput type="number" formControlName="amount"
                  [max]="data.mode === 'fee' ? data.maxAmount : null"

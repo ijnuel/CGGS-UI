@@ -18,26 +18,32 @@
 
       <!-- Term / Session -->
       <div>
-        <mat-form-field class="form-input w-full">
-          <mat-label>Term / Session</mat-label>
-          <mat-select [formControl]="formControl.schoolTermSessionId">
-            <mat-option *ngFor="let ts of schoolTermSessionAll$ | async" [value]="ts.id">
-              {{ getTermLabel(ts) }}
-            </mat-option>
-          </mat-select>
-          <mat-error>{{ getErrorMessage('schoolTermSessionId') }}</mat-error>
-        </mat-form-field>
+        <app-searchable-mat-select
+          label="Term / Session"
+          [options]="allTermSessions"
+          [labelFn]="getTermLabel"
+          valueKey="id"
+          formInputClass="form-input w-full"
+          [formControl]="formControl.schoolTermSessionId"
+        ></app-searchable-mat-select>
+        <mat-error *ngIf="formControl.schoolTermSessionId.touched && formControl.schoolTermSessionId.invalid" class="text-xs">
+          {{ getErrorMessage('schoolTermSessionId') }}
+        </mat-error>
       </div>
 
       <!-- Class -->
       <div>
-        <mat-form-field class="form-input w-full">
-          <mat-label>Class</mat-label>
-          <mat-select [formControl]="formControl.classId">
-            <mat-option *ngFor="let c of classList$ | async" [value]="c.id">{{ getClassLabel(c) }}</mat-option>
-          </mat-select>
-          <mat-error>{{ getErrorMessage('classId') }}</mat-error>
-        </mat-form-field>
+        <app-searchable-mat-select
+          label="Class"
+          [options]="allClasses"
+          [labelFn]="getClassLabelFn"
+          valueKey="id"
+          formInputClass="form-input w-full"
+          [formControl]="formControl.classId"
+        ></app-searchable-mat-select>
+        <mat-error *ngIf="formControl.classId.touched && formControl.classId.invalid" class="text-xs">
+          {{ getErrorMessage('classId') }}
+        </mat-error>
       </div>
 
       <!-- Fee Type -->

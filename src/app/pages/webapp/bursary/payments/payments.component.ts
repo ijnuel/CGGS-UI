@@ -32,14 +32,22 @@ export class PaymentsComponent implements OnInit, OnDestroy {
   private destroy$ = new Subject<void>();
   paymentList$: Observable<PaginatedResponseInterface<PaymentListInterface[]> | null>;
   loading$: Observable<boolean>;
-  schoolTermSessionAll$: Observable<SchoolTermSessionListInterface[] | null>;
   tableHeaderData: TableHeaderInterface[] = tableHeader;
-  selectedTermSessionId = '';
-  selectedStudentId = '';
 
-  studentSearchControl = new FormControl('');
-  private allStudents: StudentListInterface[] = [];
-  filteredStudents: StudentListInterface[] = [];
+  termSessionFilterControl = new FormControl('');
+  studentFilterControl = new FormControl('');
+
+  schoolTermSessions: SchoolTermSessionListInterface[] = [];
+  allStudents: StudentListInterface[] = [];
+
+  getTermLabel = (ts: SchoolTermSessionListInterface): string => {
+    const term = ts.termString ?? `Term ${ts.term}`;
+    const session = ts.session?.name ?? '';
+    return `${session} - ${term}`;
+  };
+
+  getStudentLabel = (s: StudentListInterface): string =>
+    `${s.firstName ?? ''} ${s.lastName ?? ''}`.trim();
 
   private baseNestedProperties = [
     { name: 'createdBy' },
@@ -76,7 +84,6 @@ export class PaymentsComponent implements OnInit, OnDestroy {
   ) {
     this.paymentList$ = this.paymentFacade.paymentList$;
     this.loading$ = this.paymentFacade.loading$;
-    this.schoolTermSessionAll$ = this.schoolTermSessionFacade.schoolTermSessionAll$;
   }
 
   ngOnInit() {
@@ -85,20 +92,17 @@ export class PaymentsComponent implements OnInit, OnDestroy {
 
     this.studentFacade.studentAll$.pipe(takeUntil(this.destroy$)).subscribe(students => {
       this.allStudents = students ?? [];
-      this.applyStudentSearch(this.studentSearchControl.value ?? '');
     });
 
-    this.studentSearchControl.valueChanges.pipe(takeUntil(this.destroy$)).subscribe(text => {
-      this.applyStudentSearch(text ?? '');
-    });
-
-    this.schoolTermSessionAll$.pipe(
+    this.schoolTermSessionFacade.schoolTermSessionAll$.pipe(
       filter(sessions => !!sessions && sessions!.length > 0),
       take(1),
       takeUntil(this.destroy$),
     ).subscribe(sessions => {
+      this.schoolTermSessions = sessions!;
       const current = sessions!.find(s => s.isCurrent);
       if (current) {
+        this.termSessionFilterControl.setValue(current.id, { emitEvent: false });
         this.onTermSessionChange(current.id);
       } else {
         this.paymentFacade.getPaymentList(this.lastQuery);
@@ -108,40 +112,21 @@ export class PaymentsComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() { this.destroy$.next(); this.destroy$.complete(); }
 
-  getTermLabel(ts: SchoolTermSessionListInterface): string {
-    const term = ts.termString ?? `Term ${ts.term}`;
-    const session = ts.session?.name ?? '';
-    return `${session} - ${term}`;
-  }
-
-  getStudentLabel(s: StudentListInterface): string {
-    return `${s.firstName ?? ''} ${s.lastName ?? ''}`.trim();
-  }
-
-  private applyStudentSearch(text: string) {
-    const lower = text.toLowerCase();
-    this.filteredStudents = lower
-      ? this.allStudents.filter(s => this.getStudentLabel(s).toLowerCase().includes(lower))
-      : [...this.allStudents];
-  }
-
   private buildQueryProperties(): { name: string; value: string }[] {
     const props: { name: string; value: string }[] = [];
-    if (this.selectedTermSessionId) props.push({ name: 'feeLine.fee.schoolTermSessionId', value: this.selectedTermSessionId });
-    if (this.selectedStudentId) props.push({ name: 'feeLine.fee.studentClass.studentId', value: this.selectedStudentId });
+    const termId = this.termSessionFilterControl.value;
+    const studentId = this.studentFilterControl.value;
+    if (termId) props.push({ name: 'feeLine.fee.schoolTermSessionId', value: termId });
+    if (studentId) props.push({ name: 'feeLine.fee.studentClass.studentId', value: studentId });
     return props;
   }
 
   onTermSessionChange(termSessionId: string) {
-    this.selectedTermSessionId = termSessionId;
     this.lastQuery = { ...this.lastQuery, start: 0, pageIndex: 0, queryProperties: this.buildQueryProperties() };
     this.paymentFacade.getPaymentList(this.lastQuery);
   }
 
   onStudentChange(studentId: string) {
-    this.selectedStudentId = studentId;
-    this.studentSearchControl.setValue('', { emitEvent: false });
-    this.applyStudentSearch('');
     this.lastQuery = { ...this.lastQuery, start: 0, pageIndex: 0, queryProperties: this.buildQueryProperties() };
     this.paymentFacade.getPaymentList(this.lastQuery);
   }

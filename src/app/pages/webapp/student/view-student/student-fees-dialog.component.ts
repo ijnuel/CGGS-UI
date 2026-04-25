@@ -133,25 +133,25 @@ interface PaymentFormState {
                 </div>
                 <div class="px-4 py-3">
                   <div [formGroup]="feeState.form" class="grid grid-cols-2 gap-3">
-                    <mat-form-field appearance="outline" class="col-span-1">
+                    <mat-form-field class="col-span-1">
                       <mat-label>Amount (₦)</mat-label>
                       <input matInput type="number" formControlName="amount" min="0.01" />
                       <mat-error>Required, max ₦{{ getFeeBalance(entry.fee) | number:'1.2-2' }}</mat-error>
                     </mat-form-field>
-                    <mat-form-field appearance="outline" class="col-span-1">
+                    <mat-form-field class="col-span-1">
                       <mat-label>Payment Date</mat-label>
                       <input matInput type="date" formControlName="paymentDate" />
                       <mat-error>Required</mat-error>
                     </mat-form-field>
-                    <mat-form-field appearance="outline" class="col-span-1">
+                    <mat-form-field class="col-span-1">
                       <mat-label>Payment Method</mat-label>
                       <input matInput formControlName="paymentMethod" placeholder="e.g. Cash, Transfer" />
                     </mat-form-field>
-                    <mat-form-field appearance="outline" class="col-span-1">
+                    <mat-form-field class="col-span-1">
                       <mat-label>Transaction ID</mat-label>
                       <input matInput formControlName="transactionId" placeholder="Optional reference" />
                     </mat-form-field>
-                    <mat-form-field appearance="outline" class="col-span-2">
+                    <mat-form-field class="col-span-2">
                       <mat-label>Narration</mat-label>
                       <input matInput formControlName="narration" placeholder="Optional note" />
                     </mat-form-field>
@@ -218,25 +218,25 @@ interface PaymentFormState {
                     </div>
                     <div class="px-4 py-3">
                       <div [formGroup]="lineState.form" class="grid grid-cols-2 gap-3">
-                        <mat-form-field appearance="outline" class="col-span-1">
+                        <mat-form-field class="col-span-1">
                           <mat-label>Amount (₦)</mat-label>
                           <input matInput type="number" formControlName="amount" min="0.01" />
                           <mat-error>Required, max ₦{{ (fl.amount - fl.settledAmount) | number:'1.2-2' }}</mat-error>
                         </mat-form-field>
-                        <mat-form-field appearance="outline" class="col-span-1">
+                        <mat-form-field class="col-span-1">
                           <mat-label>Payment Date</mat-label>
                           <input matInput type="date" formControlName="paymentDate" />
                           <mat-error>Required</mat-error>
                         </mat-form-field>
-                        <mat-form-field appearance="outline" class="col-span-1">
+                        <mat-form-field class="col-span-1">
                           <mat-label>Payment Method</mat-label>
                           <input matInput formControlName="paymentMethod" placeholder="e.g. Cash, Transfer" />
                         </mat-form-field>
-                        <mat-form-field appearance="outline" class="col-span-1">
+                        <mat-form-field class="col-span-1">
                           <mat-label>Transaction ID</mat-label>
                           <input matInput formControlName="transactionId" placeholder="Optional reference" />
                         </mat-form-field>
-                        <mat-form-field appearance="outline" class="col-span-2">
+                        <mat-form-field class="col-span-2">
                           <mat-label>Narration</mat-label>
                           <input matInput formControlName="narration" placeholder="Optional note" />
                         </mat-form-field>
