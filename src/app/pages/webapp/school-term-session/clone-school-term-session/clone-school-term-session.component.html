@@ -1,0 +1,36 @@
+<div class="flex items-center justify-between px-6 pt-5 pb-3 border-b border-gray-100">
+  <div>
+    <h2 class="text-lg font-bold" style="color: var(--app-primary);">Clone School Term Session</h2>
+    <p class="text-sm text-gray-500 mt-0.5">Copy fee setups and class subjects from another term into this one</p>
+  </div>
+  <button mat-icon-button (click)="dialogRef.close()" [disabled]="cloning">
+    <mat-icon class="text-gray-400">close</mat-icon>
+  </button>
+</div>
+
+<mat-dialog-content class="!px-6 !py-5">
+  <div class="mb-4 p-3 rounded-lg bg-gray-50 border border-gray-200">
+    <p class="text-xs text-gray-400 mb-0.5">Destination (this term session)</p>
+    <p class="text-sm font-medium text-gray-700">{{ destinationLabel }}</p>
+  </div>
+
+  <app-searchable-mat-select
+    label="Source Term Session"
+    [options]="availableSessions"
+    [labelFn]="getSessionLabel"
+    valueKey="id"
+    formInputClass="form-input w-full"
+    [formControl]="sourceControl"
+    [loading]="sessionsLoading"
+    placeholder="Select source to clone from"
+  ></app-searchable-mat-select>
+  <p class="text-xs text-gray-400 mt-1">Fee setups and class subjects from the selected source will be cloned into the destination.</p>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end" class="!px-6 !pb-5 gap-2">
+  <button mat-button (click)="dialogRef.close()" [disabled]="cloning">Cancel</button>
+  <button mat-raised-button color="primary" (click)="confirm()" [disabled]="!sourceControl.value || cloning">
+    <mat-spinner *ngIf="cloning" diameter="16" class="!mr-2 !inline-block"></mat-spinner>
+    {{ cloning ? 'Cloning...' : 'Clone' }}
+  </button>
+</mat-dialog-actions>

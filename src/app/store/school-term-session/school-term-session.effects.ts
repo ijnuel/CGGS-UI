@@ -328,6 +328,25 @@ export class SchoolTermSessionEffect {
     )
   );
 
+  // Clone
+  $cloneSchoolTermSession = createEffect(() =>
+    this.actions$.pipe(
+      ofType(SchoolTermSessionAction.cloneSchoolTermSession),
+      switchMap(({ sourceSchoolTermSessionId, destinationSchoolTermSessionId }) =>
+        this.http
+          .post<GenericResponseInterface<SchoolTermSessionListInterface>>(
+            `${environment.baseUrl}/SchoolTermSession/CloneSchoolTermSession`,
+            { sourceSchoolTermSessionId, destinationSchoolTermSessionId },
+            { withCredentials: true }
+          )
+          .pipe(
+            map((payload) => SchoolTermSessionAction.cloneSchoolTermSessionSuccess({ payload })),
+            catchError((error) => of(SchoolTermSessionAction.cloneSchoolTermSessionFail({ error })))
+          )
+      )
+    )
+  );
+
   // Set As Current
   $setSchoolTermSessionAsCurrent = createEffect(() =>
     this.actions$.pipe(

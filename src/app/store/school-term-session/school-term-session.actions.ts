@@ -220,6 +220,20 @@ export const deleteManySchoolTermSessionsFail = createAction(
   props<{ error: string }>()
 );
 
+// Clone
+export const cloneSchoolTermSession = createAction(
+  '[SchoolTermSession] Clone',
+  props<{ sourceSchoolTermSessionId: string; destinationSchoolTermSessionId: string }>()
+);
+export const cloneSchoolTermSessionSuccess = createAction(
+  '[SchoolTermSession/API] Clone Success',
+  props<{ payload: GenericResponseInterface<SchoolTermSessionListInterface> }>()
+);
+export const cloneSchoolTermSessionFail = createAction(
+  '[SchoolTermSession/API] Clone Fail',
+  props<{ error: string }>()
+);
+
 // Set As Current
 export const setSchoolTermSessionAsCurrent = createAction(
   '[SchoolTermSession] Set As Current',
