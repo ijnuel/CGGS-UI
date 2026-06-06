@@ -15,10 +15,11 @@ export const environment = {
   heroBgUrl: 'assets/images/assembly.jpeg',
 
   // Contact info
-  address: 'No. 4 Molipa Estate, Off Irewon road, Ijebu Ode, Ogun state, Nigeria.',
+  address:
+    'No. 4 Molipa Estate, Off Irewon road, Ijebu Ode, Ogun state, Nigeria.',
   phoneNumbers: ['08054849749'],
   emails: [
-    { address: 'busarithienkie@gmail.com', note: 'responds faster' },
+    //{ address: 'busarithienkie@gmail.com', note: 'responds faster' },
     { address: 'buscoschool@gmail.com' },
   ],
   officeHours: 'Monday – Friday: 8:00 AM – 4:00 PM',
