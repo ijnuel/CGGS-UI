@@ -113,4 +113,8 @@ export class SchoolTermSessionFacade {
   setSchoolTermSessionAsCurrent(schoolTermSessionId: string): void {
     this.store.dispatch(SchoolTermSessionAction.setSchoolTermSessionAsCurrent({ schoolTermSessionId }));
   }
+
+  cloneSchoolTermSession(sourceSchoolTermSessionId: string, destinationSchoolTermSessionId: string): void {
+    this.store.dispatch(SchoolTermSessionAction.cloneSchoolTermSession({ sourceSchoolTermSessionId, destinationSchoolTermSessionId }));
+  }
 }

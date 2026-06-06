@@ -70,63 +70,79 @@
 
       <!-- Permission Groups -->
       <div *ngFor="let group of permissionGroups; let last = last"
-        class="px-6 py-4" [class.border-b]="!last" [class.border-gray-100]="!last">
-        <div class="flex items-center justify-between mb-3">
-          <div class="flex items-center gap-2">
+        class="border-b border-gray-100" [class.border-b-0]="last">
+
+        <!-- Group Header -->
+        <div class="px-6 py-4 flex items-center justify-between"
+          [ngClass]="isCollapsed(group.group) ? '' : 'border-b border-gray-50'">
+
+          <!-- Left: collapse toggle + group name -->
+          <div class="flex items-center gap-2 cursor-pointer select-none flex-1 min-w-0"
+            (click)="toggleCollapse(group.group)">
+            <mat-icon class="!text-lg transition-transform duration-200 text-gray-400"
+              [ngClass]="isCollapsed(group.group) ? '-rotate-90' : ''">
+              expand_more
+            </mat-icon>
             <mat-icon class="!text-lg text-gray-400">folder</mat-icon>
             <h4 class="text-sm font-semibold text-gray-700 uppercase tracking-wide">{{ group.group }}</h4>
-            <span class="text-xs text-gray-400 ml-1">
-              ({{ group.permissions.length }})
+            <span class="text-xs text-gray-400 ml-1">({{ group.permissions.length }})</span>
+            <span *ngIf="isGroupPartiallyAssigned(group)"
+              class="ml-2 text-xs text-blue-500 font-medium">
+              {{ getGroupAssignedCount(group) }} / {{ group.permissions.length }}
             </span>
           </div>
-          <div class="flex items-center gap-2 cursor-pointer" (click)="toggleGroup(group)">
+
+          <!-- Right: enable-all toggle -->
+          <div class="flex items-center gap-2 flex-shrink-0 ml-4"
+            (click)="$event.stopPropagation()">
             <span class="text-xs font-medium"
               [ngClass]="isGroupAllAssigned(group) ? 'text-green-600' : 'text-gray-500'">
               {{ isGroupAllAssigned(group) ? 'All enabled' : 'Enable all' }}
             </span>
             <mat-slide-toggle
               [checked]="isGroupAllAssigned(group)"
-              (click)="$event.stopPropagation()"
               (change)="toggleGroup(group)"
               color="primary">
             </mat-slide-toggle>
           </div>
         </div>
 
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2">
-          <div *ngFor="let perm of group.permissions"
-            class="flex items-center justify-between p-3 rounded-lg border transition-all duration-200 cursor-pointer"
-            [ngClass]="perm.assigned
-              ? 'border-green-200 bg-green-50 hover:bg-green-100'
-              : 'border-gray-200 bg-white hover:bg-gray-50'"
-            (click)="togglePermission(perm)">
-            <div class="flex items-center gap-3 flex-1 min-w-0">
-              <div class="w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0"
-                [ngClass]="perm.assigned ? 'bg-green-100' : 'bg-gray-100'">
-                <mat-icon class="!text-base"
-                  [ngClass]="perm.assigned ? 'text-green-600' : 'text-gray-400'">
-                  {{ perm.assigned ? 'check_circle' : 'radio_button_unchecked' }}
-                </mat-icon>
+        <!-- Permissions Grid (collapsible) -->
+        <div *ngIf="!isCollapsed(group.group)" class="px-6 pb-4">
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2">
+            <div *ngFor="let perm of group.permissions"
+              class="flex items-center justify-between p-3 rounded-lg border transition-all duration-200 cursor-pointer"
+              [ngClass]="perm.assigned
+                ? 'border-green-200 bg-green-50 hover:bg-green-100'
+                : 'border-gray-200 bg-white hover:bg-gray-50'"
+              (click)="togglePermission(perm)">
+              <div class="flex items-center gap-3 flex-1 min-w-0">
+                <div class="w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0"
+                  [ngClass]="perm.assigned ? 'bg-green-100' : 'bg-gray-100'">
+                  <mat-icon class="!text-base"
+                    [ngClass]="perm.assigned ? 'text-green-600' : 'text-gray-400'">
+                    {{ perm.assigned ? 'check_circle' : 'radio_button_unchecked' }}
+                  </mat-icon>
+                </div>
+                <div class="min-w-0">
+                  <p class="text-sm font-medium truncate"
+                    [ngClass]="perm.assigned ? 'text-green-800' : 'text-gray-700'">
+                    {{ perm.action }}
+                  </p>
+                  <p class="text-xs text-gray-500 truncate">{{ perm.permission }}</p>
+                </div>
               </div>
-              <div class="min-w-0">
-                <p class="text-sm font-medium truncate"
-                  [ngClass]="perm.assigned ? 'text-green-800' : 'text-gray-700'">
-                  {{ perm.action }}
-                </p>
-                <p class="text-xs text-gray-500 truncate">
-                  {{ perm.permission }}
-                </p>
-              </div>
-            </div>
 
-            <mat-slide-toggle
-              [checked]="perm.assigned"
-              (click)="$event.stopPropagation()"
-              (change)="togglePermission(perm)"
-              color="primary">
-            </mat-slide-toggle>
+              <mat-slide-toggle
+                [checked]="perm.assigned"
+                (click)="$event.stopPropagation()"
+                (change)="togglePermission(perm)"
+                color="primary">
+              </mat-slide-toggle>
+            </div>
           </div>
         </div>
+
       </div>
     </div>
   </div>

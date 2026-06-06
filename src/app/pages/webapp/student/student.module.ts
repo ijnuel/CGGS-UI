@@ -14,6 +14,7 @@ import { SharedModule } from '../../../shared/shared.module';
 import { CreateUpdateStudentComponent } from './create-update-student/create-update-student.component';
 import { provideNativeDateAdapter } from '@angular/material/core';
 import { ViewStudentComponent } from './view-student/view-student.component';
+import { StudentFeesDialogComponent } from './view-student/student-fees-dialog.component';
 
 const routes: Routes = [
     {
@@ -38,7 +39,7 @@ const routes: Routes = [
 ];
 
 @NgModule({
-    declarations: [StudentComponent, CreateUpdateStudentComponent, ViewStudentComponent],
+    declarations: [StudentComponent, CreateUpdateStudentComponent, ViewStudentComponent, StudentFeesDialogComponent],
     imports: [
         CommonModule,
         SharedModule,

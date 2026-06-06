@@ -44,7 +44,19 @@ const routes: Routes = [
         loadChildren: () => import('./result/result.module').then((m) => m.ResultModule),
       },
 
+      // ── All authenticated (student payment) ──────────────────────────────
+      {
+        path: 'payment',
+        data: { roles: ALL_AUTHENTICATED },
+        loadChildren: () => import('./payment/payment.module').then((m) => m.PaymentModule),
+      },
+
       // ── Admin and above ───────────────────────────────────────────────────
+      {
+        path: 'people',
+        data: { roles: ADMIN_AND_ABOVE },
+        loadChildren: () => import('./people/people.module').then((m) => m.PeopleModule),
+      },
       {
         path: 'student',
         data: { roles: ADMIN_AND_ABOVE },
@@ -79,6 +91,11 @@ const routes: Routes = [
         path: 'data-import',
         data: { roles: ADMIN_AND_ABOVE },
         loadChildren: () => import('./data-import/data-import.module').then((m) => m.DataImportModule),
+      },
+      {
+        path: 'bursary',
+        data: { roles: ADMIN_AND_ABOVE },
+        loadChildren: () => import('./bursary/bursary.module').then((m) => m.BursaryModule),
       },
 
       // ── Admin Setup sub-routes (Admin and above) ──────────────────────────

@@ -3,7 +3,6 @@ import { Observable, of } from 'rxjs';
 import { AuthFacade } from '../../../store/auth/auth.facade';
 import { StudentFacade } from '../../../store/student/student.facade';
 import { StaffFacade } from '../../../store/staff/staff.facade';
-import { AdministratorFacade } from '../../../store/administrator/administrator.facade';
 import { ClassFacade } from '../../../store/class/class.facade';
 import { CurrentUserInterface } from '../../../types';
 import { UserRolesEnum } from '../../../types/auth';
@@ -46,7 +45,6 @@ export class DashboardComponent implements OnInit {
     private authFacade: AuthFacade,
     private studentFacade: StudentFacade,
     private staffFacade: StaffFacade,
-    private administratorFacade: AdministratorFacade,
     private classFacade: ClassFacade,
   ) {
     this.currentUser$ = this.authFacade.selectedCurrentUser$;
@@ -65,10 +63,16 @@ export class DashboardComponent implements OnInit {
         roles: [UserRolesEnum.SuperAdmin, UserRolesEnum.Admin],
       },
       {
-        label: 'Administrators', count$: this.administratorFacade.count$,
-        icon: 'admin_panel_settings', color: 'text-indigo-500', bg: 'bg-indigo-50',
-        route: '/app/administrator',
-        roles: [UserRolesEnum.SuperAdmin],
+        label: 'Classes', count$: this.classFacade.count$,
+        icon: 'school', color: 'text-orange-500', bg: 'bg-orange-50',
+        route: '/app/class',
+        roles: [UserRolesEnum.SuperAdmin, UserRolesEnum.Admin],
+      },
+      {
+        label: 'Bursary', count$: of(null),
+        icon: 'account_balance_wallet', color: 'text-purple-500', bg: 'bg-purple-50',
+        route: '/app/bursary', hideCount: true,
+        roles: [UserRolesEnum.SuperAdmin, UserRolesEnum.Admin],
       },
       {
         label: 'Results', count$: of(null),
@@ -83,10 +87,10 @@ export class DashboardComponent implements OnInit {
         roles: [UserRolesEnum.Student],
       },
       {
-        label: 'Classes', count$: this.classFacade.count$,
-        icon: 'school', color: 'text-orange-500', bg: 'bg-orange-50',
-        route: '/app/class',
-        roles: [UserRolesEnum.SuperAdmin, UserRolesEnum.Admin],
+        label: 'My Payments', count$: of(null),
+        icon: 'receipt_long', color: 'text-purple-500', bg: 'bg-purple-50',
+        route: '/app/payment', hideCount: true,
+        roles: [UserRolesEnum.Student],
       },
     ];
 
@@ -102,9 +106,9 @@ export class DashboardComponent implements OnInit {
         roles: [UserRolesEnum.SuperAdmin, UserRolesEnum.Admin],
       },
       {
-        label: 'Administrators', icon: 'admin_panel_settings', route: '/app/administrator',
-        description: 'Manage administrators',
-        roles: [UserRolesEnum.SuperAdmin],
+        label: 'Bursary', icon: 'account_balance_wallet', route: '/app/bursary',
+        description: 'Manage fees and payments',
+        roles: [UserRolesEnum.SuperAdmin, UserRolesEnum.Admin],
       },
       {
         label: 'Results', icon: 'description', route: '/app/result',
@@ -114,6 +118,11 @@ export class DashboardComponent implements OnInit {
       {
         label: 'My Result', icon: 'assignment_ind', route: '/app/result/my-result',
         description: 'View your personal result sheet',
+        roles: [UserRolesEnum.Student],
+      },
+      {
+        label: 'My Payments', icon: 'receipt_long', route: '/app/payment',
+        description: 'View fees and make payments',
         roles: [UserRolesEnum.Student],
       },
       {
@@ -148,7 +157,6 @@ export class DashboardComponent implements OnInit {
       const visibleLabels = new Set(this.stats.map(s => s.label));
       if (visibleLabels.has('Students')) this.studentFacade.studentCount();
       if (visibleLabels.has('Staff')) this.staffFacade.staffCount();
-      if (visibleLabels.has('Administrators')) this.administratorFacade.administratorCount();
       if (visibleLabels.has('Classes')) this.classFacade.classCount();
     });
   }

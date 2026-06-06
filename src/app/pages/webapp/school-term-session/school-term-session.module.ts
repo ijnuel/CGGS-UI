@@ -13,6 +13,8 @@ import { SharedModule } from '../../../shared/shared.module';
 import { CreateUpdateSchoolTermSessionComponent } from './create-update-school-term-session/create-update-school-term-session.component';
 import { provideNativeDateAdapter } from '@angular/material/core';
 import { ViewSchoolTermSessionComponent } from './view-school-configuration/view-school-term-session.component';
+import { CloneSchoolTermSessionComponent } from './clone-school-term-session/clone-school-term-session.component';
+import { MatDialogModule } from '@angular/material/dialog';
 
 const routes: Routes = [
     {
@@ -37,7 +39,7 @@ const routes: Routes = [
 ];
 
 @NgModule({
-    declarations: [SchoolTermSessionComponent, CreateUpdateSchoolTermSessionComponent, ViewSchoolTermSessionComponent],
+    declarations: [SchoolTermSessionComponent, CreateUpdateSchoolTermSessionComponent, ViewSchoolTermSessionComponent, CloneSchoolTermSessionComponent],
     imports: [
         CommonModule,
         SharedModule,
@@ -50,6 +52,7 @@ const routes: Routes = [
         MatDatepickerModule,
         MatSelectModule,
         MatRadioModule,
+        MatDialogModule,
     ],
     providers: [provideNativeDateAdapter()],
 })

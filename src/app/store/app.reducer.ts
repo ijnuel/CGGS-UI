@@ -29,6 +29,11 @@ import * as fromGlobalLoading from './global-loading/global-loading.reducer';
 import * as fromDataImport from './data-import/data-import.reducer';
 import * as fromProfileImage from './profile-image/profile-image.reducer';
 import * as fromRole from './role/role.reducer';
+import * as fromFeeType from './fee-type/fee-type.reducer';
+import * as fromFeeSetup from './fee-setup/fee-setup.reducer';
+import * as fromFee from './fee/fee.reducer';
+import * as fromPayment from './payment/payment.reducer';
+import * as fromTransaction from './transaction/transaction.reducer';
 
 export const appFeatureKey = 'appFeatureKey';
 
@@ -62,6 +67,11 @@ export interface AppState {
   [fromDataImport.dataImportFeatureKey]: fromDataImport.DataImportState;
   [fromProfileImage.profileImageFeatureKey]: fromProfileImage.ProfileImageState;
   [fromRole.roleFeatureKey]: fromRole.RoleState;
+  [fromFeeType.feeTypeFeatureKey]: fromFeeType.FeeTypeState;
+  [fromFeeSetup.feeSetupFeatureKey]: fromFeeSetup.FeeSetupState;
+  [fromFee.feeFeatureKey]: fromFee.FeeState;
+  [fromPayment.paymentFeatureKey]: fromPayment.PaymentState;
+  [fromTransaction.transactionFeatureKey]: fromTransaction.TransactionState;
 }
 
 export const reducers = {
@@ -94,6 +104,11 @@ export const reducers = {
   [fromDataImport.dataImportFeatureKey]: fromDataImport.reducer,
   [fromProfileImage.profileImageFeatureKey]: fromProfileImage.reducer,
   [fromRole.roleFeatureKey]: fromRole.reducer,
+  [fromFeeType.feeTypeFeatureKey]: fromFeeType.reducer,
+  [fromFeeSetup.feeSetupFeatureKey]: fromFeeSetup.reducer,
+  [fromFee.feeFeatureKey]: fromFee.reducer,
+  [fromPayment.paymentFeatureKey]: fromPayment.reducer,
+  [fromTransaction.transactionFeatureKey]: fromTransaction.reducer,
 };
 
 export const selectAppState = createFeatureSelector<AppState>(appFeatureKey);

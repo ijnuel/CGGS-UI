@@ -5,7 +5,7 @@
   <!-- ClassLevel form -->
   <div *ngIf="data.level === ProgramSetupLevel.CLASSLEVEL" [formGroup]="form"
     class="grid gap-4 pt-2">
-    <mat-form-field appearance="outline" class="w-full">
+    <mat-form-field class="w-full">
       <mat-label>Level Number (e.g. 1, 2, 3…)</mat-label>
       <input matInput type="number" formControlName="level" required />
       <mat-error *ngIf="form.get('level')?.hasError('required')">Level is required</mat-error>
@@ -16,7 +16,7 @@
   <!-- ClassArm form -->
   <div *ngIf="data.level === ProgramSetupLevel.CLASSARM" [formGroup]="form"
     class="grid gap-4 pt-2">
-    <mat-form-field appearance="outline" class="w-full">
+    <mat-form-field class="w-full">
       <mat-label>Class Name (e.g. A, B, C…)</mat-label>
       <input matInput type="text" formControlName="name" required />
       <mat-error *ngIf="form.get('name')?.hasError('required')">Name is required</mat-error>
@@ -55,12 +55,12 @@
   <!-- ClassSubjectAssessment form -->
   <div *ngIf="data.level === ProgramSetupLevel.CLASSSUBJECTASSESSMENT" [formGroup]="form"
     class="grid gap-4 pt-2">
-    <mat-form-field appearance="outline" class="w-full">
+    <mat-form-field class="w-full">
       <mat-label>Assessment Type</mat-label>
       <input matInput type="text" formControlName="assessmentType" required />
       <mat-error *ngIf="form.get('assessmentType')?.hasError('required')">Type is required</mat-error>
     </mat-form-field>
-    <mat-form-field appearance="outline" class="w-full">
+    <mat-form-field class="w-full">
       <mat-label>Score Weight</mat-label>
       <input matInput type="number" formControlName="scoreWeigth" required />
       <mat-error *ngIf="form.get('scoreWeigth')?.hasError('required')">Score weight is required</mat-error>

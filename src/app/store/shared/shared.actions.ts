@@ -136,3 +136,15 @@ export const getSkillGradeListFail = createAction(
   '[Shared/API] Get Skill Grade List Fail',
   props<{ error: string }>()
 );
+
+export const getPaymentGatewayList = createAction('[Shared] Get Payment Gateway List');
+
+export const getPaymentGatewayListSuccess = createAction(
+  '[Shared/API] Get Payment Gateway List Success',
+  props<{ payload: GenericResponseInterface<DropdownListInterface[]> }>()
+);
+
+export const getPaymentGatewayListFail = createAction(
+  '[Shared/API] Get Payment Gateway List Fail',
+  props<{ error: string }>()
+);

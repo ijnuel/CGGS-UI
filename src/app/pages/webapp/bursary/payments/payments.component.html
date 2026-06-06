@@ -1,0 +1,50 @@
+<div class="pl-8 pr-9 pt-6">
+  <div class="flex items-center gap-3 mb-6">
+    <button mat-icon-button routerLink="/app/bursary" style="color: var(--app-primary);">
+      <mat-icon>arrow_back</mat-icon>
+    </button>
+    <div>
+      <h3 class="text-xl font-bold" style="color: var(--app-primary)">Payments</h3>
+      <p class="text-sm text-gray-500">View all fee payments recorded in the system</p>
+    </div>
+  </div>
+
+  <div class="flex flex-wrap items-center justify-between gap-3 mb-4">
+    <div class="flex flex-wrap gap-3">
+      <app-searchable-mat-select
+        label="Term / Session"
+        [options]="schoolTermSessions"
+        [labelFn]="getTermLabel"
+        valueKey="id"
+        formInputClass="form-input w-64"
+        [formControl]="termSessionFilterControl"
+        (selectionChange)="onTermSessionChange($event)"
+      ></app-searchable-mat-select>
+
+      <app-searchable-mat-select
+        label="Student"
+        [options]="allStudents"
+        [labelFn]="getStudentLabel"
+        valueKey="id"
+        formInputClass="form-input w-64"
+        [formControl]="studentFilterControl"
+        (selectionChange)="onStudentChange($event)"
+      ></app-searchable-mat-select>
+    </div>
+
+    <button mat-raised-button color="primary" (click)="onRefresh()">
+      <mat-icon>refresh</mat-icon> Refresh
+    </button>
+  </div>
+
+  <app-table
+    [tableData]="(paymentList$ | async)?.data ?? []"
+    [tableHeaderData]="tableHeaderData"
+    [isLoading]="(loading$ | async) ?? false"
+    [totalLength]="(paymentList$ | async)?.totalCount ?? 0"
+    [showSearch]="false"
+    [showFilters]="false"
+    [showActionColumn]="false"
+    (queryChange)="onQueryChange($event)"
+  ></app-table>
+</div>

@@ -9,18 +9,11 @@ export default [
     url: '/app/home'
   },
   {
-    name: 'Students',
+    name: 'People',
     icon: 'assets/icons/student-icon.svg',
     roles: [UserRolesEnum.SuperAdmin, UserRolesEnum.Admin],
-    url: '/app/student'
+    url: '/app/people'
   },
-
-  // {
-  //   name: 'Families',
-  //   icon: 'assets/icons/users-icon.svg',
-  //   roles: [],
-  //   url: '/app/family'
-  // },
 
   {
     name: 'Classes',
@@ -35,24 +28,24 @@ export default [
     roles: [UserRolesEnum.SuperAdmin, UserRolesEnum.Admin,UserRolesEnum.Staff],
     url: '/app/result'
   },
-
   {
-    name: 'Staff',
-    icon: 'assets/icons/staff-icon.svg',
+    name: 'Bursary',
+    icon: 'assets/icons/result-icon.svg',
     roles: [UserRolesEnum.SuperAdmin, UserRolesEnum.Admin],
-    url: '/app/staff'
+    url: '/app/bursary'
   },
+  {
+    name: 'Payments',
+    icon: 'assets/icons/result-icon.svg',
+    roles: [UserRolesEnum.Student],
+    url: '/app/payment'
+  },
+
   {
     name: 'Roles',
     icon: 'assets/icons/roles.svg',
     roles: [UserRolesEnum.SuperAdmin],
     url: '/app/role'
-  },
-  {
-    name: 'Administrators',
-    icon: 'assets/icons/admin-icon.svg',
-    roles: [UserRolesEnum.SuperAdmin],
-    url: '/app/administrator'
   },
   {
     name: 'Admin Setup',

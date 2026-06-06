@@ -3,7 +3,7 @@
   <!-- Toolbar: search + export -->
   <div *ngIf="showSearch || showExport" class="table-toolbar">
     <div *ngIf="showSearch" [formGroup]="searchForm" class="search-wrap">
-      <mat-form-field appearance="outline" subscriptSizing="dynamic" class="search-field">
+      <mat-form-field subscriptSizing="dynamic" class="search-field">
         <mat-icon matPrefix class="search-prefix-icon">search</mat-icon>
         <input matInput formControlName="search" placeholder="Search…">
         <button *ngIf="searchForm.get('search')?.value" matSuffix mat-icon-button

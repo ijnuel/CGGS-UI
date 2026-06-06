@@ -7,7 +7,7 @@ import { TestEntityTemplateFormInterface, TestEntityTemplateListInterface } from
 import { PrincipalRemarkFormInterface, PrincipalRemarkListInterface } from './principal-remark';
 import { ProgrammeGradeRemarkFormInterface, ProgrammeGradeRemarkListInterface } from './programme-grade-remark';
 import { FamilyFormInterface, FamilyListInterface } from './family';
-import { StudentFormInterface, StudentListInterface } from './student';
+import { StudentFormInterface, StudentListInterface, StudentWalletInterface } from './student';
 import { ClassSubjectAssessmentFormInterface, ClassSubjectAssessmentListInterface } from './class-subject-assessment';
 import { ClassSubjectFormInterface, ClassSubjectListInterface } from './class-subject';
 import { ClassLevelFormInterface, ClassLevelListInterface } from './class-level';
@@ -40,6 +40,23 @@ import {
   RolePermissionAssignInterface,
   UserRoleInterface,
 } from './role';
+import {
+  FeeTypeListInterface,
+  FeeTypeFormInterface,
+  FeeSetupListInterface,
+  FeeSetupFormInterface,
+  FeeListInterface,
+  FeeLineListInterface,
+  PaymentListInterface,
+  PaymentStatusEnum,
+  PaymentGatewayEnum,
+  TermEnum,
+  GenerateFeesByTermSessionRequest,
+  GenerateFeesBySessionAndTermRequest,
+  GenerateFeesByTermSessionForStudentRequest,
+  GenerateFeesBySessionAndTermForStudentRequest,
+  InitiatePaymentRequest,
+} from './fee';
 
 interface GenericResponseInterface<T> {
   error: string;
@@ -107,6 +124,7 @@ export {
   ProgrammeGradeRemarkListInterface,
   FamilyListInterface,
   StudentListInterface,
+  StudentWalletInterface,
   ClassSubjectAssessmentListInterface,
   ClassSubjectListInterface,
   ClassLevelListInterface,
@@ -159,4 +177,19 @@ export {
   PermissionInterface,
   RolePermissionAssignInterface,
   UserRoleInterface,
+  FeeTypeListInterface,
+  FeeTypeFormInterface,
+  FeeSetupListInterface,
+  FeeSetupFormInterface,
+  FeeListInterface,
+  FeeLineListInterface,
+  PaymentListInterface,
+  PaymentStatusEnum,
+  PaymentGatewayEnum,
+  TermEnum,
+  GenerateFeesByTermSessionRequest,
+  GenerateFeesBySessionAndTermRequest,
+  GenerateFeesByTermSessionForStudentRequest,
+  GenerateFeesBySessionAndTermForStudentRequest,
+  InitiatePaymentRequest,
 };

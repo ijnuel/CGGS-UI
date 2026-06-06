@@ -1,0 +1,106 @@
+<div class="flex items-center justify-between px-6 pt-5 pb-3 border-b border-gray-100">
+  <div>
+    <h2 class="text-lg font-bold" style="color: var(--app-primary);">
+      {{ isEditMode ? 'Edit' : 'Create' }} Fee Setup
+    </h2>
+    <p class="text-sm text-gray-500 mt-0.5">
+      {{ isEditMode ? 'Update fee setup amount' : 'Configure a new fee setup' }}
+    </p>
+  </div>
+  <button mat-icon-button (click)="dialogRef.close()">
+    <mat-icon class="text-gray-400">close</mat-icon>
+  </button>
+</div>
+
+<mat-dialog-content class="!px-6 !py-4">
+  <form [formGroup]="formGroup">
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-x-4 gap-y-1">
+
+      <!-- Term / Session -->
+      <div>
+        <app-searchable-mat-select
+          label="Term / Session"
+          [options]="allTermSessions"
+          [labelFn]="getTermLabel"
+          valueKey="id"
+          formInputClass="form-input w-full"
+          [formControl]="formControl.schoolTermSessionId"
+        ></app-searchable-mat-select>
+        <mat-error *ngIf="formControl.schoolTermSessionId.touched && formControl.schoolTermSessionId.invalid" class="text-xs">
+          {{ getErrorMessage('schoolTermSessionId') }}
+        </mat-error>
+      </div>
+
+      <!-- Class -->
+      <div>
+        <app-searchable-mat-select
+          label="Class"
+          [options]="allClasses"
+          [labelFn]="getClassLabelFn"
+          valueKey="id"
+          formInputClass="form-input w-full"
+          [formControl]="formControl.classId"
+        ></app-searchable-mat-select>
+        <mat-error *ngIf="formControl.classId.touched && formControl.classId.invalid" class="text-xs">
+          {{ getErrorMessage('classId') }}
+        </mat-error>
+      </div>
+
+      <!-- Fee Type -->
+      <div>
+        <mat-form-field class="form-input w-full" [class.fee-type-loading]="feeTypesLoading">
+          <mat-label>Fee Type</mat-label>
+          <mat-select [formControl]="formControl.feeTypeId">
+            <mat-option *ngFor="let ft of filteredFeeTypes" [value]="ft.id">{{ ft.name }}</mat-option>
+          </mat-select>
+          <mat-spinner *ngIf="feeTypesLoading" matSuffix diameter="16" class="!mr-1"></mat-spinner>
+          <ng-container *ngIf="!isEditMode">
+            <mat-hint *ngIf="!feeTypesLoading && (!formControl.schoolTermSessionId.value || !formControl.classId.value)">
+              Select term and class first
+            </mat-hint>
+            <mat-hint *ngIf="!feeTypesLoading && formControl.schoolTermSessionId.value && formControl.classId.value && filteredFeeTypes.length === 0"
+                      class="text-orange-500">
+              All fee types are already configured for this class and term
+            </mat-hint>
+          </ng-container>
+          <mat-error>{{ getErrorMessage('feeTypeId') }}</mat-error>
+        </mat-form-field>
+      </div>
+
+      <!-- Amount -->
+      <div>
+        <mat-form-field class="form-input w-full">
+          <mat-label>Amount (₦)</mat-label>
+          <input type="number" min="0" matInput [formControl]="formControl.amount" placeholder="0.00" />
+          <mat-icon matPrefix class="mr-2 text-gray-400">payments</mat-icon>
+          <mat-hint *ngIf="amountReadOnly" class="text-orange-500">
+            Cannot edit — fee is in use for a past term
+          </mat-hint>
+          <mat-error>{{ getErrorMessage('amount') }}</mat-error>
+        </mat-form-field>
+      </div>
+
+      <!-- In Use -->
+      <div *ngIf="!isEditMode" class="flex items-center gap-2 py-2">
+        <mat-slide-toggle [formControl]="formControl.inUse" color="primary"></mat-slide-toggle>
+        <span class="text-sm text-gray-700">Mark as In Use</span>
+      </div>
+      <div *ngIf="isEditMode" class="flex flex-col justify-center py-1">
+        <span class="text-xs text-gray-400 mb-0.5">In Use</span>
+        <span class="text-sm font-medium text-gray-700">
+          {{ (feeSetupById$ | async)?.inUse ? 'Yes' : 'No' }}
+        </span>
+      </div>
+
+    </div>
+  </form>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end" class="!px-6 !pb-5 gap-2">
+  <button mat-button (click)="dialogRef.close()">Cancel</button>
+  <button mat-raised-button color="primary"
+          (click)="submit()"
+          [disabled]="(loading$ | async)">
+    {{ isEditMode ? 'Update' : 'Create' }} Fee Setup
+  </button>
+</mat-dialog-actions>

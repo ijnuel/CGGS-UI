@@ -1,0 +1,64 @@
+<div class="pl-8 pr-9 pt-6">
+  <div class="flex items-center gap-3 mb-6">
+    <button mat-icon-button routerLink="/app/bursary" style="color: var(--app-primary);">
+      <mat-icon>arrow_back</mat-icon>
+    </button>
+    <div>
+      <h3 class="text-xl font-bold" style="color: var(--app-primary)">Fee Setup</h3>
+      <p class="text-sm text-gray-500">Configure fee amounts per class and term</p>
+    </div>
+  </div>
+
+  <div class="flex flex-wrap items-center justify-between gap-3 mb-4">
+    <div class="flex flex-wrap gap-3">
+      <app-searchable-mat-select
+        label="Term / Session"
+        [options]="schoolTermSessions"
+        [labelFn]="getTermLabel"
+        valueKey="id"
+        formInputClass="form-input w-64"
+        [formControl]="termSessionFilterControl"
+        (selectionChange)="onTermSessionChange($event)"
+      ></app-searchable-mat-select>
+
+      <app-searchable-mat-select
+        label="Class"
+        [options]="allClasses"
+        [labelFn]="getClassLabel"
+        valueKey="id"
+        formInputClass="form-input w-64"
+        [formControl]="classFilterControl"
+        (selectionChange)="onClassChange($event)"
+      ></app-searchable-mat-select>
+    </div>
+
+    <div class="flex gap-2">
+      <button mat-raised-button color="primary" (click)="onRefresh()">
+        <mat-icon>refresh</mat-icon> Refresh
+      </button>
+      <button mat-raised-button (click)="openCreate()" style="background-color: var(--app-button-bg); color: white;">
+        <mat-icon>add</mat-icon> Create New
+      </button>
+    </div>
+  </div>
+
+  <app-table
+    [tableData]="(feeSetupList$ | async)?.data ?? []"
+    [tableHeaderData]="tableHeaderData"
+    [isLoading]="(loading$ | async) ?? false"
+    [totalLength]="(feeSetupList$ | async)?.totalCount ?? 0"
+    [showSearch]="false"
+    [showFilters]="false"
+    [showActionColumn]="true"
+    [showViewIcon]="false"
+    [showDeleteIcon]="true"
+    (queryChange)="onQueryChange($event)"
+    (edit)="onEdit($event)"
+    (delete)="onDelete($event)"
+  ></app-table>
+
+  <p class="text-xs text-gray-400 mt-2">
+    <mat-icon class="!text-xs !w-3 !h-3 mr-1">info</mat-icon>
+    Fee Setups marked as "In Use" cannot be deleted.
+  </p>
+</div>

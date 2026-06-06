@@ -25,13 +25,13 @@
     <div *ngIf="addFormVisibleFor === getId(item)" class="p-3 border rounded">
       <form [formGroup]="config.formGroup!">
         @if (levelType === ProgramSetupLevel.PROGRAMTYPE) {
-        <mat-form-field appearance="outline" class="w-full">
+        <mat-form-field class="w-full">
           <mat-label>Level (e.g 1, 2, 3...)</mat-label>
           <input matInput type="number" formControlName="level" required />
         </mat-form-field>
         }
         @else if (levelType === ProgramSetupLevel.CLASSLEVEL) {
-        <mat-form-field appearance="outline" class="w-full" >
+        <mat-form-field class="w-full" >
           <mat-label>Class Arm (e.g A, B, C...)</mat-label>
           <input matInput type="text" formControlName="name" [disabled]="visibleFormIsEdit" required />
         </mat-form-field>
@@ -62,11 +62,11 @@
           ></app-searchable-mat-select>
         }
         @else if (levelType === ProgramSetupLevel.CLASSSUBJECT) {
-        <mat-form-field appearance="outline" class="w-full">
+        <mat-form-field class="w-full">
           <mat-label>Assessment Type</mat-label>
           <input matInput type="text" formControlName="assessmentType" required />
         </mat-form-field>
-        <mat-form-field appearance="outline" class="w-full">
+        <mat-form-field class="w-full">
           <mat-label>Score Weight</mat-label>
           <input matInput type="number" formControlName="scoreWeigth" required />
         </mat-form-field>

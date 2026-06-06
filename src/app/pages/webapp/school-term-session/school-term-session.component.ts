@@ -11,6 +11,7 @@ import { PageQueryInterface } from '../../../types';
 import { TableHeaderInterface, TableActionInterface } from '../../../types/table';
 import { MatDialog } from '@angular/material/dialog';
 import { ConfirmDialogComponent } from '../../../shared/confirm-dialog/confirm-dialog.component';
+import { CloneSchoolTermSessionComponent, CloneSchoolTermSessionDialogData } from './clone-school-term-session/clone-school-term-session.component';
 import { ToastNotificationService, NotificationTypeEnums } from '../../../services/toast-notification.service';
 import { tableHeader } from './table-header';
 import { SessionFacade } from '../../../store/session/session.facade';
@@ -27,7 +28,8 @@ export class SchoolTermSessionComponent implements OnDestroy {
   loading$: Observable<boolean>;
   tableHeaderData: TableHeaderInterface[] = tableHeader;
   customActions: TableActionInterface[] = [
-    { key: 'set-current', label: 'Set as Current', icon: 'star', iconClass: '!text-amber-500', show: (row) => !row.isCurrent }
+    { key: 'set-current', label: 'Set as Current', icon: 'star', iconClass: '!text-amber-500', show: (row) => !row.isCurrent },
+    { key: 'clone', label: 'Clone', icon: 'content_copy', iconClass: '!text-blue-500' },
   ];
 
   private readonly nestedProperties = [{ name: 'session' }];
@@ -61,6 +63,21 @@ export class SchoolTermSessionComponent implements OnDestroy {
       this.toastService.openToast('School Term Session deleted successfully', NotificationTypeEnums.SUCCESS);
       this.schoolTermSessionFacade.getSchoolTermSessionList(this.lastQuery);
     });
+
+    this.actions$.pipe(
+      ofType(SchoolTermSessionAction.cloneSchoolTermSessionSuccess),
+      takeUntil(this.destroy$)
+    ).subscribe(() => {
+      this.toastService.openToast('School Term Session cloned successfully', NotificationTypeEnums.SUCCESS);
+      this.schoolTermSessionFacade.getSchoolTermSessionList(this.lastQuery);
+    });
+
+    this.actions$.pipe(
+      ofType(SchoolTermSessionAction.cloneSchoolTermSessionFail),
+      takeUntil(this.destroy$)
+    ).subscribe(() => {
+      this.toastService.openToast('Failed to clone School Term Session', NotificationTypeEnums.ERROR);
+    });
   }
 
   ngOnDestroy(): void {
@@ -88,6 +105,14 @@ export class SchoolTermSessionComponent implements OnDestroy {
   onCustomAction(event: { key: string; row: SchoolTermSessionListInterface }) {
     if (event.key === 'set-current') {
       this.schoolTermSessionFacade.setSchoolTermSessionAsCurrent(event.row.id);
+    }
+    if (event.key === 'clone') {
+      const dialogRef = this.dialog.open(CloneSchoolTermSessionComponent, {
+        width: '480px',
+        maxWidth: '95vw',
+        data: { destination: event.row } as CloneSchoolTermSessionDialogData,
+      });
+      dialogRef.afterClosed().subscribe();
     }
   }
 

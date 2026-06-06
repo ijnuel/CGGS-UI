@@ -1,0 +1,52 @@
+<div class="flex items-center justify-between px-6 pt-5 pb-3 border-b border-gray-100">
+  <div>
+    <h2 class="text-lg font-bold" style="color: var(--app-primary);">
+      {{ isEditMode ? 'Edit' : 'Create' }} Fee Type
+    </h2>
+    <p class="text-sm text-gray-500 mt-0.5">
+      {{ isEditMode ? 'Update fee type details' : 'Set up a new fee type' }}
+    </p>
+  </div>
+  <button mat-icon-button (click)="dialogRef.close()">
+    <mat-icon class="text-gray-400">close</mat-icon>
+  </button>
+</div>
+
+<mat-dialog-content class="!px-6 !py-4">
+  <form [formGroup]="formGroup">
+    <div class="grid grid-cols-1 gap-y-1">
+      <mat-form-field class="form-input w-full">
+        <mat-label>Name</mat-label>
+        <input type="text" matInput [formControl]="formControl.name" placeholder="e.g. Tuition, Books" />
+        <mat-icon matPrefix class="mr-2 text-gray-400">label</mat-icon>
+        <mat-error>{{ getErrorMessage('name') }}</mat-error>
+      </mat-form-field>
+
+      <mat-form-field class="form-input w-full">
+        <mat-label>Description</mat-label>
+        <input type="text" matInput [formControl]="formControl.description" placeholder="Optional description" />
+        <mat-icon matPrefix class="mr-2 text-gray-400">description</mat-icon>
+      </mat-form-field>
+
+      <div class="flex items-center gap-6 py-2">
+        <label class="flex items-center gap-2 cursor-pointer">
+          <mat-slide-toggle [formControl]="formControl.createdByDefault" color="primary"></mat-slide-toggle>
+          <span class="text-sm text-gray-700">Created by Default</span>
+        </label>
+        <label class="flex items-center gap-2 cursor-pointer">
+          <mat-slide-toggle [formControl]="formControl.compulsory" color="primary"></mat-slide-toggle>
+          <span class="text-sm text-gray-700">Compulsory</span>
+        </label>
+      </div>
+    </div>
+  </form>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end" class="!px-6 !pb-5 gap-2">
+  <button mat-button (click)="dialogRef.close()">Cancel</button>
+  <button mat-raised-button color="primary"
+          (click)="submit()"
+          [disabled]="(loading$ | async)">
+    {{ isEditMode ? 'Update' : 'Create' }} Fee Type
+  </button>
+</mat-dialog-actions>

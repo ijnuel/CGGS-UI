@@ -2,6 +2,7 @@ import { FormControl } from '@angular/forms';
 import { SharedFacade } from '../store/shared/shared.facade';
 import { BehaviorSubject, Subject, takeUntil } from 'rxjs';
 import { DropdownListInterface } from '../types';
+import { ClassListInterface } from '../types/class';
 
 /**
  * Formats a Date as YYYY-MM-DD using LOCAL timezone methods, preventing the
@@ -14,6 +15,19 @@ export function toLocalDateString(date: Date | string | null | undefined): strin
   const month = String(d.getMonth() + 1).padStart(2, '0');
   const day = String(d.getDate()).padStart(2, '0');
   return `${year}-${month}-${day}`;
+}
+
+/**
+ * Builds a full human-readable class label from a ClassListInterface.
+ * Combines programme type, level, and class name into a single string.
+ * Requires classLevel and classLevel.programmeType to be nested on the entity.
+ */
+export function getClassLabel(c: ClassListInterface | null | undefined): string {
+  if (!c) return '—';
+  const programmeType = c.classLevel?.programmeType?.name ?? '';
+  const level = c.classLevel?.level != null ? `${c.classLevel.level}` : '';
+  const name = c.name ?? '';
+  return [programmeType, level, name].filter(Boolean).join(' ') || '—';
 }
 
 export function getErrorMessageHelper(control: FormControl): string | null {

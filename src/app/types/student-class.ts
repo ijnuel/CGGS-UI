@@ -12,7 +12,7 @@ export interface StudentClassListInterface {
     student?: StudentListInterface;
     class?: ClassListInterface;
     session?: SessionListInterface;
-    // fees?: FeeListInterface[];
+    fees?: any[]; // FeeListInterface[] — typed as any to avoid circular import with fee.ts
 }
 
 export interface StudentClassFormInterface {
