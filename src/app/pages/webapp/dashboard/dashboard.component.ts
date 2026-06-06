@@ -54,25 +54,25 @@ export class DashboardComponent implements OnInit {
         label: 'Students', count$: this.studentFacade.count$,
         icon: 'person', color: 'text-blue-500', bg: 'bg-blue-50',
         route: '/app/student',
-        roles: [UserRolesEnum.SuperAdmin, UserRolesEnum.Admin],
+        roles: [UserRolesEnum.SuperAdmin, UserRolesEnum.Admin, UserRolesEnum.Staff],
       },
       {
         label: 'Staff', count$: this.staffFacade.count$,
         icon: 'badge', color: 'text-teal-500', bg: 'bg-teal-50',
         route: '/app/staff',
-        roles: [UserRolesEnum.SuperAdmin, UserRolesEnum.Admin],
+        roles: [UserRolesEnum.SuperAdmin, UserRolesEnum.Admin, UserRolesEnum.Staff],
       },
       {
         label: 'Classes', count$: this.classFacade.count$,
         icon: 'school', color: 'text-orange-500', bg: 'bg-orange-50',
         route: '/app/class',
-        roles: [UserRolesEnum.SuperAdmin, UserRolesEnum.Admin],
+        roles: [UserRolesEnum.SuperAdmin, UserRolesEnum.Admin, UserRolesEnum.Staff],
       },
       {
         label: 'Bursary', count$: of(null),
         icon: 'account_balance_wallet', color: 'text-purple-500', bg: 'bg-purple-50',
         route: '/app/bursary', hideCount: true,
-        roles: [UserRolesEnum.SuperAdmin, UserRolesEnum.Admin],
+        roles: [UserRolesEnum.SuperAdmin, UserRolesEnum.Admin, UserRolesEnum.Staff],
       },
       {
         label: 'Results', count$: of(null),
@@ -98,17 +98,17 @@ export class DashboardComponent implements OnInit {
       {
         label: 'Students', icon: 'person', route: '/app/student',
         description: 'Manage student records',
-        roles: [UserRolesEnum.SuperAdmin, UserRolesEnum.Admin],
+        roles: [UserRolesEnum.SuperAdmin, UserRolesEnum.Admin, UserRolesEnum.Staff],
       },
       {
         label: 'Staff', icon: 'badge', route: '/app/staff',
         description: 'Manage staff members',
-        roles: [UserRolesEnum.SuperAdmin, UserRolesEnum.Admin],
+        roles: [UserRolesEnum.SuperAdmin, UserRolesEnum.Admin, UserRolesEnum.Staff],
       },
       {
         label: 'Bursary', icon: 'account_balance_wallet', route: '/app/bursary',
         description: 'Manage fees and payments',
-        roles: [UserRolesEnum.SuperAdmin, UserRolesEnum.Admin],
+        roles: [UserRolesEnum.SuperAdmin, UserRolesEnum.Admin, UserRolesEnum.Staff],
       },
       {
         label: 'Results', icon: 'description', route: '/app/result',
@@ -128,22 +128,22 @@ export class DashboardComponent implements OnInit {
       {
         label: 'Classes', icon: 'school', route: '/app/class',
         description: 'Manage classes',
-        roles: [UserRolesEnum.SuperAdmin, UserRolesEnum.Admin],
+        roles: [UserRolesEnum.SuperAdmin, UserRolesEnum.Admin, UserRolesEnum.Staff],
       },
       {
         label: 'Subjects', icon: 'menu_book', route: '/app/class-subject',
         description: 'Manage class subjects',
-        roles: [UserRolesEnum.SuperAdmin, UserRolesEnum.Admin],
+        roles: [UserRolesEnum.SuperAdmin, UserRolesEnum.Admin, UserRolesEnum.Staff],
       },
       {
         label: 'Sessions', icon: 'event', route: '/app/school-term-session',
         description: 'Manage school term sessions',
-        roles: [UserRolesEnum.SuperAdmin, UserRolesEnum.Admin],
+        roles: [UserRolesEnum.SuperAdmin, UserRolesEnum.Admin, UserRolesEnum.Staff],
       },
       {
         label: 'Admin Setup', icon: 'settings', route: '/app/admin-setup',
         description: 'System configuration',
-        roles: [UserRolesEnum.SuperAdmin, UserRolesEnum.Admin],
+        roles: [UserRolesEnum.SuperAdmin, UserRolesEnum.Admin, UserRolesEnum.Staff],
       },
     ];
   }

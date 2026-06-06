@@ -5,7 +5,7 @@ import { RoleGuard } from '../../services/role.guard';
 import { UserRolesEnum } from '../../types/auth';
 
 const ALL_AUTHENTICATED   = [UserRolesEnum.SuperAdmin, UserRolesEnum.Admin, UserRolesEnum.Staff, UserRolesEnum.Student, UserRolesEnum.Family, UserRolesEnum.Guest];
-const ADMIN_AND_ABOVE     = [UserRolesEnum.SuperAdmin, UserRolesEnum.Admin];
+const ADMIN_AND_ABOVE     = [UserRolesEnum.SuperAdmin, UserRolesEnum.Admin, UserRolesEnum.Staff];
 const STAFF_AND_ABOVE     = [UserRolesEnum.SuperAdmin, UserRolesEnum.Admin, UserRolesEnum.Staff];
 const SUPERADMIN_ONLY     = [UserRolesEnum.SuperAdmin];
 

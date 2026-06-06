@@ -85,7 +85,7 @@ export class PeopleComponent implements OnInit {
         gradient: 'linear-gradient(135deg, #3b82f6, #6366f1)',
         route: '/app/student',
         count$: this.studentFacade.count$,
-        roles: [UserRolesEnum.SuperAdmin, UserRolesEnum.Admin],
+        roles: [UserRolesEnum.SuperAdmin, UserRolesEnum.Admin, UserRolesEnum.Staff],
       },
       {
         label: 'Staff',
@@ -94,7 +94,7 @@ export class PeopleComponent implements OnInit {
         gradient: 'linear-gradient(135deg, #0d9488, #0891b2)',
         route: '/app/staff',
         count$: this.staffFacade.count$,
-        roles: [UserRolesEnum.SuperAdmin, UserRolesEnum.Admin],
+        roles: [UserRolesEnum.SuperAdmin, UserRolesEnum.Admin, UserRolesEnum.Staff],
       },
       {
         label: 'Administrators',

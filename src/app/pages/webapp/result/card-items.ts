@@ -14,7 +14,7 @@ export default [
     icon: 'assets/icons/result-icon.svg',
     matIcon: 'bar_chart',
     description: 'View and print student result sheets',
-    roles: [UserRolesEnum.SuperAdmin, UserRolesEnum.Admin],
+    roles: [UserRolesEnum.SuperAdmin, UserRolesEnum.Admin, UserRolesEnum.Staff],
     url: '/app/result/view'
   },
   {
