@@ -1,18 +1,23 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FormBuilder, FormGroup, FormControl, Validators } from '@angular/forms';
-import { Observable, Subject } from 'rxjs';
+import { combineLatest, Observable, Subject } from 'rxjs';
 import { takeUntil, map, filter, first, distinctUntilChanged, withLatestFrom } from 'rxjs/operators';
 import { Router, ActivatedRoute } from '@angular/router';
 import { ResultFacade } from '../../../../store/result/result.facade';
 import { StudentClassSubjectAssessmentScoreFacade } from '../../../../store/student-class-subject-assessment-score/student-class-subject-assessment-score.facade';
 import { SchoolTermSessionFacade } from '../../../../store/school-term-session/school-term-session.facade';
+import { SessionFacade } from '../../../../store/session/session.facade';
 import { ClassFacade } from '../../../../store/class/class.facade';
+import { ClassLevelFacade } from '../../../../store/class-level/class-level.facade';
 import { SubjectFacade } from '../../../../store/subject/subject.facade';
 import { SharedFacade } from '../../../../store/shared/shared.facade';
 import { StudentAssessmentScoreInterface, AssessmentColumnInterface, StudentAssessmentRowInterface } from '../../../../types/result';
 import { StudentClassSubjectAssessmentScoreFormInterface } from '../../../../types/student-class-subject-assessment-score';
 import { SchoolTermSessionListInterface, ClassListInterface, SubjectListInterface, PaginatedResponseInterface, DropdownListInterface } from '../../../../types';
+import { ClassLevelListInterface } from '../../../../types/class-level';
+import { SessionListInterface } from '../../../../types/session';
 import { ToastNotificationService, NotificationTypeEnums } from '../../../../services/toast-notification.service';
+import { getClassLabel } from '../../../../services/helper.service';
 
 @Component({
   selector: 'app-update-result',
@@ -59,7 +64,9 @@ export class UpdateResultComponent implements OnInit, OnDestroy {
     private resultFacade: ResultFacade,
     private studentClassSubjectAssessmentScoreFacade: StudentClassSubjectAssessmentScoreFacade,
     private schoolTermSessionFacade: SchoolTermSessionFacade,
+    private sessionFacade: SessionFacade,
     private classFacade: ClassFacade,
+    private classLevelFacade: ClassLevelFacade,
     private subjectFacade: SubjectFacade,
     private sharedFacade: SharedFacade,
     private router: Router,
@@ -73,8 +80,40 @@ export class UpdateResultComponent implements OnInit, OnDestroy {
     });
 
     // Initialize observables
-    this.schoolTermSessions$ = this.schoolTermSessionFacade.schoolTermSessionAll$;
-    this.classes$ = this.classFacade.classAll$;
+    // SchoolTermSession/GetAll currently returns session: null; hydrate from sessions
+    // so the dropdown labels render "{session.name}, {termString} Term".
+    this.schoolTermSessions$ = combineLatest([
+      this.schoolTermSessionFacade.schoolTermSessionAll$,
+      this.sessionFacade.sessionAll$,
+    ]).pipe(
+      map(([terms, sessions]) => {
+        if (!terms) return terms;
+        const sessionMap = new Map<string, SessionListInterface>(
+          (sessions ?? []).map(s => [s.id, s])
+        );
+        return terms.map(t => ({
+          ...t,
+          session: t.session ?? (t.sessionId ? sessionMap.get(t.sessionId) : undefined),
+        }));
+      })
+    );
+    // Class/GetAll currently returns classLevel: null; hydrate from class-levels
+    // so the dropdown labels render with "{classLevel.name} {level} {name}".
+    this.classes$ = combineLatest([
+      this.classFacade.classAll$,
+      this.classLevelFacade.classLevelAll$,
+    ]).pipe(
+      map(([classes, levels]) => {
+        if (!classes) return classes;
+        const levelMap = new Map<string, ClassLevelListInterface>(
+          (levels ?? []).map(l => [l.id, l])
+        );
+        return classes.map(c => ({
+          ...c,
+          classLevel: c.classLevel ?? (c.classLevelId ? levelMap.get(c.classLevelId) : undefined),
+        }));
+      })
+    );
     this.subjects$ = this.subjectFacade.subjectAll$;
     this.skillGrades$ = this.sharedFacade.selectSkillGradeList$.pipe(
       map(skillGrades => this.sortSkillGradesByValue(skillGrades))
@@ -165,10 +204,7 @@ export class UpdateResultComponent implements OnInit, OnDestroy {
   }
 
   getClassName(item: ClassListInterface): string {
-    const programmeType = item?.classLevel?.programmeType?.name ?? '';
-    const level = item?.classLevel?.level ?? '';
-    const name = item?.name ?? '';
-    return [programmeType, level, name].filter(Boolean).join(' ');
+    return getClassLabel(item);
   }
 
   loadDropdownData(): void {
@@ -183,6 +219,16 @@ export class UpdateResultComponent implements OnInit, OnDestroy {
         { name: 'classLevel', innerNestedProperties: [{ name: 'programmeType' }] },
       ],
     });
+
+    // Load class levels separately to hydrate the class dropdown labels —
+    // Class/GetAll currently returns classLevel: null even with nestedProperties.
+    this.classLevelFacade.getClassLevelAll({
+      nestedProperties: [{ name: 'programmeType' }],
+    });
+
+    // Load sessions separately to hydrate the term-session dropdown labels —
+    // SchoolTermSession/GetAll currently returns session: null.
+    this.sessionFacade.getSessionAll();
 
     // Load subjects
     this.subjectFacade.getSubjectAll();
