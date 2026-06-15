@@ -1,4 +1,5 @@
 import { TableHeaderInterface } from '../../../types/table';
+import { getClassLabel } from '../../../services/helper.service';
 
 export const tableHeader: TableHeaderInterface[] = [
   {
@@ -8,11 +9,20 @@ export const tableHeader: TableHeaderInterface[] = [
     filterable: true,
     type: 'text',
     align: 'left',
+    format: (_: any, row: any) => getClassLabel(row)
+  },
+  {
+    name: 'Form Teacher',
+    key: 'staffName',
+    nestedKey: 'staff.firstName',
+    sortable: false,
+    filterable: false,
+    type: 'text',
+    align: 'left',
     format: (_: any, row: any) => {
-      const programmeType = row?.classLevel?.programmeType?.name ?? '';
-      const level = row?.classLevel?.level ?? '';
-      const name = row?.name ?? '';
-      return [programmeType, level, name].filter(Boolean).join(' ');
+      const first = row?.staff?.firstName ?? '';
+      const last = row?.staff?.lastName ?? '';
+      return [first, last].filter(Boolean).join(' ') || '—';
     }
   }
 ];

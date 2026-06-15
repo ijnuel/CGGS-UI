@@ -1,11 +1,15 @@
-import { Component, OnDestroy } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
-import { Observable, Subject } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
+import { combineLatest, Observable, Subject } from 'rxjs';
+import { map, takeUntil } from 'rxjs/operators';
 import { Actions, ofType } from '@ngrx/effects';
 import { ClassFacade } from '../../../store/class/class.facade';
+import { ClassLevelFacade } from '../../../store/class-level/class-level.facade';
+import { StaffFacade } from '../../../store/staff/staff.facade';
 import * as ClassAction from '../../../store/class/class.actions';
 import { ClassListInterface } from '../../../types/class';
+import { ClassLevelListInterface } from '../../../types/class-level';
+import { StaffListInterface } from '../../../types/staff';
 import { PaginatedResponseInterface } from '../../../types';
 import { PageQueryInterface } from '../../../types';
 import { TableHeaderInterface } from '../../../types/table';
@@ -19,24 +23,51 @@ import { tableHeader } from './table-header';
   templateUrl: './class.component.html',
   styleUrls: ['./class.component.scss'],
 })
-export class ClassComponent implements OnDestroy {
+export class ClassComponent implements OnInit, OnDestroy {
   private destroy$ = new Subject<void>();
   classList$: Observable<PaginatedResponseInterface<ClassListInterface[]> | null>;
   loading$: Observable<boolean>;
   tableHeaderData: TableHeaderInterface[] = tableHeader;
 
-  private lastQuery: PageQueryInterface = { start: 0, recordsPerPage: 100, pageIndex: 0 };
+  private lastQuery: PageQueryInterface = { start: 0, recordsPerPage: 10, pageIndex: 0 };
 
   constructor(
     private router: Router,
     private route: ActivatedRoute,
     private classFacade: ClassFacade,
+    private classLevelFacade: ClassLevelFacade,
+    private staffFacade: StaffFacade,
     private actions$: Actions,
     private dialog: MatDialog,
     private toastService: ToastNotificationService
   ) {
-    this.classList$ = this.classFacade.classList$;
     this.loading$ = this.classFacade.loading$;
+    // Backend's Class/GetAllPaginated currently returns classLevel: null and staff: null
+    // even when nestedProperties is sent. Join the lookups in-memory so the table can
+    // render Description (programme + level + name) and Form Teacher.
+    this.classList$ = combineLatest([
+      this.classFacade.classList$,
+      this.classLevelFacade.classLevelAll$,
+      this.staffFacade.staffAll$,
+    ]).pipe(
+      map(([list, levels, staff]) => {
+        if (!list) return list;
+        const levelMap = new Map<string, ClassLevelListInterface>(
+          (levels ?? []).map(l => [l.id, l])
+        );
+        const staffMap = new Map<string, StaffListInterface>(
+          (staff ?? []).map(s => [s.id, s])
+        );
+        return {
+          ...list,
+          data: list.data.map(row => ({
+            ...row,
+            classLevel: row.classLevel ?? (row.classLevelId ? levelMap.get(row.classLevelId) : undefined),
+            staff: row.staff ?? (row.staffId ? staffMap.get(row.staffId) : undefined),
+          })),
+        };
+      })
+    );
 
     this.actions$.pipe(
       ofType(ClassAction.deleteClassSuccess),
@@ -47,13 +78,21 @@ export class ClassComponent implements OnDestroy {
     });
   }
 
+  ngOnInit(): void {
+    this.classLevelFacade.getClassLevelAll({
+      nestedProperties: [{ name: 'programmeType' }],
+    });
+    this.staffFacade.getStaffAll();
+  }
+
   ngOnDestroy(): void {
     this.destroy$.next();
     this.destroy$.complete();
   }
 
   private readonly nestedProperties = [
-    { name: 'classLevel', innerNestedProperties: [{ name: 'programmeType' }] }
+    { name: 'classLevel', innerNestedProperties: [{ name: 'programmeType' }] },
+    { name: 'staff' },
   ];
 
   onQueryChange(query: PageQueryInterface) {
