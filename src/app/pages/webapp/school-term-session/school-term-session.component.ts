@@ -1,7 +1,7 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
-import { combineLatest, Observable, Subject } from 'rxjs';
-import { map, takeUntil } from 'rxjs/operators';
+import { Observable, Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 import { Actions, ofType } from '@ngrx/effects';
 import { SchoolTermSessionFacade } from '../../../store/school-term-session/school-term-session.facade';
 import * as SchoolTermSessionAction from '../../../store/school-term-session/school-term-session.actions';
@@ -21,7 +21,7 @@ import { SessionFacade } from '../../../store/session/session.facade';
   templateUrl: './school-term-session.component.html',
   styleUrls: ['./school-term-session.component.scss'],
 })
-export class SchoolTermSessionComponent implements OnInit, OnDestroy {
+export class SchoolTermSessionComponent implements OnDestroy {
   private destroy$ = new Subject<void>();
   schoolTermSessionList$: Observable<PaginatedResponseInterface<SchoolTermSessionListInterface[]> | null>;
   sessionList$: Observable<SessionListInterface[] | null>;
@@ -45,27 +45,7 @@ export class SchoolTermSessionComponent implements OnInit, OnDestroy {
     private toastService: ToastNotificationService
   ) {
     this.sessionList$ = this.sessionFacade.sessionAll$;
-    // SchoolTermSession/GetAllPaginated currently returns session: null even when
-    // nestedProperties is sent. Join sessionId → session in-memory so the table's
-    // Session column has a value to render.
-    this.schoolTermSessionList$ = combineLatest([
-      this.schoolTermSessionFacade.schoolTermSessionList$,
-      this.sessionFacade.sessionAll$,
-    ]).pipe(
-      map(([list, sessions]) => {
-        if (!list) return list;
-        const sessionMap = new Map<string, SessionListInterface>(
-          (sessions ?? []).map(s => [s.id, s])
-        );
-        return {
-          ...list,
-          data: list.data.map(row => ({
-            ...row,
-            session: row.session ?? (row.sessionId ? sessionMap.get(row.sessionId) : undefined),
-          })),
-        };
-      })
-    );
+    this.schoolTermSessionList$ = this.schoolTermSessionFacade.schoolTermSessionList$;
     this.loading$ = this.schoolTermSessionFacade.loading$;
 
     this.actions$.pipe(
@@ -98,10 +78,6 @@ export class SchoolTermSessionComponent implements OnInit, OnDestroy {
     ).subscribe(() => {
       this.toastService.openToast('Failed to clone School Term Session', NotificationTypeEnums.ERROR);
     });
-  }
-
-  ngOnInit(): void {
-    this.sessionFacade.getSessionAll();
   }
 
   ngOnDestroy(): void {

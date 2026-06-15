@@ -6,7 +6,6 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { ResultFacade } from '../../../../store/result/result.facade';
 import { StudentClassSubjectAssessmentScoreFacade } from '../../../../store/student-class-subject-assessment-score/student-class-subject-assessment-score.facade';
 import { SchoolTermSessionFacade } from '../../../../store/school-term-session/school-term-session.facade';
-import { SessionFacade } from '../../../../store/session/session.facade';
 import { ClassFacade } from '../../../../store/class/class.facade';
 import { ClassLevelFacade } from '../../../../store/class-level/class-level.facade';
 import { SubjectFacade } from '../../../../store/subject/subject.facade';
@@ -15,7 +14,6 @@ import { StudentAssessmentScoreInterface, AssessmentColumnInterface, StudentAsse
 import { StudentClassSubjectAssessmentScoreFormInterface } from '../../../../types/student-class-subject-assessment-score';
 import { SchoolTermSessionListInterface, ClassListInterface, SubjectListInterface, PaginatedResponseInterface, DropdownListInterface } from '../../../../types';
 import { ClassLevelListInterface } from '../../../../types/class-level';
-import { SessionListInterface } from '../../../../types/session';
 import { ToastNotificationService, NotificationTypeEnums } from '../../../../services/toast-notification.service';
 import { getClassLabel } from '../../../../services/helper.service';
 
@@ -64,7 +62,6 @@ export class UpdateResultComponent implements OnInit, OnDestroy {
     private resultFacade: ResultFacade,
     private studentClassSubjectAssessmentScoreFacade: StudentClassSubjectAssessmentScoreFacade,
     private schoolTermSessionFacade: SchoolTermSessionFacade,
-    private sessionFacade: SessionFacade,
     private classFacade: ClassFacade,
     private classLevelFacade: ClassLevelFacade,
     private subjectFacade: SubjectFacade,
@@ -80,23 +77,7 @@ export class UpdateResultComponent implements OnInit, OnDestroy {
     });
 
     // Initialize observables
-    // SchoolTermSession/GetAll currently returns session: null; hydrate from sessions
-    // so the dropdown labels render "{session.name}, {termString} Term".
-    this.schoolTermSessions$ = combineLatest([
-      this.schoolTermSessionFacade.schoolTermSessionAll$,
-      this.sessionFacade.sessionAll$,
-    ]).pipe(
-      map(([terms, sessions]) => {
-        if (!terms) return terms;
-        const sessionMap = new Map<string, SessionListInterface>(
-          (sessions ?? []).map(s => [s.id, s])
-        );
-        return terms.map(t => ({
-          ...t,
-          session: t.session ?? (t.sessionId ? sessionMap.get(t.sessionId) : undefined),
-        }));
-      })
-    );
+    this.schoolTermSessions$ = this.schoolTermSessionFacade.schoolTermSessionAll$;
     // Class/GetAll currently returns classLevel: null; hydrate from class-levels
     // so the dropdown labels render with "{classLevel.name} {level} {name}".
     this.classes$ = combineLatest([
@@ -225,10 +206,6 @@ export class UpdateResultComponent implements OnInit, OnDestroy {
     this.classLevelFacade.getClassLevelAll({
       nestedProperties: [{ name: 'programmeType' }],
     });
-
-    // Load sessions separately to hydrate the term-session dropdown labels —
-    // SchoolTermSession/GetAll currently returns session: null.
-    this.sessionFacade.getSessionAll();
 
     // Load subjects
     this.subjectFacade.getSubjectAll();
