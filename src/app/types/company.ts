@@ -3,6 +3,13 @@ import { AdministratorListInterface } from "./administrator";
 export interface CompanyListInterface {
     id: string;
     name?: string;
+    shortName?: string;
+    domainName?: string;
+    address?: string;
+    principalName?: string;
+    teacherShortCode?: string;
+    studentShortCode?: string;
+    logo?: string;
     isCurrent?: boolean;
     administratorCompanies?: AdministratorListInterface[];
 }
@@ -10,5 +17,11 @@ export interface CompanyListInterface {
 export interface CompanyFormInterface {
     id?: string;
     name?: string;
-    isCurrent: boolean;
+    shortName?: string;
+    domainName?: string;
+    address?: string;
+    principalName?: string;
+    teacherShortCode?: string;
+    studentShortCode?: string;
+    logo?: string;
 }

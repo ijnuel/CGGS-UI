@@ -1,16 +1,148 @@
 <div class="p-6">
-  <h3 class="text-xl font-semibold">View Company</h3>
-  <div class="flex justify-start mb-5 mt-4">
+
+  <!-- Header -->
+  <div class="flex items-center gap-4 mb-6">
     <button mat-button (click)="goBack()" class="flex items-center gap-1">
       <mat-icon>arrow_back</mat-icon>
       <span>Back</span>
     </button>
+    <h2 class="text-2xl font-bold text-gray-800">Company Profile</h2>
   </div>
-  <div *ngIf="company$ | async as company">
-    <p><strong>Name:</strong> {{ company.name }}</p>
-    <!-- Add more fields as needed -->
-  </div>
-  <div *ngIf="!(company$ | async)">
-    <p>Loading...</p>
-  </div>
-</div> 
+
+  <!-- Skeleton Loader -->
+  <ng-container *ngIf="loading$ | async">
+    <div class="bg-white rounded-lg shadow-md p-6 mb-6 flex flex-col sm:flex-row items-start sm:items-center gap-6 animate-pulse">
+      <div class="w-20 h-20 rounded-full bg-gray-200 flex-shrink-0"></div>
+      <div class="flex-1 min-w-0 space-y-3">
+        <div class="h-5 bg-gray-200 rounded w-48"></div>
+        <div class="h-3.5 bg-gray-200 rounded w-36"></div>
+        <div class="h-3.5 bg-gray-200 rounded w-44"></div>
+      </div>
+      <div class="h-9 w-20 bg-gray-200 rounded flex-shrink-0"></div>
+    </div>
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      <div *ngFor="let card of [1,2]" class="bg-white rounded-lg shadow-md p-6 animate-pulse">
+        <div class="flex items-center gap-2 mb-4">
+          <div class="w-5 h-5 bg-gray-200 rounded"></div>
+          <div class="h-4 bg-gray-200 rounded w-40"></div>
+        </div>
+        <div class="space-y-4">
+          <div *ngFor="let row of [1,2,3]" class="flex gap-3 py-2 border-b border-gray-100">
+            <div class="h-3.5 bg-gray-200 rounded w-28 flex-shrink-0"></div>
+            <div class="h-3.5 bg-gray-200 rounded w-40"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </ng-container>
+
+  <ng-container *ngIf="!(loading$ | async) && (company$ | async) as company">
+
+    <!-- Profile Header Card -->
+    <div class="bg-white rounded-lg shadow-md p-6 mb-6 flex flex-col sm:flex-row items-start sm:items-center gap-6">
+
+      <!-- Logo upload area -->
+      <div class="flex flex-col items-center gap-1">
+        <div class="group relative w-20 h-20 rounded-full cursor-pointer"
+             [class.cursor-default]="logoUploading || logoDeleting"
+             (click)="!logoUploading && !logoDeleting && logoInput.click()">
+          <img *ngIf="logoUrl && !logoUploading && !logoDeleting"
+               [src]="logoUrl" alt="Company logo"
+               class="w-full h-full rounded-full object-cover" />
+          <div *ngIf="!logoUrl && !logoUploading && !logoDeleting"
+               class="w-full h-full rounded-full bg-blue-100 flex items-center justify-center text-2xl font-bold text-blue-400">
+            {{ company.shortName?.charAt(0) || company.name?.charAt(0) || 'C' }}
+          </div>
+          <div *ngIf="logoUploading || logoDeleting"
+               class="absolute inset-0 rounded-full bg-white/60 flex items-center justify-center">
+            <mat-spinner diameter="32"></mat-spinner>
+          </div>
+          <div *ngIf="!logoUploading && !logoDeleting"
+               class="absolute inset-0 rounded-full flex items-center justify-center transition-all duration-200 group-hover:bg-black/40">
+            <mat-icon class="text-white opacity-0 group-hover:opacity-100 transition-opacity duration-200">photo_camera</mat-icon>
+          </div>
+        </div>
+        <button *ngIf="logoUrl && !logoUploading && !logoDeleting"
+                class="text-xs text-red-500 hover:text-red-700 underline bg-transparent border-none cursor-pointer p-0"
+                (click)="deleteLogo()">
+          Remove
+        </button>
+      </div>
+      <input #logoInput type="file" accept="image/jpeg,image/png,image/webp" class="hidden"
+             (change)="onLogoSelected($event)" />
+
+      <!-- Company name & meta -->
+      <div class="flex-1 min-w-0">
+        <h3 class="text-xl font-bold text-gray-800">{{ company.name }}</h3>
+        <p class="text-gray-500 text-sm mt-1" *ngIf="company.shortName">
+          Short name: <span class="font-medium text-gray-700">{{ company.shortName }}</span>
+        </p>
+        <p class="text-gray-500 text-sm" *ngIf="company.principalName">
+          Principal: <span class="font-medium text-gray-700">{{ company.principalName }}</span>
+        </p>
+      </div>
+
+      <div class="flex-shrink-0">
+        <button mat-raised-button color="primary" (click)="navigateToEdit()">
+          <mat-icon>edit</mat-icon>
+          Edit
+        </button>
+      </div>
+    </div>
+
+    <!-- Info Cards -->
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+
+      <!-- General Information -->
+      <div class="bg-white rounded-lg shadow-md p-6">
+        <h4 class="text-base font-semibold text-gray-700 mb-4 flex items-center gap-2">
+          <mat-icon class="text-blue-400">business</mat-icon>
+          General Information
+        </h4>
+        <div class="space-y-3">
+          <div class="flex gap-3 py-2 border-b border-gray-100">
+            <span class="text-gray-500 w-36 flex-shrink-0 text-sm">Company Name</span>
+            <span class="text-gray-800 text-sm font-medium">{{ company.name || '—' }}</span>
+          </div>
+          <div class="flex gap-3 py-2 border-b border-gray-100">
+            <span class="text-gray-500 w-36 flex-shrink-0 text-sm">Short Name</span>
+            <span class="text-gray-800 text-sm font-medium">{{ company.shortName || '—' }}</span>
+          </div>
+          <div class="flex gap-3 py-2 border-b border-gray-100">
+            <span class="text-gray-500 w-36 flex-shrink-0 text-sm">Principal</span>
+            <span class="text-gray-800 text-sm font-medium">{{ company.principalName || '—' }}</span>
+          </div>
+          <div class="flex gap-3 py-2">
+            <span class="text-gray-500 w-36 flex-shrink-0 text-sm">Address</span>
+            <span class="text-gray-800 text-sm font-medium">{{ company.address || '—' }}</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Technical Settings -->
+      <div class="bg-white rounded-lg shadow-md p-6">
+        <h4 class="text-base font-semibold text-gray-700 mb-4 flex items-center gap-2">
+          <mat-icon class="text-purple-400">settings</mat-icon>
+          Technical Settings
+        </h4>
+        <div class="space-y-3">
+          <div class="flex gap-3 py-2 border-b border-gray-100">
+            <span class="text-gray-500 w-36 flex-shrink-0 text-sm">Domain Name</span>
+            <span class="text-gray-800 text-sm font-medium">{{ company.domainName || '—' }}</span>
+          </div>
+          <div class="flex gap-3 py-2 border-b border-gray-100">
+            <span class="text-gray-500 w-36 flex-shrink-0 text-sm">Teacher Code</span>
+            <span class="text-gray-800 text-sm font-medium">{{ company.teacherShortCode || '—' }}</span>
+          </div>
+          <div class="flex gap-3 py-2">
+            <span class="text-gray-500 w-36 flex-shrink-0 text-sm">Student Code</span>
+            <span class="text-gray-800 text-sm font-medium">{{ company.studentShortCode || '—' }}</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+  </ng-container>
+
+</div>

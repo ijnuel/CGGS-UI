@@ -11,6 +11,7 @@ import { ProfileImageFacade } from '../../../../store/profile-image/profile-imag
 import { RoleFacade } from '../../../../store/role/role.facade';
 import { StaffListInterface, DropdownListInterface, ClassSubjectListInterface, RoleWithPermissionsInterface } from '../../../../types';
 import { RoleDialogComponent, RoleDialogData } from '../../../../shared/role-dialog/role-dialog.component';
+import { ConfirmDialogComponent } from '../../../../shared/confirm-dialog/confirm-dialog.component';
 
 @Component({
   selector: 'app-view-staff',
@@ -108,7 +109,20 @@ export class ViewStaffComponent implements OnInit, OnDestroy {
 
   deletePhoto() {
     if (!this.staffId) return;
-    this.profileImageFacade.deleteProfileImage('Staff', this.staffId);
+    const dialogRef = this.dialog.open(ConfirmDialogComponent, {
+      width: '400px',
+      data: {
+        title: 'Remove Photo',
+        message: 'Are you sure you want to remove this photo?',
+        confirmText: 'Remove',
+        cancelText: 'Cancel',
+      },
+    });
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.profileImageFacade.deleteProfileImage('Staff', this.staffId);
+      }
+    });
   }
 
   onPhotoSelected(event: Event) {

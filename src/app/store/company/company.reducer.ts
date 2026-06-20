@@ -80,6 +80,7 @@ export const reducer = createReducer(
   // Get By Id
   on(CompanyAction.getCompanyById, (state) => ({
     ...state,
+    companyById: null,
     loading: true,
     error: null,
     createSuccess: false,

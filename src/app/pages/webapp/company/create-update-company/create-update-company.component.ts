@@ -26,6 +26,12 @@ export class CreateUpdateCompanyComponent implements OnInit, OnDestroy {
 
     formGroup: FormGroup<{
         name: FormControl;
+        shortName: FormControl;
+        domainName: FormControl;
+        address: FormControl;
+        principalName: FormControl;
+        teacherShortCode: FormControl;
+        studentShortCode: FormControl;
     }>;
 
     get formControl() {
@@ -50,6 +56,12 @@ export class CreateUpdateCompanyComponent implements OnInit, OnDestroy {
 
         this.formGroup = this.fb.group({
             name: ['', [Validators.required, Validators.maxLength(255)]],
+            shortName: ['', [Validators.maxLength(50)]],
+            domainName: ['', [Validators.maxLength(255)]],
+            address: ['', [Validators.maxLength(500)]],
+            principalName: ['', [Validators.maxLength(255)]],
+            teacherShortCode: ['', [Validators.maxLength(20)]],
+            studentShortCode: ['', [Validators.maxLength(20)]],
         });
     }
 
@@ -61,7 +73,13 @@ export class CreateUpdateCompanyComponent implements OnInit, OnDestroy {
             this.companyById$.pipe(takeUntil(this.unsubscribe$)).subscribe((data) => {
                 if (data) {
                     this.formGroup.patchValue({
-                        name: data.name!
+                        name: data.name ?? '',
+                        shortName: data.shortName ?? '',
+                        domainName: data.domainName ?? '',
+                        address: data.address ?? '',
+                        principalName: data.principalName ?? '',
+                        teacherShortCode: data.teacherShortCode ?? '',
+                        studentShortCode: data.studentShortCode ?? '',
                     });
                 }
             });

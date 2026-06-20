@@ -19,6 +19,7 @@ import {
 } from '../../../../types';
 import { RoleDialogComponent, RoleDialogData } from '../../../../shared/role-dialog/role-dialog.component';
 import { StudentFeesDialogComponent, StudentFeesDialogData, FeeGroup } from './student-fees-dialog.component';
+import { ConfirmDialogComponent } from '../../../../shared/confirm-dialog/confirm-dialog.component';
 import { getClassLabel } from '../../../../services/helper.service';
 
 @Component({
@@ -272,7 +273,20 @@ export class ViewStudentComponent implements OnInit, OnDestroy {
 
   deletePhoto() {
     if (!this.studentId) return;
-    this.profileImageFacade.deleteProfileImage('Student', this.studentId);
+    const dialogRef = this.dialog.open(ConfirmDialogComponent, {
+      width: '400px',
+      data: {
+        title: 'Remove Photo',
+        message: 'Are you sure you want to remove this photo?',
+        confirmText: 'Remove',
+        cancelText: 'Cancel',
+      },
+    });
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.profileImageFacade.deleteProfileImage('Student', this.studentId);
+      }
+    });
   }
 
   onPhotoSelected(event: Event) {

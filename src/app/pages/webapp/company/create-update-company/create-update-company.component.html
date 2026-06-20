@@ -13,22 +13,106 @@
 
   <div class="mt-8">
     <form [formGroup]="formGroup">
+
       <div class="grid grid-cols-2 gap-x-4 mt-2">
         <div>
           <mat-form-field class="form-input">
-            <mat-label>Name</mat-label>
+            <mat-label>Company Name</mat-label>
             <input
               type="text"
               autocomplete="off"
               matInput
               [formControl]="formControl.name"
             />
-            <mat-error>
-              {{ getErrorMessage("name") }}
-            </mat-error>
+            <mat-error>{{ getErrorMessage("name") }}</mat-error>
+          </mat-form-field>
+        </div>
+
+        <div>
+          <mat-form-field class="form-input">
+            <mat-label>Short Name</mat-label>
+            <input
+              type="text"
+              autocomplete="off"
+              matInput
+              [formControl]="formControl.shortName"
+            />
+            <mat-error>{{ getErrorMessage("shortName") }}</mat-error>
           </mat-form-field>
         </div>
       </div>
+
+      <div class="grid grid-cols-2 gap-x-4 mt-2">
+        <div>
+          <mat-form-field class="form-input">
+            <mat-label>Principal Name</mat-label>
+            <input
+              type="text"
+              autocomplete="off"
+              matInput
+              [formControl]="formControl.principalName"
+            />
+            <mat-error>{{ getErrorMessage("principalName") }}</mat-error>
+          </mat-form-field>
+        </div>
+
+        <div>
+          <mat-form-field class="form-input">
+            <mat-label>Domain Name</mat-label>
+            <input
+              type="text"
+              autocomplete="off"
+              matInput
+              [formControl]="formControl.domainName"
+            />
+            <mat-error>{{ getErrorMessage("domainName") }}</mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-2 gap-x-4 mt-2">
+        <div>
+          <mat-form-field class="form-input">
+            <mat-label>Teacher Short Code</mat-label>
+            <input
+              type="text"
+              autocomplete="off"
+              matInput
+              [formControl]="formControl.teacherShortCode"
+            />
+            <mat-error>{{ getErrorMessage("teacherShortCode") }}</mat-error>
+          </mat-form-field>
+        </div>
+
+        <div>
+          <mat-form-field class="form-input">
+            <mat-label>Student Short Code</mat-label>
+            <input
+              type="text"
+              autocomplete="off"
+              matInput
+              [formControl]="formControl.studentShortCode"
+            />
+            <mat-error>{{ getErrorMessage("studentShortCode") }}</mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 gap-x-4 mt-2">
+        <div>
+          <mat-form-field class="form-input">
+            <mat-label>Address</mat-label>
+            <textarea
+              matInput
+              rows="3"
+              autocomplete="off"
+              [formControl]="formControl.address"
+            ></textarea>
+            <mat-error>{{ getErrorMessage("address") }}</mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+
     </form>
 
     <div class="actions-btn flex justify-end mt-10 gap-5 form-container mx-auto px-3">

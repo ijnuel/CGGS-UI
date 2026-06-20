@@ -2,6 +2,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { BehaviorSubject, Observable, Subject, takeUntil } from 'rxjs';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
+import { MatDialog } from '@angular/material/dialog';
 import { AuthFacade } from '../../../store/auth/auth.facade';
 import { AdministratorFacade } from '../../../store/administrator/administrator.facade';
 import { StaffFacade } from '../../../store/staff/staff.facade';
@@ -10,6 +11,7 @@ import { SharedFacade } from '../../../store/shared/shared.facade';
 import { GlobalLoadingFacade } from '../../../store/global-loading/global-loading.facade';
 import { ProfileImageFacade } from '../../../store/profile-image/profile-image.facade';
 import { ProfileImageEntityType } from '../../../store/profile-image/profile-image.actions';
+import { ConfirmDialogComponent } from '../../../shared/confirm-dialog/confirm-dialog.component';
 import { getErrorMessageHelper, initUserProfileForm } from '../../../services/helper.service';
 import { CurrentUserInterface } from '../../../types/user';
 import { UserRolesEnum } from '../../../types/auth';
@@ -67,6 +69,7 @@ export class UpdateProfileComponent implements OnInit, OnDestroy {
   constructor(
     private fb: FormBuilder,
     private router: Router,
+    private dialog: MatDialog,
     private authFacade: AuthFacade,
     private administratorFacade: AdministratorFacade,
     private staffFacade: StaffFacade,
@@ -215,7 +218,20 @@ export class UpdateProfileComponent implements OnInit, OnDestroy {
 
   deletePhoto() {
     if (!this.entityId || !this.entityType) return;
-    this.profileImageFacade.deleteProfileImage(this.entityType, this.entityId);
+    const dialogRef = this.dialog.open(ConfirmDialogComponent, {
+      width: '400px',
+      data: {
+        title: 'Remove Photo',
+        message: 'Are you sure you want to remove this photo?',
+        confirmText: 'Remove',
+        cancelText: 'Cancel',
+      },
+    });
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.profileImageFacade.deleteProfileImage(this.entityType!, this.entityId!);
+      }
+    });
   }
 
   onPhotoSelected(event: Event) {

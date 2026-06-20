@@ -1,6 +1,6 @@
 import { createAction, props } from '@ngrx/store';
 
-export type ProfileImageEntityType = 'Administrator' | 'Staff' | 'Student';
+export type ProfileImageEntityType = 'Administrator' | 'Staff' | 'Student' | 'Company';
 
 // Upload — HTTP is handled in the facade to avoid putting a File object in the store.
 // Only serializable state-transition actions go through the reducer/effects.

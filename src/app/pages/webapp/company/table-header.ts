@@ -10,6 +10,22 @@ export const tableHeader: TableHeaderInterface[] = [
     align: 'left',
   },
   {
+    key: 'shortName',
+    type: 'text',
+    name: 'Short Name',
+    sortable: true,
+    filterable: true,
+    align: 'left',
+  },
+  {
+    key: 'principalName',
+    type: 'text',
+    name: 'Principal',
+    sortable: true,
+    filterable: true,
+    align: 'left',
+  },
+  {
     key: 'address',
     type: 'text',
     name: 'Address',
@@ -18,19 +34,11 @@ export const tableHeader: TableHeaderInterface[] = [
     align: 'left',
   },
   {
-    key: 'phone',
+    key: 'domainName',
     type: 'text',
-    name: 'Phone Number',
+    name: 'Domain',
     sortable: true,
     filterable: true,
     align: 'left',
   },
-  {
-    key: 'email',
-    type: 'text',
-    name: 'Email',
-    sortable: true,
-    filterable: true,
-    align: 'left',
-  }
 ];
