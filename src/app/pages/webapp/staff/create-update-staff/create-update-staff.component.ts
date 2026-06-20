@@ -107,7 +107,7 @@ export class CreateUpdateStaffComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.familyFacade.getFamilyAll();
-    this.classFacade.getClassAll();
+    this.classFacade.getClassAll({ nestedProperties: [{ name: 'classLevel', innerNestedProperties: [{ name: 'programmeType' }] }] });
     initUserProfileForm(this.sharedFacade, this.formControl, this.unsubscribe$, this.selectedCountryStateList$, this.selectedStateLgaList$);
     const staffId = this.route.snapshot.params['id'];
     if (staffId) {

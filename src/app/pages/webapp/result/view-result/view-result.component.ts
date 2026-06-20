@@ -13,6 +13,7 @@ import {
   ToastNotificationService,
   NotificationTypeEnums,
 } from '../../../../services/toast-notification.service';
+import { getClassLabel } from '../../../../services/helper.service';
 
 @Component({
   selector: 'app-view-result',
@@ -54,10 +55,7 @@ export class ViewResultComponent implements OnInit, OnDestroy {
   }
 
   getClassName(item: ClassListInterface): string {
-    const programmeType = item?.classLevel?.programmeType?.name ?? '';
-    const level = item?.classLevel?.level ?? '';
-    const name = item?.name ?? '';
-    return [programmeType, level, name].filter(Boolean).join(' ');
+    return getClassLabel(item) || item?.name || '';
   }
 
   ngOnInit(): void {

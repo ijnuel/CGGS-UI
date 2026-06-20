@@ -1,9 +1,11 @@
 import { Injectable } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { Observable } from 'rxjs';
+import { combineLatest, Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 import {
   ClassListInterface,
   ClassFormInterface,
+  ClassLevelListInterface,
   PageQueryInterface,
   PaginatedResponseInterface,
   QueryInterface,
@@ -23,6 +25,7 @@ import {
   selectClassDeleteSuccess,
 } from './class.selector';
 import { ClassState } from './class.reducer';
+import { ClassLevelFacade } from '../class-level/class-level.facade';
 
 @Injectable({
   providedIn: 'root',
@@ -46,11 +49,62 @@ export class ClassFacade {
     searchText: ''
   };
 
-  constructor(private store: Store<{ class: ClassState }>) {
-    this.classList$ = this.store.select(selectClassList);
-    this.classAll$ = this.store.select(selectClassAll);
-    this.classByProperties$ = this.store.select(selectClassByProperties);
-    this.classById$ = this.store.select(selectClassById);
+  constructor(
+    private store: Store<{ class: ClassState }>,
+    private classLevelFacade: ClassLevelFacade,
+  ) {
+    // Backend's Class endpoints return classLevel: null even when nestedProperties
+    // is sent. Hydrate classLevel in the facade from the classLevelAll$ store so
+    // every consumer (dropdowns, tables) sees the populated object.
+    const hydrate = <T extends ClassListInterface | null | undefined>(
+      cls: T,
+      classLevelMap: Map<string, ClassLevelListInterface>,
+    ): T => {
+      if (!cls) return cls;
+      return {
+        ...cls,
+        classLevel: cls.classLevel ?? (cls.classLevelId ? classLevelMap.get(cls.classLevelId) : undefined),
+      } as T;
+    };
+
+    const classLevelMap$ = this.classLevelFacade.classLevelAll$.pipe(
+      map(levels => new Map<string, ClassLevelListInterface>(
+        (levels ?? []).map(l => [l.id, l])
+      ))
+    );
+
+    this.classList$ = combineLatest([
+      this.store.select(selectClassList),
+      classLevelMap$,
+    ]).pipe(
+      map(([list, classLevelMap]) => {
+        if (!list) return list;
+        return { ...list, data: list.data.map(c => hydrate(c, classLevelMap)) };
+      })
+    );
+    this.classAll$ = combineLatest([
+      this.store.select(selectClassAll),
+      classLevelMap$,
+    ]).pipe(
+      map(([classes, classLevelMap]) =>
+        classes ? classes.map(c => hydrate(c, classLevelMap)) : classes
+      )
+    );
+    this.classByProperties$ = combineLatest([
+      this.store.select(selectClassByProperties),
+      classLevelMap$,
+    ]).pipe(
+      map(([classes, classLevelMap]) =>
+        classes ? classes.map(c => hydrate(c, classLevelMap)) : classes
+      )
+    );
+    this.classById$ = combineLatest([
+      this.store.select(selectClassById),
+      classLevelMap$,
+    ]).pipe(
+      map(([cls, classLevelMap]) => hydrate(cls, classLevelMap))
+    );
+
     this.exists$ = this.store.select(selectExists);
     this.count$ = this.store.select(selectCount);
     this.loading$ = this.store.select(selectClassLoading);
@@ -58,6 +112,12 @@ export class ClassFacade {
     this.createSuccess$ = this.store.select(selectClassCreateSuccess);
     this.deleteSuccess$ = this.store.select(selectClassDeleteSuccess);
     this.updateSuccess$ = this.store.select(selectClassUpdateSuccess);
+
+    // Ensure class levels (with programmeType) are always loaded so hydration
+    // produces labels with the full prefix/level even on first load.
+    this.classLevelFacade.getClassLevelAll({
+      nestedProperties: [{ name: 'programmeType' }],
+    });
   }
 
   getClassList(pageQuery: PageQueryInterface): void {
