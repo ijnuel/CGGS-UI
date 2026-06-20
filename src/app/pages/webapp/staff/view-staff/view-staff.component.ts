@@ -152,10 +152,9 @@ export class ViewStaffComponent implements OnInit, OnDestroy {
   }
 
   getClassName(cs: ClassSubjectListInterface): string {
-    const programmeType = cs.class?.classLevel?.programmeType?.name ?? '';
-    const level = cs.class?.classLevel?.level ?? '';
-    const name = cs.class?.name ?? cs.classId;
-    return [programmeType, level, name].filter(Boolean).join(' ');
+    const cl = cs.class?.classLevel;
+    const parts = [cl?.name ?? '', cl?.level != null ? String(cl.level) : '', cs.class?.name ?? ''].filter(Boolean);
+    return parts.join(' ') || cs.classId;
   }
 
   goBack(): void { this.location.back(); }

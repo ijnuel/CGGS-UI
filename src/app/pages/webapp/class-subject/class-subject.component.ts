@@ -72,7 +72,7 @@ export class ClassSubjectComponent implements OnDestroy {
       width: '400px',
       data: {
         title: 'Delete Class Subject',
-        message: `Are you sure you want to delete "${row.subject?.name!}"?`,
+        message: `Are you sure you want to delete "${row.subject?.name ?? row.subjectId}"?`,
         confirmText: 'Delete',
         cancelText: 'Cancel'
       }

@@ -316,10 +316,7 @@ export class ViewStudentComponent implements OnInit, OnDestroy {
   }
 
   getClassName(sc: StudentClassListInterface): string {
-    const programmeType = sc.class?.classLevel?.programmeType?.name ?? '';
-    const level = sc.class?.classLevel?.level ?? '';
-    const name = sc.class?.name ?? sc.classId;
-    return [programmeType, level, name].filter(Boolean).join(' ');
+    return getClassLabel(sc.class) || sc.class?.name || sc.classId;
   }
 
   getFeeTotal(fee: FeeListInterface): number {

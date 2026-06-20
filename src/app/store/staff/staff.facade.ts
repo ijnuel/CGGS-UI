@@ -1,9 +1,12 @@
 import { Injectable } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { Observable } from 'rxjs';
+import { combineLatest, Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 import {
   StaffListInterface,
   StaffFormInterface,
+  ClassLevelListInterface,
+  SubjectListInterface,
   PageQueryInterface,
   PaginatedResponseInterface,
   QueryInterface,
@@ -22,6 +25,8 @@ import {
   selectStaffUpdateSuccess,
 } from './staff.selector';
 import { StaffState } from './staff.reducer';
+import { ClassLevelFacade } from '../class-level/class-level.facade';
+import { SubjectFacade } from '../subject/subject.facade';
 
 @Injectable({
   providedIn: 'root',
@@ -44,17 +49,87 @@ export class StaffFacade {
     searchText: ''
   };
 
-  constructor(private store: Store<{ staff: StaffState }>) {
-    this.staffList$ = this.store.select(selectStaffList);
-    this.staffAll$ = this.store.select(selectStaffAll);
-    this.staffByProperties$ = this.store.select(selectStaffByProperties);
-    this.staffById$ = this.store.select(selectStaffById);
+  constructor(
+    private store: Store<{ staff: StaffState }>,
+    private classLevelFacade: ClassLevelFacade,
+    private subjectFacade: SubjectFacade,
+  ) {
+    const classLevelMap$ = this.classLevelFacade.classLevelAll$.pipe(
+      map(levels => new Map<string, ClassLevelListInterface>(
+        (levels ?? []).map(l => [l.id, l])
+      ))
+    );
+
+    const subjectMap$ = this.subjectFacade.subjectAll$.pipe(
+      map(subjects => new Map<string, SubjectListInterface>(
+        (subjects ?? []).map(s => [s.id, s])
+      ))
+    );
+
+    const hydrateStaff = (
+      staff: StaffListInterface,
+      classLevelMap: Map<string, ClassLevelListInterface>,
+      subjectMap: Map<string, SubjectListInterface>,
+    ): StaffListInterface => ({
+      ...staff,
+      classSubjects: (staff.classSubjects ?? []).map(cs => ({
+        ...cs,
+        subject: cs.subject ?? subjectMap.get(cs.subjectId),
+        class: cs.class ? {
+          ...cs.class,
+          classLevel: cs.class.classLevel ?? (cs.class.classLevelId ? classLevelMap.get(cs.class.classLevelId) : undefined),
+        } : cs.class,
+      })),
+    });
+
+    const maps$ = combineLatest([classLevelMap$, subjectMap$]);
+
+    this.staffList$ = combineLatest([
+      this.store.select(selectStaffList),
+      maps$,
+    ]).pipe(
+      map(([list, [classLevelMap, subjectMap]]) => {
+        if (!list) return list;
+        return { ...list, data: list.data.map(s => hydrateStaff(s, classLevelMap, subjectMap)) };
+      })
+    );
+
+    this.staffAll$ = combineLatest([
+      this.store.select(selectStaffAll),
+      maps$,
+    ]).pipe(
+      map(([staff, [classLevelMap, subjectMap]]) =>
+        staff ? staff.map(s => hydrateStaff(s, classLevelMap, subjectMap)) : staff
+      )
+    );
+
+    this.staffByProperties$ = combineLatest([
+      this.store.select(selectStaffByProperties),
+      maps$,
+    ]).pipe(
+      map(([staff, [classLevelMap, subjectMap]]) =>
+        staff ? staff.map(s => hydrateStaff(s, classLevelMap, subjectMap)) : staff
+      )
+    );
+
+    this.staffById$ = combineLatest([
+      this.store.select(selectStaffById),
+      maps$,
+    ]).pipe(
+      map(([staff, [classLevelMap, subjectMap]]) =>
+        staff ? hydrateStaff(staff, classLevelMap, subjectMap) : staff
+      )
+    );
+
     this.exists$ = this.store.select(selectExists);
     this.count$ = this.store.select(selectCount);
     this.loading$ = this.store.select(selectStaffLoading);
     this.error$ = this.store.select(selectStaffError);
     this.createSuccess$ = this.store.select(selectStaffCreateSuccess);
     this.updateSuccess$ = this.store.select(selectStaffUpdateSuccess);
+
+    this.classLevelFacade.getClassLevelAll({ nestedProperties: [{ name: 'programmeType' }] });
+    this.subjectFacade.getSubjectAll();
   }
 
   getStaffList(pageQuery: PageQueryInterface): void {

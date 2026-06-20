@@ -1,9 +1,12 @@
 import { Injectable } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { Observable } from 'rxjs';
+import { combineLatest, Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 import {
   StudentListInterface,
   StudentFormInterface,
+  ClassLevelListInterface,
+  SessionListInterface,
   PageQueryInterface,
   PaginatedResponseInterface,
   QueryInterface,
@@ -23,6 +26,8 @@ import {
   selectStudentUpdateSuccess,
 } from './student.selector';
 import { StudentState } from './student.reducer';
+import { ClassLevelFacade } from '../class-level/class-level.facade';
+import { SessionFacade } from '../session/session.facade';
 
 @Injectable({
   providedIn: 'root',
@@ -46,18 +51,103 @@ export class StudentFacade {
     searchText: ''
   };
 
-  constructor(private store: Store<{ student: StudentState }>) {
-    this.studentList$ = this.store.select(selectStudentList);
-    this.studentAll$ = this.store.select(selectStudentAll);
-    this.studentsWithoutClass$ = this.store.select(selectStudentsWithoutClass);
-    this.studentByProperties$ = this.store.select(selectStudentByProperties);
-    this.studentById$ = this.store.select(selectStudentById);
+  constructor(
+    private store: Store<{ student: StudentState }>,
+    private classLevelFacade: ClassLevelFacade,
+    private sessionFacade: SessionFacade,
+  ) {
+    const classLevelMap$ = this.classLevelFacade.classLevelAll$.pipe(
+      map(levels => new Map<string, ClassLevelListInterface>(
+        (levels ?? []).map(l => [l.id, l])
+      ))
+    );
+
+    const sessionMap$ = this.sessionFacade.sessionAll$.pipe(
+      map(sessions => new Map<string, SessionListInterface>(
+        (sessions ?? []).map(s => [s.id, s])
+      ))
+    );
+
+    const hydrateStudent = (
+      student: StudentListInterface,
+      classLevelMap: Map<string, ClassLevelListInterface>,
+      sessionMap: Map<string, SessionListInterface>,
+    ): StudentListInterface => ({
+      ...student,
+      studentClasses: (student.studentClasses ?? []).map(sc => ({
+        ...sc,
+        session: sc.session ?? sessionMap.get(sc.sessionId),
+        class: sc.class ? {
+          ...sc.class,
+          classLevel: sc.class.classLevel ?? (sc.class.classLevelId ? classLevelMap.get(sc.class.classLevelId) : undefined),
+        } : sc.class,
+        fees: (sc.fees ?? []).map((fee: any) => ({
+          ...fee,
+          schoolTermSession: fee.schoolTermSession ? {
+            ...fee.schoolTermSession,
+            session: fee.schoolTermSession.session ?? sessionMap.get(fee.schoolTermSession.sessionId),
+          } : fee.schoolTermSession,
+        })),
+      })),
+    });
+
+    const maps$ = combineLatest([classLevelMap$, sessionMap$]);
+
+    this.studentList$ = combineLatest([
+      this.store.select(selectStudentList),
+      maps$,
+    ]).pipe(
+      map(([list, [classLevelMap, sessionMap]]) => {
+        if (!list) return list;
+        return { ...list, data: list.data.map(s => hydrateStudent(s, classLevelMap, sessionMap)) };
+      })
+    );
+
+    this.studentAll$ = combineLatest([
+      this.store.select(selectStudentAll),
+      maps$,
+    ]).pipe(
+      map(([students, [classLevelMap, sessionMap]]) =>
+        students ? students.map(s => hydrateStudent(s, classLevelMap, sessionMap)) : students
+      )
+    );
+
+    this.studentsWithoutClass$ = combineLatest([
+      this.store.select(selectStudentsWithoutClass),
+      maps$,
+    ]).pipe(
+      map(([students, [classLevelMap, sessionMap]]) =>
+        students ? students.map(s => hydrateStudent(s, classLevelMap, sessionMap)) : students
+      )
+    );
+
+    this.studentByProperties$ = combineLatest([
+      this.store.select(selectStudentByProperties),
+      maps$,
+    ]).pipe(
+      map(([students, [classLevelMap, sessionMap]]) =>
+        students ? students.map(s => hydrateStudent(s, classLevelMap, sessionMap)) : students
+      )
+    );
+
+    this.studentById$ = combineLatest([
+      this.store.select(selectStudentById),
+      maps$,
+    ]).pipe(
+      map(([student, [classLevelMap, sessionMap]]) =>
+        student ? hydrateStudent(student, classLevelMap, sessionMap) : student
+      )
+    );
+
     this.exists$ = this.store.select(selectExists);
     this.count$ = this.store.select(selectCount);
     this.loading$ = this.store.select(selectStudentLoading);
     this.error$ = this.store.select(selectStudentError);
     this.createSuccess$ = this.store.select(selectStudentCreateSuccess);
     this.updateSuccess$ = this.store.select(selectStudentUpdateSuccess);
+
+    this.classLevelFacade.getClassLevelAll({ nestedProperties: [{ name: 'programmeType' }] });
+    this.sessionFacade.getSessionAll();
   }
 
   getStudentList(pageQuery: PageQueryInterface): void {

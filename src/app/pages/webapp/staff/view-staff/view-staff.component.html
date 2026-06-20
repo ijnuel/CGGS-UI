@@ -168,7 +168,7 @@
           <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
             <div *ngFor="let cs of staff.classSubjects"
                  class="border border-gray-100 rounded-lg px-4 py-3">
-              <p class="text-gray-800 text-sm font-medium">{{ cs.subject?.name ?? cs.subjectId }}</p>
+              <p class="text-gray-800 text-sm font-medium">{{ cs.subject?.name }}</p>
               <p class="text-gray-500 text-xs mt-1">{{ getClassName(cs) }}</p>
             </div>
           </div>

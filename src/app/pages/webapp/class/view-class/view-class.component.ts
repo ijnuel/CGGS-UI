@@ -26,45 +26,13 @@ export class ViewClassComponent implements OnInit, OnDestroy {
   allStudents$: Observable<StudentListInterface[] | null>;
   loading$: Observable<boolean>;
   studentClassLoading$: Observable<boolean>;
-  
+
   // Table configuration
   tableHeaderData: TableHeaderInterface[] = [
-    {
-      name: 'Student No',
-      key: 'studentNo',
-      nestedKey: 'student.studentNo',
-      sortable: true,
-      filterable: true,
-      type: 'text',
-      align: 'left'
-    },
-    {
-      name: 'First Name',
-      key: 'firstName',
-      nestedKey: 'student.firstName',
-      sortable: true,
-      filterable: true,
-      type: 'text',
-      align: 'left'
-    },
-    {
-      name: 'Last Name',
-      key: 'lastName',
-      nestedKey: 'student.lastName',
-      sortable: true,
-      filterable: true,
-      type: 'text',
-      align: 'left'
-    },
-    {
-      name: 'Email',
-      key: 'email',
-      nestedKey: 'student.email',
-      sortable: true,
-      filterable: true,
-      type: 'text',
-      align: 'left'
-    }
+    { name: 'Student No', key: 'studentNo', nestedKey: 'student.studentNo', sortable: true, filterable: true, type: 'text', align: 'left' },
+    { name: 'First Name', key: 'firstName', nestedKey: 'student.firstName', sortable: true, filterable: true, type: 'text', align: 'left' },
+    { name: 'Last Name', key: 'lastName', nestedKey: 'student.lastName', sortable: true, filterable: true, type: 'text', align: 'left' },
+    { name: 'Email', key: 'email', nestedKey: 'student.email', sortable: true, filterable: true, type: 'text', align: 'left' },
   ];
 
   // Component state
@@ -130,7 +98,6 @@ export class ViewClassComponent implements OnInit, OnDestroy {
       });
     }
 
-    // Load sessions
     this.sessionFacade.getSessionAll();
 
     this.sessions$.pipe(takeUntil(this.destroy$)).subscribe((sessions) => {

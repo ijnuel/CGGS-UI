@@ -6,6 +6,7 @@ import { SubjectListInterface } from "./subject";
 
 export interface ClassSubjectListInterface {
     id: string;
+    name?: string;
     isActive: boolean;
     classId: string;
     subjectId: string;
