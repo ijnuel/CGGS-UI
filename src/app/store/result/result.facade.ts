@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
-import { StudentAssessmentScoreInterface } from '../../types/result';
+import { StudentAssessmentScoreInterface, PromotionResultInterface } from '../../types/result';
 import { ResultState } from './result.reducer';
 import * as ResultActions from './result.actions';
 import * as ResultSelectors from './result.selector';
@@ -61,6 +61,18 @@ export class ResultFacade {
     return this.store.select(ResultSelectors.selectGenerateClassResultError);
   }
 
+  get promotingStudents$(): Observable<boolean> {
+    return this.store.select(ResultSelectors.selectPromotingStudents);
+  }
+
+  get promotionResult$(): Observable<PromotionResultInterface | null> {
+    return this.store.select(ResultSelectors.selectPromotionResult);
+  }
+
+  get promotionError$(): Observable<string | null> {
+    return this.store.select(ResultSelectors.selectPromotionError);
+  }
+
   // Actions
   clearResultMarkSheet(): void {
     this.store.dispatch(ResultActions.clearResultMarkSheet());
@@ -97,4 +109,12 @@ export class ResultFacade {
   clearGeneratedBroadSheet(): void {
     this.store.dispatch(ResultActions.clearGeneratedBroadSheet());
   }
-} 
+
+  promoteStudents(classId: string, sessionId: string): void {
+    this.store.dispatch(ResultActions.promoteStudents({ classId, sessionId }));
+  }
+
+  clearPromotionResult(): void {
+    this.store.dispatch(ResultActions.clearPromotionResult());
+  }
+}

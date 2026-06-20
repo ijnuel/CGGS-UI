@@ -104,6 +104,10 @@ export class ProgramSetupLevelPanelComponent {
     return this.expandedChildPanels.has(itemId);
   }
 
+  getSubtitle(item: any): string | null {
+    return this.config.getSubtitle ? this.config.getSubtitle(item) : null;
+  }
+
   getFormControl(key: string): FormControl {
     return this.config.formGroup?.get(key) as FormControl;
   }

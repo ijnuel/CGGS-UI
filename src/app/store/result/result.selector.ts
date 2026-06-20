@@ -62,3 +62,18 @@ export const selectGenerateClassResultError = createSelector(
   selectResultState,
   (state) => state.generateClassResultError
 );
+
+export const selectPromotingStudents = createSelector(
+  selectResultState,
+  (state) => state.promotingStudents
+);
+
+export const selectPromotionResult = createSelector(
+  selectResultState,
+  (state) => state.promotionResult
+);
+
+export const selectPromotionError = createSelector(
+  selectResultState,
+  (state) => state.promotionError
+);

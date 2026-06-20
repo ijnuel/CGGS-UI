@@ -144,6 +144,10 @@
           <div class="min-w-0 flex-1">
             <p class="font-semibold text-gray-800 truncate">{{ getItemDisplayName(item) }}</p>
             <p class="text-sm text-gray-400 mt-0.5 truncate">{{ getItemSubtitle(item) }}</p>
+            <p *ngIf="currentLevel === ProgramSetupLevel.CLASSARM && getNextClassLabel(item)"
+               class="text-xs text-indigo-500 mt-1 truncate">
+              Next: {{ getNextClassLabel(item) }}
+            </p>
           </div>
           <div class="flex items-center flex-shrink-0 -mt-1" (click)="$event.stopPropagation()">
             <button mat-icon-button *ngIf="currentLevel !== ProgramSetupLevel.PROGRAMTYPE"

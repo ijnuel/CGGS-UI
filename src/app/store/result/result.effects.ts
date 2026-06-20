@@ -4,7 +4,7 @@ import { of } from 'rxjs';
 import { map, mergeMap, catchError, retry } from 'rxjs/operators';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { environment } from '../../../environments/environment';
-import { StudentAssessmentScoreInterface } from '../../types/result';
+import { StudentAssessmentScoreInterface, PromotionResultInterface } from '../../types/result';
 import { GenericResponseInterface } from '../../types';
 import * as ResultActions from './result.actions';
 
@@ -124,6 +124,30 @@ export class ResultEffect {
             map((blob) => ResultActions.generateBroadSheetSuccess({ payload: blob })),
             catchError((error) =>
               of(ResultActions.generateBroadSheetFail({ error: error?.message ?? String(error) }))
+            )
+          );
+      })
+    )
+  );
+
+  promoteStudents$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(ResultActions.promoteStudents),
+      mergeMap(({ classId, sessionId }) => {
+        const params = new HttpParams()
+          .set('classId', classId)
+          .set('sessionId', sessionId);
+
+        return this.http
+          .post<GenericResponseInterface<PromotionResultInterface>>(
+            `${environment.baseUrl}/Result/PromoteStudents`,
+            null,
+            { params, withCredentials: true }
+          )
+          .pipe(
+            map((response) => ResultActions.promoteStudentsSuccess({ payload: response })),
+            catchError((error) =>
+              of(ResultActions.promoteStudentsFail({ error: error?.error?.message ?? error?.message ?? String(error) }))
             )
           );
       })

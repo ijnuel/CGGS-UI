@@ -25,4 +25,12 @@ export default [
     roles: [UserRolesEnum.Student],
     url: '/app/result/my-result'
   },
+  {
+    name: 'Promote Students',
+    icon: 'assets/icons/result-icon.svg',
+    matIcon: 'trending_up',
+    description: 'Promote or retain students based on session average scores',
+    roles: [UserRolesEnum.SuperAdmin, UserRolesEnum.Admin],
+    url: '/app/result/promote'
+  },
 ];

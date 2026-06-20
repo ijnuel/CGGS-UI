@@ -1,5 +1,5 @@
 import { createAction, props } from '@ngrx/store';
-import { StudentAssessmentScoreInterface, ResultMarkSheetFormInterface } from '../../types/result';
+import { StudentAssessmentScoreInterface, ResultMarkSheetFormInterface, PromotionResultInterface } from '../../types/result';
 import { GenericResponseInterface } from '../../types';
 
 // Clear Result MarkSheet
@@ -112,4 +112,24 @@ export const generateClassResultFail = createAction(
 
 export const clearGeneratedClassResult = createAction(
   '[Result] Clear Generated Class Result'
+);
+
+// Promote Students
+export const promoteStudents = createAction(
+  '[Result] Promote Students',
+  props<{ classId: string; sessionId: string }>()
+);
+
+export const promoteStudentsSuccess = createAction(
+  '[Result/API] Promote Students Success',
+  props<{ payload: GenericResponseInterface<PromotionResultInterface> }>()
+);
+
+export const promoteStudentsFail = createAction(
+  '[Result/API] Promote Students Fail',
+  props<{ error: string }>()
+);
+
+export const clearPromotionResult = createAction(
+  '[Result] Clear Promotion Result'
 );

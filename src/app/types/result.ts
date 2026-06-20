@@ -82,4 +82,22 @@ export interface ResultMarkSheetFormInterface {
   subjectId: string;
 }
 
-export interface ResultMarkSheetListInterface extends ResultMarkSheetInterface {} 
+export interface ResultMarkSheetListInterface extends ResultMarkSheetInterface {}
+
+export interface StudentPromotionResultInterface {
+  studentId: string;
+  studentName: string;
+  studentNo: string;
+  sessionAverage: number;
+  isPromoted: boolean;
+  newClassId: string;
+  newClassName: string;
+}
+
+export interface PromotionResultInterface {
+  totalStudents: number;
+  promotedCount: number;
+  repeatingCount: number;
+  nextSessionName: string;
+  studentResults: StudentPromotionResultInterface[];
+}

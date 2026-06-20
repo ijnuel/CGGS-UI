@@ -1,8 +1,11 @@
 <mat-accordion>
   <mat-expansion-panel *ngFor="let item of items" (opened)="refresh.emit({ item, level: this.levelType })" (expandedChange)="onPanelToggle(item, $event)">
-    <mat-expansion-panel-header>
+    <mat-expansion-panel-header collapsedHeight="auto" expandedHeight="auto" style="padding: 12px 24px;">
       <mat-panel-title>
-        {{ getName(item) }}
+        <div class="flex flex-col">
+          <span>{{ getName(item) }}</span>
+          <span *ngIf="getSubtitle(item)" class="text-xs text-gray-400 font-normal mt-0.5">{{ getSubtitle(item) }}</span>
+        </div>
       </mat-panel-title>
       <span *ngIf="showIcons" class="ml-auto flex gap-2" (click)="$event.stopPropagation()">
         <button mat-icon-button color="accent" (click)="edit.emit({ item, level: levelType })" matTooltip="Edit">
@@ -42,6 +45,13 @@
             [valueKey]="'id'"
             [labelKeys]="['lastName', 'firstName','staffNo']"
             [formControl]="getFormControl('staffId')"
+          ></app-searchable-mat-select>
+          <app-searchable-mat-select
+            [options]="getDropDownOptions('classes', item)"
+            label="Next Class (for promotion)"
+            placeholder="Select Next Class"
+            [labelKeys]="['name']"
+            [formControl]="getFormControl('nextClassId')"
           ></app-searchable-mat-select>
         }
         @else if (levelType === ProgramSetupLevel.CLASSARM) {

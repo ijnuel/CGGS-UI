@@ -1,5 +1,5 @@
 import { createReducer, on } from '@ngrx/store';
-import { StudentAssessmentScoreInterface } from '../../types/result';
+import { StudentAssessmentScoreInterface, PromotionResultInterface } from '../../types/result';
 import * as ResultActions from './result.actions';
 
 export const resultFeatureKey = 'result';
@@ -17,6 +17,9 @@ export interface ResultState {
   generatingClassResult: boolean;
   generatedClassResult: Blob | null;
   generateClassResultError: string | null;
+  promotingStudents: boolean;
+  promotionResult: PromotionResultInterface | null;
+  promotionError: string | null;
 }
 
 export const initialState: ResultState = {
@@ -32,6 +35,9 @@ export const initialState: ResultState = {
   generatingClassResult: false,
   generatedClassResult: null,
   generateClassResultError: null,
+  promotingStudents: false,
+  promotionResult: null,
+  promotionError: null,
 };
 
 export const resultReducer = createReducer(
@@ -157,5 +163,31 @@ export const resultReducer = createReducer(
   on(ResultActions.clearGeneratedClassResult, (state) => ({
     ...state,
     generatedClassResult: null,
+  })),
+
+  // Promote Students
+  on(ResultActions.promoteStudents, (state) => ({
+    ...state,
+    promotingStudents: true,
+    promotionError: null,
+  })),
+
+  on(ResultActions.promoteStudentsSuccess, (state, { payload }) => ({
+    ...state,
+    promotingStudents: false,
+    promotionResult: payload.entity,
+    promotionError: null,
+  })),
+
+  on(ResultActions.promoteStudentsFail, (state, { error }) => ({
+    ...state,
+    promotingStudents: false,
+    promotionError: error,
+  })),
+
+  on(ResultActions.clearPromotionResult, (state) => ({
+    ...state,
+    promotionResult: null,
+    promotionError: null,
   }))
 ); 

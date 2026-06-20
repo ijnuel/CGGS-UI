@@ -16,6 +16,7 @@ export interface ProgramSetupLevelConfig {
   childItemsFn: (id: string) => any[];
   childConfig?: ProgramSetupLevelConfig;
   getName?: (item: any) => string;
+  getSubtitle?: (item: any) => string | null;
   getId?: (item: any) => string;
   showTable?: (item: any) => boolean;
   tableHeaderData?: any[];

@@ -12,6 +12,7 @@ import { ResultComponent } from './result.component';
 import { UpdateResultComponent } from './update-result/update-result.component';
 import { ViewResultComponent } from './view-result/view-result.component';
 import { StudentResultComponent } from './student-result/student-result.component';
+import { PromoteStudentsComponent } from './promote-students/promote-students.component';
 import { SharedModule } from '../../../shared/shared.module';
 import { provideNativeDateAdapter } from '@angular/material/core';
 
@@ -31,11 +32,15 @@ const routes: Routes = [
     {
         path: 'my-result',
         component: StudentResultComponent,
+    },
+    {
+        path: 'promote',
+        component: PromoteStudentsComponent,
     }
 ];
 
 @NgModule({
-    declarations: [ResultComponent, UpdateResultComponent, ViewResultComponent, StudentResultComponent],
+    declarations: [ResultComponent, UpdateResultComponent, ViewResultComponent, StudentResultComponent, PromoteStudentsComponent],
     imports: [
         CommonModule,
         SharedModule,

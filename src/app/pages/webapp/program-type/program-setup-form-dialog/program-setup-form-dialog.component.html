@@ -29,6 +29,13 @@
       [labelKeys]="['lastName', 'firstName', 'staffNo']"
       [formControl]="$any(form.get('staffId'))">
     </app-searchable-mat-select>
+    <app-searchable-mat-select
+      [options]="data.classes || []"
+      label="Next Class (for promotion)"
+      placeholder="Select next class"
+      [labelKeys]="['name']"
+      [formControl]="$any(form.get('nextClassId'))">
+    </app-searchable-mat-select>
   </div>
 
   <!-- ClassSubject form -->

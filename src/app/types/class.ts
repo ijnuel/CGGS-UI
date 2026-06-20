@@ -9,8 +9,10 @@ export interface ClassListInterface {
     description?: string;
     classLevelId: string;
     staffId?: string;
+    nextClassId?: string;
     classLevel?: ClassLevelListInterface;
     staff?: StaffListInterface;
+    nextClass?: ClassListInterface;
     classSubjects?: ClassSubjectListInterface[];
     studentClasses?: StudentClassListInterface[];
     // feeSetups?: FeeSetupListInterface[];
@@ -22,4 +24,5 @@ export interface ClassFormInterface {
     description: string;
     classLevelId: string;
     staffId: string;
+    nextClassId?: string;
 }

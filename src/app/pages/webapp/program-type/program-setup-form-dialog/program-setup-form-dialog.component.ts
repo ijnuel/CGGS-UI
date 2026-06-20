@@ -9,6 +9,7 @@ export interface ProgramSetupFormDialogData {
   initialValue?: any;
   subjects?: DropdownListInterface[];
   staffs?: StaffListInterface[];
+  classes?: DropdownListInterface[];
 }
 
 @Component({
@@ -41,7 +42,8 @@ export class ProgramSetupFormDialogComponent {
         return this.fb.group({
           id: [''],
           name: ['', [Validators.required, Validators.maxLength(255)]],
-          staffId: [null]
+          staffId: [null],
+          nextClassId: [null],
         });
       case ProgramSetupLevel.CLASSSUBJECT:
         return this.fb.group({

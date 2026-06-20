@@ -5,6 +5,7 @@ import { filter, take } from 'rxjs/operators';
 import { ProgramTypeFacade } from '../../../store/program-type/program-type.facade';
 import { ProgramTypeListInterface } from '../../../types/program-type';
 import { ClassFormInterface, ClassLevelFormInterface, ClassLevelListInterface, ClassListInterface, ClassSubjectAssessmentFormInterface, ClassSubjectAssessmentListInterface, ClassSubjectFormInterface, ClassSubjectListInterface, DropdownListInterface, PaginatedResponseInterface, ProgramSetupLevelConfig, QueryInterface, SchoolTermSessionListInterface, SessionListInterface, StaffListInterface, SubjectListInterface } from '../../../types';
+import { getClassLabel } from '../../../services/helper.service';
 import { PageQueryInterface } from '../../../types';
 import { TableHeaderInterface } from '../../../types/table';
 import { MatDialog } from '@angular/material/dialog';
@@ -77,6 +78,7 @@ export class ProgramTypeComponent implements OnInit {
     id: FormControl;
     name: FormControl;
     staffId: FormControl;
+    nextClassId: FormControl;
   }>;
   addClassSubjectForm: FormGroup<{
     id: FormControl;
@@ -140,6 +142,7 @@ export class ProgramTypeComponent implements OnInit {
       id: [''],
       staffId: [null],
       name: ['', [Validators.required, Validators.maxLength(255)]],
+      nextClassId: [null],
     });
     this.addClassSubjectForm = this.fb.group({
       id: [''],
@@ -319,7 +322,8 @@ export class ProgramTypeComponent implements OnInit {
   getClassQueryParameters(): QueryInterface {
     return {
       nestedProperties: [
-        { name: 'classLevel', innerNestedProperties: [{ name: 'programmeType' }] }
+        { name: 'classLevel', innerNestedProperties: [{ name: 'programmeType' }] },
+        { name: 'nextClass', innerNestedProperties: [{ name: 'classLevel' }] },
       ]
     };
   }
@@ -571,9 +575,11 @@ export class ProgramTypeComponent implements OnInit {
         childItemsFn: (classLevelId: string) => this.getClasses(classLevelId),
         showTable: (item: any) => false,
         getName: (item: any) => `${item.name} ${item.level}`,
+        getSubtitle: (item: any) => item.nextClass ? `Next: ${getClassLabel(item.nextClass)}` : null,
         showAddButton: (item: any) => true,
-        dropDownOptions: (classIdLevelId: string) => [
-          { key: "staffs", dropDownListFn: () => this.getStaffs() }
+        dropDownOptions: (classLevelId: string) => [
+          { key: "staffs", dropDownListFn: () => this.getStaffs() },
+          { key: "classes", dropDownListFn: () => this.getClassesDropDown() },
         ],
         childConfig: {
           label: ProgramSetupLevel.CLASSARM,
@@ -622,7 +628,7 @@ export class ProgramTypeComponent implements OnInit {
         this.showAddForm(item.programmeTypeId, true);
         break;
       case ProgramSetupLevel.CLASSARM:
-        this.addClassArmForm.patchValue({ id: item.id, name: item.name, staffId: item.staffId });
+        this.addClassArmForm.patchValue({ id: item.id, name: item.name, staffId: item.staffId, nextClassId: item.nextClassId ?? null });
         this.showAddForm(item.classLevelId, true);
         break;
       case ProgramSetupLevel.CLASSSUBJECT:
@@ -860,7 +866,7 @@ export class ProgramTypeComponent implements OnInit {
         initialValue = { id: item.id, level: item.level };
         break;
       case ProgramSetupLevel.CLASSARM:
-        initialValue = { id: item.id, name: item.name, staffId: item.staffId };
+        initialValue = { id: item.id, name: item.name, staffId: item.staffId, nextClassId: item.nextClassId ?? null };
         break;
       case ProgramSetupLevel.CLASSSUBJECT:
         initialValue = { id: item.id, subjectId: item.subjectId, staffId: item.staffId };
@@ -881,7 +887,8 @@ export class ProgramTypeComponent implements OnInit {
         isEditMode,
         initialValue,
         subjects: this.getSubjectsForCurrentArm(isEditMode),
-        staffs: this.getStaffs()
+        staffs: this.getStaffs(),
+        classes: this.getClassesDropDown(),
       } as ProgramSetupFormDialogData
     });
 
@@ -950,6 +957,13 @@ export class ProgramTypeComponent implements OnInit {
     return this.selectedClassArm ? this.getSubjects(this.selectedClassArm.id, isEditMode) : this.subjectAllSnapShot;
   }
 
+  getClassesDropDown(): DropdownListInterface[] {
+    return this.classAllSnapShot.map(c => ({
+      value: c.id,
+      name: getClassLabel(c) || c.name || '',
+    } as DropdownListInterface));
+  }
+
   // ── Card display helpers ──────────────────────────────────────────────
 
   getItemDisplayName(item: any): string {
@@ -976,6 +990,15 @@ export class ProgramTypeComponent implements OnInit {
       groups.get(typeName)!.push(s);
     }
     this.groupedCurrentSubjects = Array.from(groups.entries()).map(([type, items]) => ({ type, items }));
+  }
+
+  getNextClassLabel(item: ClassListInterface): string {
+    if (!item.nextClassId) return '';
+    const nextClass = item.nextClass ?? this.classAllSnapShot.find(c => c.id === item.nextClassId);
+    if (!nextClass) return '';
+    const classLevel = this.classLevelAllSnapShot.find(cl => cl.id === nextClass.classLevelId);
+    const parts = [classLevel?.name, classLevel?.level != null ? String(classLevel.level) : '', nextClass.name || ''].filter(Boolean);
+    return parts.join(' ') || '';
   }
 
   getItemSubtitle(item: any): string {

@@ -27,6 +27,7 @@ export class CreateUpdateProgramTypeComponent implements OnInit, OnDestroy {
     formGroup: FormGroup<{
         name: FormControl;
         level: FormControl;
+        averagePromotionScore: FormControl;
     }>;
 
     get formControl() {
@@ -52,6 +53,7 @@ export class CreateUpdateProgramTypeComponent implements OnInit, OnDestroy {
         this.formGroup = this.fb.group({
             name: ['', [Validators.required, Validators.maxLength(255)]],
             level: [null, [Validators.required, Validators.min(1)]],
+            averagePromotionScore: [50, [Validators.required, Validators.min(0), Validators.max(100)]],
         });
     }
 
@@ -65,6 +67,7 @@ export class CreateUpdateProgramTypeComponent implements OnInit, OnDestroy {
                     this.formGroup.patchValue({
                         name: data.name,
                         level: data.level,
+                        averagePromotionScore: data.averagePromotionScore ?? 50,
                     });
                 }
             });
