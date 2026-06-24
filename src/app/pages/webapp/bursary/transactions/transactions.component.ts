@@ -30,7 +30,7 @@ export class TransactionsComponent implements OnInit, OnDestroy {
 
   private lastQuery: PageQueryInterface = {
     start: 0, recordsPerPage: 10, pageIndex: 0,
-    sortProperties: [{ name: 'paidAt', isDescending: true }],
+    sortProperties: [{ name: 'createdDate', isDescending: true }],
   };
 
   constructor(

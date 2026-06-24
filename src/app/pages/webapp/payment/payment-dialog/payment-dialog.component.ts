@@ -16,6 +16,13 @@ export interface PaymentDialogResult {
   feeId?: string;
 }
 
+const GATEWAY_LOGOS: Record<number, string> = {
+  0: 'assets/images/gateways/paystack.svg',
+  1: 'assets/images/gateways/flutterwave.svg',
+  2: 'assets/images/gateways/monnify.svg',
+  3: 'assets/images/gateways/interswitch.svg',
+};
+
 @Component({
   selector: 'app-payment-dialog',
   template: `
@@ -53,15 +60,27 @@ export interface PaymentDialogResult {
         <!-- Gateway -->
         <div>
           <p class="text-sm font-medium text-gray-700 mb-3">Select Payment Gateway</p>
-          <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+          <div class="grid grid-cols-4 gap-3">
             <label *ngFor="let gw of data.gateways"
-                   class="flex items-center gap-3 border rounded-lg px-4 py-3 cursor-pointer transition-all"
-                   [class.border-2]="form.get('gateway')?.value == gw.value"
+                   class="relative flex items-center justify-center border-2 rounded-xl px-3 py-3 cursor-pointer transition-all select-none"
+                   style="min-height: 56px;"
                    [ngStyle]="form.get('gateway')?.value == gw.value
                      ? { 'border-color': 'var(--app-primary)', 'background': 'var(--app-primary-light, #eff6ff)' }
-                     : { 'border-color': '#e5e7eb' }">
-              <input type="radio" formControlName="gateway" [value]="gw.value" class="accent-primary" />
-              <span class="text-sm font-medium text-gray-700">{{ gw.name }}</span>
+                     : { 'border-color': '#e5e7eb', 'background': '#fff' }">
+              <input type="radio" formControlName="gateway" [value]="gw.value" class="sr-only" />
+
+              <!-- Checkmark badge when selected -->
+              <span *ngIf="form.get('gateway')?.value == gw.value"
+                    class="absolute top-1.5 right-1.5 flex items-center justify-center w-5 h-5 rounded-full"
+                    style="background: var(--app-primary)">
+                <mat-icon class="!text-sm !w-4 !h-4 !leading-4 text-white">check</mat-icon>
+              </span>
+
+              <img *ngIf="getLogoUrl(gw.value)"
+                   [src]="getLogoUrl(gw.value)"
+                   [alt]="gw.name"
+                   class="max-h-8 w-full object-contain" />
+              <span *ngIf="!getLogoUrl(gw.value)" class="text-xs font-semibold text-gray-700 text-center">{{ gw.name }}</span>
             </label>
           </div>
           <mat-error *ngIf="form.get('gateway')?.touched && form.get('gateway')?.hasError('required')" class="text-xs mt-1">
@@ -100,6 +119,10 @@ export class PaymentDialogComponent implements OnInit {
   }
 
   ngOnInit() {}
+
+  getLogoUrl(value: number | string): string | null {
+    return GATEWAY_LOGOS[+value] ?? null;
+  }
 
   confirm() {
     if (this.form.invalid) {

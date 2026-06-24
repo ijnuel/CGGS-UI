@@ -135,6 +135,11 @@ const routes: Routes = [
         loadChildren: () => import('./school-term-session/school-term-session.module').then((m) => m.SchoolTermSessionModule),
       },
       {
+        path: 'payment-gateway-setup',
+        data: { roles: ADMIN_AND_ABOVE },
+        loadChildren: () => import('./payment-gateway-setup/payment-gateway-setup.module').then((m) => m.PaymentGatewaySetupModule),
+      },
+      {
         path: 'principal-remark',
         data: { roles: ADMIN_AND_ABOVE },
         loadChildren: () => import('./principal-remark/principal-remark.module').then((m) => m.PrincipalRemarkModule),

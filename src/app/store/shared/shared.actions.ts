@@ -148,3 +148,15 @@ export const getPaymentGatewayListFail = createAction(
   '[Shared/API] Get Payment Gateway List Fail',
   props<{ error: string }>()
 );
+
+export const getActivePaymentGatewayList = createAction('[Shared] Get Active Payment Gateway List');
+
+export const getActivePaymentGatewayListSuccess = createAction(
+  '[Shared/API] Get Active Payment Gateway List Success',
+  props<{ payload: GenericResponseInterface<DropdownListInterface[]> }>()
+);
+
+export const getActivePaymentGatewayListFail = createAction(
+  '[Shared/API] Get Active Payment Gateway List Fail',
+  props<{ error: string }>()
+);

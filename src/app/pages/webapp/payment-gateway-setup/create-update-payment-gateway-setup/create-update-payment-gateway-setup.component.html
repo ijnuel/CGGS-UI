@@ -1,0 +1,114 @@
+<div class="flex items-center justify-between px-6 pt-5 pb-3 border-b border-gray-100">
+  <div>
+    <h2 class="text-lg font-bold" style="color: var(--app-primary);">
+      {{ isEditMode ? 'Edit' : 'Add' }} Payment Gateway
+    </h2>
+    <p class="text-sm text-gray-500 mt-0.5">
+      {{ isEditMode ? 'Update gateway credentials' : 'Configure a new payment gateway' }}
+    </p>
+  </div>
+  <button mat-icon-button (click)="dialogRef.close()">
+    <mat-icon class="text-gray-400">close</mat-icon>
+  </button>
+</div>
+
+<mat-dialog-content class="!px-6 !py-4">
+  <form [formGroup]="formGroup">
+
+    <!-- Gateway selector -->
+    <div class="mb-2">
+      <app-searchable-mat-select
+        label="Gateway"
+        [options]="gatewayOptions"
+        [labelFn]="gatewayLabelFn"
+        valueKey="value"
+        formInputClass="form-input w-full"
+        [formControl]="fc.gateway"
+        [error]="getErrorMessage('gateway')"
+      ></app-searchable-mat-select>
+    </div>
+
+    <!-- Active toggle -->
+    <div class="flex gap-6 mb-4">
+      <div class="flex items-center gap-2">
+        <mat-slide-toggle [formControl]="fc.isActive" color="primary"></mat-slide-toggle>
+        <span class="text-sm text-gray-700">Active</span>
+      </div>
+    </div>
+
+    <ng-container *ngIf="selectedGateway !== null">
+
+      <div class="grid grid-cols-1 gap-y-1">
+
+        <!-- Secret Key — label/placeholder varies by gateway -->
+        <mat-form-field class="form-input w-full">
+          <mat-label>{{ secretKeyLabel }}</mat-label>
+          <input matInput [formControl]="fc.secretKey" [placeholder]="secretKeyPlaceholder" />
+        </mat-form-field>
+
+        <!-- Public Key — label/placeholder varies by gateway -->
+        <mat-form-field class="form-input w-full">
+          <mat-label>{{ publicKeyLabel }}</mat-label>
+          <input matInput [formControl]="fc.publicKey" [placeholder]="publicKeyPlaceholder" />
+        </mat-form-field>
+
+        <!-- Flutterwave only -->
+        <mat-form-field *ngIf="isFlutterwave" class="form-input w-full">
+          <mat-label>Webhook Secret</mat-label>
+          <input matInput [formControl]="fc.webhookSecret" />
+        </mat-form-field>
+
+        <!-- Monnify only -->
+        <mat-form-field *ngIf="isMonnify" class="form-input w-full">
+          <mat-label>Contract Code</mat-label>
+          <input matInput [formControl]="fc.contractCode" />
+        </mat-form-field>
+
+      </div>
+
+      <!-- Interswitch extras -->
+      <ng-container *ngIf="isInterswitch">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-x-4 gap-y-1 mt-1">
+          <mat-form-field class="form-input w-full">
+            <mat-label>MAC Key</mat-label>
+            <input matInput [formControl]="fc.macKey" />
+          </mat-form-field>
+          <mat-form-field class="form-input w-full">
+            <mat-label>Product ID</mat-label>
+            <input matInput [formControl]="fc.productId" />
+          </mat-form-field>
+          <mat-form-field class="form-input w-full">
+            <mat-label>Pay Item ID</mat-label>
+            <input matInput [formControl]="fc.payItemId" />
+          </mat-form-field>
+          <mat-form-field class="form-input w-full">
+            <mat-label>Payment Page URL</mat-label>
+            <input matInput [formControl]="fc.paymentPageUrl" placeholder="https://..." />
+          </mat-form-field>
+        </div>
+      </ng-container>
+
+      <!-- Base URL (required) -->
+      <div class="mt-1">
+        <mat-form-field class="form-input w-full">
+          <mat-label>Base URL</mat-label>
+          <input matInput [formControl]="fc.baseUrl" placeholder="https://..." />
+          <mat-error>{{ getErrorMessage('baseUrl') }}</mat-error>
+        </mat-form-field>
+      </div>
+
+    </ng-container>
+
+    <div *ngIf="selectedGateway === null" class="text-sm text-gray-400 text-center py-4">
+      Select a gateway above to configure its credentials
+    </div>
+
+  </form>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end" class="!px-6 !pb-5 gap-2">
+  <button mat-button (click)="dialogRef.close()">Cancel</button>
+  <button mat-raised-button color="primary" (click)="submit()" [disabled]="isLoading">
+    {{ isEditMode ? 'Update' : 'Create' }}
+  </button>
+</mat-dialog-actions>

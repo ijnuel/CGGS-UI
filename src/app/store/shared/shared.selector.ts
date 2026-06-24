@@ -66,3 +66,8 @@ export const selectPaymentGatewayList = createSelector(
   fromShared.selectSharedState,
   fromShared.getPaymentGatewayList
 );
+
+export const selectActivePaymentGatewayList = createSelector(
+  fromShared.selectSharedState,
+  fromShared.getActivePaymentGatewayList
+);

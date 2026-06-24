@@ -57,7 +57,7 @@ export class PaymentComponent implements OnInit, OnDestroy {
       map(ts => Array.isArray(ts) ? ts : ((ts as any)?.data ?? []))
     );
 
-    this.gateways$ = this.sharedFacade.selectPaymentGatewayList$.pipe(
+    this.gateways$ = this.sharedFacade.selectActivePaymentGatewayList$.pipe(
       map(list => list ?? [])
     );
 
@@ -70,7 +70,7 @@ export class PaymentComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.schoolTermSessionFacade.getSchoolTermSessionAll();
-    this.sharedFacade.getPaymentGatewayList();
+    this.sharedFacade.getActivePaymentGatewayList();
 
     this.authFacade.selectedCurrentUser$.pipe(
       filter(u => !!u),

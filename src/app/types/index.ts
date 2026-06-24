@@ -57,6 +57,7 @@ import {
   GenerateFeesBySessionAndTermForStudentRequest,
   InitiatePaymentRequest,
 } from './fee';
+import { PaymentGatewaySetupListInterface, PaymentGatewaySetupFormInterface } from './payment-gateway-setup';
 
 interface GenericResponseInterface<T> {
   error: string;
@@ -192,4 +193,6 @@ export {
   GenerateFeesByTermSessionForStudentRequest,
   GenerateFeesBySessionAndTermForStudentRequest,
   InitiatePaymentRequest,
+  PaymentGatewaySetupListInterface,
+  PaymentGatewaySetupFormInterface,
 };

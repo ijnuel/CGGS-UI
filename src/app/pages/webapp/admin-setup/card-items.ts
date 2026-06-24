@@ -46,5 +46,13 @@ export default [
     description: 'Bulk import data from spreadsheets',
     roles: [],
     url: '/app/data-import'
+  },
+  {
+    name: 'Payment Gateway',
+    icon: 'assets/icons/admin-setup-icon.svg',
+    matIcon: 'payment',
+    description: 'Configure payment gateway credentials',
+    roles: [],
+    url: '/app/payment-gateway-setup'
   }
 ];

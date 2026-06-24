@@ -84,6 +84,8 @@ import { PaymentEffect } from './store/payment/payment.effects';
 import { PaymentFacade } from './store/payment/payment.facade';
 import { TransactionEffect } from './store/transaction/transaction.effects';
 import { TransactionFacade } from './store/transaction/transaction.facade';
+import { PaymentGatewaySetupEffect } from './store/payment-gateway-setup/payment-gateway-setup.effects';
+import { PaymentGatewaySetupFacade } from './store/payment-gateway-setup/payment-gateway-setup.facade';
 // import { provideStoreDevtools } from '@ngrx/store-devtools';
 
 export const appConfig: ApplicationConfig = {
@@ -124,6 +126,7 @@ export const appConfig: ApplicationConfig = {
         FeeEffect,
         PaymentEffect,
         TransactionEffect,
+        PaymentGatewaySetupEffect,
       ]),
     ),
     provideAnimations(),
@@ -199,5 +202,6 @@ export const appConfig: ApplicationConfig = {
     FeeFacade,
     PaymentFacade,
     TransactionFacade,
+    PaymentGatewaySetupFacade,
   ],
 };
