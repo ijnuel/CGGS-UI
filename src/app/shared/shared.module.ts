@@ -10,7 +10,7 @@ import { CommonModule } from '@angular/common';
 import { TableLoaderComponent } from './table-loader/table-loader.component';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { LoadingSpinnerDirective } from './loading-spinner/loading-spinner.directive';
-import { CurrencyInputDirective } from './currency-input/currency-input.directive';
+import { NgxCurrencyDirective } from 'ngx-currency';
 import { CardComponent } from './card/card.component';
 import { MatPaginator } from '@angular/material/paginator';
 import { ConfirmDialogComponent } from './confirm-dialog/confirm-dialog.component';
@@ -36,7 +36,6 @@ import { MatAutocompleteModule } from '@angular/material/autocomplete';
     GlobalLoadingComponent,
     TableLoaderComponent,
     LoadingSpinnerDirective,
-    CurrencyInputDirective,
     ConfirmDialogComponent,
     ProgramSetupLevelPanelComponent,
     SearchableMatSelectComponent,
@@ -56,6 +55,7 @@ import { MatAutocompleteModule } from '@angular/material/autocomplete';
     MatFormFieldModule,
     MatInputModule,
     MatAutocompleteModule,
+    NgxCurrencyDirective,
   ],
   exports: [
     LayoutSidebarComponent,
@@ -65,7 +65,7 @@ import { MatAutocompleteModule } from '@angular/material/autocomplete';
     TablePaginatorComponent,
     GlobalLoadingComponent,
     LoadingSpinnerDirective,
-    CurrencyInputDirective,
+    NgxCurrencyDirective,
     ConfirmDialogComponent,
     TableLoaderComponent,
     RouterModule,

@@ -46,7 +46,9 @@ const GATEWAY_LOGOS: Record<number, string> = {
         <!-- Amount -->
         <mat-form-field class="w-full">
           <mat-label>Amount (₦)</mat-label>
-          <input matInput appCurrencyInput formControlName="amount" placeholder="0.00" />
+          <input matInput currencyMask
+                 [currencyMask]="{ prefix: '', thousands: ',', decimal: '.', precision: 2, align: 'left', allowNegative: false, nullable: true }"
+                 formControlName="amount" placeholder="0.00" />
           <mat-hint *ngIf="data.mode === 'fee'">Max: ₦{{ data.maxAmount | number:'1.2-2' }}</mat-hint>
           <mat-error *ngIf="form.get('amount')?.hasError('required')">Amount is required</mat-error>
           <mat-error *ngIf="form.get('amount')?.hasError('min')">Amount must be greater than 0</mat-error>

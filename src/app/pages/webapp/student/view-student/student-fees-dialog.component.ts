@@ -135,7 +135,9 @@ interface PaymentFormState {
                   <div [formGroup]="feeState.form" class="grid grid-cols-2 gap-3">
                     <mat-form-field class="col-span-1">
                       <mat-label>Amount (₦)</mat-label>
-                      <input matInput appCurrencyInput formControlName="amount" />
+                      <input matInput currencyMask
+                             [currencyMask]="{ prefix: '', thousands: ',', decimal: '.', precision: 2, align: 'left', allowNegative: false, nullable: true }"
+                             formControlName="amount" />
                       <mat-error>Required, max ₦{{ getFeeBalance(entry.fee) | number:'1.2-2' }}</mat-error>
                     </mat-form-field>
                     <mat-form-field class="col-span-1">
@@ -220,7 +222,9 @@ interface PaymentFormState {
                       <div [formGroup]="lineState.form" class="grid grid-cols-2 gap-3">
                         <mat-form-field class="col-span-1">
                           <mat-label>Amount (₦)</mat-label>
-                          <input matInput appCurrencyInput formControlName="amount" />
+                          <input matInput currencyMask
+                               [currencyMask]="{ prefix: '', thousands: ',', decimal: '.', precision: 2, align: 'left', allowNegative: false, nullable: true }"
+                               formControlName="amount" />
                           <mat-error>Required, max ₦{{ (fl.amount - fl.settledAmount) | number:'1.2-2' }}</mat-error>
                         </mat-form-field>
                         <mat-form-field class="col-span-1">
