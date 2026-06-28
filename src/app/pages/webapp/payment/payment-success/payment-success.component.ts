@@ -27,6 +27,7 @@ export class PaymentSuccessComponent implements OnInit {
     this.reference = this.route.snapshot.queryParams['reference']
       ?? this.route.snapshot.queryParams['trxref']
       ?? this.route.snapshot.queryParams['transaction_id']
+      ?? this.route.snapshot.queryParams['paymentReference']
       ?? null;
 
     if (this.reference) {
