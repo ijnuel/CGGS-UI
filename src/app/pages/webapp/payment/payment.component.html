@@ -1,3 +1,11 @@
+<!-- Redirect overlay — shown while waiting for gateway redirect -->
+<div *ngIf="initiatingPayment"
+     class="fixed inset-0 z-50 flex flex-col items-center justify-center bg-black/50 backdrop-blur-sm">
+  <mat-spinner diameter="52" color="accent"></mat-spinner>
+  <p class="mt-5 text-white text-base font-semibold tracking-wide">Redirecting to payment gateway…</p>
+  <p class="mt-1 text-white/60 text-sm">Please do not close this page</p>
+</div>
+
 <div class="p-6">
 
   <!-- Page Header -->

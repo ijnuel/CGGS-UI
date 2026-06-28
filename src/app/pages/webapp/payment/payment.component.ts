@@ -183,7 +183,6 @@ export class PaymentComponent implements OnInit, OnDestroy {
       { withCredentials: true }
     ).subscribe({
       next: (response) => {
-        this.initiatingPayment = false;
         const entity = response?.entity;
         const paymentUrl: string | null =
           (typeof entity === 'string' ? entity : null)
@@ -197,8 +196,10 @@ export class PaymentComponent implements OnInit, OnDestroy {
           ?? null;
 
         if (paymentUrl && paymentUrl.startsWith('http')) {
+          // Keep initiatingPayment = true so the overlay stays visible until the browser navigates away
           window.location.assign(paymentUrl);
         } else {
+          this.initiatingPayment = false;
           this.globalLoadingFacade.globalErrorShow(
             'Payment initiated but no redirect URL was returned. Please contact support.',
             6000
