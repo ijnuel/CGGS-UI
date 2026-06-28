@@ -113,6 +113,22 @@
         </div>
       </div>
 
+      <div class="grid grid-cols-1 gap-x-4 mt-2">
+        <div>
+          <mat-form-field class="form-input">
+            <mat-label>Description</mat-label>
+            <textarea
+              matInput
+              rows="4"
+              autocomplete="off"
+              [formControl]="formControl.description"
+              placeholder="Brief description of the school..."
+            ></textarea>
+            <mat-error>{{ getErrorMessage("description") }}</mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+
     </form>
 
     <div class="actions-btn flex justify-end mt-10 gap-5 form-container mx-auto px-3">

@@ -6,6 +6,7 @@ export interface CompanyListInterface {
     shortName?: string;
     domainName?: string;
     address?: string;
+    description?: string;
     principalName?: string;
     teacherShortCode?: string;
     studentShortCode?: string;
@@ -20,6 +21,7 @@ export interface CompanyFormInterface {
     shortName?: string;
     domainName?: string;
     address?: string;
+    description?: string;
     principalName?: string;
     teacherShortCode?: string;
     studentShortCode?: string;

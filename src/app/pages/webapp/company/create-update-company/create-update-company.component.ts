@@ -29,6 +29,7 @@ export class CreateUpdateCompanyComponent implements OnInit, OnDestroy {
         shortName: FormControl;
         domainName: FormControl;
         address: FormControl;
+        description: FormControl;
         principalName: FormControl;
         teacherShortCode: FormControl;
         studentShortCode: FormControl;
@@ -59,6 +60,7 @@ export class CreateUpdateCompanyComponent implements OnInit, OnDestroy {
             shortName: ['', [Validators.maxLength(50)]],
             domainName: ['', [Validators.maxLength(255)]],
             address: ['', [Validators.maxLength(500)]],
+            description: ['', [Validators.maxLength(1000)]],
             principalName: ['', [Validators.maxLength(255)]],
             teacherShortCode: ['', [Validators.maxLength(20)]],
             studentShortCode: ['', [Validators.maxLength(20)]],
@@ -77,6 +79,7 @@ export class CreateUpdateCompanyComponent implements OnInit, OnDestroy {
                         shortName: data.shortName ?? '',
                         domainName: data.domainName ?? '',
                         address: data.address ?? '',
+                        description: data.description ?? '',
                         principalName: data.principalName ?? '',
                         teacherShortCode: data.teacherShortCode ?? '',
                         studentShortCode: data.studentShortCode ?? '',

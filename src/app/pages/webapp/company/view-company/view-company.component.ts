@@ -58,16 +58,18 @@ export class ViewCompanyComponent implements OnInit, OnDestroy {
         .subscribe(deleting => this.logoDeleting = deleting);
     }
 
-    // Fallback: use company.logo from the API response (a persisted public URL)
-    // when the localStorage cache is absent (different browser, cleared storage, etc.).
-    // Safe to use because companyById is cleared to null before every new request,
-    // so this subscription never fires with stale data from a previous company.
+    // Sync logoUrl with the authoritative API value:
+    // - fall back to company.logo when the store has nothing (different browser, cleared storage, etc.)
+    // - clear any stale cached URL when the API confirms no logo exists
     this.company$.pipe(
       takeUntil(this.unsubscribe$),
       filter(company => !!company && company.id === this.companyId)
     ).subscribe(company => {
-      if (company?.logo && !this.logoUrl) {
+      if (!this.logoUrl && company?.logo) {
         this.logoUrl = company.logo;
+      }
+      if (company && !company.logo && !this.logoUploading) {
+        this.logoUrl = null;
       }
     });
   }

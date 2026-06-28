@@ -41,4 +41,12 @@ export const tableHeader: TableHeaderInterface[] = [
     filterable: true,
     align: 'left',
   },
+  {
+    key: 'description',
+    type: 'text',
+    name: 'Description',
+    sortable: false,
+    filterable: true,
+    align: 'left',
+  },
 ];
