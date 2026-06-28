@@ -26,17 +26,17 @@ const GATEWAY_LOGOS: Record<number, string> = {
 @Component({
   selector: 'app-payment-dialog',
   template: `
-    <div class="flex items-center justify-between px-6 pt-5 pb-3 border-b border-gray-100">
+    <div class="dialog-gradient-header">
       <div>
-        <h2 class="text-lg font-bold" style="color: var(--app-primary);">
+        <h2 class="text-lg font-bold text-white">
           {{ data.mode === 'wallet' ? 'Fund Wallet' : 'Pay Fee' }}
         </h2>
-        <p class="text-sm text-gray-500 mt-0.5">
+        <p class="text-sm text-white/70 mt-0.5">
           {{ data.mode === 'wallet' ? 'Top up your school wallet' : 'Outstanding: ₦' + (data.maxAmount | number:'1.2-2') }}
         </p>
       </div>
-      <button mat-icon-button (click)="close()">
-        <mat-icon class="text-gray-400">close</mat-icon>
+      <button mat-icon-button (click)="close()" class="!text-white">
+        <mat-icon>close</mat-icon>
       </button>
     </div>
 
@@ -46,9 +46,7 @@ const GATEWAY_LOGOS: Record<number, string> = {
         <!-- Amount -->
         <mat-form-field class="w-full">
           <mat-label>Amount (₦)</mat-label>
-          <input matInput type="number" formControlName="amount"
-                 [max]="data.mode === 'fee' ? data.maxAmount : null"
-                 min="1" step="0.01" placeholder="0.00" />
+          <input matInput appCurrencyInput formControlName="amount" placeholder="0.00" />
           <mat-hint *ngIf="data.mode === 'fee'">Max: ₦{{ data.maxAmount | number:'1.2-2' }}</mat-hint>
           <mat-error *ngIf="form.get('amount')?.hasError('required')">Amount is required</mat-error>
           <mat-error *ngIf="form.get('amount')?.hasError('min')">Amount must be greater than 0</mat-error>

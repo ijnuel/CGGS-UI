@@ -14,9 +14,7 @@ export interface RoleDialogData {
 @Component({
   selector: 'app-role-dialog',
   template: `
-    <h2 mat-dialog-title class="!text-lg !font-bold" style="color: var(--app-primary);">
-      {{ data.title }}
-    </h2>
+    <h2 mat-dialog-title>{{ data.title }}</h2>
     <mat-dialog-content>
       <p class="text-sm text-gray-500 mb-4">
         {{ data.mode === 'assign' ? 'Select a role to assign to' : 'Select a role to remove from' }}

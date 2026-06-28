@@ -55,3 +55,80 @@ hot-toast-container {
     opacity: 1;
   }
 }
+
+// ── Material font override ────────────────────────────────────────────────────
+.mat-mdc-form-field,
+.mat-mdc-input-element,
+.mdc-text-field__input,
+.mdc-floating-label,
+.mat-mdc-select-value,
+.mat-mdc-option,
+.mat-mdc-button,
+.mat-mdc-raised-button,
+.mat-mdc-stroked-button,
+.mat-mdc-outlined-button,
+.mat-mdc-menu-item,
+.mat-mdc-tab,
+.mat-mdc-chip-action-label,
+.mat-mdc-snack-bar-label,
+.mat-mdc-dialog-surface,
+.mat-mdc-tooltip {
+  font-family: "Nunito", sans-serif !important;
+}
+
+// ── Dialog global overrides ───────────────────────────────────────────────────
+
+// Container: rounded corners, no overflow
+.mat-mdc-dialog-surface {
+  border-radius: 16px !important;
+  overflow: hidden !important;
+  padding: 0 !important;
+}
+
+.mat-dialog-container {
+  border-radius: 16px !important;
+  overflow: hidden !important;
+  padding: 0 !important;
+}
+
+// Title: gradient banner
+[mat-dialog-title],
+.mat-mdc-dialog-title,
+.mdc-dialog__title {
+  background: linear-gradient(135deg, var(--app-gradient-from), var(--app-gradient-to)) !important;
+  color: #ffffff !important;
+  padding: 20px 24px 16px !important;
+  margin: 0 !important;
+  font-family: "Nunito", sans-serif !important;
+  font-weight: 700 !important;
+  font-size: 1.1rem !important;
+  letter-spacing: -0.01em;
+
+  &::before {
+    display: none !important;
+    height: 0 !important;
+  }
+}
+
+// Content padding
+.mat-mdc-dialog-content,
+.mat-dialog-content {
+  padding: 20px 24px !important;
+  font-family: "Nunito", sans-serif !important;
+}
+
+// Actions padding
+.mat-mdc-dialog-actions,
+.mat-dialog-actions {
+  padding: 8px 24px 16px !important;
+  font-family: "Nunito", sans-serif !important;
+}
+
+// Gradient header block for dialogs with a close button (custom headers)
+.dialog-gradient-header {
+  background: linear-gradient(135deg, var(--app-gradient-from), var(--app-gradient-to));
+  padding: 20px 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}

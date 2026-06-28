@@ -41,13 +41,13 @@ interface PaymentFormState {
   selector: 'app-student-fees-dialog',
   template: `
     <!-- Header -->
-    <div class="flex items-center justify-between px-6 pt-5 pb-3 border-b border-gray-100">
+    <div class="dialog-gradient-header">
       <div>
-        <h2 class="text-lg font-bold" style="color: var(--app-primary);">Fees</h2>
-        <p class="text-sm text-gray-500 mt-0.5">{{ data.studentName }}</p>
+        <h2 class="text-lg font-bold text-white">Fees</h2>
+        <p class="text-sm text-white/70 mt-0.5">{{ data.studentName }}</p>
       </div>
-      <button mat-icon-button (click)="close()">
-        <mat-icon class="text-gray-400">close</mat-icon>
+      <button mat-icon-button (click)="close()" class="!text-white">
+        <mat-icon>close</mat-icon>
       </button>
     </div>
 
@@ -135,7 +135,7 @@ interface PaymentFormState {
                   <div [formGroup]="feeState.form" class="grid grid-cols-2 gap-3">
                     <mat-form-field class="col-span-1">
                       <mat-label>Amount (₦)</mat-label>
-                      <input matInput type="number" formControlName="amount" min="0.01" />
+                      <input matInput appCurrencyInput formControlName="amount" />
                       <mat-error>Required, max ₦{{ getFeeBalance(entry.fee) | number:'1.2-2' }}</mat-error>
                     </mat-form-field>
                     <mat-form-field class="col-span-1">
@@ -220,7 +220,7 @@ interface PaymentFormState {
                       <div [formGroup]="lineState.form" class="grid grid-cols-2 gap-3">
                         <mat-form-field class="col-span-1">
                           <mat-label>Amount (₦)</mat-label>
-                          <input matInput type="number" formControlName="amount" min="0.01" />
+                          <input matInput appCurrencyInput formControlName="amount" />
                           <mat-error>Required, max ₦{{ (fl.amount - fl.settledAmount) | number:'1.2-2' }}</mat-error>
                         </mat-form-field>
                         <mat-form-field class="col-span-1">
