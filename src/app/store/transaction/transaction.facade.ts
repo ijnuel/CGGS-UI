@@ -2,9 +2,10 @@ import { Injectable } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
 import { TransactionListInterface } from '../../types/transaction';
-import { PageQueryInterface, PaginatedResponseInterface } from '../../types';
+import { PageQueryInterface, PaginatedResponseInterface, QueryInterface } from '../../types';
 import * as TransactionAction from './transaction.actions';
 import {
+  selectTransactionAll,
   selectTransactionList,
   selectTransactionById,
   selectTransactionLoading,
@@ -15,6 +16,7 @@ import { TransactionState } from './transaction.reducer';
 
 @Injectable({ providedIn: 'root' })
 export class TransactionFacade {
+  transactionAll$: Observable<TransactionListInterface[] | null>;
   transactionList$: Observable<PaginatedResponseInterface<TransactionListInterface[]> | null>;
   transactionById$: Observable<TransactionListInterface | null>;
   loading$: Observable<boolean>;
@@ -22,11 +24,16 @@ export class TransactionFacade {
   error$: Observable<string | null>;
 
   constructor(private store: Store<{ transaction: TransactionState }>) {
+    this.transactionAll$ = this.store.select(selectTransactionAll);
     this.transactionList$ = this.store.select(selectTransactionList);
     this.transactionById$ = this.store.select(selectTransactionById);
     this.loading$ = this.store.select(selectTransactionLoading);
     this.verifying$ = this.store.select(selectTransactionVerifying);
     this.error$ = this.store.select(selectTransactionError);
+  }
+
+  getTransactionAll(query?: QueryInterface): void {
+    this.store.dispatch(TransactionAction.getTransactionAll({ query }));
   }
 
   getTransactionList(pageQuery: PageQueryInterface): void {

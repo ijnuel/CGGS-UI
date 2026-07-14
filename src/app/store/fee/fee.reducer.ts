@@ -1,12 +1,13 @@
 import { createFeatureSelector, createReducer, on } from '@ngrx/store';
 import * as FeeAction from './fee.actions';
-import { FeeListInterface } from '../../types/fee';
+import { FeeListInterface, FeeLineListInterface } from '../../types/fee';
 import { PaginatedResponseInterface } from '../../types';
 
 export const feeFeatureKey = 'fee';
 
 export interface FeeState {
   feeAll: FeeListInterface[] | null;
+  feeLineAll: FeeLineListInterface[] | null;
   feeList: PaginatedResponseInterface<FeeListInterface[]> | null;
   feeByProperties: FeeListInterface[] | null;
   loading: boolean;
@@ -17,6 +18,7 @@ export interface FeeState {
 
 export const initialState: FeeState = {
   feeAll: null,
+  feeLineAll: null,
   feeList: null,
   feeByProperties: null,
   loading: false,
@@ -31,6 +33,10 @@ export const reducer = createReducer(
   on(FeeAction.getFeeAll, (state) => ({ ...state, loading: true, error: null })),
   on(FeeAction.getFeeAllSuccess, (state, { payload }) => ({ ...state, feeAll: payload.entity, loading: false })),
   on(FeeAction.getFeeAllFail, (state, { error }) => ({ ...state, loading: false, error })),
+
+  on(FeeAction.getFeeLineAll, (state) => ({ ...state, error: null })),
+  on(FeeAction.getFeeLineAllSuccess, (state, { payload }) => ({ ...state, feeLineAll: payload.entity })),
+  on(FeeAction.getFeeLineAllFail, (state, { error }) => ({ ...state, error })),
 
   on(FeeAction.getFeeList, (state) => ({ ...state, loading: true, error: null })),
   on(FeeAction.getFeeListSuccess, (state, { payload }) => ({ ...state, feeList: payload.entity, loading: false })),
@@ -60,6 +66,7 @@ export const reducer = createReducer(
 export const selectFeeState = createFeatureSelector<FeeState>(feeFeatureKey);
 
 export const getFeeAll = (state: FeeState) => state.feeAll;
+export const getFeeLineAll = (state: FeeState) => state.feeLineAll;
 export const getFeeList = (state: FeeState) => state.feeList;
 export const getFeeByProperties = (state: FeeState) => state.feeByProperties;
 export const getLoading = (state: FeeState) => state.loading;

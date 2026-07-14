@@ -9,6 +9,7 @@ import {
 export const studentClassFeatureKey = 'studentClass';
 
 export interface StudentClassState {
+  studentClassAll: StudentClassListInterface[] | null;
   studentClassList: PaginatedResponseInterface<StudentClassListInterface[]> | null;
   pageQuery: PageQueryInterface | null;
   studentClassById: StudentClassListInterface | null;
@@ -20,6 +21,7 @@ export interface StudentClassState {
 }
 
 export const initialState: StudentClassState = {
+  studentClassAll: null,
   studentClassList: null,
   pageQuery: null,
   studentClassById: null,
@@ -32,6 +34,10 @@ export const initialState: StudentClassState = {
 
 export const reducer = createReducer(
   initialState,
+  on(StudentClassAction.getStudentClassAll, (state) => ({ ...state, error: null })),
+  on(StudentClassAction.getStudentClassAllSuccess, (state, { payload }) => ({ ...state, studentClassAll: payload.entity })),
+  on(StudentClassAction.getStudentClassAllFail, (state, { error }) => ({ ...state, error })),
+
   on(StudentClassAction.getStudentClassList, (state, { pageQuery }) => {
     return {
       ...state,
@@ -124,6 +130,7 @@ export const reducer = createReducer(
   })
 );
 
+export const getStudentClassAll = (state: StudentClassState) => state.studentClassAll;
 export const getStudentClassList = (state: StudentClassState) => state.studentClassList;
 
 export const getStudentClassById = (state: StudentClassState) => state.studentClassById;

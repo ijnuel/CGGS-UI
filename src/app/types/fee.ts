@@ -2,6 +2,7 @@ import { SchoolTermSessionListInterface } from './school-term-session';
 import { StudentClassListInterface } from './student-class';
 import { ClassListInterface } from './class';
 import { LoggedUserInterface } from './auth';
+import { TransactionListInterface } from './transaction';
 
 export enum PaymentStatusEnum {
   Pending = 0,
@@ -94,6 +95,7 @@ export interface PaymentListInterface {
   paymentMethod?: string;
   paymentReversed: boolean;
   transactionId?: string;
+  transaction?: TransactionListInterface;
   createdBy?: LoggedUserInterface;
   feeLine?: FeeLineListInterface;
 }

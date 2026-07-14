@@ -14,6 +14,22 @@ import { GlobalLoadingFacade } from '../global-loading/global-loading.facade';
 
 @Injectable()
 export class StudentClassEffect {
+  $studentClassAll = createEffect(() =>
+    this.actions$.pipe(
+      ofType(StudentClassAction.getStudentClassAll),
+      switchMap(({ query }) =>
+        this.http.post<GenericResponseInterface<StudentClassListInterface[]>>(
+          `${environment.baseUrl}/StudentClass/GetAll`,
+          query ?? {},
+          { withCredentials: true }
+        ).pipe(
+          map((payload) => StudentClassAction.getStudentClassAllSuccess({ payload })),
+          catchError((error) => of(StudentClassAction.getStudentClassAllFail({ error })))
+        )
+      )
+    )
+  );
+
   $studentClassList = createEffect(() =>
     this.actions$.pipe(
       ofType(StudentClassAction.getStudentClassList),

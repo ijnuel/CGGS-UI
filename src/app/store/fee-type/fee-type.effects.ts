@@ -110,8 +110,8 @@ export class FeeTypeEffect {
       ofType(FeeTypeAction.deleteFeeType),
       switchMap(({ id }) =>
         this.http.delete<GenericResponseInterface<any>>(
-          `${environment.baseUrl}/FeeType/Delete/${id}`,
-          { withCredentials: true }
+          `${environment.baseUrl}/FeeType/Delete`,
+          { params: { id }, withCredentials: true }
         ).pipe(
           map((payload) => FeeTypeAction.deleteFeeTypeSuccess({ payload })),
           catchError((error) => of(FeeTypeAction.deleteFeeTypeFail({ error })))

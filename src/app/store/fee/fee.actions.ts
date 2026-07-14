@@ -7,6 +7,7 @@ import {
 } from '../../types';
 import {
   FeeListInterface,
+  FeeLineListInterface,
   GenerateFeesByTermSessionRequest,
   GenerateFeesBySessionAndTermRequest,
   GenerateFeesByTermSessionForStudentRequest,
@@ -15,6 +16,11 @@ import {
 
 // Get All (non-paginated)
 export const getFeeAll = createAction('[Fee] Get All', props<{ query?: QueryInterface }>());
+
+// FeeLine GetAll (used for in-memory join in payment facade)
+export const getFeeLineAll = createAction('[Fee] Get FeeLine All', props<{ query?: QueryInterface }>());
+export const getFeeLineAllSuccess = createAction('[Fee/API] Get FeeLine All Success', props<{ payload: GenericResponseInterface<FeeLineListInterface[]> }>());
+export const getFeeLineAllFail = createAction('[Fee/API] Get FeeLine All Fail', props<{ error: string }>());
 export const getFeeAllSuccess = createAction('[Fee/API] Get All Success', props<{ payload: GenericResponseInterface<FeeListInterface[]> }>());
 export const getFeeAllFail = createAction('[Fee/API] Get All Fail', props<{ error: string }>());
 

@@ -3,9 +3,14 @@ import {
   GenericResponseInterface,
   PageQueryInterface,
   PaginatedResponseInterface,
+  QueryInterface,
   StudentClassListInterface,
   StudentClassFormInterface,
 } from '../../types';
+
+export const getStudentClassAll = createAction('[StudentClass] Get All', props<{ query?: QueryInterface }>());
+export const getStudentClassAllSuccess = createAction('[StudentClass/API] Get All Success', props<{ payload: GenericResponseInterface<StudentClassListInterface[]> }>());
+export const getStudentClassAllFail = createAction('[StudentClass/API] Get All Fail', props<{ error: string }>());
 
 export const getStudentClassList = createAction(
   '[StudentClass] Get StudentClass List',

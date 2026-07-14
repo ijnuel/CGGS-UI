@@ -15,12 +15,11 @@ const tableHeader: TableHeaderInterface[] = [
   { key: 'paymentDate', type: 'text', name: 'Payment Date', sortable: true, filterable: false, align: 'left', format: (v: string) => v ? new Date(v).toLocaleDateString('en-NG', { day: '2-digit', month: 'short', year: 'numeric' }) : '—' },
   { key: 'paymentMethod', type: 'text', name: 'Payment Method', sortable: false, filterable: false, align: 'left', format: (v: string) => v ?? '—' },
   { key: 'paymentReversed', type: 'text', name: 'Reversed', sortable: false, filterable: false, align: 'center', format: (v: boolean) => v ? 'Yes' : 'No' },
-  { key: 'transactionId', type: 'text', name: 'Transaction ID', sortable: false, filterable: false, align: 'left', format: (v: string) => v ?? '—' },
+  { key: 'transactionRef', nestedKey: 'transaction.reference', type: 'text', name: 'Transaction Reference', sortable: false, filterable: false, align: 'left', format: (_: any, row: any) => row?.transaction?.reference ?? '—' },
   { key: 'session', nestedKey: 'feeLine.fee.schoolTermSession.session.name', type: 'text', name: 'Session', sortable: false, filterable: false, align: 'left', format: (_: any, row: any) => row?.feeLine?.fee?.schoolTermSession?.session?.name ?? '—' },
   { key: 'term', nestedKey: 'feeLine.fee.schoolTermSession.termString', type: 'text', name: 'Term', sortable: false, filterable: false, align: 'left', format: (_: any, row: any) => row?.feeLine?.fee?.schoolTermSession?.termString ?? '—' },
   { key: 'class', nestedKey: 'feeLine.fee.studentClass.class.name', type: 'text', name: 'Class', sortable: false, filterable: false, align: 'left', format: (_: any, row: any) => getClassLabel(row?.feeLine?.fee?.studentClass?.class) || row?.feeLine?.fee?.studentClass?.class?.name || '—' },
   { key: 'studentNo', nestedKey: 'feeLine.fee.studentClass.student.studentNo', type: 'text', name: 'Student No', sortable: false, filterable: false, align: 'left', format: (_: any, row: any) => row?.feeLine?.fee?.studentClass?.student?.studentNo ?? '—' },
-  { key: 'createdBy', nestedKey: 'createdBy.userName', type: 'text', name: 'Created By', sortable: false, filterable: false, align: 'left', format: (_: any, row: any) => row?.createdBy?.userName ?? '—' },
 ];
 
 @Component({
@@ -87,6 +86,7 @@ export class PaymentsComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
+    this.paymentFacade.loadReferenceData();
     this.schoolTermSessionFacade.getSchoolTermSessionAll({ nestedProperties: [{ name: 'session' }] });
     this.studentFacade.getStudentAll();
 

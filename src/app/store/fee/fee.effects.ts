@@ -4,7 +4,7 @@ import { of } from 'rxjs';
 import { catchError, map, switchMap, tap } from 'rxjs/operators';
 import * as FeeAction from './fee.actions';
 import { environment } from '../../../environments/environment';
-import { FeeListInterface } from '../../types/fee';
+import { FeeListInterface, FeeLineListInterface } from '../../types/fee';
 import { GenericResponseInterface, PaginatedResponseInterface } from '../../types';
 import { HttpClient } from '@angular/common/http';
 import { GlobalLoadingFacade } from '../global-loading/global-loading.facade';
@@ -22,6 +22,22 @@ export class FeeEffect {
         ).pipe(
           map((payload) => FeeAction.getFeeAllSuccess({ payload })),
           catchError((error) => of(FeeAction.getFeeAllFail({ error })))
+        )
+      )
+    )
+  );
+
+  $feeLineAll = createEffect(() =>
+    this.actions$.pipe(
+      ofType(FeeAction.getFeeLineAll),
+      switchMap(({ query }) =>
+        this.http.post<GenericResponseInterface<FeeLineListInterface[]>>(
+          `${environment.baseUrl}/FeeLine/GetAll`,
+          query ?? {},
+          { withCredentials: true }
+        ).pipe(
+          map((payload) => FeeAction.getFeeLineAllSuccess({ payload })),
+          catchError((error) => of(FeeAction.getFeeLineAllFail({ error })))
         )
       )
     )

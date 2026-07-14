@@ -10,6 +10,22 @@ import { HttpClient } from '@angular/common/http';
 
 @Injectable()
 export class TransactionEffect {
+  $transactionAll = createEffect(() =>
+    this.actions$.pipe(
+      ofType(TransactionAction.getTransactionAll),
+      switchMap(({ query }) =>
+        this.http.post<GenericResponseInterface<TransactionListInterface[]>>(
+          `${environment.baseUrl}/Transaction/GetAll`,
+          query ?? {},
+          { withCredentials: true }
+        ).pipe(
+          map((payload) => TransactionAction.getTransactionAllSuccess({ payload })),
+          catchError((error) => of(TransactionAction.getTransactionAllFail({ error })))
+        )
+      )
+    )
+  );
+
   $transactionList = createEffect(() =>
     this.actions$.pipe(
       ofType(TransactionAction.getTransactionList),

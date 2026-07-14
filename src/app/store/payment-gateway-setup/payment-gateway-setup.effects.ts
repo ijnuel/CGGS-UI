@@ -95,8 +95,8 @@ export class PaymentGatewaySetupEffect {
       ofType(PaymentGatewaySetupAction.deletePaymentGatewaySetup),
       switchMap(({ id }) =>
         this.http.delete<GenericResponseInterface<any>>(
-          `${environment.baseUrl}/PaymentGatewaySetup/Delete/${id}`,
-          { withCredentials: true }
+          `${environment.baseUrl}/PaymentGatewaySetup/Delete`,
+          { params: { id }, withCredentials: true }
         ).pipe(
           map((payload) => PaymentGatewaySetupAction.deletePaymentGatewaySetupSuccess({ payload })),
           catchError((error) => of(PaymentGatewaySetupAction.deletePaymentGatewaySetupFail({ error })))

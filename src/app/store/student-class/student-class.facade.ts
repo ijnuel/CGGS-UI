@@ -1,15 +1,16 @@
 import { Injectable } from '@angular/core';
 import { select, Store } from '@ngrx/store';
-import { combineLatest } from 'rxjs';
+import { combineLatest, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
 import * as StudentClassActions from './student-class.actions';
 import * as StudentClassSelector from './student-class.selector';
-import { PageQueryInterface, StudentClassFormInterface, StudentClassListInterface, StudentListInterface } from '../../types';
+import { PageQueryInterface, QueryInterface, StudentClassFormInterface, StudentClassListInterface, StudentListInterface } from '../../types';
 import { StudentFacade } from '../student/student.facade';
 
 @Injectable()
 export class StudentClassFacade {
+  studentClassAll$: Observable<StudentClassListInterface[] | null>;
   studentClassList$;
   studentClassById$;
   loading$ = this.store.pipe(select(StudentClassSelector.selectLoading));
@@ -36,6 +37,8 @@ export class StudentClassFacade {
       student: sc.student ?? studentMap.get(sc.studentId),
     });
 
+    this.studentClassAll$ = this.store.pipe(select(StudentClassSelector.selectStudentClassAll));
+
     this.studentClassList$ = combineLatest([
       this.store.pipe(select(StudentClassSelector.selectStudentClassList)),
       studentMap$,
@@ -54,6 +57,10 @@ export class StudentClassFacade {
     );
 
     this.studentFacade.getStudentAll();
+  }
+
+  getStudentClassAll(query?: QueryInterface) {
+    this.store.dispatch(StudentClassActions.getStudentClassAll({ query }));
   }
 
   getStudentClassList(pageQuery: PageQueryInterface) {

@@ -1,6 +1,7 @@
 import { createSelector } from '@ngrx/store';
 import {
   getFeeAll,
+  getFeeLineAll,
   getFeeList,
   getFeeByProperties,
   getLoading,
@@ -13,6 +14,7 @@ import {
 export const selectFeeState = (state: { fee: FeeState }) => state.fee;
 
 export const selectFeeAll = createSelector(selectFeeState, getFeeAll);
+export const selectFeeLineAll = createSelector(selectFeeState, getFeeLineAll);
 export const selectFeeList = createSelector(selectFeeState, getFeeList);
 export const selectFeeByProperties = createSelector(selectFeeState, getFeeByProperties);
 export const selectFeeLoading = createSelector(selectFeeState, getLoading);

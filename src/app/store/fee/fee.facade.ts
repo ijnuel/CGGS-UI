@@ -3,6 +3,7 @@ import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
 import {
   FeeListInterface,
+  FeeLineListInterface,
   GenerateFeesByTermSessionRequest,
   GenerateFeesBySessionAndTermRequest,
   GenerateFeesByTermSessionForStudentRequest,
@@ -12,6 +13,7 @@ import { PageQueryInterface, PaginatedResponseInterface, QueryInterface } from '
 import * as FeeAction from './fee.actions';
 import {
   selectFeeAll,
+  selectFeeLineAll,
   selectFeeList,
   selectFeeByProperties,
   selectFeeLoading,
@@ -24,6 +26,7 @@ import { FeeState } from './fee.reducer';
 @Injectable({ providedIn: 'root' })
 export class FeeFacade {
   feeAll$: Observable<FeeListInterface[] | null>;
+  feeLineAll$: Observable<FeeLineListInterface[] | null>;
   feeList$: Observable<PaginatedResponseInterface<FeeListInterface[]> | null>;
   feeByProperties$: Observable<FeeListInterface[] | null>;
   loading$: Observable<boolean>;
@@ -33,6 +36,7 @@ export class FeeFacade {
 
   constructor(private store: Store<{ fee: FeeState }>) {
     this.feeAll$ = this.store.select(selectFeeAll);
+    this.feeLineAll$ = this.store.select(selectFeeLineAll);
     this.feeList$ = this.store.select(selectFeeList);
     this.feeByProperties$ = this.store.select(selectFeeByProperties);
     this.loading$ = this.store.select(selectFeeLoading);
@@ -43,6 +47,10 @@ export class FeeFacade {
 
   getFeeAll(query?: QueryInterface): void {
     this.store.dispatch(FeeAction.getFeeAll({ query }));
+  }
+
+  getFeeLineAll(query?: QueryInterface): void {
+    this.store.dispatch(FeeAction.getFeeLineAll({ query }));
   }
 
   getFeeList(pageQuery: PageQueryInterface): void {

@@ -86,6 +86,19 @@ export class SearchableMatSelectComponent implements ControlValueAccessor, OnIni
     }
   }
 
+  get hasValue(): boolean {
+    return this.value != null && this.value !== '';
+  }
+
+  clearSelection(event: MouseEvent): void {
+    event.stopPropagation();
+    this.value = null;
+    this.inputControl.setValue(null, { emitEvent: false });
+    this.filteredOptions = this.options;
+    this.onChange(null);
+    this.selectionChange.emit(null);
+  }
+
   onOptionSelected(event: MatAutocompleteSelectedEvent) {
     const option = event.option.value;
     const val = option[this.valueKey];

@@ -1,6 +1,10 @@
 import { createAction, props } from '@ngrx/store';
-import { GenericResponseInterface, PageQueryInterface, PaginatedResponseInterface } from '../../types';
+import { GenericResponseInterface, PageQueryInterface, PaginatedResponseInterface, QueryInterface } from '../../types';
 import { TransactionListInterface } from '../../types/transaction';
+
+export const getTransactionAll = createAction('[Transaction] Get All', props<{ query?: QueryInterface }>());
+export const getTransactionAllSuccess = createAction('[Transaction/API] Get All Success', props<{ payload: GenericResponseInterface<TransactionListInterface[]> }>());
+export const getTransactionAllFail = createAction('[Transaction/API] Get All Fail', props<{ error: string }>());
 
 export const getTransactionList = createAction('[Transaction] Get List', props<{ pageQuery: PageQueryInterface }>());
 export const getTransactionListSuccess = createAction('[Transaction/API] Get List Success', props<{ payload: GenericResponseInterface<PaginatedResponseInterface<TransactionListInterface[]>> }>());

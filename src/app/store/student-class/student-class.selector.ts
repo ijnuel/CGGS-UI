@@ -7,6 +7,11 @@ export const selectStudentClassState = createSelector(
   (state) => state[fromStudentClass.studentClassFeatureKey]
 );
 
+export const selectStudentClassAll = createSelector(
+  fromStudentClass.selectStudentClassState,
+  fromStudentClass.getStudentClassAll
+);
+
 export const selectStudentClassList = createSelector(
   fromStudentClass.selectStudentClassState,
   fromStudentClass.getStudentClassList
