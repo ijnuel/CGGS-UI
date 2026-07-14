@@ -5,9 +5,11 @@
 export const environment = {
   production: true,
   baseUrl: 'https://api.chosenschool.org/api',
+  companyId: 'c503274b-49ad-4096-ffc6-08dd9560d596', // fill in the Chosen Generation company UUID
   schoolName: 'Chosen Generation',
   schoolNameFull: 'Chosen Generation Schools',
   schoolAbbreviation: 'CGGS',
+  r2BaseUrl: 'https://files.chosenschool.org',
   logoUrl: 'assets/images/logo.png',
   logoWhiteUrl: 'assets/images/logo-white.png',
   faviconUrl: 'chosen.ico',
@@ -17,7 +19,7 @@ export const environment = {
   address: 'No. 47 Olorunsogo, Ijaregbe Road, Ilesa, Osun State, Nigeria.',
   phoneNumbers: ['08062315427', '09037535756'],
   emails: [
-    { address: 'ijitonajesudunsin@gmail.com', note: 'responds faster' },
+    { address: 'support@chosenschool.org', note: 'responds faster' },
     { address: 'Chosengenerationacad@gmail.com' },
   ],
   officeHours: 'Monday – Friday: 8:00 AM – 4:00 PM',

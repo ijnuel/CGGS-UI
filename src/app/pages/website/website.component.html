@@ -1,14 +1,12 @@
 <div class="overflow-x-hidden">
 
   <!-- ===== NAVBAR ===== -->
-  <nav
-    id="topbar"
-    class="fixed top-0 left-0 w-full h-20 flex justify-between items-center px-6 md:px-14 z-50"
-  >
+  <nav id="topbar" [class.scrolled]="navScrolled"
+    class="fixed top-0 left-0 w-full h-20 flex justify-between items-center px-6 md:px-14 z-50 transition-all duration-300">
     <div class="flex items-center gap-3">
-      <img [src]="env.logoWhiteUrl" class="w-11 h-11 object-contain" [alt]="env.schoolAbbreviation + ' Logo'" />
+      <img [src]="logoUrl" class="w-11 h-11 object-contain rounded-full" [alt]="schoolShort + ' Logo'" />
       <div class="hidden sm:block leading-tight">
-        <p class="text-white font-bold text-sm tracking-wide">{{ env.schoolName }}</p>
+        <p class="text-white font-bold text-sm tracking-wide">{{ schoolName }}</p>
       </div>
     </div>
 
@@ -16,6 +14,7 @@
     <ul class="hidden md:flex items-center gap-8 text-sm font-semibold text-[var(--app-secondary)]">
       <li class="nav-link" (click)="smoothScroll('#home')">Home</li>
       <li class="nav-link" (click)="smoothScroll('#about-us')">About Us</li>
+      <li *ngIf="galleryGrid.length > 0" class="nav-link" (click)="smoothScroll('#gallery')">Gallery</li>
       <li class="nav-link" (click)="smoothScroll('#news')">News &amp; Events</li>
       <li class="nav-link" (click)="smoothScroll('#contact-us')">Contact Us</li>
       <li>
@@ -30,13 +29,12 @@
   </nav>
 
   <!-- Mobile Menu -->
-  <div
-    [ngClass]="{'hidden': !isMobileMenuOpen}"
-    class="md:hidden fixed top-20 left-0 w-full bg-[var(--app-primary)] z-40 shadow-2xl border-t border-white/10"
-  >
+  <div [ngClass]="{'hidden': !isMobileMenuOpen}"
+    class="md:hidden fixed top-20 left-0 w-full bg-[var(--app-primary)] z-40 shadow-2xl border-t border-white/10">
     <ul class="flex flex-col items-center gap-0 py-4 text-sm font-semibold text-[var(--app-secondary)]">
       <li class="nav-link w-full text-center py-4 border-b border-white/10" (click)="scrollAndClose('#home')">Home</li>
       <li class="nav-link w-full text-center py-4 border-b border-white/10" (click)="scrollAndClose('#about-us')">About Us</li>
+      <li *ngIf="galleryGrid.length > 0" class="nav-link w-full text-center py-4 border-b border-white/10" (click)="scrollAndClose('#gallery')">Gallery</li>
       <li class="nav-link w-full text-center py-4 border-b border-white/10" (click)="scrollAndClose('#news')">News &amp; Events</li>
       <li class="nav-link w-full text-center py-4 border-b border-white/10" (click)="scrollAndClose('#contact-us')">Contact Us</li>
       <li class="pt-4 pb-2">
@@ -51,36 +49,28 @@
     <div class="hero-overlay absolute inset-0"></div>
 
     <div class="relative z-10 text-center px-6 max-w-4xl mx-auto pt-20">
-      <!-- Badge -->
       <div class="inline-flex items-center gap-2 bg-white/10 backdrop-blur-sm border border-white/20 rounded-full px-5 py-2 mb-8">
         <span class="w-2 h-2 rounded-full bg-[var(--app-accent)] animate-pulse"></span>
         <span class="text-[var(--app-secondary)] text-xs font-semibold tracking-[0.2em] uppercase">Excellence · Character · Purpose</span>
       </div>
 
-      <h1 class="text-white font-bold leading-tight mb-6">
-        {{ env.schoolNameFull }}<br />
-      </h1>
+      <h1 class="text-white font-bold leading-tight mb-6">{{ schoolName }}</h1>
 
       <p class="text-[var(--app-secondary)] text-lg md:text-xl leading-relaxed mb-10 max-w-2xl mx-auto opacity-90">
-        Where bright minds flourish and future leaders are shaped. We deliver a transformative
-        education that equips every child with knowledge, skills, and values to thrive in
-        a rapidly changing world.
+        {{ company?.description || 'Where bright minds flourish and future leaders are shaped. We deliver a transformative education that equips every child with knowledge, skills, and values to thrive in a rapidly changing world.' }}
       </p>
 
       <div class="flex flex-col xs:flex-row gap-4 justify-center">
         <button routerLink="/auth/enroll" class="btn w-full xs:w-auto px-8 py-3 text-base rounded-full font-semibold shadow-lg shadow-blue-500/20">
           Enroll For Admission
         </button>
-        <button
-          (click)="smoothScroll('#about-us')"
-          class="w-full xs:w-auto px-8 py-3 text-base rounded-full font-semibold border-2 border-white/30 text-white hover:bg-white/10 transition-all duration-200"
-        >
+        <button (click)="smoothScroll('#about-us')"
+          class="w-full xs:w-auto px-8 py-3 text-base rounded-full font-semibold border-2 border-white/30 text-white hover:bg-white/10 transition-all duration-200">
           Discover More
         </button>
       </div>
     </div>
 
-    <!-- Scroll cue -->
     <div class="absolute bottom-8 left-1/2 -translate-x-1/2 text-white/50 flex flex-col items-center gap-1">
       <span class="text-[10px] tracking-[0.25em] uppercase">Scroll</span>
       <span class="material-icons text-lg scroll-bounce">expand_more</span>
@@ -96,7 +86,7 @@
         <p class="text-blue-100 text-sm mt-1 font-medium tracking-wide">Enrolled Students</p>
       </div>
       <div class="stat-card text-white">
-        <p class="text-4xl font-bold">5+</p>
+        <p class="text-4xl font-bold">{{ yearsOfExcellence }}+</p>
         <p class="text-blue-100 text-sm mt-1 font-medium tracking-wide">Years of Excellence</p>
       </div>
       <div class="stat-card text-white">
@@ -115,14 +105,12 @@
   <section id="about-us" class="py-24 bg-[var(--app-bg)]">
     <div class="max-w-6xl mx-auto px-6">
 
-      <!-- Section header -->
       <div class="text-center mb-16">
         <span class="text-[var(--app-accent)] font-semibold text-xs uppercase tracking-[0.2em]">Who We Are</span>
         <h2 class="text-[var(--app-primary)] mt-3 mb-4">About Us</h2>
         <div class="w-14 h-1 bg-[var(--app-accent)] mx-auto rounded-full"></div>
       </div>
 
-      <!-- Mission & Vision -->
       <div class="grid md:grid-cols-2 gap-14 items-start mb-20">
         <div>
           <div class="flex items-center gap-3 mb-5">
@@ -131,15 +119,9 @@
             </div>
             <h3 class="text-[var(--app-primary)]">Our Mission</h3>
           </div>
-          <p class="text-gray-500 leading-relaxed mb-4">
-            At {{ env.schoolNameFull }}, our mission is to raise a generation of critical thinkers,
-            compassionate leaders, and responsible global citizens. We believe every child carries
-            extraordinary potential — our role is to ignite it.
-          </p>
-          <p class="text-gray-500 leading-relaxed">
-            Founded with a vision to bridge academic excellence with strong moral values, {{ env.schoolAbbreviation }} has
-            grown into one of the most trusted educational institutions in the region, nurturing
-            students from nursery through primary school.
+          <p class="text-gray-500 leading-relaxed mb-4" [innerHTML]="safeMission"></p>
+          <p class="text-gray-500 leading-relaxed" *ngIf="company?.principalName">
+            Led by <strong class="text-[var(--app-primary)]">{{ company!.principalName }}</strong>, our team is committed to delivering an education that shapes character alongside intellect.
           </p>
         </div>
 
@@ -150,11 +132,7 @@
             </div>
             <h3 class="text-[var(--app-primary)]">Our Vision</h3>
           </div>
-          <p class="text-gray-500 leading-relaxed mb-6">
-            To be the leading center of learning excellence — where students don't just pass exams
-            but discover their purpose, develop their character, and are empowered to positively
-            impact their communities and the world beyond.
-          </p>
+          <p class="text-gray-500 leading-relaxed mb-6" [innerHTML]="safeVision"></p>
           <div class="space-y-3">
             <div class="flex items-start gap-3">
               <span class="material-icons text-[var(--app-accent)] text-lg mt-0.5">check_circle</span>
@@ -181,36 +159,13 @@
         <h3 class="text-[var(--app-primary)]">Our Core Values</h3>
       </div>
       <div class="grid sm:grid-cols-2 md:grid-cols-4 gap-6">
-        <div class="value-card bg-white rounded-2xl p-6 text-center shadow-sm border border-gray-100">
+        <div *ngFor="let val of displayCoreValues"
+             class="value-card bg-white rounded-2xl p-6 text-center shadow-sm border border-gray-100">
           <div class="w-14 h-14 bg-blue-50 rounded-2xl flex items-center justify-center mx-auto mb-4">
-            <span class="material-icons text-[var(--app-accent)] text-2xl">school</span>
+            <span class="material-icons text-[var(--app-accent)] text-2xl">{{ val.iconName || 'star' }}</span>
           </div>
-          <h5 class="text-[var(--app-primary)] font-bold mb-2">Academic Excellence</h5>
-          <p class="text-gray-400 text-sm leading-relaxed">We uphold the highest standards of learning and intellectual growth.</p>
-        </div>
-
-        <div class="value-card bg-white rounded-2xl p-6 text-center shadow-sm border border-gray-100">
-          <div class="w-14 h-14 bg-blue-50 rounded-2xl flex items-center justify-center mx-auto mb-4">
-            <span class="material-icons text-[var(--app-accent)] text-2xl">favorite</span>
-          </div>
-          <h5 class="text-[var(--app-primary)] font-bold mb-2">Character &amp; Integrity</h5>
-          <p class="text-gray-400 text-sm leading-relaxed">Building young people of honour, honesty, and strong moral fibre.</p>
-        </div>
-
-        <div class="value-card bg-white rounded-2xl p-6 text-center shadow-sm border border-gray-100">
-          <div class="w-14 h-14 bg-blue-50 rounded-2xl flex items-center justify-center mx-auto mb-4">
-            <span class="material-icons text-[var(--app-accent)] text-2xl">groups</span>
-          </div>
-          <h5 class="text-[var(--app-primary)] font-bold mb-2">Community &amp; Service</h5>
-          <p class="text-gray-400 text-sm leading-relaxed">Nurturing empathy and a spirit of giving back to society.</p>
-        </div>
-
-        <div class="value-card bg-white rounded-2xl p-6 text-center shadow-sm border border-gray-100">
-          <div class="w-14 h-14 bg-blue-50 rounded-2xl flex items-center justify-center mx-auto mb-4">
-            <span class="material-icons text-[var(--app-accent)] text-2xl">lightbulb</span>
-          </div>
-          <h5 class="text-[var(--app-primary)] font-bold mb-2">Innovation &amp; Creativity</h5>
-          <p class="text-gray-400 text-sm leading-relaxed">Encouraging curiosity, innovation, and creative problem-solving.</p>
+          <h5 class="text-[var(--app-primary)] font-bold mb-2" [innerHTML]="safeHtml(val.title)"></h5>
+          <p class="text-gray-400 text-sm leading-relaxed" [innerHTML]="safeHtml(val.body)"></p>
         </div>
       </div>
 
@@ -218,25 +173,169 @@
   </section>
 
 
-  <!-- ===== NEWS & EVENTS SECTION ===== -->
-  <section id="news" class="py-24 bg-white">
+  <!-- ===== GALLERY SECTION ===== -->
+  <section id="gallery" class="py-24 bg-white" *ngIf="galleryGrid.length > 0">
     <div class="max-w-6xl mx-auto px-6">
 
-      <!-- Section header -->
+      <div class="text-center mb-16">
+        <span class="text-[var(--app-accent)] font-semibold text-xs uppercase tracking-[0.2em]">Our Campus</span>
+        <h2 class="text-[var(--app-primary)] mt-3 mb-4">Gallery</h2>
+        <div class="w-14 h-1 bg-[var(--app-accent)] mx-auto rounded-full"></div>
+        <p class="text-gray-400 mt-5 max-w-xl mx-auto text-sm leading-relaxed">
+          A glimpse into the vibrant life at {{ schoolName }} — our facilities, activities, and memorable moments.
+        </p>
+      </div>
+
+      <!-- Static grid (≤ 3 images) -->
+      <div *ngIf="!galleryCarouselActive" class="grid grid-cols-2 md:grid-cols-3 gap-4">
+        <div *ngFor="let img of gallery"
+             class="gallery-item group relative aspect-square overflow-hidden rounded-2xl cursor-pointer"
+             (click)="openLightbox(img.imageUrl)">
+          <img [src]="img.imageUrl" [alt]="img.caption || 'Gallery image'"
+               class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" />
+          <div class="absolute inset-0 bg-black/0 group-hover:bg-black/40 transition-all duration-300 flex items-center justify-center">
+            <span class="material-icons text-white opacity-0 group-hover:opacity-100 transition-opacity duration-200 text-3xl">zoom_in</span>
+          </div>
+          <p *ngIf="img.caption" class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent text-white text-xs px-3 py-2 translate-y-full group-hover:translate-y-0 transition-transform duration-300">
+            {{ img.caption }}
+          </p>
+        </div>
+      </div>
+
+      <!-- Infinite carousel (> 3 images) -->
+      <div *ngIf="galleryCarouselActive" class="relative">
+        <button (click)="galleryPrev()"
+                class="absolute -left-5 top-1/2 -translate-y-1/2 z-10 w-10 h-10 rounded-full bg-white shadow-md border border-gray-100 flex items-center justify-center text-[var(--app-accent)] hover:bg-[var(--app-accent)] hover:text-white hover:border-transparent transition-all">
+          <span class="material-icons">chevron_left</span>
+        </button>
+
+        <div #galleryViewport class="overflow-hidden">
+          <div class="flex"
+               [style.transform]="galleryTransform"
+               [style.transition]="galleryTransitioning ? 'transform 0.5s ease' : 'none'"
+               (transitionend)="onGalleryTransitionEnd($event)">
+            <div *ngFor="let img of galleryAllItems"
+                 class="flex-none px-2"
+                 [style.width.px]="galleryCardWidth">
+              <div class="gallery-item group relative aspect-square overflow-hidden rounded-2xl cursor-pointer"
+                   (click)="openLightbox(img.imageUrl)">
+                <img [src]="img.imageUrl" [alt]="img.caption || 'Gallery image'"
+                     class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" />
+                <div class="absolute inset-0 bg-black/0 group-hover:bg-black/40 transition-all duration-300 flex items-center justify-center">
+                  <span class="material-icons text-white opacity-0 group-hover:opacity-100 transition-opacity duration-200 text-3xl">zoom_in</span>
+                </div>
+                <p *ngIf="img.caption" class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent text-white text-xs px-3 py-2 translate-y-full group-hover:translate-y-0 transition-transform duration-300">
+                  {{ img.caption }}
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <button (click)="galleryNext()"
+                class="absolute -right-5 top-1/2 -translate-y-1/2 z-10 w-10 h-10 rounded-full bg-white shadow-md border border-gray-100 flex items-center justify-center text-[var(--app-accent)] hover:bg-[var(--app-accent)] hover:text-white hover:border-transparent transition-all">
+          <span class="material-icons">chevron_right</span>
+        </button>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- Lightbox -->
+  <div *ngIf="lightboxUrl"
+       class="fixed inset-0 bg-black/90 z-[100] flex items-center justify-center p-4"
+       (click)="closeLightbox()">
+    <button class="absolute top-4 right-4 text-white hover:text-gray-300 z-10" (click)="closeLightbox()">
+      <span class="material-icons text-3xl">close</span>
+    </button>
+    <img [src]="lightboxUrl" alt="Gallery" class="max-w-full max-h-[90vh] rounded-xl object-contain"
+         (click)="$event.stopPropagation()" />
+  </div>
+
+
+  <!-- ===== NEWS & EVENTS SECTION ===== -->
+  <section id="news" class="py-24 bg-[var(--app-bg)]">
+    <div class="max-w-6xl mx-auto px-6">
+
       <div class="text-center mb-16">
         <span class="text-[var(--app-accent)] font-semibold text-xs uppercase tracking-[0.2em]">Stay Updated</span>
         <h2 class="text-[var(--app-primary)] mt-3 mb-4">News &amp; Events</h2>
         <div class="w-14 h-1 bg-[var(--app-accent)] mx-auto rounded-full"></div>
         <p class="text-gray-400 mt-5 max-w-xl mx-auto text-sm leading-relaxed">
-          Stay connected with the latest happenings, achievements, and upcoming events at {{ env.schoolNameFull }}.
+          Stay connected with the latest happenings, achievements, and upcoming events at {{ schoolName }}.
         </p>
       </div>
 
-      <!-- News Cards -->
-      <div class="grid sm:grid-cols-2 md:grid-cols-3 gap-8">
+      <!-- Dynamic cards from API -->
+      <ng-container *ngIf="announcements.length > 0">
 
-        <!-- Card 1: Annual Graduation -->
-        <div class="news-card bg-[var(--app-bg)] rounded-2xl overflow-hidden border border-gray-100">
+        <!-- Static grid (≤ 3 announcements) -->
+        <div *ngIf="!newsCarouselActive" class="grid sm:grid-cols-2 md:grid-cols-3 gap-8">
+          <div *ngFor="let ann of announcements" class="news-card bg-white rounded-2xl overflow-hidden border border-gray-100 h-full flex flex-col">
+            <ng-container *ngTemplateOutlet="newsCard; context: { ann: ann }"></ng-container>
+          </div>
+        </div>
+
+        <!-- Infinite carousel (> 3 announcements) -->
+        <div *ngIf="newsCarouselActive" class="relative">
+          <button (click)="newsPrev()"
+                  class="absolute -left-5 top-1/2 -translate-y-1/2 z-10 w-10 h-10 rounded-full bg-white shadow-md border border-gray-100 flex items-center justify-center text-[var(--app-accent)] hover:bg-[var(--app-accent)] hover:text-white hover:border-transparent transition-all">
+            <span class="material-icons">chevron_left</span>
+          </button>
+
+          <div #newsViewport class="overflow-hidden">
+            <div class="flex"
+                 [style.transform]="newsTransform"
+                 [style.transition]="newsTransitioning ? 'transform 0.5s ease' : 'none'"
+                 (transitionend)="onNewsTransitionEnd($event)">
+              <div *ngFor="let ann of newsAllItems"
+                   class="flex-none px-4 flex flex-col"
+                   [style.width.px]="newsCardWidth">
+                <div class="news-card bg-white rounded-2xl overflow-hidden border border-gray-100 h-full flex flex-col">
+                  <ng-container *ngTemplateOutlet="newsCard; context: { ann: ann }"></ng-container>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <button (click)="newsNext()"
+                  class="absolute -right-5 top-1/2 -translate-y-1/2 z-10 w-10 h-10 rounded-full bg-white shadow-md border border-gray-100 flex items-center justify-center text-[var(--app-accent)] hover:bg-[var(--app-accent)] hover:text-white hover:border-transparent transition-all">
+            <span class="material-icons">chevron_right</span>
+          </button>
+        </div>
+
+      </ng-container>
+
+      <!-- Shared card template -->
+      <ng-template #newsCard let-ann="ann">
+        <div class="bg-[var(--app-accent)] h-1.5 flex-none"></div>
+        <div class="p-6 flex flex-col flex-1">
+          <div class="flex items-center gap-2 mb-4 flex-none">
+            <span class="material-icons text-[var(--app-accent)] text-base">{{ ann.iconName || categoryIcon(ann.category) }}</span>
+            <span class="text-[var(--app-accent)] text-[10px] font-bold uppercase tracking-widest">
+              {{ ann.category || 'Announcement' }}
+            </span>
+          </div>
+          <h5 class="text-[var(--app-primary)] font-bold mb-3 leading-snug flex-none">{{ ann.title }}</h5>
+          <p class="text-gray-400 text-sm leading-relaxed line-clamp-3 flex-none"
+             [innerHTML]="safeHtml(ann.body)"
+             [title]="stripHtml(ann.body)"></p>
+          <div class="mt-auto pt-4 border-t border-gray-100 flex flex-wrap items-center gap-x-4 gap-y-1">
+            <span class="flex items-center gap-1">
+              <span class="material-icons text-gray-300 text-base">calendar_today</span>
+              <span class="text-gray-400 text-xs">{{ ann.announcementDate | date:'mediumDate' }}</span>
+            </span>
+            <span *ngIf="ann.location" class="flex items-center gap-1">
+              <span class="material-icons text-gray-300 text-base">location_on</span>
+              <span class="text-gray-400 text-xs">{{ ann.location }}</span>
+            </span>
+          </div>
+        </div>
+      </ng-template>
+
+      <!-- Fallback static cards when no API data -->
+      <div *ngIf="announcements.length === 0" class="grid sm:grid-cols-2 md:grid-cols-3 gap-8">
+        <div class="news-card bg-white rounded-2xl overflow-hidden border border-gray-100">
           <div class="bg-[var(--app-accent)] h-1.5"></div>
           <div class="p-6">
             <div class="flex items-center gap-2 mb-4">
@@ -246,8 +345,7 @@
             <h5 class="text-[var(--app-primary)] font-bold mb-3 leading-snug">Annual Graduation Ceremony</h5>
             <p class="text-gray-400 text-sm leading-relaxed">
               A landmark celebration as we honour our graduating class — students who have shown
-              remarkable dedication, growth, and excellence throughout their time at {{ env.schoolAbbreviation }}. Family
-              and friends are warmly invited to share in this special milestone.
+              remarkable dedication, growth, and excellence throughout their time at {{ schoolShort }}.
             </p>
             <div class="mt-5 pt-4 border-t border-gray-100 flex items-center gap-2">
               <span class="material-icons text-gray-300 text-base">location_on</span>
@@ -255,9 +353,7 @@
             </div>
           </div>
         </div>
-
-        <!-- Card 2: Traditional Day -->
-        <div class="news-card bg-[var(--app-bg)] rounded-2xl overflow-hidden border border-gray-100">
+        <div class="news-card bg-white rounded-2xl overflow-hidden border border-gray-100">
           <div class="bg-[var(--app-primary)] h-1.5"></div>
           <div class="p-6">
             <div class="flex items-center gap-2 mb-4">
@@ -266,9 +362,8 @@
             </div>
             <h5 class="text-[var(--app-primary)] font-bold mb-3 leading-snug">Traditional Day Celebration</h5>
             <p class="text-gray-400 text-sm leading-relaxed">
-              A vibrant celebration of culture, heritage, and identity! Students and staff dress in
-              their traditional attire and showcase the rich diversity of Nigeria's peoples through
-              dance, music, food, and storytelling. Unity in diversity at its finest.
+              A vibrant celebration of culture, heritage, and identity! Students and staff showcase
+              the rich diversity of Nigeria's peoples through dance, music, food, and storytelling.
             </p>
             <div class="mt-5 pt-4 border-t border-gray-100 flex items-center gap-2">
               <span class="material-icons text-gray-300 text-base">location_on</span>
@@ -276,9 +371,7 @@
             </div>
           </div>
         </div>
-
-        <!-- Card 3: Christmas Carol -->
-        <div class="news-card bg-[var(--app-bg)] rounded-2xl overflow-hidden border border-gray-100">
+        <div class="news-card bg-white rounded-2xl overflow-hidden border border-gray-100">
           <div class="bg-[#008042] h-1.5"></div>
           <div class="p-6">
             <div class="flex items-center gap-2 mb-4">
@@ -287,9 +380,8 @@
             </div>
             <h5 class="text-[var(--app-primary)] font-bold mb-3 leading-snug">Christmas Carol Service</h5>
             <p class="text-gray-400 text-sm leading-relaxed">
-              Usher in the festive season with the {{ env.schoolAbbreviation }} Christmas Carol Service — an enchanting
-              evening of carols, dramatic performances, and heartfelt worship as our students
-              celebrate the joy and spirit of Christmas together with family and the community.
+              Usher in the festive season with the {{ schoolShort }} Christmas Carol Service — an enchanting
+              evening of carols, dramatic performances, and heartfelt worship together with family.
             </p>
             <div class="mt-5 pt-4 border-t border-gray-100 flex items-center gap-2">
               <span class="material-icons text-gray-300 text-base">location_on</span>
@@ -297,7 +389,6 @@
             </div>
           </div>
         </div>
-
       </div>
 
       <!-- Admission Banner -->
@@ -321,10 +412,9 @@
 
 
   <!-- ===== CONTACT US SECTION ===== -->
-  <section id="contact-us" class="py-24 bg-[var(--app-bg)]">
+  <section id="contact-us" class="py-24 bg-white">
     <div class="max-w-6xl mx-auto px-6">
 
-      <!-- Section header -->
       <div class="text-center mb-16">
         <span class="text-[var(--app-accent)] font-semibold text-xs uppercase tracking-[0.2em]">Get In Touch</span>
         <h2 class="text-[var(--app-primary)] mt-3 mb-4">Contact Us</h2>
@@ -342,84 +432,101 @@
           <h4 class="text-[var(--app-primary)] font-bold">Reach Us Directly</h4>
 
           <div class="flex items-start gap-4">
-            <div class="w-12 h-12 bg-white rounded-xl flex items-center justify-center flex-shrink-0 shadow-sm border border-gray-100">
+            <div class="w-12 h-12 bg-[var(--app-bg)] rounded-xl flex items-center justify-center flex-shrink-0 shadow-sm border border-gray-100">
               <span class="material-icons text-[var(--app-accent)]">location_on</span>
             </div>
             <div>
               <p class="font-semibold text-[var(--app-primary)] text-sm mb-1">Our Address</p>
-              <p class="text-gray-400 text-sm leading-relaxed">{{ env.address }}</p>
+              <p class="text-gray-400 text-sm leading-relaxed">{{ displayAddress }}</p>
             </div>
           </div>
 
           <div class="flex items-start gap-4">
-            <div class="w-12 h-12 bg-white rounded-xl flex items-center justify-center flex-shrink-0 shadow-sm border border-gray-100">
+            <div class="w-12 h-12 bg-[var(--app-bg)] rounded-xl flex items-center justify-center flex-shrink-0 shadow-sm border border-gray-100">
               <span class="material-icons text-[var(--app-accent)]">phone</span>
             </div>
             <div>
               <p class="font-semibold text-[var(--app-primary)] text-sm mb-1">Phone Numbers</p>
               <p class="text-gray-400 text-sm leading-relaxed">
-                @for (phone of env.phoneNumbers; track phone; let last = $last) {
-                  {{ phone }}@if (!last) {<br />}
-                }
+                <ng-container *ngFor="let phone of displayPhone; let last = last">
+                  <a [href]="'tel:' + phone" class="hover:text-[var(--app-accent)] transition-colors">{{ phone }}</a>
+                  <br *ngIf="!last" />
+                </ng-container>
               </p>
             </div>
           </div>
 
           <div class="flex items-start gap-4">
-            <div class="w-12 h-12 bg-white rounded-xl flex items-center justify-center flex-shrink-0 shadow-sm border border-gray-100">
+            <div class="w-12 h-12 bg-[var(--app-bg)] rounded-xl flex items-center justify-center flex-shrink-0 shadow-sm border border-gray-100">
               <span class="material-icons text-[var(--app-accent)]">email</span>
             </div>
             <div>
               <p class="font-semibold text-[var(--app-primary)] text-sm mb-1">Email Address</p>
-              <p class="text-gray-400 text-sm leading-relaxed break-all">
-                @for (email of env.emails; track email.address; let last = $last) {
-                  {{ email.address }}@if (email.note) { <span class="text-[10px] text-[var(--app-accent)] font-semibold">({{ email.note }})</span>}@if (!last) {<br />}
-                }
-              </p>
+              <a [href]="mailtoLink" class="text-gray-400 text-sm break-all hover:text-[var(--app-accent)] transition-colors">
+                {{ displayEmail }}
+              </a>
             </div>
           </div>
 
           <div class="flex items-start gap-4">
-            <div class="w-12 h-12 bg-white rounded-xl flex items-center justify-center flex-shrink-0 shadow-sm border border-gray-100">
+            <div class="w-12 h-12 bg-[var(--app-bg)] rounded-xl flex items-center justify-center flex-shrink-0 shadow-sm border border-gray-100">
               <span class="material-icons text-[var(--app-accent)]">schedule</span>
             </div>
             <div>
               <p class="font-semibold text-[var(--app-primary)] text-sm mb-1">Office Hours</p>
-              <p class="text-gray-400 text-sm leading-relaxed">
-                {{ env.officeHours }}
-              </p>
+              <p class="text-gray-400 text-sm leading-relaxed">{{ env.officeHours }}</p>
             </div>
+          </div>
+
+          <!-- Quick action buttons -->
+          <div class="flex flex-wrap gap-3 pt-2">
+            <a [href]="whatsAppLink" target="_blank" rel="noopener"
+               class="inline-flex items-center gap-2 bg-[#25d366] text-white text-sm font-semibold px-5 py-2.5 rounded-full hover:bg-[#1ebe5a] transition-colors shadow-sm">
+              <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+              WhatsApp
+            </a>
+            <a [href]="mailtoLink"
+               class="inline-flex items-center gap-2 bg-[var(--app-accent)] text-white text-sm font-semibold px-5 py-2.5 rounded-full hover:opacity-90 transition-opacity shadow-sm">
+              <span class="material-icons text-base">email</span>
+              Send Email
+            </a>
           </div>
         </div>
 
-        <!-- Contact Form (visual) -->
-        <div class="bg-white rounded-2xl p-8 shadow-sm border border-gray-100">
+        <!-- Contact Form -->
+        <div class="bg-[var(--app-bg)] rounded-2xl p-8 shadow-sm border border-gray-100">
           <h4 class="text-[var(--app-primary)] font-bold mb-6">Send Us a Message</h4>
           <div class="space-y-4">
             <div>
               <label class="text-xs font-semibold text-gray-500 uppercase tracking-wide block mb-1.5">Full Name</label>
-              <input type="text" placeholder="e.g. John Doe" disabled
-                class="w-full border border-gray-200 rounded-lg px-4 py-3 text-sm text-gray-400 bg-gray-50 cursor-not-allowed" />
+              <input type="text" placeholder="e.g. John Doe"
+                class="w-full border border-gray-200 rounded-lg px-4 py-3 text-sm text-gray-700 bg-white focus:outline-none focus:ring-2 focus:ring-[var(--app-accent)]/30 focus:border-[var(--app-accent)] transition-all" />
             </div>
             <div>
-              <label class="text-xs font-semibold text-gray-500 uppercase tracking-wide block mb-1.5">Email Address</label>
-              <input type="email" placeholder="your@email.com" disabled
-                class="w-full border border-gray-200 rounded-lg px-4 py-3 text-sm text-gray-400 bg-gray-50 cursor-not-allowed" />
+              <label class="text-xs font-semibold text-gray-500 uppercase tracking-wide block mb-1.5">Phone / Email</label>
+              <input type="text" placeholder="Phone number or email address"
+                class="w-full border border-gray-200 rounded-lg px-4 py-3 text-sm text-gray-700 bg-white focus:outline-none focus:ring-2 focus:ring-[var(--app-accent)]/30 focus:border-[var(--app-accent)] transition-all" />
             </div>
             <div>
               <label class="text-xs font-semibold text-gray-500 uppercase tracking-wide block mb-1.5">Subject</label>
-              <input type="text" placeholder="e.g. Admission Enquiry" disabled
-                class="w-full border border-gray-200 rounded-lg px-4 py-3 text-sm text-gray-400 bg-gray-50 cursor-not-allowed" />
+              <input type="text" placeholder="e.g. Admission Enquiry"
+                class="w-full border border-gray-200 rounded-lg px-4 py-3 text-sm text-gray-700 bg-white focus:outline-none focus:ring-2 focus:ring-[var(--app-accent)]/30 focus:border-[var(--app-accent)] transition-all" />
             </div>
             <div>
               <label class="text-xs font-semibold text-gray-500 uppercase tracking-wide block mb-1.5">Message</label>
-              <textarea rows="4" placeholder="Your message here..." disabled
-                class="w-full border border-gray-200 rounded-lg px-4 py-3 text-sm text-gray-400 bg-gray-50 cursor-not-allowed resize-none"></textarea>
+              <textarea rows="4" placeholder="Your message here..."
+                class="w-full border border-gray-200 rounded-lg px-4 py-3 text-sm text-gray-700 bg-white focus:outline-none focus:ring-2 focus:ring-[var(--app-accent)]/30 focus:border-[var(--app-accent)] transition-all resize-none"></textarea>
             </div>
-            <p class="text-xs text-gray-400 text-center">For enquiries, please call or email us directly.</p>
-            <button (click)="smoothScroll('#contact-us')" class="btn w-full py-3 rounded-lg font-semibold text-sm" disabled>
-              Coming Soon
-            </button>
+            <p class="text-xs text-gray-400 text-center">
+              For faster response, contact us via
+              <a [href]="whatsAppLink" target="_blank" class="text-[#25d366] font-semibold hover:underline">WhatsApp</a>
+              or
+              <a [href]="mailtoLink" class="text-[var(--app-accent)] font-semibold hover:underline">Email</a>.
+            </p>
+            <a [href]="whatsAppLink" target="_blank" rel="noopener"
+               class="btn block w-full py-3 rounded-lg font-semibold text-sm text-center">
+              Send via WhatsApp
+            </a>
           </div>
         </div>
 
@@ -436,15 +543,30 @@
         <!-- Brand -->
         <div>
           <div class="flex items-center gap-3 mb-4">
-            <img [src]="env.logoWhiteUrl" class="w-10 h-10 object-contain" [alt]="env.schoolAbbreviation" />
+            <img [src]="logoUrl" class="w-10 h-10 object-contain rounded-full" [alt]="schoolShort" />
             <div class="leading-tight">
-              <p class="text-white font-bold text-sm">{{ env.schoolName }}</p>
-              <p class="text-xs text-[var(--app-secondary)]/60">Schools</p>
+              <p class="text-white font-bold text-sm">{{ schoolName }}</p>
+              <p class="text-xs text-[var(--app-secondary)]/60">Est. {{ yearFounded }}</p>
             </div>
           </div>
           <p class="text-sm text-[var(--app-secondary)]/60 leading-relaxed max-w-xs">
-            Raising a generation of excellence, character, and purpose since 2004.
+            Raising a generation of excellence, character, and purpose since {{ yearFounded }}.
           </p>
+          <!-- Social links -->
+          <div class="flex items-center gap-3 mt-4" *ngIf="company?.facebookUrl || company?.instagramUrl || displayWhatsApp">
+            <a *ngIf="company?.facebookUrl" [href]="company!.facebookUrl" target="_blank" rel="noopener"
+               class="w-8 h-8 bg-white/10 hover:bg-white/20 rounded-full flex items-center justify-center transition-colors">
+              <svg class="w-4 h-4 fill-white" viewBox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+            </a>
+            <a *ngIf="company?.instagramUrl" [href]="company!.instagramUrl" target="_blank" rel="noopener"
+               class="w-8 h-8 bg-white/10 hover:bg-white/20 rounded-full flex items-center justify-center transition-colors">
+              <svg class="w-4 h-4 fill-white" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+            </a>
+            <a *ngIf="displayWhatsApp" [href]="whatsAppLink" target="_blank" rel="noopener"
+               class="w-8 h-8 bg-white/10 hover:bg-white/20 rounded-full flex items-center justify-center transition-colors">
+              <svg class="w-4 h-4 fill-white" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+            </a>
+          </div>
         </div>
 
         <!-- Quick Links -->
@@ -453,6 +575,7 @@
           <ul class="space-y-2.5 text-sm text-[var(--app-secondary)]/60">
             <li class="hover:text-white cursor-pointer transition-colors duration-150" (click)="smoothScroll('#home')">Home</li>
             <li class="hover:text-white cursor-pointer transition-colors duration-150" (click)="smoothScroll('#about-us')">About Us</li>
+            <li *ngIf="galleryGrid.length > 0" class="hover:text-white cursor-pointer transition-colors duration-150" (click)="smoothScroll('#gallery')">Gallery</li>
             <li class="hover:text-white cursor-pointer transition-colors duration-150" (click)="smoothScroll('#news')">News &amp; Events</li>
             <li class="hover:text-white cursor-pointer transition-colors duration-150" (click)="smoothScroll('#contact-us')">Contact Us</li>
           </ul>
@@ -472,7 +595,7 @@
 
       <div class="border-t border-white/10 pt-6 text-center">
         <p class="text-xs text-[var(--app-secondary)]/40">
-          &copy; 2026 {{ env.schoolNameFull }}. All rights reserved.
+          &copy; {{ yearFounded > 0 ? yearFounded : '2024' }}–{{ (env.production ? 2026 : 2026) }} {{ schoolName }}. All rights reserved.
         </p>
       </div>
     </div>

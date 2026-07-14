@@ -6,9 +6,11 @@ export const environment = {
   production: true,
   baseUrl: 'https://api.chosenschool.org/api',
   // baseUrl: 'https://ijesudunsin-002-site1.ftempurl.com/api',
+  companyId: 'c488f43c-4e0f-4a25-f0cf-08de8eb28ccd', // fill in the Busco company UUID
   schoolName: 'Busco School',
   schoolNameFull: 'Busco Nur and Primary School',
   schoolAbbreviation: 'Busco',
+  r2BaseUrl: 'https://files.chosenschool.org',
   logoUrl: 'assets/images/busco.png',
   logoWhiteUrl: 'assets/images/busco.png',
   faviconUrl: 'busco.ico',

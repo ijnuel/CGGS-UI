@@ -54,7 +54,7 @@ export interface RoleDialogData {
               : 'text-gray-700'">
               {{ role.name }}
             </p>
-            <p class="text-xs text-gray-400">{{ role.permissions?.length || 0 }} permissions</p>
+            <p class="text-xs text-gray-400">{{ role.permissions.length }} permissions</p>
           </div>
         </div>
       </div>

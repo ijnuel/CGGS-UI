@@ -5,9 +5,11 @@
 export const environment = {
   production: false,
   baseUrl: 'https://localhost:7118/api',
+  companyId: 'd0c142ee-e550-4973-e890-08dce78b9223', // fill in the Chosen Generation company UUID
   schoolName: 'Chosen Generation',
   schoolNameFull: 'Chosen Generation Schools',
   schoolAbbreviation: 'CGGS',
+  r2BaseUrl: 'https://files.chosenschool.org',
   logoUrl: 'assets/images/logo.png',
   logoWhiteUrl: 'assets/images/logo-white.png',
   faviconUrl: 'chosen.ico',

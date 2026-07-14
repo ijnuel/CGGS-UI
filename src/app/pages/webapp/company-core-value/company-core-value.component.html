@@ -1,0 +1,26 @@
+<div class="p-6">
+  <div class="flex justify-between items-center mb-4">
+    <h3 class="text-xl font-semibold">Core Values</h3>
+    <div class="flex gap-2">
+      <button mat-raised-button (click)="onRefresh()">
+        <mat-icon>refresh</mat-icon> Refresh
+      </button>
+      <button mat-raised-button color="primary" routerLink="create">
+        <mat-icon>add</mat-icon> New Core Value
+      </button>
+    </div>
+  </div>
+  <app-table
+    [tableData]="(companyCoreValueList$ | async)?.data ?? []"
+    [tableHeaderData]="tableHeaderData"
+    [isLoading]="(loading$ | async) ?? false"
+    [totalLength]="(companyCoreValueList$ | async)?.totalCount ?? 0"
+    [showSearch]="true"
+    [showFilters]="true"
+    [showActionColumn]="true"
+    (queryChange)="onQueryChange($event)"
+    (view)="onView($event)"
+    (edit)="onEdit($event)"
+    (delete)="onDelete($event)"
+  ></app-table>
+</div>

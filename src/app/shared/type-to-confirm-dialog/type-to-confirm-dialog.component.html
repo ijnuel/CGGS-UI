@@ -1,0 +1,25 @@
+<h3 mat-dialog-title class="!text-red-600">{{ data.title }}</h3>
+
+<mat-dialog-content>
+  <p class="text-gray-600 text-sm leading-relaxed mb-4">{{ data.message }}</p>
+
+  <div class="bg-gray-100 rounded-lg p-3 mb-4 flex items-center gap-3">
+    <span class="material-icons text-gray-400 text-base">lock</span>
+    <p class="text-xs text-gray-500 m-0">Type the following code to confirm:</p>
+    <span class="font-mono font-bold tracking-widest text-red-600 text-base select-all">{{ confirmCode }}</span>
+  </div>
+
+  <mat-form-field appearance="outline" class="w-full">
+    <mat-label>Confirmation code</mat-label>
+    <input matInput [formControl]="inputControl" autocomplete="off" spellcheck="false"
+           (keyup.enter)="confirm()" placeholder="Type the code above" />
+    <mat-hint *ngIf="inputControl.value && !isMatch" class="!text-red-500">Code does not match</mat-hint>
+  </mat-form-field>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button [mat-dialog-close]="false">Cancel</button>
+  <button mat-raised-button color="warn" [disabled]="!isMatch" (click)="confirm()">
+    Delete
+  </button>
+</mat-dialog-actions>

@@ -1,0 +1,87 @@
+@if ({ loading: loading$ | async, error: error$ | async }; as obs) {
+<div class="pl-8 pr-9 pt-6">
+  <div class="text-xl font-bold mb-8">{{ isEditMode ? 'Edit' : 'Add' }} Gallery Image</div>
+
+  <form [formGroup]="formGroup">
+
+    <!-- Upload zone -->
+    <div class="mb-6">
+      <label class="block text-sm font-medium text-gray-500 mb-2">Image</label>
+      <div class="relative w-64 h-64 rounded-2xl border-2 border-dashed border-gray-200 bg-gray-50
+                  flex items-center justify-center overflow-hidden group cursor-pointer"
+           (click)="!uploading && fileInput.click()">
+
+        <!-- Preview -->
+        <img *ngIf="imagePreview && !uploading"
+             [src]="imagePreview" alt="Preview"
+             class="w-full h-full object-cover"
+             (error)="imagePreview = null" />
+
+        <!-- Uploading spinner -->
+        <div *ngIf="uploading" class="flex flex-col items-center gap-3 text-gray-400">
+          <mat-spinner diameter="36"></mat-spinner>
+          <span class="text-sm">Uploading…</span>
+        </div>
+
+        <!-- Empty placeholder -->
+        <div *ngIf="!imagePreview && !uploading"
+             class="flex flex-col items-center gap-2 text-gray-400 px-4 text-center">
+          <mat-icon class="!text-5xl !w-12 !h-12">add_photo_alternate</mat-icon>
+          <span class="text-sm font-medium">Click to upload</span>
+          <span class="text-xs text-gray-300">JPEG, PNG or WebP · max 5 MB</span>
+        </div>
+
+        <!-- Hover overlay on existing image -->
+        <div *ngIf="imagePreview && !uploading"
+             class="absolute inset-0 bg-black/40 flex items-center justify-center
+                    opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+          <mat-icon class="text-white !text-3xl">photo_camera</mat-icon>
+        </div>
+      </div>
+
+      <input #fileInput type="file" accept="image/jpeg,image/png,image/webp" class="hidden"
+             (change)="onFileSelected($event)" />
+    </div>
+
+    <!-- Image URL (auto-filled after upload, read-only) -->
+    <div class="grid grid-cols-1 gap-x-4 mt-2">
+      <div>
+        <mat-form-field class="form-input">
+          <mat-label>Image URL</mat-label>
+          <input type="url" matInput autocomplete="off" [formControl]="formControl.imageUrl"
+            readonly placeholder="Auto-filled after upload" class="!cursor-default !text-gray-500" />
+          <mat-error>{{ getErrorMessage('imageUrl') }}</mat-error>
+        </mat-form-field>
+      </div>
+    </div>
+
+    <div class="grid grid-cols-2 gap-x-4 mt-2">
+      <div>
+        <mat-form-field class="form-input">
+          <mat-label>Caption</mat-label>
+          <input type="text" matInput autocomplete="off" [formControl]="formControl.caption"
+            placeholder="Optional caption shown on hover" />
+        </mat-form-field>
+      </div>
+      <div>
+        <mat-form-field class="form-input">
+          <mat-label>Display Order</mat-label>
+          <input type="number" matInput [formControl]="formControl.displayOrder" min="0" />
+          <mat-hint>Lower number appears first in the gallery</mat-hint>
+        </mat-form-field>
+      </div>
+    </div>
+
+    <div class="mt-4">
+      <mat-checkbox [formControl]="formControl.isActive">Active (visible on public website)</mat-checkbox>
+    </div>
+  </form>
+
+  <div class="actions-btn flex justify-end mt-10 gap-5 form-container mx-auto px-3">
+    <button class="cancel-btn" routerLink="/app/company-gallery-image">Cancel</button>
+    <button class="sec-btn" (click)="submit()" [disabled]="obs.loading || uploading">
+      {{ isEditMode ? 'Update' : 'Submit' }}
+    </button>
+  </div>
+</div>
+}

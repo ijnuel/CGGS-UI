@@ -155,6 +155,23 @@ const routes: Routes = [
         loadChildren: () => import('./test-entity-template/test-entity-template.module').then((m) => m.TestEntityTemplateModule),
       },
 
+      // ── Website content management ───────────────────────────────────────
+      {
+        path: 'company-announcement',
+        data: { roles: ADMIN_AND_ABOVE },
+        loadChildren: () => import('./company-announcement/company-announcement.module').then(m => m.CompanyAnnouncementModule),
+      },
+      {
+        path: 'company-core-value',
+        data: { roles: ADMIN_AND_ABOVE },
+        loadChildren: () => import('./company-core-value/company-core-value.module').then(m => m.CompanyCoreValueModule),
+      },
+      {
+        path: 'company-gallery-image',
+        data: { roles: ADMIN_AND_ABOVE },
+        loadChildren: () => import('./company-gallery-image/company-gallery-image.module').then(m => m.CompanyGalleryImageModule),
+      },
+
       // ── SuperAdmin only ───────────────────────────────────────────────────
       {
         path: 'role',

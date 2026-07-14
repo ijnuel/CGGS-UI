@@ -9,7 +9,7 @@ import { CompanyListInterface } from '../../../types/company';
 import { PaginatedResponseInterface, PageQueryInterface } from '../../../types';
 import { TableHeaderInterface } from '../../../types/table';
 import { MatDialog } from '@angular/material/dialog';
-import { ConfirmDialogComponent } from '../../../shared/confirm-dialog/confirm-dialog.component';
+import { TypeToConfirmDialogComponent } from '../../../shared/type-to-confirm-dialog/type-to-confirm-dialog.component';
 import { ToastNotificationService, NotificationTypeEnums } from '../../../services/toast-notification.service';
 import { tableHeader } from './table-header';
 
@@ -68,20 +68,16 @@ export class CompanyComponent implements OnDestroy {
   }
 
   onDelete(row: CompanyListInterface) {
-    const dialogRef = this.dialog.open(ConfirmDialogComponent, {
-      width: '400px',
+    const dialogRef = this.dialog.open(TypeToConfirmDialogComponent, {
+      width: '440px',
       data: {
         title: 'Delete Company',
-        message: `Are you sure you want to delete "${row.name}"?`,
-        confirmText: 'Delete',
-        cancelText: 'Cancel'
-      }
+        message: `You are about to permanently delete "${row.name}". This action cannot be undone.`,
+      },
     });
 
-    dialogRef.afterClosed().subscribe(result => {
-      if (result) {
-        this.companyFacade.deleteCompany(row.id);
-      }
+    dialogRef.afterClosed().subscribe(confirmed => {
+      if (confirmed) this.companyFacade.deleteCompany(row.id);
     });
   }
 }

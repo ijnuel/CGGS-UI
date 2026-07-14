@@ -2,6 +2,15 @@ import { TableHeaderInterface } from '../../../types/table';
 
 export const tableHeader: TableHeaderInterface[] = [
   {
+    key: 'logo',
+    type: 'image',
+    name: 'Logo',
+    sortable: false,
+    filterable: false,
+    align: 'center',
+    fallback: (row: any) => row.name?.split(' ').slice(0, 2).map((w: string) => w[0]).join('').toUpperCase() || '?',
+  },
+  {
     key: 'name',
     type: 'text',
     name: 'Name',

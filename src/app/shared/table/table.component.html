@@ -43,10 +43,22 @@
           <td mat-cell *matCellDef="let row"
               [class.col-center]="header.align === 'center'"
               [class.col-right]="header.align === 'right'">
-            <ng-container *ngIf="header.format && header.type !== 'boolean' && header.type !== 'date'">
+            <ng-container *ngIf="header.type === 'image'">
+              <ng-container *ngIf="(header.format ? header.format(getValue(row, header), row) : getValue(row, header)) as imgSrc; else imgFallback">
+                <img [src]="imgSrc" class="w-12 h-12 rounded-full object-cover" alt="" />
+              </ng-container>
+              <ng-template #imgFallback>
+                <div *ngIf="header.fallback"
+                     class="w-12 h-12 rounded-full flex items-center justify-center text-white text-sm font-bold select-none"
+                     style="background: linear-gradient(135deg, var(--app-gradient-from), var(--app-gradient-to))">
+                  {{ header.fallback(row) }}
+                </div>
+              </ng-template>
+            </ng-container>
+            <ng-container *ngIf="header.format && header.type !== 'boolean' && header.type !== 'date' && header.type !== 'image'">
               {{ header.format(getValue(row, header), row) }}
             </ng-container>
-            <ng-container *ngIf="!header.format && header.type !== 'boolean' && header.type !== 'date'">
+            <ng-container *ngIf="!header.format && header.type !== 'boolean' && header.type !== 'date' && header.type !== 'image'">
               {{ getValue(row, header) }}
             </ng-container>
             <ng-container *ngIf="header.type === 'boolean'">

@@ -58,6 +58,9 @@ import {
   InitiatePaymentRequest,
 } from './fee';
 import { PaymentGatewaySetupListInterface, PaymentGatewaySetupFormInterface } from './payment-gateway-setup';
+import { CompanyAnnouncementListInterface, CompanyAnnouncementFormInterface } from './company-announcement';
+import { CompanyCoreValueListInterface, CompanyCoreValueFormInterface } from './company-core-value';
+import { CompanyGalleryImageListInterface, CompanyGalleryImageFormInterface } from './company-gallery-image';
 
 interface GenericResponseInterface<T> {
   error: string;
@@ -195,4 +198,10 @@ export {
   InitiatePaymentRequest,
   PaymentGatewaySetupListInterface,
   PaymentGatewaySetupFormInterface,
+  CompanyAnnouncementListInterface,
+  CompanyAnnouncementFormInterface,
+  CompanyCoreValueListInterface,
+  CompanyCoreValueFormInterface,
+  CompanyGalleryImageListInterface,
+  CompanyGalleryImageFormInterface,
 };

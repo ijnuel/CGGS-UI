@@ -129,6 +129,38 @@
         </div>
       </div>
 
+      <div class="grid grid-cols-1 gap-x-4 mt-2">
+        <div>
+          <mat-form-field class="form-input">
+            <mat-label>Mission Statement</mat-label>
+            <textarea
+              matInput
+              rows="5"
+              autocomplete="off"
+              [formControl]="formControl.mission"
+              placeholder="HTML supported — e.g. Our mission is to <strong>raise</strong> future leaders..."
+            ></textarea>
+            <mat-hint>Supports HTML markup. Shown on the public website About Us section.</mat-hint>
+          </mat-form-field>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 gap-x-4 mt-2">
+        <div>
+          <mat-form-field class="form-input">
+            <mat-label>Vision Statement</mat-label>
+            <textarea
+              matInput
+              rows="5"
+              autocomplete="off"
+              [formControl]="formControl.vision"
+              placeholder="HTML supported — e.g. To be the <em>leading</em> center of learning excellence..."
+            ></textarea>
+            <mat-hint>Supports HTML markup. Shown on the public website About Us section.</mat-hint>
+          </mat-form-field>
+        </div>
+      </div>
+
     </form>
 
     <div class="actions-btn flex justify-end mt-10 gap-5 form-container mx-auto px-3">

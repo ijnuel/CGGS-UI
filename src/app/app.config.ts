@@ -86,6 +86,12 @@ import { TransactionEffect } from './store/transaction/transaction.effects';
 import { TransactionFacade } from './store/transaction/transaction.facade';
 import { PaymentGatewaySetupEffect } from './store/payment-gateway-setup/payment-gateway-setup.effects';
 import { PaymentGatewaySetupFacade } from './store/payment-gateway-setup/payment-gateway-setup.facade';
+import { CompanyAnnouncementEffect } from './store/company-announcement/company-announcement.effects';
+import { CompanyAnnouncementFacade } from './store/company-announcement/company-announcement.facade';
+import { CompanyCoreValueEffect } from './store/company-core-value/company-core-value.effects';
+import { CompanyCoreValueFacade } from './store/company-core-value/company-core-value.facade';
+import { CompanyGalleryImageEffect } from './store/company-gallery-image/company-gallery-image.effects';
+import { CompanyGalleryImageFacade } from './store/company-gallery-image/company-gallery-image.facade';
 // import { provideStoreDevtools } from '@ngrx/store-devtools';
 
 export const appConfig: ApplicationConfig = {
@@ -127,6 +133,9 @@ export const appConfig: ApplicationConfig = {
         PaymentEffect,
         TransactionEffect,
         PaymentGatewaySetupEffect,
+        CompanyAnnouncementEffect,
+        CompanyCoreValueEffect,
+        CompanyGalleryImageEffect,
       ]),
     ),
     provideAnimations(),
@@ -203,5 +212,8 @@ export const appConfig: ApplicationConfig = {
     PaymentFacade,
     TransactionFacade,
     PaymentGatewaySetupFacade,
+    CompanyAnnouncementFacade,
+    CompanyCoreValueFacade,
+    CompanyGalleryImageFacade,
   ],
 };

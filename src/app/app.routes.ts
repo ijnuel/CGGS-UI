@@ -9,6 +9,11 @@ export const routes: Routes = [
       import('./pages/website/website.module').then((m) => m.WebsiteModule),
   },
   {
+    path: 'home/:companyId',
+    loadChildren: () =>
+      import('./pages/website/website.module').then((m) => m.WebsiteModule),
+  },
+  {
     path: 'auth',
     loadChildren: () =>
       import('./pages/auth/auth.module').then((m) => m.AuthModule),

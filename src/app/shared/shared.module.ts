@@ -20,6 +20,7 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { ProgramSetupLevelPanelComponent } from './program-setup-level-panel/program-setup-level-panel.component';
 import { SearchableMatSelectComponent } from './searchable-mat-select/searchable-mat-select.component';
 import { RoleDialogComponent } from './role-dialog/role-dialog.component';
+import { TypeToConfirmDialogComponent } from './type-to-confirm-dialog/type-to-confirm-dialog.component';
 import { FormsModule } from '@angular/forms';
 import { MatSelectModule } from '@angular/material/select';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -39,7 +40,8 @@ import { MatAutocompleteModule } from '@angular/material/autocomplete';
     ConfirmDialogComponent,
     ProgramSetupLevelPanelComponent,
     SearchableMatSelectComponent,
-    RoleDialogComponent
+    RoleDialogComponent,
+    TypeToConfirmDialogComponent
   ],
   imports: [
     RouterModule,

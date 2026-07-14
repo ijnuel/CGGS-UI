@@ -7,6 +7,8 @@ export interface CompanyListInterface {
     domainName?: string;
     address?: string;
     description?: string;
+    mission?: string;
+    vision?: string;
     principalName?: string;
     teacherShortCode?: string;
     studentShortCode?: string;
@@ -22,6 +24,8 @@ export interface CompanyFormInterface {
     domainName?: string;
     address?: string;
     description?: string;
+    mission?: string;
+    vision?: string;
     principalName?: string;
     teacherShortCode?: string;
     studentShortCode?: string;

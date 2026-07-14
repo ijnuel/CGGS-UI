@@ -3,6 +3,13 @@
   background-image: url("../../../assets/images/home-background.svg");
   background-color: var(--app-primary);
   z-index: 50;
+
+  /* Scroll-aware: solid background + shadow when page is scrolled */
+  &.scrolled {
+    background-image: none;
+    background-color: var(--app-primary);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
+  }
 }
 
 /* ===== HERO SECTION ===== */
@@ -86,6 +93,22 @@
     transform: translateY(-5px);
     box-shadow: 0 10px 30px rgba(0, 110, 254, 0.1);
   }
+}
+
+/* ===== GALLERY ===== */
+.gallery-item {
+  cursor: zoom-in;
+
+  img {
+    will-change: transform;
+  }
+}
+
+/* ===== ADMISSION BANNER BLOBS ===== */
+.admission-blob-1,
+.admission-blob-2 {
+  pointer-events: none;
+  filter: blur(40px);
 }
 
 /* ===== MOBILE RESPONSIVENESS ===== */

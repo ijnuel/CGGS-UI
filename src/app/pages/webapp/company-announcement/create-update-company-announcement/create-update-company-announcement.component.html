@@ -1,0 +1,77 @@
+@if ({ loading: loading$ | async, error: error$ | async }; as obs) {
+<div class="pl-8 pr-9 pt-6">
+  <div class="text-xl font-bold mb-8">{{ isEditMode ? 'Edit' : 'Create' }} Announcement</div>
+
+  <form [formGroup]="formGroup">
+    <div class="grid grid-cols-2 gap-x-4 mt-2">
+      <div class="col-span-2">
+        <mat-form-field class="form-input">
+          <mat-label>Title</mat-label>
+          <input type="text" matInput autocomplete="off" [formControl]="formControl.title" />
+          <mat-error>{{ getErrorMessage('title') }}</mat-error>
+        </mat-form-field>
+      </div>
+    </div>
+
+    <div class="grid grid-cols-2 gap-x-4 mt-2">
+      <div>
+        <mat-form-field class="form-input">
+          <mat-label>Category</mat-label>
+          <input type="text" matInput autocomplete="off" [formControl]="formControl.category"
+            placeholder="e.g. Event, Academic, Sports" />
+        </mat-form-field>
+      </div>
+      <div>
+        <mat-form-field class="form-input">
+          <mat-label>Icon Name</mat-label>
+          <input type="text" matInput autocomplete="off" [formControl]="formControl.iconName"
+            placeholder="Material icon e.g. school, event, sports_soccer" />
+          <span matSuffix *ngIf="formControl.iconName.value" class="material-icons text-gray-500 mr-1">{{ formControl.iconName.value }}</span>
+        </mat-form-field>
+      </div>
+    </div>
+
+    <div class="grid grid-cols-2 gap-x-4 mt-2">
+      <div>
+        <mat-form-field class="form-input">
+          <mat-label>Location</mat-label>
+          <input type="text" matInput autocomplete="off" [formControl]="formControl.location"
+            placeholder="e.g. School Hall, Sports Field" />
+        </mat-form-field>
+      </div>
+      <div>
+        <mat-form-field class="form-input">
+          <mat-label>Announcement Date</mat-label>
+          <input matInput [matDatepicker]="picker" [formControl]="formControl.announcementDate" />
+          <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+          <mat-datepicker #picker></mat-datepicker>
+          <mat-error>{{ getErrorMessage('announcementDate') }}</mat-error>
+        </mat-form-field>
+      </div>
+    </div>
+
+    <div class="grid grid-cols-1 gap-x-4 mt-2">
+      <div>
+        <mat-form-field class="form-input">
+          <mat-label>Body</mat-label>
+          <textarea matInput rows="8" autocomplete="off" [formControl]="formControl.body"
+            placeholder="Announcement content — HTML markup is supported"></textarea>
+          <mat-hint>Supports HTML markup (bold, italic, links, etc.)</mat-hint>
+          <mat-error>{{ getErrorMessage('body') }}</mat-error>
+        </mat-form-field>
+      </div>
+    </div>
+
+    <div class="mt-4">
+      <mat-checkbox [formControl]="formControl.isActive">Active (visible on public website)</mat-checkbox>
+    </div>
+  </form>
+
+  <div class="actions-btn flex justify-end mt-10 gap-5 form-container mx-auto px-3">
+    <button class="cancel-btn" routerLink="/app/company-announcement">Cancel</button>
+    <button class="sec-btn" (click)="submit()" [disabled]="obs.loading">
+      {{ isEditMode ? 'Update' : 'Submit' }}
+    </button>
+  </div>
+</div>
+}

@@ -4,10 +4,11 @@ export interface TableHeaderInterface {
   nestedKey?: string;
   sortable?: boolean;
   filterable?: boolean;
-  type?: 'text' | 'number' | 'date' | 'boolean';
+  type?: 'text' | 'number' | 'date' | 'boolean' | 'image';
   width?: string;
   align?: 'left' | 'center' | 'right';
   format?: (value: any, row?: any) => string;
+  fallback?: (row: any) => string;
 }
 
 export interface TableActionInterface {

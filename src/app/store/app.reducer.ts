@@ -35,6 +35,9 @@ import * as fromFee from './fee/fee.reducer';
 import * as fromPayment from './payment/payment.reducer';
 import * as fromTransaction from './transaction/transaction.reducer';
 import * as fromPaymentGatewaySetup from './payment-gateway-setup/payment-gateway-setup.reducer';
+import * as fromCompanyAnnouncement from './company-announcement/company-announcement.reducer';
+import * as fromCompanyCoreValue from './company-core-value/company-core-value.reducer';
+import * as fromCompanyGalleryImage from './company-gallery-image/company-gallery-image.reducer';
 
 export const appFeatureKey = 'appFeatureKey';
 
@@ -74,6 +77,9 @@ export interface AppState {
   [fromPayment.paymentFeatureKey]: fromPayment.PaymentState;
   [fromTransaction.transactionFeatureKey]: fromTransaction.TransactionState;
   [fromPaymentGatewaySetup.paymentGatewaySetupFeatureKey]: fromPaymentGatewaySetup.PaymentGatewaySetupState;
+  [fromCompanyAnnouncement.companyAnnouncementFeatureKey]: fromCompanyAnnouncement.CompanyAnnouncementState;
+  [fromCompanyCoreValue.companyCoreValueFeatureKey]: fromCompanyCoreValue.CompanyCoreValueState;
+  [fromCompanyGalleryImage.companyGalleryImageFeatureKey]: fromCompanyGalleryImage.CompanyGalleryImageState;
 }
 
 export const reducers = {
@@ -112,6 +118,9 @@ export const reducers = {
   [fromPayment.paymentFeatureKey]: fromPayment.reducer,
   [fromTransaction.transactionFeatureKey]: fromTransaction.reducer,
   [fromPaymentGatewaySetup.paymentGatewaySetupFeatureKey]: fromPaymentGatewaySetup.reducer,
+  [fromCompanyAnnouncement.companyAnnouncementFeatureKey]: fromCompanyAnnouncement.reducer,
+  [fromCompanyCoreValue.companyCoreValueFeatureKey]: fromCompanyCoreValue.reducer,
+  [fromCompanyGalleryImage.companyGalleryImageFeatureKey]: fromCompanyGalleryImage.reducer,
 };
 
 export const selectAppState = createFeatureSelector<AppState>(appFeatureKey);

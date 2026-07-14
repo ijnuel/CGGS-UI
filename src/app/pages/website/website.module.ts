@@ -1,21 +1,23 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule, Routes } from '@angular/router';
+import { HttpClientModule } from '@angular/common/http';
 import { WebsiteComponent } from './website.component';
+import { WebsiteService } from './website.service';
 
 const routes: Routes = [
-  {
-    path: '',
-    component: WebsiteComponent,
-  },
+  { path: '', component: WebsiteComponent },
+  { path: ':companyId', component: WebsiteComponent },
 ];
 
 @NgModule({
   declarations: [WebsiteComponent],
   imports: [
     CommonModule,
-    RouterModule.forChild(routes)
+    HttpClientModule,
+    RouterModule.forChild(routes),
   ],
-  exports: [WebsiteComponent]
+  providers: [WebsiteService],
+  exports: [WebsiteComponent],
 })
 export class WebsiteModule {}
