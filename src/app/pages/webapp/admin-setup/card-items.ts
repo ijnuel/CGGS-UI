@@ -1,5 +1,13 @@
 export default [
   {
+    name: 'School Configuration',
+    icon: 'assets/icons/admin-setup-icon.svg',
+    matIcon: 'settings',
+    description: 'Edit school profile, logo, mission, vision and website content',
+    roles: [],
+    url: '/app/company/settings'
+  },
+  {
     name: 'School Setup',
     icon: 'assets/icons/admin-setup-icon.svg',
     matIcon: 'account_balance',
@@ -55,28 +63,4 @@ export default [
     roles: [],
     url: '/app/payment-gateway-setup'
   },
-  {
-    name: 'Announcements',
-    icon: 'assets/icons/admin-setup-icon.svg',
-    matIcon: 'campaign',
-    description: 'Manage news, events and announcements on the school website',
-    roles: [],
-    url: '/app/company-announcement'
-  },
-  {
-    name: 'Core Values',
-    icon: 'assets/icons/admin-setup-icon.svg',
-    matIcon: 'stars',
-    description: 'Define the school mission, vision and core values',
-    roles: [],
-    url: '/app/company-core-value'
-  },
-  {
-    name: 'Gallery Images',
-    icon: 'assets/icons/admin-setup-icon.svg',
-    matIcon: 'collections',
-    description: 'Upload and manage campus photos shown on the website',
-    roles: [],
-    url: '/app/company-gallery-image'
-  }
 ];

@@ -90,6 +90,8 @@ export class CreateUpdateCompanyComponent implements OnInit, OnDestroy {
                         teacherShortCode: data.teacherShortCode ?? '',
                         studentShortCode: data.studentShortCode ?? '',
                     });
+                    this.formControl.name.disable();
+                    this.formControl.domainName.disable();
                 }
             });
         }
@@ -122,7 +124,7 @@ export class CreateUpdateCompanyComponent implements OnInit, OnDestroy {
 
         if (!this.formGroup.valid) return;
 
-        const formData = this.formGroup.value as CompanyFormInterface;
+        const formData = this.formGroup.getRawValue() as CompanyFormInterface;
         if (this.isEditMode) {
             this.companyFacade.updateCompany({
                 ...formData,
