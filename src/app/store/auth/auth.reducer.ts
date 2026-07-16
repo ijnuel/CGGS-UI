@@ -1,12 +1,13 @@
 import { createReducer, on } from '@ngrx/store';
 import * as AuthActions from './auth.actions';
-import { CurrentUserInterface } from '../../types';
+import { CompanyListInterface, CurrentUserInterface } from '../../types';
 
 export const authFeatureKey = 'auth';
 
 export interface AuthState {
     currentUserId: string | null;
     currentUser: CurrentUserInterface | null;
+    userCompanies: CompanyListInterface[] | null;
     loading: boolean;
     error: string | null;
 }
@@ -14,6 +15,7 @@ export interface AuthState {
 export const initialState: AuthState = {
     currentUserId: null,
     currentUser: null,
+    userCompanies: null,
     loading: false,
     error: null,
 };
@@ -53,17 +55,19 @@ export const authReducer = createReducer(
     on(AuthActions.switchCompanySuccess, (state) => ({
         ...state,
         loading: false,
-    })), // No state change needed on success
+        userCompanies: null,
+    })),
     on(AuthActions.switchCompanyFail, (state, { error }) => ({
         ...state,
         loading: false,
         error,
     })),
     on(AuthActions.getUserCompanies, (state) => ({ ...state, loading: true, error: null })),
-    on(AuthActions.getUserCompaniesSuccess, (state) => ({
+    on(AuthActions.getUserCompaniesSuccess, (state, { payload }) => ({
         ...state,
         loading: false,
-    })), // No state change needed on success
+        userCompanies: payload.entity,
+    })),
     on(AuthActions.getUserCompaniesFail, (state, { error }) => ({
         ...state,
         loading: false,

@@ -13,6 +13,11 @@ export const selectCurrentUser = createSelector(
     (state: AuthState) => state.currentUser
 );
 
+export const selectUserCompanies = createSelector(
+    selectAuthState,
+    (state: AuthState) => state.userCompanies
+);
+
 export const selectLoading = createSelector(
     selectAuthState,
     (state: AuthState) => state.loading

@@ -23,6 +23,10 @@ export class AuthFacade {
         select(AuthSelector.selectCurrentUser)
     );
 
+    userCompanies$ = this.store.pipe(
+        select(AuthSelector.selectUserCompanies)
+    );
+
     selectedLoading$ = this.store.pipe(select(AuthSelector.selectLoading));
 
     selectedError$ = this.store.pipe(select(AuthSelector.selectError));

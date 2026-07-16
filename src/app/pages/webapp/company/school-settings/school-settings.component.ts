@@ -2,6 +2,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Subject, filter, takeUntil } from 'rxjs';
 import { CompanyFacade } from '../../../../store/company/company.facade';
+import { AuthFacade } from '../../../../store/auth/auth.facade';
 import { ProfileImageFacade } from '../../../../store/profile-image/profile-image.facade';
 import { GlobalLoadingFacade } from '../../../../store/global-loading/global-loading.facade';
 import { CompanyListInterface } from '../../../../types';
@@ -40,6 +41,7 @@ export class SchoolSettingsComponent implements OnInit, OnDestroy {
 
   constructor(
     private companyFacade: CompanyFacade,
+    private authFacade: AuthFacade,
     private profileImageFacade: ProfileImageFacade,
     private globalLoadingFacade: GlobalLoadingFacade,
     private dialog: MatDialog,
@@ -58,9 +60,9 @@ export class SchoolSettingsComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.companyFacade.getCompanyAll();
+    this.authFacade.getUserCompanies();
 
-    this.companyFacade.companyAll$
+    this.authFacade.userCompanies$
       .pipe(takeUntil(this.destroy$), filter(list => !!list))
       .subscribe(list => {
         const current = list!.find(c => c.isCurrent) ?? list![0];
@@ -99,7 +101,7 @@ export class SchoolSettingsComponent implements OnInit, OnDestroy {
           this.saving = false;
           this.editMode = false;
           this.globalLoadingFacade.globalSuccessShow('School configuration saved', 3000);
-          this.companyFacade.getCompanyAll();
+          this.authFacade.getUserCompanies();
         }
       });
   }
