@@ -1,6 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-import { Subject, filter, takeUntil } from 'rxjs';
+import { Subject, takeUntil } from 'rxjs';
+import { take } from 'rxjs/operators';
 import { CompanyFacade } from '../../../../store/company/company.facade';
 import { AuthFacade } from '../../../../store/auth/auth.facade';
 import { ProfileImageFacade } from '../../../../store/profile-image/profile-image.facade';
@@ -62,10 +63,13 @@ export class SchoolSettingsComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.authFacade.getUserCompanies();
 
-    this.authFacade.userCompanies$
-      .pipe(takeUntil(this.destroy$), filter(list => !!list))
-      .subscribe(list => {
-        const current = list!.find(c => c.isCurrent) ?? list![0];
+    // Use the action stream so we always work from the fresh HTTP response,
+    // never from stale store data that might have a different isCurrent company.
+    this.authFacade.getUserCompaniesSuccessAction()
+      .pipe(take(1), takeUntil(this.destroy$))
+      .subscribe(response => {
+        const list = response.entity ?? [];
+        const current = list.find(c => c.isCurrent) ?? list[0];
         if (!current) { this.loading = false; return; }
 
         this.company = current;
@@ -78,8 +82,7 @@ export class SchoolSettingsComponent implements OnInit, OnDestroy {
           .subscribe(url => this.logoUrl = url);
 
         this.company$.pipe(
-          takeUntil(this.destroy$),
-          filter(c => !!c && c.id === this.companyId)
+          takeUntil(this.destroy$)
         ).subscribe(c => {
           if (!this.logoUrl && c?.logo) this.logoUrl = c.logo;
           if (c && !c.logo && !this.logoUploading) this.logoUrl = null;

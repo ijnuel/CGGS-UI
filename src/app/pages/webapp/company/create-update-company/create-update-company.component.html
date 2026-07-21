@@ -24,7 +24,7 @@
               matInput
               [formControl]="formControl.name"
             />
-            <mat-icon *ngIf="isEditMode" matSuffix class="!text-gray-400 !text-base">lock</mat-icon>
+            <mat-icon *ngIf="isEditMode && !isSuperAdmin" matSuffix class="!text-gray-400 !text-base">lock</mat-icon>
             <mat-error>{{ getErrorMessage("name") }}</mat-error>
           </mat-form-field>
         </div>
@@ -66,7 +66,7 @@
               matInput
               [formControl]="formControl.domainName"
             />
-            <mat-icon *ngIf="isEditMode" matSuffix class="!text-gray-400 !text-base">lock</mat-icon>
+            <mat-icon *ngIf="isEditMode && !isSuperAdmin" matSuffix class="!text-gray-400 !text-base">lock</mat-icon>
             <mat-error>{{ getErrorMessage("domainName") }}</mat-error>
           </mat-form-field>
         </div>

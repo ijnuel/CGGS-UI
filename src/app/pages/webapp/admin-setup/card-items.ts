@@ -5,7 +5,7 @@ export default [
     matIcon: 'settings',
     description: 'Edit school profile, logo, mission, vision and website content',
     roles: [],
-    url: '/app/company/settings'
+    url: '/app/school-settings'
   },
   {
     name: 'School Setup',

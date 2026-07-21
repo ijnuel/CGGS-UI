@@ -15,7 +15,6 @@ import { SharedModule } from '../../../shared/shared.module';
 import { CreateUpdateCompanyComponent } from './create-update-company/create-update-company.component';
 import { provideNativeDateAdapter } from '@angular/material/core';
 import { ViewCompanyComponent } from './view-company/view-company.component';
-import { SchoolSettingsComponent } from './school-settings/school-settings.component';
 
 const routes: Routes = [
     {
@@ -37,14 +36,10 @@ const routes: Routes = [
         path: 'view/:id',
         component: ViewCompanyComponent,
     },
-    {
-        path: 'settings',
-        component: SchoolSettingsComponent,
-    },
 ];
 
 @NgModule({
-    declarations: [CompanyComponent, CreateUpdateCompanyComponent, ViewCompanyComponent, SchoolSettingsComponent],
+    declarations: [CompanyComponent, CreateUpdateCompanyComponent, ViewCompanyComponent],
     imports: [
         CommonModule,
         SharedModule,

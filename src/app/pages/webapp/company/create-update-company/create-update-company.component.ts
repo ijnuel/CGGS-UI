@@ -1,6 +1,8 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { BehaviorSubject, Observable, Subject, takeUntil } from 'rxjs';
+import { Observable, Subject, takeUntil } from 'rxjs';
+import { take } from 'rxjs/operators';
 import { CompanyFacade } from '../../../../store/company/company.facade';
+import { AuthFacade } from '../../../../store/auth/auth.facade';
 import {
     FormBuilder,
     FormControl,
@@ -8,10 +10,11 @@ import {
     Validators,
 } from '@angular/forms';
 import { getErrorMessageHelper } from '../../../../services/helper.service';
-import { DropdownListInterface, CompanyFormInterface, CompanyListInterface } from '../../../../types';
+import { CompanyFormInterface, CompanyListInterface } from '../../../../types';
 import { SharedFacade } from '../../../../store/shared/shared.facade';
 import { ActivatedRoute, Router } from '@angular/router';
 import { GlobalLoadingFacade } from '../../../../store/global-loading/global-loading.facade';
+import { UserRolesEnum } from '../../../../types/auth';
 
 @Component({
     selector: 'app-create-update-company',
@@ -42,10 +45,12 @@ export class CreateUpdateCompanyComponent implements OnInit, OnDestroy {
     }
     today = new Date();
     isEditMode = false;
+    isSuperAdmin = false;
     unsubscribe$ = new Subject<void>();
 
     constructor(
         private companyFacade: CompanyFacade,
+        private authFacade: AuthFacade,
         private fb: FormBuilder,
         private sharedFacade: SharedFacade,
         private route: ActivatedRoute,
@@ -72,6 +77,10 @@ export class CreateUpdateCompanyComponent implements OnInit, OnDestroy {
     }
 
     ngOnInit() {
+        this.authFacade.selectedCurrentUser$.pipe(take(1)).subscribe(user => {
+            this.isSuperAdmin = user?.userType === UserRolesEnum.SuperAdmin;
+        });
+
         const companyId = this.route.snapshot.params['id'];
         if (companyId) {
             this.isEditMode = true;
@@ -90,8 +99,10 @@ export class CreateUpdateCompanyComponent implements OnInit, OnDestroy {
                         teacherShortCode: data.teacherShortCode ?? '',
                         studentShortCode: data.studentShortCode ?? '',
                     });
-                    this.formControl.name.disable();
-                    this.formControl.domainName.disable();
+                    if (!this.isSuperAdmin) {
+                        this.formControl.name.disable();
+                        this.formControl.domainName.disable();
+                    }
                 }
             });
         }
