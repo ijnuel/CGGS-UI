@@ -10,14 +10,13 @@ import {
 } from '@angular/forms';
 import { initUserProfileForm } from '../../../../services/helper.service';
 import { getErrorMessageHelper } from '../../../../services/helper.service';
-import { ClassListInterface, DropdownListInterface, FamilyListInterface, StudentFormInterface, StudentListInterface } from '../../../../types';
+import { ClassListInterface, DropdownListInterface, FamilyListInterface, ProgrammeTypeStreamListInterface, StudentFormInterface, StudentListInterface } from '../../../../types';
 import { SharedFacade } from '../../../../store/shared/shared.facade';
 import { ActivatedRoute, Router } from '@angular/router';
 import { GlobalLoadingFacade } from '../../../../store/global-loading/global-loading.facade';
 import { FamilyFacade } from '../../../../store/family/family.facade';
 import { ClassFacade } from '../../../../store/class/class.facade';
-import { ProgramTypeFacade } from '../../../../store/program-type/program-type.facade';
-import { ClassLevelFacade } from '../../../../store/class-level/class-level.facade';
+import { ProgrammeTypeStreamFacade } from '../../../../store/programme-type-stream/programme-type-stream.facade';
 
 @Component({
   selector: 'app-create-update-student',
@@ -48,6 +47,7 @@ export class CreateUpdateStudentComponent implements OnInit, OnDestroy {
     email: FormControl;
     familyId: FormControl;
     classId: FormControl;
+    streamId: FormControl;
   }>;
 
   get formControl() {
@@ -55,19 +55,19 @@ export class CreateUpdateStudentComponent implements OnInit, OnDestroy {
   }
   today = new Date();
   isEditMode = false;
-  unsubscribe$ = new Subject<void>(); selectedCountryStateList$ = new BehaviorSubject<
-    DropdownListInterface[] | null
-  >(null);
-  selectedStateLgaList$ = new BehaviorSubject<DropdownListInterface[] | null>(
-    null
-  );
+  unsubscribe$ = new Subject<void>();
 
+  selectedCountryStateList$ = new BehaviorSubject<DropdownListInterface[] | null>(null);
+  selectedStateLgaList$ = new BehaviorSubject<DropdownListInterface[] | null>(null);
 
   genderList$: Observable<DropdownListInterface[] | null>;
   religionList$: Observable<DropdownListInterface[] | null>;
   countryList$: Observable<DropdownListInterface[] | null>;
   familyList$: Observable<FamilyListInterface[] | null>;
   classList$: Observable<ClassListInterface[] | null>;
+
+  allStreams: ProgrammeTypeStreamListInterface[] = [];
+  availableStreams: ProgrammeTypeStreamListInterface[] = [];
 
   constructor(
     private studentFacade: StudentFacade,
@@ -78,6 +78,7 @@ export class CreateUpdateStudentComponent implements OnInit, OnDestroy {
     private globalLoadingFacade: GlobalLoadingFacade,
     private familyFacade: FamilyFacade,
     private classFacade: ClassFacade,
+    private programmeTypeStreamFacade: ProgrammeTypeStreamFacade,
   ) {
     this.loading$ = this.studentFacade.loading$;
     this.error$ = this.studentFacade.error$;
@@ -99,6 +100,7 @@ export class CreateUpdateStudentComponent implements OnInit, OnDestroy {
       phoneNumber: [''],
       email: [''],
       classId: ['', [Validators.required]],
+      streamId: [null as string | null],
       religion: [0, [Validators.required]],
       gender: ['', [Validators.required]],
       nationalityId: ['00000000-0000-0000-0000-000000000000', [Validators.required]],
@@ -117,6 +119,22 @@ export class CreateUpdateStudentComponent implements OnInit, OnDestroy {
     this.classFacade.getClassAll({
       nestedProperties: [{ name: 'classLevel', innerNestedProperties: [{ name: 'programmeType' }] }]
     });
+    this.programmeTypeStreamFacade.getProgrammeTypeStreamAll();
+
+    this.classFacade.classAll$.pipe(takeUntil(this.unsubscribe$)).subscribe(classes => {
+      this._classMap = new Map((classes ?? []).map(c => [c.id, c]));
+      this.refreshAvailableStreams(this.formGroup.controls.classId.value);
+    });
+
+    this.programmeTypeStreamFacade.programmeTypeStreamAll$.pipe(takeUntil(this.unsubscribe$)).subscribe(streams => {
+      this.allStreams = streams ?? [];
+      this.refreshAvailableStreams(this.formGroup.controls.classId.value);
+    });
+
+    this.formGroup.controls.classId.valueChanges.pipe(takeUntil(this.unsubscribe$)).subscribe(classId => {
+      this.refreshAvailableStreams(classId);
+    });
+
     initUserProfileForm(this.sharedFacade, this.formControl, this.unsubscribe$, this.selectedCountryStateList$, this.selectedStateLgaList$);
     const studentId = this.route.snapshot.params['id'];
     if (studentId) {
@@ -168,6 +186,25 @@ export class CreateUpdateStudentComponent implements OnInit, OnDestroy {
       });
   }
 
+  private _classMap = new Map<string, ClassListInterface>();
+
+  private refreshAvailableStreams(classId: string | null) {
+    const programTypeId = classId
+      ? (this._classMap.get(classId)?.classLevel?.programmeTypeId ?? null)
+      : null;
+    this.availableStreams = programTypeId
+      ? this.allStreams.filter(s => s.programTypeId === programTypeId)
+      : [];
+    const streamCtrl = this.formGroup.controls.streamId;
+    if (this.availableStreams.length > 0) {
+      streamCtrl.setValidators(Validators.required);
+    } else {
+      streamCtrl.clearValidators();
+      streamCtrl.setValue(null, { emitEvent: false });
+    }
+    streamCtrl.updateValueAndValidity({ emitEvent: false });
+  }
+
   getClassName(item: ClassListInterface): string {
     const programmeType = item?.classLevel?.programmeType?.name ?? '';
     const level = item?.classLevel?.level ?? '';
@@ -182,9 +219,7 @@ export class CreateUpdateStudentComponent implements OnInit, OnDestroy {
 
   submit() {
     this.formGroup.markAllAsTouched();
-
     if (!this.formGroup.valid) return;
-
     const formData = this.formGroup.value as StudentFormInterface;
     if (this.isEditMode) {
       this.studentFacade.updateStudent({

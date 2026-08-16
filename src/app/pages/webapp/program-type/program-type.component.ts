@@ -4,6 +4,8 @@ import { Observable } from 'rxjs';
 import { filter, take } from 'rxjs/operators';
 import { ProgramTypeFacade } from '../../../store/program-type/program-type.facade';
 import { ProgramTypeListInterface } from '../../../types/program-type';
+import { ProgrammeTypeStreamFacade } from '../../../store/programme-type-stream/programme-type-stream.facade';
+import { ProgrammeTypeStreamListInterface } from '../../../types/programme-type-stream';
 import { ClassFormInterface, ClassLevelFormInterface, ClassLevelListInterface, ClassListInterface, ClassSubjectAssessmentFormInterface, ClassSubjectAssessmentListInterface, ClassSubjectFormInterface, ClassSubjectListInterface, DropdownListInterface, PaginatedResponseInterface, ProgramSetupLevelConfig, QueryInterface, SchoolTermSessionListInterface, SessionListInterface, StaffListInterface, SubjectListInterface } from '../../../types';
 import { getClassLabel } from '../../../services/helper.service';
 import { PageQueryInterface } from '../../../types';
@@ -93,6 +95,10 @@ export class ProgramTypeComponent implements OnInit {
 
 
   programTypeAllSnapShot: ProgramTypeListInterface[] = [];
+  streamAllSnapShot: ProgrammeTypeStreamListInterface[] = [];
+  showStreamForm = false;
+  editingStream: ProgrammeTypeStreamListInterface | null = null;
+  addStreamForm: FormGroup<{ id: FormControl; name: FormControl }>;
   classLevelAllSnapShot: ClassLevelListInterface[] = [];
   classAllSnapShot: ClassListInterface[] = [];
   classSubjectAllSnapShot: ClassSubjectListInterface[] = [];
@@ -118,6 +124,7 @@ export class ProgramTypeComponent implements OnInit {
     private sharedFacade: SharedFacade,
     private sessionFacade: SessionFacade,
     private staffFacade: StaffFacade,
+    private programmeTypeStreamFacade: ProgrammeTypeStreamFacade,
     private dialog: MatDialog,
     private toastService: ToastNotificationService
   ) {
@@ -153,6 +160,11 @@ export class ProgramTypeComponent implements OnInit {
       id: [''],
       assessmentType: ['', [Validators.required, Validators.maxLength(255)]],
       scoreWeigth: [null, [Validators.required, Validators.min(1)]]
+    });
+
+    this.addStreamForm = this.fb.group({
+      id: [''],
+      name: ['', [Validators.required, Validators.maxLength(255)]],
     });
   }
 
@@ -207,6 +219,11 @@ export class ProgramTypeComponent implements OnInit {
     this.classSubjectAssessmentFacade.createSuccess$.subscribe(ok => { if (ok) this.classSubjectAssessmentFacade.getClassSubjectAssessmentAll(); });
     this.classSubjectAssessmentFacade.updateSuccess$.subscribe(ok => { if (ok) this.classSubjectAssessmentFacade.getClassSubjectAssessmentAll(); });
     this.classSubjectAssessmentFacade.deleteSuccess$.subscribe(ok => { if (ok) this.classSubjectAssessmentFacade.getClassSubjectAssessmentAll(); });
+
+    // Streams
+    this.programmeTypeStreamFacade.createSuccess$.subscribe(ok => { if (ok) { this.loadStreams(); this.cancelStreamForm(); } });
+    this.programmeTypeStreamFacade.updateSuccess$.subscribe(ok => { if (ok) { this.loadStreams(); this.cancelStreamForm(); } });
+    this.programmeTypeStreamFacade.deleteSuccess$.subscribe(ok => { if (ok) this.loadStreams(); });
   }
 
   private getSnapShots() {
@@ -214,6 +231,10 @@ export class ProgramTypeComponent implements OnInit {
       if (data) {
         this.programTypeAllSnapShot = [...data].sort((a, b) => a.level - b.level);
       }
+    });
+
+    this.programmeTypeStreamFacade.programmeTypeStreamAll$.subscribe(data => {
+      if (data) this.streamAllSnapShot = [...data];
     });
 
     this.schoolTermSessionAll$.subscribe(data => {
@@ -297,6 +318,7 @@ export class ProgramTypeComponent implements OnInit {
     }
     if (programSetupLevel == ProgramSetupLevel.CLASSLEVEL) {
       this.classLevelFacade.getClassLevelAll();
+      this.loadStreams();
     }
     if (programSetupLevel == ProgramSetupLevel.CLASSARM) {
       this.classFacade.getClassAll(this.getClassQueryParameters());
@@ -1021,5 +1043,63 @@ export class ProgramTypeComponent implements OnInit {
       default:
         return '';
     }
+  }
+
+  // ── Stream management ─────────────────────────────────────────────────
+
+  getStreamsForCurrentProgramType(): ProgrammeTypeStreamListInterface[] {
+    return this.selectedProgramType
+      ? this.streamAllSnapShot.filter(s => s.programTypeId === this.selectedProgramType!.id)
+      : [];
+  }
+
+  loadStreams(): void {
+    if (!this.selectedProgramType) return;
+    this.programmeTypeStreamFacade.getProgrammeTypeStreamAll({
+      queryProperties: [{ name: 'programTypeId', value: this.selectedProgramType.id }],
+    });
+  }
+
+  openAddStreamForm(): void {
+    this.editingStream = null;
+    this.addStreamForm.reset({ id: '', name: '' });
+    this.showStreamForm = true;
+  }
+
+  openEditStreamForm(stream: ProgrammeTypeStreamListInterface): void {
+    this.editingStream = stream;
+    this.addStreamForm.patchValue({ id: stream.id, name: stream.name });
+    this.showStreamForm = true;
+  }
+
+  cancelStreamForm(): void {
+    this.showStreamForm = false;
+    this.editingStream = null;
+    this.addStreamForm.reset();
+  }
+
+  submitStream(): void {
+    this.addStreamForm.markAllAsTouched();
+    if (!this.addStreamForm.valid || !this.selectedProgramType) return;
+    const formValue = this.addStreamForm.value;
+    const payload = { id: formValue.id || undefined, name: formValue.name, programTypeId: this.selectedProgramType.id };
+    if (formValue.id) {
+      this.programmeTypeStreamFacade.updateProgrammeTypeStream(payload as any);
+    } else {
+      this.programmeTypeStreamFacade.createProgrammeTypeStream(payload);
+    }
+  }
+
+  deleteStream(stream: ProgrammeTypeStreamListInterface): void {
+    const dialogRef = this.dialog.open(ConfirmDialogComponent, {
+      width: '400px',
+      data: { title: 'Delete Stream', message: `Are you sure you want to delete "${stream.name}"?`, confirmText: 'Delete', cancelText: 'Cancel' }
+    });
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.programmeTypeStreamFacade.deleteProgrammeTypeStream(stream.id);
+        this.toastService.openToast('Stream deleted successfully', NotificationTypeEnums.SUCCESS);
+      }
+    });
   }
 }

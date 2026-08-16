@@ -3,6 +3,7 @@ import { StudentClassListInterface } from './student-class';
 import { ClassListInterface } from './class';
 import { LoggedUserInterface } from './auth';
 import { TransactionListInterface } from './transaction';
+import { ProgrammeTypeStreamListInterface } from './programme-type-stream';
 
 export enum PaymentStatusEnum {
   Pending = 0,
@@ -48,9 +49,12 @@ export interface FeeSetupListInterface {
   classId: string;
   schoolTermSessionId: string;
   inUse: boolean;
+  streamId?: string;
+  isNew: boolean;
   feeType?: FeeTypeListInterface;
   class?: ClassListInterface;
   schoolTermSession?: SchoolTermSessionListInterface;
+  stream?: ProgrammeTypeStreamListInterface;
 }
 
 export interface FeeSetupFormInterface {
@@ -60,6 +64,8 @@ export interface FeeSetupFormInterface {
   classId: string;
   schoolTermSessionId: string;
   inUse: boolean;
+  streamId?: string | null;
+  isNew?: boolean;
 }
 
 export interface FeeLineListInterface {

@@ -14,6 +14,7 @@ import { ClassLevelFormInterface, ClassLevelListInterface } from './class-level'
 import { ClassFormInterface, ClassListInterface } from './class';
 import { SubjectFormInterface, SubjectListInterface } from './subject';
 import { ProgramTypeFormInterface, ProgramTypeListInterface } from './program-type';
+import { ProgrammeTypeStreamListInterface, ProgrammeTypeStreamFormInterface } from './programme-type-stream';
 import { ApplicationFormInterface, ApplicationListInterface } from './application';
 import { StateFormInterface, StateListInterface } from './state';
 import { SessionFormInterface, SessionListInterface } from './session';
@@ -204,4 +205,6 @@ export {
   CompanyCoreValueFormInterface,
   CompanyGalleryImageListInterface,
   CompanyGalleryImageFormInterface,
+  ProgrammeTypeStreamListInterface,
+  ProgrammeTypeStreamFormInterface,
 };

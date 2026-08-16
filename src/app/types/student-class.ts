@@ -7,6 +7,7 @@ export interface StudentClassListInterface {
     studentId: string;
     classId: string;
     sessionId: string;
+    streamId?: string;
     studentFullName?: string;
     studentNo?: string;
     student?: StudentListInterface;
@@ -20,5 +21,6 @@ export interface StudentClassFormInterface {
     studentId?: string;
     sessionId?: string;
     classId?: string;
+    streamId?: string | null;
     name?: string;
 }

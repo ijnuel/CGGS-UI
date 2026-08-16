@@ -65,4 +65,5 @@ export interface StudentFormInterface {
     phoneNumber: string;
     familyId: string;
     classId: string;
+    streamId?: string | null;
 }

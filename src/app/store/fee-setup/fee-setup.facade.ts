@@ -3,7 +3,7 @@ import { Store } from '@ngrx/store';
 import { combineLatest, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { FeeSetupListInterface, FeeSetupFormInterface, FeeTypeListInterface } from '../../types/fee';
-import { ClassListInterface, PageQueryInterface, PaginatedResponseInterface, QueryInterface, SchoolTermSessionListInterface } from '../../types';
+import { ClassListInterface, PageQueryInterface, PaginatedResponseInterface, QueryInterface, SchoolTermSessionListInterface, ProgrammeTypeStreamListInterface } from '../../types';
 import * as FeeSetupAction from './fee-setup.actions';
 import {
   selectFeeSetupAll,
@@ -19,6 +19,7 @@ import { FeeSetupState } from './fee-setup.reducer';
 import { FeeTypeFacade } from '../fee-type/fee-type.facade';
 import { ClassFacade } from '../class/class.facade';
 import { SchoolTermSessionFacade } from '../school-term-session/school-term-session.facade';
+import { ProgrammeTypeStreamFacade } from '../programme-type-stream/programme-type-stream.facade';
 
 @Injectable({ providedIn: 'root' })
 export class FeeSetupFacade {
@@ -36,17 +37,20 @@ export class FeeSetupFacade {
     private feeTypeFacade: FeeTypeFacade,
     private classFacade: ClassFacade,
     private schoolTermSessionFacade: SchoolTermSessionFacade,
+    private programmeTypeStreamFacade: ProgrammeTypeStreamFacade,
   ) {
     const hydrate = (
       row: FeeSetupListInterface,
       feeTypeMap: Map<string, FeeTypeListInterface>,
       classMap: Map<string, ClassListInterface>,
       stsMap: Map<string, SchoolTermSessionListInterface>,
+      streamMap: Map<string, ProgrammeTypeStreamListInterface>,
     ): FeeSetupListInterface => ({
       ...row,
       feeType: row.feeType ?? (row.feeTypeId ? feeTypeMap.get(row.feeTypeId) : undefined),
       class: row.class ?? (row.classId ? classMap.get(row.classId) : undefined),
       schoolTermSession: row.schoolTermSession ?? (row.schoolTermSessionId ? stsMap.get(row.schoolTermSessionId) : undefined),
+      stream: row.stream ?? (row.streamId ? streamMap.get(row.streamId) : undefined),
     });
 
     const feeTypeMap$ = this.feeTypeFacade.feeTypeAll$.pipe(
@@ -58,38 +62,35 @@ export class FeeSetupFacade {
     const stsMap$ = this.schoolTermSessionFacade.schoolTermSessionAll$.pipe(
       map(sessions => new Map<string, SchoolTermSessionListInterface>((sessions ?? []).map(s => [s.id, s])))
     );
+    const streamMap$ = this.programmeTypeStreamFacade.programmeTypeStreamAll$.pipe(
+      map(streams => new Map<string, ProgrammeTypeStreamListInterface>((streams ?? []).map(s => [s.id, s])))
+    );
 
     this.feeSetupList$ = combineLatest([
       this.store.select(selectFeeSetupList),
-      feeTypeMap$,
-      classMap$,
-      stsMap$,
+      feeTypeMap$, classMap$, stsMap$, streamMap$,
     ]).pipe(
-      map(([list, feeTypeMap, classMap, stsMap]) => {
+      map(([list, feeTypeMap, classMap, stsMap, streamMap]) => {
         if (!list) return list;
-        return { ...list, data: list.data.map(r => hydrate(r, feeTypeMap, classMap, stsMap)) };
+        return { ...list, data: list.data.map(r => hydrate(r, feeTypeMap, classMap, stsMap, streamMap)) };
       })
     );
 
     this.feeSetupAll$ = combineLatest([
       this.store.select(selectFeeSetupAll),
-      feeTypeMap$,
-      classMap$,
-      stsMap$,
+      feeTypeMap$, classMap$, stsMap$, streamMap$,
     ]).pipe(
-      map(([rows, feeTypeMap, classMap, stsMap]) =>
-        rows ? rows.map(r => hydrate(r, feeTypeMap, classMap, stsMap)) : rows
+      map(([rows, feeTypeMap, classMap, stsMap, streamMap]) =>
+        rows ? rows.map(r => hydrate(r, feeTypeMap, classMap, stsMap, streamMap)) : rows
       )
     );
 
     this.feeSetupById$ = combineLatest([
       this.store.select(selectFeeSetupById),
-      feeTypeMap$,
-      classMap$,
-      stsMap$,
+      feeTypeMap$, classMap$, stsMap$, streamMap$,
     ]).pipe(
-      map(([row, feeTypeMap, classMap, stsMap]) =>
-        row ? hydrate(row, feeTypeMap, classMap, stsMap) : row
+      map(([row, feeTypeMap, classMap, stsMap, streamMap]) =>
+        row ? hydrate(row, feeTypeMap, classMap, stsMap, streamMap) : row
       )
     );
 
@@ -99,11 +100,10 @@ export class FeeSetupFacade {
     this.updateSuccess$ = this.store.select(selectFeeSetupUpdateSuccess);
     this.deleteSuccess$ = this.store.select(selectFeeSetupDeleteSuccess);
 
-    // Ensure lookup data is loaded so hydration works on first render.
-    // ClassFacade and SchoolTermSessionFacade hydrate their own nested objects.
     this.feeTypeFacade.getFeeTypeAll();
-    this.classFacade.getClassAll();
+    this.classFacade.getClassAll({ nestedProperties: [{ name: 'classLevel', innerNestedProperties: [{ name: 'programmeType' }] }] });
     this.schoolTermSessionFacade.getSchoolTermSessionAll();
+    this.programmeTypeStreamFacade.getProgrammeTypeStreamAll();
   }
 
   getFeeSetupAll(query?: QueryInterface): void {

@@ -92,6 +92,8 @@ import { CompanyCoreValueEffect } from './store/company-core-value/company-core-
 import { CompanyCoreValueFacade } from './store/company-core-value/company-core-value.facade';
 import { CompanyGalleryImageEffect } from './store/company-gallery-image/company-gallery-image.effects';
 import { CompanyGalleryImageFacade } from './store/company-gallery-image/company-gallery-image.facade';
+import { ProgrammeTypeStreamEffect } from './store/programme-type-stream/programme-type-stream.effects';
+import { ProgrammeTypeStreamFacade } from './store/programme-type-stream/programme-type-stream.facade';
 // import { provideStoreDevtools } from '@ngrx/store-devtools';
 
 export const appConfig: ApplicationConfig = {
@@ -136,6 +138,7 @@ export const appConfig: ApplicationConfig = {
         CompanyAnnouncementEffect,
         CompanyCoreValueEffect,
         CompanyGalleryImageEffect,
+        ProgrammeTypeStreamEffect,
       ]),
     ),
     provideAnimations(),
@@ -215,5 +218,6 @@ export const appConfig: ApplicationConfig = {
     CompanyAnnouncementFacade,
     CompanyCoreValueFacade,
     CompanyGalleryImageFacade,
+    ProgrammeTypeStreamFacade,
   ],
 };

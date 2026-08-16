@@ -8,6 +8,7 @@ import { FeeSetupFacade } from '../../../../../store/fee-setup/fee-setup.facade'
 import { FeeTypeFacade } from '../../../../../store/fee-type/fee-type.facade';
 import { ClassFacade } from '../../../../../store/class/class.facade';
 import { SchoolTermSessionFacade } from '../../../../../store/school-term-session/school-term-session.facade';
+import { ProgrammeTypeStreamFacade } from '../../../../../store/programme-type-stream/programme-type-stream.facade';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { getErrorMessageHelper, getClassLabel } from '../../../../../services/helper.service';
 import {
@@ -15,6 +16,7 @@ import {
   FeeTypeListInterface,
   ClassListInterface,
   SchoolTermSessionListInterface,
+  ProgrammeTypeStreamListInterface,
 } from '../../../../../types';
 import { GlobalLoadingFacade } from '../../../../../store/global-loading/global-loading.facade';
 import { environment } from '../../../../../../environments/environment';
@@ -34,6 +36,8 @@ export class CreateUpdateFeeSetupComponent implements OnInit, OnDestroy {
 
   allClasses: ClassListInterface[] = [];
   allTermSessions: SchoolTermSessionListInterface[] = [];
+  allStreams: ProgrammeTypeStreamListInterface[] = [];
+  availableStreams: ProgrammeTypeStreamListInterface[] = [];
 
   filteredFeeTypes: FeeTypeListInterface[] = [];
   feeTypesLoading = false;
@@ -44,6 +48,8 @@ export class CreateUpdateFeeSetupComponent implements OnInit, OnDestroy {
     schoolTermSessionId: FormControl;
     amount: FormControl;
     inUse: FormControl;
+    streamId: FormControl;
+    isNew: FormControl;
   }>;
 
   get formControl() { return this.formGroup.controls; }
@@ -69,6 +75,7 @@ export class CreateUpdateFeeSetupComponent implements OnInit, OnDestroy {
     private feeTypeFacade: FeeTypeFacade,
     private classFacade: ClassFacade,
     private schoolTermSessionFacade: SchoolTermSessionFacade,
+    private programmeTypeStreamFacade: ProgrammeTypeStreamFacade,
     private http: HttpClient,
     private fb: FormBuilder,
     private globalLoadingFacade: GlobalLoadingFacade,
@@ -84,6 +91,8 @@ export class CreateUpdateFeeSetupComponent implements OnInit, OnDestroy {
       schoolTermSessionId: ['', Validators.required],
       amount: [0, [Validators.required, Validators.min(0)]],
       inUse: [false],
+      streamId: [null as string | null],
+      isNew: [false],
     });
   }
 
@@ -91,9 +100,16 @@ export class CreateUpdateFeeSetupComponent implements OnInit, OnDestroy {
     this.feeTypeFacade.getFeeTypeAll();
     this.classFacade.getClassAll({ nestedProperties: [{ name: 'classLevel', innerNestedProperties: [{ name: 'programmeType' }] }] });
     this.schoolTermSessionFacade.getSchoolTermSessionAll({ nestedProperties: [{ name: 'session' }] });
+    this.programmeTypeStreamFacade.getProgrammeTypeStreamAll();
 
     this.classFacade.classAll$.pipe(takeUntil(this.unsubscribe$)).subscribe(classes => {
       this.allClasses = classes ?? [];
+      this.updateAvailableStreams();
+    });
+
+    this.programmeTypeStreamFacade.programmeTypeStreamAll$.pipe(takeUntil(this.unsubscribe$)).subscribe(streams => {
+      this.allStreams = streams ?? [];
+      this.updateAvailableStreams();
     });
 
     this.schoolTermSessionFacade.schoolTermSessionAll$.pipe(takeUntil(this.unsubscribe$)).subscribe(sessions => {
@@ -118,7 +134,10 @@ export class CreateUpdateFeeSetupComponent implements OnInit, OnDestroy {
           schoolTermSessionId: data!.schoolTermSessionId,
           amount: data!.amount,
           inUse: data!.inUse,
+          streamId: data!.streamId ?? null,
+          isNew: data!.isNew ?? false,
         });
+        this.updateAvailableStreams();
         this.formControl.feeTypeId.disable();
         this.formControl.classId.disable();
         this.formControl.schoolTermSessionId.disable();
@@ -148,6 +167,8 @@ export class CreateUpdateFeeSetupComponent implements OnInit, OnDestroy {
 
       this.formControl.classId.valueChanges.pipe(takeUntil(this.unsubscribe$)).subscribe(() => {
         this.formControl.feeTypeId.setValue('');
+        this.formControl.streamId.setValue(null);
+        this.updateAvailableStreams();
         this.refreshExistingSetups();
       });
     }
@@ -219,6 +240,16 @@ export class CreateUpdateFeeSetupComponent implements OnInit, OnDestroy {
     } else {
       this.feeSetupFacade.createFeeSetup(formData as any);
     }
+  }
+
+  private updateAvailableStreams(): void {
+    const classId = this.formControl.classId.value;
+    if (!classId) { this.availableStreams = []; return; }
+    const selectedClass = this.allClasses.find(c => c.id === classId);
+    const programTypeId = selectedClass?.classLevel?.programmeType?.id;
+    this.availableStreams = programTypeId
+      ? this.allStreams.filter(s => s.programTypeId === programTypeId)
+      : [];
   }
 
   ngOnDestroy() { this.unsubscribe$.next(); this.unsubscribe$.complete(); }

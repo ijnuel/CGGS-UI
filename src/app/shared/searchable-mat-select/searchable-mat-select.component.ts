@@ -108,14 +108,18 @@ export class SearchableMatSelectComponent implements ControlValueAccessor, OnIni
   }
 
   onBlur() {
-    const selected = this.options?.find(o => o[this.valueKey] === this.value);
-    if (selected) {
-      this.inputControl.setValue(selected, { emitEvent: false });
-    } else {
-      this.inputControl.setValue(null, { emitEvent: false });
-    }
-    this.filteredOptions = this.options;
-    this.onTouched();
+    // Delay so that mat-autocomplete's optionSelected fires first (blur fires on
+    // mousedown, before the click event that completes option selection).
+    setTimeout(() => {
+      const selected = this.options?.find(o => o[this.valueKey] === this.value);
+      if (selected) {
+        this.inputControl.setValue(selected, { emitEvent: false });
+      } else {
+        this.inputControl.setValue(null, { emitEvent: false });
+      }
+      this.filteredOptions = this.options;
+      this.onTouched();
+    }, 200);
   }
 
   writeValue(value: any): void {

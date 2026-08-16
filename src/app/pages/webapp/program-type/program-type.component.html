@@ -183,6 +183,58 @@
         Click "Add {{ currentLevelLabel }}" to get started
       </p>
     </div>
+
+    <!-- ── Streams section (visible at Class Level drill-down) ──────────── -->
+    <ng-container *ngIf="currentLevel === ProgramSetupLevel.CLASSLEVEL && selectedProgramType">
+      <div class="mt-8 border-t border-gray-100 pt-6">
+        <div class="flex items-center justify-between mb-4">
+          <div>
+            <h4 class="text-base font-semibold text-gray-700">Streams</h4>
+            <p class="text-xs text-gray-400 mt-0.5">Define streams (e.g. Science, Art, Commercial) for this programme type</p>
+          </div>
+          <button mat-raised-button color="accent" (click)="openAddStreamForm()" *ngIf="!showStreamForm">
+            <mat-icon>add</mat-icon> Add Stream
+          </button>
+        </div>
+
+        <!-- Stream form -->
+        <div *ngIf="showStreamForm" class="bg-gray-50 rounded-xl border border-gray-200 p-4 mb-4">
+          <form [formGroup]="addStreamForm" class="flex items-end gap-3 flex-wrap">
+            <mat-form-field class="flex-1" subscriptSizing="dynamic">
+              <mat-label>Stream Name</mat-label>
+              <input matInput formControlName="name" placeholder="e.g. Science" />
+              <mat-error *ngIf="addStreamForm.get('name')?.invalid">Name is required</mat-error>
+            </mat-form-field>
+            <div class="flex gap-2 pb-0.5">
+              <button mat-raised-button color="primary" type="button" (click)="submitStream()">
+                {{ editingStream ? 'Update' : 'Add' }}
+              </button>
+              <button mat-button type="button" (click)="cancelStreamForm()">Cancel</button>
+            </div>
+          </form>
+        </div>
+
+        <!-- Streams list -->
+        <div *ngIf="getStreamsForCurrentProgramType().length; else noStreams"
+          class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+          <div *ngFor="let stream of getStreamsForCurrentProgramType()"
+            class="bg-white rounded-xl border border-gray-100 p-4 flex items-center justify-between">
+            <span class="font-medium text-gray-800 text-sm">{{ stream.name }}</span>
+            <div class="flex gap-1 -mr-2">
+              <button mat-icon-button (click)="openEditStreamForm(stream)" matTooltip="Edit">
+                <mat-icon class="!text-indigo-400 text-sm">edit</mat-icon>
+              </button>
+              <button mat-icon-button (click)="deleteStream(stream)" matTooltip="Delete">
+                <mat-icon class="!text-red-400 text-sm">delete</mat-icon>
+              </button>
+            </div>
+          </div>
+        </div>
+        <ng-template #noStreams>
+          <p *ngIf="!showStreamForm" class="text-sm text-gray-400 italic">No streams configured. Click "Add Stream" to get started.</p>
+        </ng-template>
+      </div>
+    </ng-container>
   </ng-container>
 
   }

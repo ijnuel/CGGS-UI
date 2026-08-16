@@ -104,7 +104,7 @@ export class PaymentFacade {
     this.feeFacade.getFeeAll();
     this.feeFacade.getFeeLineAll();
     this.schoolTermSessionFacade.getSchoolTermSessionAll();
-    this.classFacade.getClassAll();
+    this.classFacade.getClassAll({ nestedProperties: [{ name: 'classLevel', innerNestedProperties: [{ name: 'programmeType' }] }] });
     this.studentFacade.getStudentAll();
     this.studentClassFacade.getStudentClassAll();
     this.transactionFacade.getTransactionAll();

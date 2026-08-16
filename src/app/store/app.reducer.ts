@@ -38,6 +38,7 @@ import * as fromPaymentGatewaySetup from './payment-gateway-setup/payment-gatewa
 import * as fromCompanyAnnouncement from './company-announcement/company-announcement.reducer';
 import * as fromCompanyCoreValue from './company-core-value/company-core-value.reducer';
 import * as fromCompanyGalleryImage from './company-gallery-image/company-gallery-image.reducer';
+import * as fromProgrammeTypeStream from './programme-type-stream/programme-type-stream.reducer';
 
 export const appFeatureKey = 'appFeatureKey';
 
@@ -80,6 +81,7 @@ export interface AppState {
   [fromCompanyAnnouncement.companyAnnouncementFeatureKey]: fromCompanyAnnouncement.CompanyAnnouncementState;
   [fromCompanyCoreValue.companyCoreValueFeatureKey]: fromCompanyCoreValue.CompanyCoreValueState;
   [fromCompanyGalleryImage.companyGalleryImageFeatureKey]: fromCompanyGalleryImage.CompanyGalleryImageState;
+  [fromProgrammeTypeStream.programmeTypeStreamFeatureKey]: fromProgrammeTypeStream.ProgrammeTypeStreamState;
 }
 
 export const reducers = {
@@ -121,6 +123,7 @@ export const reducers = {
   [fromCompanyAnnouncement.companyAnnouncementFeatureKey]: fromCompanyAnnouncement.reducer,
   [fromCompanyCoreValue.companyCoreValueFeatureKey]: fromCompanyCoreValue.reducer,
   [fromCompanyGalleryImage.companyGalleryImageFeatureKey]: fromCompanyGalleryImage.reducer,
+  [fromProgrammeTypeStream.programmeTypeStreamFeatureKey]: fromProgrammeTypeStream.programmeTypeStreamReducer,
 };
 
 export const selectAppState = createFeatureSelector<AppState>(appFeatureKey);

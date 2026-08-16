@@ -80,6 +80,26 @@
         </mat-form-field>
       </div>
 
+      <!-- Stream (optional — only shown when selected class has streams) -->
+      <div *ngIf="availableStreams.length > 0">
+        <mat-form-field class="form-input w-full">
+          <mat-label>Stream (Optional)</mat-label>
+          <mat-select [formControl]="formControl.streamId">
+            <mat-option [value]="null">All Streams</mat-option>
+            <mat-option *ngFor="let s of availableStreams" [value]="s.id">{{ s.name }}</mat-option>
+          </mat-select>
+          <mat-hint>Leave as "All Streams" to apply to every stream</mat-hint>
+        </mat-form-field>
+      </div>
+
+      <!-- Is New Student -->
+      <div class="flex items-center gap-2 py-2 col-span-2">
+        <mat-checkbox [formControl]="formControl.isNew" color="primary">
+          <span class="text-sm text-gray-700">For new students only</span>
+        </mat-checkbox>
+        <span class="text-xs text-gray-400">(Fee applies only to first-time enrollees)</span>
+      </div>
+
       <!-- In Use -->
       <div *ngIf="!isEditMode" class="flex items-center gap-2 py-2">
         <mat-slide-toggle [formControl]="formControl.inUse" color="primary"></mat-slide-toggle>
