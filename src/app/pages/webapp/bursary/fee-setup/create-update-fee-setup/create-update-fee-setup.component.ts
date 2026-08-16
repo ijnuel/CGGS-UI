@@ -68,7 +68,7 @@ export class CreateUpdateFeeSetupComponent implements OnInit, OnDestroy {
   amountReadOnly = false;
 
   private allFeeTypes: FeeTypeListInterface[] = [];
-  private existingFeeTypeIds = new Set<string>();
+  private existingSetups: { feeTypeId: string; streamId: string | null; isNew: boolean }[] = [];
 
   constructor(
     private feeSetupFacade: FeeSetupFacade,
@@ -168,8 +168,23 @@ export class CreateUpdateFeeSetupComponent implements OnInit, OnDestroy {
       this.formControl.classId.valueChanges.pipe(takeUntil(this.unsubscribe$)).subscribe(() => {
         this.formControl.feeTypeId.setValue('');
         this.formControl.streamId.setValue(null);
+        this.formControl.isNew.setValue(false);
         this.updateAvailableStreams();
         this.refreshExistingSetups();
+      });
+
+      this.formControl.streamId.valueChanges.pipe(takeUntil(this.unsubscribe$)).subscribe(() => {
+        this.formControl.feeTypeId.setValue('');
+        this.recomputeFilteredTypes();
+        if (this.filteredFeeTypes.length > 0) this.formControl.feeTypeId.enable();
+        else this.formControl.feeTypeId.disable();
+      });
+
+      this.formControl.isNew.valueChanges.pipe(takeUntil(this.unsubscribe$)).subscribe(() => {
+        this.formControl.feeTypeId.setValue('');
+        this.recomputeFilteredTypes();
+        if (this.filteredFeeTypes.length > 0) this.formControl.feeTypeId.enable();
+        else this.formControl.feeTypeId.disable();
       });
     }
 
@@ -193,7 +208,7 @@ export class CreateUpdateFeeSetupComponent implements OnInit, OnDestroy {
     const classId = this.formControl.classId.value;
 
     if (!termId || !classId) {
-      this.existingFeeTypeIds = new Set();
+      this.existingSetups = [];
       this.recomputeFilteredTypes();
       this.formControl.feeTypeId.disable();
       return;
@@ -213,7 +228,11 @@ export class CreateUpdateFeeSetupComponent implements OnInit, OnDestroy {
       catchError(() => of({ entity: [] }))
     ).subscribe(response => {
       const existing: FeeSetupListInterface[] = response?.entity ?? [];
-      this.existingFeeTypeIds = new Set(existing.map((s: FeeSetupListInterface) => s.feeTypeId));
+      this.existingSetups = existing.map((s: FeeSetupListInterface) => ({
+        feeTypeId: s.feeTypeId,
+        streamId: s.streamId ?? null,
+        isNew: !!s.isNew,
+      }));
       this.recomputeFilteredTypes();
       this.feeTypesLoading = false;
       if (this.filteredFeeTypes.length > 0) this.formControl.feeTypeId.enable();
@@ -221,7 +240,14 @@ export class CreateUpdateFeeSetupComponent implements OnInit, OnDestroy {
   }
 
   private recomputeFilteredTypes() {
-    this.filteredFeeTypes = this.allFeeTypes.filter(ft => !this.existingFeeTypeIds.has(ft.id));
+    const streamId = this.formControl.streamId.value ?? null;
+    const isNew = !!this.formControl.isNew.value;
+    const taken = new Set(
+      this.existingSetups
+        .filter(s => (s.streamId ?? null) === streamId && s.isNew === isNew)
+        .map(s => s.feeTypeId)
+    );
+    this.filteredFeeTypes = this.allFeeTypes.filter(ft => !taken.has(ft.id));
   }
 
   getErrorMessage(controlName: string): string | null {

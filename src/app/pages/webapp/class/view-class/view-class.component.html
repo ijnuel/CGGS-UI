@@ -15,8 +15,8 @@
           <strong>Class:</strong>
           {{ cls.classLevel?.name }} {{ cls.classLevel?.level }} {{ cls.name }}
         </p>
-        <p *ngIf="cls.classLevel?.programmeTypeId" class="text-sm text-gray-400 mt-0.5">
-          Programme Type ID: {{ cls.classLevel?.programmeTypeId | slice:0:8 }}…
+        <p *ngIf="cls.classLevel?.programmeType?.name" class="text-sm text-gray-400 mt-0.5">
+          Programme Type: {{ cls.classLevel?.programmeType?.name }}
         </p>
       </div>
       <div class="w-64">
@@ -51,8 +51,8 @@
 
     <app-table
       [tableHeaderData]="tableHeaderData"
-      [tableData]="(studentClassList$ | async)?.data ?? []"
-      [totalLength]="(studentClassList$ | async)?.totalCount ?? 0"
+      [tableData]="(studentClassListDisplayed$ | async)?.data ?? []"
+      [totalLength]="(studentClassListDisplayed$ | async)?.totalCount ?? 0"
       [isLoading]="(loading$ | async) ?? false"
       [showFilters]="true"
       [showActionColumn]="true"
@@ -61,8 +61,42 @@
       (edit)="onEdit($event)"
       (delete)="onDelete($event)"
       [showViewIcon]="false"
-      [showEditIcon]="false"
+      [showEditIcon]="showStreamEdit"
     ></app-table>
+  </div>
+
+  <!-- Edit Stream Modal -->
+  <div *ngIf="showEditStreamDialog"
+    class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+    <div class="bg-white rounded-xl shadow-xl p-6 w-full max-w-sm mx-4">
+      <div class="flex items-center justify-between mb-5">
+        <h3 class="text-lg font-semibold">Edit Stream</h3>
+        <button mat-icon-button (click)="cancelEditStream()">
+          <mat-icon class="text-gray-400">close</mat-icon>
+        </button>
+      </div>
+
+      <form [formGroup]="editStreamForm" class="flex flex-col gap-3">
+        <div>
+          <mat-form-field class="w-full form-input">
+            <mat-label>Stream</mat-label>
+            <mat-select [formControl]="editStreamForm.controls.streamId">
+              <mat-option *ngFor="let s of availableStreams" [value]="s.id">{{ s.name }}</mat-option>
+            </mat-select>
+            <mat-error>Stream is required</mat-error>
+          </mat-form-field>
+        </div>
+      </form>
+
+      <div class="flex justify-end gap-2 mt-5">
+        <button mat-button (click)="cancelEditStream()">Cancel</button>
+        <button mat-raised-button color="primary"
+          (click)="saveStreamEdit()"
+          [disabled]="studentClassLoading$ | async">
+          Save
+        </button>
+      </div>
+    </div>
   </div>
 
   <!-- Add Student Modal -->

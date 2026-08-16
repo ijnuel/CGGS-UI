@@ -1,7 +1,7 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Location } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
-import { Observable, Subject } from 'rxjs';
+import { combineLatest, Observable, Subject } from 'rxjs';
 import { map, takeUntil, first, filter } from 'rxjs/operators';
 import { FormBuilder, FormGroup, FormControl, Validators } from '@angular/forms';
 import { ClassFacade } from '../../../../store/class/class.facade';
@@ -28,16 +28,16 @@ export class ViewClassComponent implements OnInit, OnDestroy {
   class$: Observable<ClassListInterface | null>;
   sessions$: Observable<SessionListInterface[] | null>;
   studentClassList$: Observable<PaginatedResponseInterface<StudentClassListInterface[]> | null>;
+  studentClassListDisplayed$: Observable<PaginatedResponseInterface<(StudentClassListInterface & { streamName: string })[]> | null>;
   allStudents$: Observable<StudentListInterface[] | null>;
   loading$: Observable<boolean>;
   studentClassLoading$: Observable<boolean>;
 
-  tableHeaderData: TableHeaderInterface[] = [
-    { name: 'Student No', key: 'studentNo', nestedKey: 'student.studentNo', sortable: true, filterable: true, type: 'text', align: 'left' },
-    { name: 'First Name', key: 'firstName', nestedKey: 'student.firstName', sortable: true, filterable: true, type: 'text', align: 'left' },
-    { name: 'Last Name', key: 'lastName', nestedKey: 'student.lastName', sortable: true, filterable: true, type: 'text', align: 'left' },
-    { name: 'Email', key: 'email', nestedKey: 'student.email', sortable: true, filterable: true, type: 'text', align: 'left' },
-  ];
+  tableHeaderData: TableHeaderInterface[] = [];
+
+  showEditStreamDialog = false;
+  editingStudentClass: StudentClassListInterface | null = null;
+  editStreamForm: FormGroup<{ streamId: FormControl<string | null> }>;
 
   selectedSessionId: string = '';
   selectedClassId: string = '';
@@ -81,6 +81,21 @@ export class ViewClassComponent implements OnInit, OnDestroy {
       studentId: ['', Validators.required],
       streamId: [null as string | null],
     });
+    this.editStreamForm = this.fb.group({ streamId: [null as string | null, Validators.required] });
+
+    this.studentClassListDisplayed$ = combineLatest([
+      this.studentClassFacade.studentClassList$,
+      this.programmeTypeStreamFacade.programmeTypeStreamAll$,
+    ]).pipe(
+      map(([list, streams]) => {
+        if (!list) return null;
+        const nameMap = new Map((streams ?? []).map(s => [s.id, s.name]));
+        return {
+          ...list,
+          data: list.data.map(sc => ({ ...sc, streamName: sc.streamId ? (nameMap.get(sc.streamId) ?? '') : '' })),
+        };
+      })
+    );
   }
 
   ngOnInit() {
@@ -126,6 +141,8 @@ export class ViewClassComponent implements OnInit, OnDestroy {
   get sessionFormControl() { return this.sessionForm.controls; }
   get studentFormControl() { return this.studentForm.controls; }
 
+  get showStreamEdit() { return this.availableStreams.length > 0; }
+
   private refreshAvailableStreams() {
     const programTypeId = this.currentClass?.classLevel?.programmeTypeId;
     this.availableStreams = programTypeId
@@ -139,6 +156,17 @@ export class ViewClassComponent implements OnInit, OnDestroy {
       this.studentForm.controls.streamId.setValue(null, { emitEvent: false });
     }
     this.studentForm.controls.streamId.updateValueAndValidity({ emitEvent: false });
+    this.rebuildTableHeaders();
+  }
+
+  private rebuildTableHeaders() {
+    this.tableHeaderData = [
+      { name: 'Student No', key: 'studentNo', nestedKey: 'student.studentNo', sortable: true, filterable: true, type: 'text', align: 'left' },
+      { name: 'First Name', key: 'firstName', nestedKey: 'student.firstName', sortable: true, filterable: true, type: 'text', align: 'left' },
+      { name: 'Last Name', key: 'lastName', nestedKey: 'student.lastName', sortable: true, filterable: true, type: 'text', align: 'left' },
+      { name: 'Email', key: 'email', nestedKey: 'student.email', sortable: true, filterable: true, type: 'text', align: 'left' },
+      { name: 'Stream', key: 'streamName', sortable: false, filterable: false, type: 'text', align: 'left', format: (v: string) => v || '—' },
+    ];
   }
 
   onSessionChange(sessionId: string) {
@@ -174,7 +202,34 @@ export class ViewClassComponent implements OnInit, OnDestroy {
 
   onRefresh() { this.loadStudentsInClass(); }
   onView(_row: StudentClassListInterface) {}
-  onEdit(_row: StudentClassListInterface) {}
+
+  onEdit(row: StudentClassListInterface) {
+    this.editingStudentClass = row;
+    this.editStreamForm.patchValue({ streamId: row.streamId ?? null });
+    this.showEditStreamDialog = true;
+  }
+
+  cancelEditStream() {
+    this.showEditStreamDialog = false;
+    this.editingStudentClass = null;
+    this.editStreamForm.reset();
+  }
+
+  saveStreamEdit() {
+    this.editStreamForm.markAllAsTouched();
+    if (!this.editStreamForm.valid || !this.editingStudentClass) return;
+    this.studentClassFacade.updateStudentClass({
+      id: this.editingStudentClass.id,
+      streamId: this.editStreamForm.value.streamId ?? undefined,
+    });
+    this.studentClassFacade.updateSuccess$.pipe(
+      filter(s => s === true), first(), takeUntil(this.destroy$)
+    ).subscribe(() => {
+      this.toastService.openToast('Stream updated successfully', NotificationTypeEnums.SUCCESS);
+      this.cancelEditStream();
+      this.loadStudentsInClass();
+    });
+  }
 
   onDelete(row: StudentClassListInterface) {
     const dialogRef = this.dialog.open(ConfirmDialogComponent, {

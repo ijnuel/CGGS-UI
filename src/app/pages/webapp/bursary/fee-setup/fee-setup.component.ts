@@ -26,6 +26,8 @@ const tableHeader: TableHeaderInterface[] = [
   { key: 'className', nestedKey: 'class.name', type: 'text', name: 'Class', sortable: false, filterable: false, align: 'left', format: (_: any, row: any) => getClassLabel(row?.class) || row?.class?.name || '—' },
   { key: 'sessionName', nestedKey: 'schoolTermSession.session.name', type: 'text', name: 'Session', sortable: false, filterable: false, align: 'left' },
   { key: 'termString', nestedKey: 'schoolTermSession.termString', type: 'text', name: 'Term', sortable: false, filterable: false, align: 'left' },
+  { key: 'streamName', nestedKey: 'stream.name', type: 'text', name: 'Stream', sortable: false, filterable: false, align: 'left', format: (v: string) => v || 'All Streams' },
+  { key: 'isNew', type: 'text', name: 'New Only', sortable: false, filterable: false, align: 'center', format: (v: boolean) => v ? 'Yes' : 'No' },
   { key: 'amount', type: 'text', name: 'Amount (₦)', sortable: true, filterable: false, align: 'right', format: (v: number) => v?.toLocaleString('en-NG', { minimumFractionDigits: 2 }) ?? '0.00' },
   { key: 'inUse', type: 'text', name: 'In Use', sortable: false, filterable: false, align: 'center', format: (v: boolean) => v ? 'Yes' : 'No' },
 ];
@@ -59,6 +61,7 @@ export class FeeSetupComponent implements OnInit, OnDestroy {
     { name: 'feeType' },
     { name: 'class', innerNestedProperties: [{ name: 'classLevel', innerNestedProperties: [{ name: 'programmeType' }] }] },
     { name: 'schoolTermSession', innerNestedProperties: [{ name: 'session' }] },
+    { name: 'stream' },
   ];
   private lastQuery: PageQueryInterface = {
     start: 0, recordsPerPage: 10, pageIndex: 0,
