@@ -335,7 +335,7 @@ export class ProgramTypeComponent implements OnInit {
     return {
       nestedProperties: [
         {name: "subject"},
-        {name: "staff", innerNestedProperties: [{ name: "nationAlity" }]},
+        {name: "staff", innerNestedProperties: [{ name: "nationality" }]},
       ],
       queryProperties: [{ name: 'schoolTermSessionId', value: this.schoolTermSessionId }]
     };
