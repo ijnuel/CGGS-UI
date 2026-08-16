@@ -1,20 +1,39 @@
 import { TableHeaderInterface } from '../../../types/table';
+import { getClassLabel } from '../../../services/helper.service';
 
 export const tableHeader: TableHeaderInterface[] = [
   {
-    name: 'Id',
-    key: 'id',
+    key: 'assessmentType',
+    type: 'text',
+    name: 'Assessment Type',
     sortable: true,
     filterable: true,
-    type: 'text',
-    align: 'left'
+    align: 'left',
   },
   {
-    name: 'Name',
-    key: 'name',
-    sortable: true,
-    filterable: true,
+    key: 'scoreWeigth',
     type: 'text',
-    align: 'left'
-  }
+    name: 'Score Weight (%)',
+    sortable: true,
+    filterable: false,
+    align: 'right',
+  },
+  {
+    key: 'subjectName',
+    nestedKey: 'classSubject.subject.name',
+    type: 'text',
+    name: 'Subject',
+    sortable: false,
+    filterable: false,
+    align: 'left',
+  },
+  {
+    key: 'classLabel',
+    type: 'text',
+    name: 'Class',
+    sortable: false,
+    filterable: false,
+    align: 'left',
+    format: (_: any, row: any) => getClassLabel(row?.classSubject?.class) || row?.classSubject?.class?.name || '—',
+  },
 ];

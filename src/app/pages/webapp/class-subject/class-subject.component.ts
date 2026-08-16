@@ -23,7 +23,13 @@ export class ClassSubjectComponent implements OnDestroy {
   classSubjectList$: Observable<PaginatedResponseInterface<ClassSubjectListInterface[]> | null>;
   loading$: Observable<boolean>;
   tableHeaderData: TableHeaderInterface[] = tableHeader;
-  private lastQuery: PageQueryInterface = { start: 0, recordsPerPage: 10, pageIndex: 0 };
+  private readonly nestedProperties = [
+    { name: 'subject' },
+    { name: 'class', innerNestedProperties: [{ name: 'classLevel', innerNestedProperties: [{ name: 'programmeType' }] }] },
+    { name: 'staff' },
+    { name: 'schoolTermSession' },
+  ];
+  private lastQuery: PageQueryInterface = { start: 0, recordsPerPage: 10, pageIndex: 0, nestedProperties: [] };
 
   constructor(
     private router: Router,
@@ -51,8 +57,8 @@ export class ClassSubjectComponent implements OnDestroy {
   }
 
   onQueryChange(query: PageQueryInterface) {
-    this.lastQuery = query;
-    this.classSubjectFacade.getClassSubjectList(query);
+    this.lastQuery = { ...query, nestedProperties: this.nestedProperties };
+    this.classSubjectFacade.getClassSubjectList(this.lastQuery);
   }
 
   onRefresh() {

@@ -23,7 +23,13 @@ export class ClassSubjectAssessmentComponent implements OnDestroy {
   classSubjectAssessmentList$: Observable<PaginatedResponseInterface<ClassSubjectAssessmentListInterface[]> | null>;
   loading$: Observable<boolean>;
   tableHeaderData: TableHeaderInterface[] = tableHeader;
-  private lastQuery: PageQueryInterface = { start: 0, recordsPerPage: 10, pageIndex: 0 };
+  private readonly nestedProperties = [
+    { name: 'classSubject', innerNestedProperties: [
+      { name: 'subject' },
+      { name: 'class', innerNestedProperties: [{ name: 'classLevel', innerNestedProperties: [{ name: 'programmeType' }] }] },
+    ]},
+  ];
+  private lastQuery: PageQueryInterface = { start: 0, recordsPerPage: 10, pageIndex: 0, nestedProperties: [] };
 
   constructor(
     private router: Router,
@@ -51,8 +57,8 @@ export class ClassSubjectAssessmentComponent implements OnDestroy {
   }
 
   onQueryChange(query: PageQueryInterface) {
-    this.lastQuery = query;
-    this.classSubjectAssessmentFacade.getClassSubjectAssessmentList(query);
+    this.lastQuery = { ...query, nestedProperties: this.nestedProperties };
+    this.classSubjectAssessmentFacade.getClassSubjectAssessmentList(this.lastQuery);
   }
 
   onRefresh() {
