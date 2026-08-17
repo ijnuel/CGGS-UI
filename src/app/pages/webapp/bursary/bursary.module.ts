@@ -24,6 +24,7 @@ import { GenerateFeesComponent } from './generate-fees/generate-fees.component';
 import { PaymentsComponent } from './payments/payments.component';
 import { TransactionsComponent } from './transactions/transactions.component';
 import { ViewTransactionComponent } from './transactions/view-transaction/view-transaction.component';
+import { DebtorsReportComponent } from './debtors-report/debtors-report.component';
 
 const routes: Routes = [
   { path: '', component: BursaryComponent },
@@ -33,6 +34,7 @@ const routes: Routes = [
   { path: 'payments', component: PaymentsComponent },
   { path: 'transactions', component: TransactionsComponent },
   { path: 'transactions/:id', component: ViewTransactionComponent },
+  { path: 'debtors-report', component: DebtorsReportComponent },
 ];
 
 @NgModule({
@@ -46,6 +48,7 @@ const routes: Routes = [
     PaymentsComponent,
     TransactionsComponent,
     ViewTransactionComponent,
+    DebtorsReportComponent,
   ],
   imports: [
     CommonModule,

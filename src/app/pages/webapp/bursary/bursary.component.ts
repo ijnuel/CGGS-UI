@@ -48,5 +48,13 @@ export class BursaryComponent {
       roles: [],
       url: '/app/bursary/transactions',
     },
+    {
+      name: 'Debtors Report',
+      icon: '',
+      matIcon: 'summarize',
+      description: 'Generate Excel report of students with outstanding fees',
+      roles: [],
+      url: '/app/bursary/debtors-report',
+    },
   ];
 }

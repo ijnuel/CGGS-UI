@@ -1,0 +1,36 @@
+<div class="pl-8 pr-9 pt-6">
+  <div class="text-xl font-bold mb-2">Debtors Report</div>
+  <p class="text-sm text-gray-500 mb-6">
+    Generates an Excel report of all students with outstanding fees for the selected session and all
+    prior sessions. Select a specific class to get a single-sheet report, or leave Class blank to
+    generate one sheet per class.
+  </p>
+
+  <form [formGroup]="form" class="grid grid-cols-1 md:grid-cols-2 gap-x-4 gap-y-2 mb-6">
+
+    <app-searchable-mat-select
+      [options]="sessions"
+      label="Session"
+      placeholder="Select session"
+      valueKey="id"
+      [labelKeys]="['name']"
+      [formControl]="form.controls.sessionId">
+    </app-searchable-mat-select>
+
+    <app-searchable-mat-select
+      [options]="classes"
+      label="Class (optional — leave blank for all classes)"
+      placeholder="All classes"
+      valueKey="id"
+      [labelFn]="classLabelFn"
+      [formControl]="form.controls.classId">
+    </app-searchable-mat-select>
+
+  </form>
+
+  <div class="flex justify-end">
+    <button class="sec-btn" (click)="generate()" [disabled]="generating || form.invalid">
+      {{ generating ? 'Generating...' : 'Generate Debtors Report' }}
+    </button>
+  </div>
+</div>
