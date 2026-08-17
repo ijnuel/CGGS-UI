@@ -45,7 +45,7 @@ jobs:
         $msdeploy = "C:\Program Files\IIS\Microsoft Web Deploy V3\msdeploy.exe"
 
         $siteName = '${{ secrets.WEBSITE_NAME }}'
-        $computer = '${{ secrets.SERVER_COMPUTER_NAME }}'
+        $computer = '${{ secrets.COMPUTER_NAME }}'
         $user     = '${{ secrets.SERVER_USERNAME }}'
         $password = '${{ secrets.SERVER_PASSWORD }}'
 
