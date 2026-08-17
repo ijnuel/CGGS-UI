@@ -99,5 +99,6 @@ export interface PromotionResultInterface {
   promotedCount: number;
   repeatingCount: number;
   nextSessionName: string;
+  isAutoPromotion: boolean;
   studentResults: StudentPromotionResultInterface[];
 }

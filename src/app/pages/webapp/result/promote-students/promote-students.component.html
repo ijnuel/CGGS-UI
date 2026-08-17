@@ -26,6 +26,8 @@
     Each student's average is computed across all 3 terms of the selected session and compared
     against the programme type's average promotion score. Students who meet or exceed the threshold
     are moved to the next class; others repeat the same class for the next session.
+    If the class level is set to <strong>Promote All</strong>, all enrolled students are promoted
+    automatically regardless of scores.
   </p>
 
   <div class="flex justify-end mb-8">
@@ -36,6 +38,13 @@
 
   <ng-container *ngIf="promotionResult$ | async as result">
     <div class="bg-white rounded-lg shadow-md p-6">
+
+      <div *ngIf="result.isAutoPromotion"
+           class="flex items-center gap-2 mb-4 px-4 py-2 bg-blue-50 border border-blue-200 rounded-md text-blue-800 text-sm font-medium">
+        <span>&#9432;</span>
+        <span>Auto-Promotion — all students promoted (no score required for this class level)</span>
+      </div>
+
       <div class="grid grid-cols-3 gap-4 mb-6">
         <div class="text-center p-4 bg-blue-50 rounded-lg">
           <div class="text-2xl font-bold text-blue-700">{{ result.totalStudents }}</div>
@@ -62,7 +71,7 @@
               <th class="text-left p-3 font-semibold">S/N</th>
               <th class="text-left p-3 font-semibold">Student Name</th>
               <th class="text-left p-3 font-semibold">Student No</th>
-              <th class="text-right p-3 font-semibold">Session Average (%)</th>
+              <th *ngIf="!result.isAutoPromotion" class="text-right p-3 font-semibold">Session Average (%)</th>
               <th class="text-left p-3 font-semibold">Status</th>
               <th class="text-left p-3 font-semibold">Next Class</th>
             </tr>
@@ -73,7 +82,7 @@
               <td class="p-3">{{ i + 1 }}</td>
               <td class="p-3">{{ student.studentName }}</td>
               <td class="p-3">{{ student.studentNo }}</td>
-              <td class="p-3 text-right">{{ student.sessionAverage | number:'1.1-2' }}</td>
+              <td *ngIf="!result.isAutoPromotion" class="p-3 text-right">{{ student.sessionAverage | number:'1.1-2' }}</td>
               <td class="p-3">
                 <span [class]="student.isPromoted
                   ? 'px-2 py-1 rounded text-xs font-medium bg-green-100 text-green-800'

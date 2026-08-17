@@ -75,6 +75,7 @@ export class ProgramTypeComponent implements OnInit {
   addClassLevelForm: FormGroup<{
     id: FormControl;
     level: FormControl;
+    promoteAll: FormControl;
   }>;
   addClassArmForm: FormGroup<{
     id: FormControl;
@@ -143,7 +144,8 @@ export class ProgramTypeComponent implements OnInit {
 
     this.addClassLevelForm = this.fb.group({
       id: [''],
-      level: [null, [Validators.required, Validators.min(1)]]
+      level: [null, [Validators.required, Validators.min(1)]],
+      promoteAll: [false],
     });
     this.addClassArmForm = this.fb.group({
       id: [''],
@@ -885,7 +887,7 @@ export class ProgramTypeComponent implements OnInit {
     let initialValue: any;
     switch (this.currentLevel) {
       case ProgramSetupLevel.CLASSLEVEL:
-        initialValue = { id: item.id, level: item.level };
+        initialValue = { id: item.id, level: item.level, promoteAll: item.promoteAll ?? false };
         break;
       case ProgramSetupLevel.CLASSARM:
         initialValue = { id: item.id, name: item.name, staffId: item.staffId, nextClassId: item.nextClassId ?? null };

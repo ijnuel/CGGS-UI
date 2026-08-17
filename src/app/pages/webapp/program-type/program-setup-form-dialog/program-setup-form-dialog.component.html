@@ -11,6 +11,10 @@
       <mat-error *ngIf="form.get('level')?.hasError('required')">Level is required</mat-error>
       <mat-error *ngIf="form.get('level')?.hasError('min')">Must be at least 1</mat-error>
     </mat-form-field>
+    <div class="flex items-center gap-3">
+      <mat-slide-toggle formControlName="promoteAll" color="primary"></mat-slide-toggle>
+      <span class="text-sm">Promote All Students (skip result-based promotion)</span>
+    </div>
   </div>
 
   <!-- ClassArm form -->

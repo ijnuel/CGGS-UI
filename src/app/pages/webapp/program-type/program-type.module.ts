@@ -10,6 +10,7 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatRadioModule } from '@angular/material/radio';
 import { MatButtonModule } from '@angular/material/button';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { ProgramTypeComponent } from './program-type.component';
 import { SharedModule } from '../../../shared/shared.module';
 import { CreateUpdateProgramTypeComponent } from './create-update-program-type/create-update-program-type.component';
@@ -55,6 +56,7 @@ const routes: Routes = [
         MatRadioModule,
         MatButtonModule,
         MatTooltipModule,
+        MatSlideToggleModule,
     ],
     providers: [provideNativeDateAdapter()],
 })

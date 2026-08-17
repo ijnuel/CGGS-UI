@@ -36,7 +36,8 @@ export class ProgramSetupFormDialogComponent {
       case ProgramSetupLevel.CLASSLEVEL:
         return this.fb.group({
           id: [''],
-          level: [null, [Validators.required, Validators.min(1)]]
+          level: [null, [Validators.required, Validators.min(1)]],
+          promoteAll: [false],
         });
       case ProgramSetupLevel.CLASSARM:
         return this.fb.group({

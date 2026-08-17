@@ -7,6 +7,7 @@ export interface ClassLevelListInterface {
     name?: string;
     level: number;
     programmeTypeId: string;
+    promoteAll: boolean;
     programmeType?: ProgramTypeListInterface;
     classes?: ClassListInterface[];
     applications?: ApplicationListInterface[];
@@ -18,4 +19,5 @@ export interface ClassLevelFormInterface {
     description: string;
     programmeTypeId: string;
     level: number;
+    promoteAll?: boolean;
 }
