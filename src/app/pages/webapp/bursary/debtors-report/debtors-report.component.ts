@@ -18,6 +18,7 @@ export class DebtorsReportComponent implements OnInit, OnDestroy {
   form: FormGroup<{
     sessionId: FormControl<string | null>;
     classId: FormControl<string | null>;
+    consolidated: FormControl<boolean | null>;
   }>;
 
   sessions: SessionListInterface[] = [];
@@ -38,6 +39,7 @@ export class DebtorsReportComponent implements OnInit, OnDestroy {
     this.form = this.fb.group({
       sessionId: ['', Validators.required],
       classId: [null as string | null],
+      consolidated: [false],
     });
   }
 
@@ -66,12 +68,13 @@ export class DebtorsReportComponent implements OnInit, OnDestroy {
     this.form.markAllAsTouched();
     if (this.form.invalid) return;
 
-    const { sessionId, classId } = this.form.value;
+    const { sessionId, classId, consolidated } = this.form.value;
     if (!sessionId) return;
 
     this.generating = true;
     let params = new HttpParams().set('sessionId', sessionId);
     if (classId) params = params.set('classId', classId);
+    if (consolidated) params = params.set('consolidated', 'true');
 
     this.http
       .get(`${environment.baseUrl}/Result/GenerateDebtorsReport`, {
