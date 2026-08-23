@@ -205,3 +205,34 @@ export const removeRoleFail = createAction(
   '[Role/API] Remove Role Fail',
   props<{ error: string }>()
 );
+
+// Get Auto Assignments
+export const getAutoAssignments = createAction(
+  '[Role] Get Auto Assignments',
+  props<{ roleId: string }>()
+);
+
+export const getAutoAssignmentsSuccess = createAction(
+  '[Role/API] Get Auto Assignments Success',
+  props<{ userTypes: number[] }>()
+);
+
+export const getAutoAssignmentsFail = createAction(
+  '[Role/API] Get Auto Assignments Fail',
+  props<{ error: string }>()
+);
+
+// Save Auto Assignments
+export const saveAutoAssignments = createAction(
+  '[Role] Save Auto Assignments',
+  props<{ roleId: string; userTypes: number[] }>()
+);
+
+export const saveAutoAssignmentsSuccess = createAction(
+  '[Role/API] Save Auto Assignments Success'
+);
+
+export const saveAutoAssignmentsFail = createAction(
+  '[Role/API] Save Auto Assignments Fail',
+  props<{ error: string }>()
+);

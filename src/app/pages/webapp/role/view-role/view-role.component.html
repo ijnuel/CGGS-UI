@@ -54,6 +54,51 @@
       </div>
     </div>
 
+    <!-- Auto User Type Assignment -->
+    <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden mb-6">
+      <div class="px-6 py-4 border-b border-gray-100">
+        <div class="flex items-center gap-3">
+          <div class="w-8 h-8 rounded-lg flex items-center justify-center" style="background-color: var(--app-secondary);">
+            <mat-icon class="!text-base" style="color: var(--app-primary);">auto_awesome</mat-icon>
+          </div>
+          <div>
+            <h3 class="text-lg font-semibold" style="color: var(--app-primary);">Automatic User Type Assignment</h3>
+            <p class="text-sm text-gray-500 mt-0.5">
+              Select user types that should automatically receive this role. A background job runs hourly to assign the role to any qualifying users who don't have it yet.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <div class="px-6 py-5 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3">
+        <div *ngFor="let ut of userTypeOptions"
+          class="flex flex-col items-center gap-2 p-3 rounded-lg border cursor-pointer transition-all duration-200 select-none"
+          [ngClass]="isUserTypeAssigned(ut.value)
+            ? 'border-blue-300 bg-blue-50 hover:bg-blue-100'
+            : 'border-gray-200 bg-white hover:bg-gray-50'"
+          (click)="toggleUserType(ut.value)">
+          <div class="w-9 h-9 rounded-full flex items-center justify-center"
+            [ngClass]="isUserTypeAssigned(ut.value) ? 'bg-blue-100' : 'bg-gray-100'">
+            <mat-icon class="!text-lg"
+              [ngClass]="isUserTypeAssigned(ut.value) ? 'text-blue-600' : 'text-gray-400'">
+              {{ isUserTypeAssigned(ut.value) ? 'check_circle' : 'person' }}
+            </mat-icon>
+          </div>
+          <span class="text-xs font-medium text-center"
+            [ngClass]="isUserTypeAssigned(ut.value) ? 'text-blue-700' : 'text-gray-600'">
+            {{ ut.name }}
+          </span>
+          <mat-slide-toggle
+            [checked]="isUserTypeAssigned(ut.value)"
+            (click)="$event.stopPropagation()"
+            (change)="toggleUserType(ut.value)"
+            color="primary"
+            [disabled]="savingAutoAssign">
+          </mat-slide-toggle>
+        </div>
+      </div>
+    </div>
+
     <!-- Permissions Section -->
     <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
       <div class="px-6 py-4 border-b border-gray-100">

@@ -5,7 +5,8 @@ import { Observable, Subject, combineLatest, takeUntil } from 'rxjs';
 import { Actions, ofType } from '@ngrx/effects';
 import { RoleFacade } from '../../../../store/role/role.facade';
 import * as RoleAction from '../../../../store/role/role.actions';
-import { RoleWithPermissionsInterface, PermissionInterface } from '../../../../types';
+import { SharedFacade } from '../../../../store/shared/shared.facade';
+import { RoleWithPermissionsInterface, PermissionInterface, DropdownListInterface } from '../../../../types';
 import { ToastNotificationService, NotificationTypeEnums } from '../../../../services/toast-notification.service';
 
 interface PermissionGroup {
@@ -30,22 +31,41 @@ export class ViewRoleComponent implements OnInit, OnDestroy {
   private toggling = false;
   roleId: string = '';
 
+  // Auto-assignment
+  userTypeOptions: DropdownListInterface[] = [];
+  assignedUserTypes = new Set<number>();
+  savingAutoAssign = false;
+
   constructor(
     private route: ActivatedRoute,
     private roleFacade: RoleFacade,
+    private sharedFacade: SharedFacade,
     private actions$: Actions,
     private location: Location,
-    private toastService: ToastNotificationService
+    private toastService: ToastNotificationService,
   ) {
     this.loading$ = this.roleFacade.loading$;
   }
 
   ngOnInit() {
     this.roleId = this.route.snapshot.params['id'];
+
+    this.sharedFacade.getUserTypeList();
+    this.sharedFacade.selectUserTypeList$
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(list => { this.userTypeOptions = list ?? []; });
+
     if (this.roleId) {
       this.roleFacade.getRoleById(this.roleId);
       this.roleFacade.getPermissions();
+      this.roleFacade.getAutoAssignments(this.roleId);
     }
+
+    this.roleFacade.autoAssignedUserTypes$
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(types => {
+        if (types != null) this.assignedUserTypes = new Set(types);
+      });
 
     combineLatest([
       this.roleFacade.roleById$,
@@ -84,6 +104,23 @@ export class ViewRoleComponent implements OnInit, OnDestroy {
       this.toggling = false;
       // Refetch to reset to server state
       this.roleFacade.getRoleById(this.roleId);
+    });
+
+    this.actions$.pipe(
+      ofType(RoleAction.saveAutoAssignmentsSuccess),
+      takeUntil(this.destroy$)
+    ).subscribe(() => {
+      this.savingAutoAssign = false;
+      this.toastService.openToast('Auto-assignment updated', NotificationTypeEnums.SUCCESS);
+    });
+
+    this.actions$.pipe(
+      ofType(RoleAction.saveAutoAssignmentsFail),
+      takeUntil(this.destroy$)
+    ).subscribe(() => {
+      this.savingAutoAssign = false;
+      this.toastService.openToast('Failed to update auto-assignment', NotificationTypeEnums.ERROR);
+      this.roleFacade.getAutoAssignments(this.roleId);
     });
   }
 
@@ -199,6 +236,22 @@ export class ViewRoleComponent implements OnInit, OnDestroy {
     let total = 0;
     this.permissionGroups.forEach((g) => (total += g.permissions.length));
     return total;
+  }
+
+  isUserTypeAssigned(value: number | string): boolean {
+    return this.assignedUserTypes.has(+value);
+  }
+
+  toggleUserType(value: number | string): void {
+    if (this.savingAutoAssign) return;
+    const num = +value;
+    if (this.assignedUserTypes.has(num)) {
+      this.assignedUserTypes.delete(num);
+    } else {
+      this.assignedUserTypes.add(num);
+    }
+    this.savingAutoAssign = true;
+    this.roleFacade.saveAutoAssignments(this.roleId, Array.from(this.assignedUserTypes));
   }
 
   goBack(): void {

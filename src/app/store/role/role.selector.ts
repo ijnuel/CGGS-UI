@@ -6,6 +6,7 @@ import {
   getUserRoles,
   getLoading,
   getError,
+  getAutoAssignedUserTypes,
   RoleState,
 } from './role.reducer';
 
@@ -36,4 +37,9 @@ export const selectRoleUpdateSuccess = createSelector(
 export const selectAssignPermissionsSuccess = createSelector(
   selectRoleState,
   (state) => state.assignPermissionsSuccess
+);
+
+export const selectAutoAssignedUserTypes = createSelector(
+  selectRoleState,
+  getAutoAssignedUserTypes
 );

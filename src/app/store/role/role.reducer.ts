@@ -12,6 +12,7 @@ export interface RoleState {
   roleById: RoleWithPermissionsInterface | null;
   permissions: PermissionInterface[] | null;
   userRoles: string[] | null;
+  autoAssignedUserTypes: number[] | null;
   loading: boolean;
   error: string | null;
   createSuccess: boolean;
@@ -24,6 +25,7 @@ export const initialState: RoleState = {
   roleById: null,
   permissions: null,
   userRoles: null,
+  autoAssignedUserTypes: null,
   loading: false,
   error: null,
   createSuccess: false,
@@ -243,6 +245,22 @@ export const reducer = createReducer(
     ...state,
     loading: false,
     error,
+  })),
+
+  // Get Auto Assignments
+  on(RoleAction.getAutoAssignmentsSuccess, (state, { userTypes }) => ({
+    ...state,
+    autoAssignedUserTypes: userTypes,
+  })),
+  on(RoleAction.getAutoAssignmentsFail, (state, { error }) => ({
+    ...state,
+    error,
+  })),
+
+  // Save Auto Assignments
+  on(RoleAction.saveAutoAssignmentsFail, (state, { error }) => ({
+    ...state,
+    error,
   }))
 );
 
@@ -257,3 +275,4 @@ export const getCreateSuccess = (state: RoleState) => state.createSuccess;
 export const getUpdateSuccess = (state: RoleState) => state.updateSuccess;
 export const getUserRoles = (state: RoleState) => state.userRoles;
 export const getAssignPermissionsSuccess = (state: RoleState) => state.assignPermissionsSuccess;
+export const getAutoAssignedUserTypes = (state: RoleState) => state.autoAssignedUserTypes;

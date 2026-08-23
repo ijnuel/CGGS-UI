@@ -20,6 +20,7 @@ import {
   selectRoleUpdateSuccess,
   selectAssignPermissionsSuccess,
   selectUserRoles,
+  selectAutoAssignedUserTypes,
 } from './role.selector';
 import { RoleState } from './role.reducer';
 
@@ -36,6 +37,7 @@ export class RoleFacade {
   updateSuccess$: Observable<boolean>;
   assignPermissionsSuccess$: Observable<boolean>;
   userRoles$: Observable<string[] | null>;
+  autoAssignedUserTypes$: Observable<number[] | null>;
 
   constructor(private store: Store<{ role: RoleState }>) {
     this.roleAll$ = this.store.select(selectRoleAll);
@@ -47,6 +49,7 @@ export class RoleFacade {
     this.updateSuccess$ = this.store.select(selectRoleUpdateSuccess);
     this.assignPermissionsSuccess$ = this.store.select(selectAssignPermissionsSuccess);
     this.userRoles$ = this.store.select(selectUserRoles);
+    this.autoAssignedUserTypes$ = this.store.select(selectAutoAssignedUserTypes);
   }
 
   invalidateCache(): void {
@@ -95,5 +98,13 @@ export class RoleFacade {
 
   removeRole(payload: UserRoleInterface): void {
     this.store.dispatch(RoleAction.removeRole({ payload }));
+  }
+
+  getAutoAssignments(roleId: string): void {
+    this.store.dispatch(RoleAction.getAutoAssignments({ roleId }));
+  }
+
+  saveAutoAssignments(roleId: string, userTypes: number[]): void {
+    this.store.dispatch(RoleAction.saveAutoAssignments({ roleId, userTypes }));
   }
 }

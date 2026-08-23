@@ -245,6 +245,43 @@ export class RoleEffect {
     )
   );
 
+  // Get Auto Assignments
+  $getAutoAssignments = createEffect(() =>
+    this.actions$.pipe(
+      ofType(RoleAction.getAutoAssignments),
+      switchMap(({ roleId }) =>
+        this.http
+          .get<GenericResponseInterface<number[]>>(
+            `${environment.baseUrl}/Role/GetAutoAssignments`,
+            { params: { roleId }, withCredentials: true }
+          )
+          .pipe(
+            map((res) => RoleAction.getAutoAssignmentsSuccess({ userTypes: res.entity ?? [] })),
+            catchError((error) => of(RoleAction.getAutoAssignmentsFail({ error })))
+          )
+      )
+    )
+  );
+
+  // Save Auto Assignments
+  $saveAutoAssignments = createEffect(() =>
+    this.actions$.pipe(
+      ofType(RoleAction.saveAutoAssignments),
+      switchMap(({ roleId, userTypes }) =>
+        this.http
+          .post<GenericResponseInterface<boolean>>(
+            `${environment.baseUrl}/Role/SaveAutoAssignments`,
+            { roleId, userTypes },
+            { withCredentials: true }
+          )
+          .pipe(
+            map(() => RoleAction.saveAutoAssignmentsSuccess()),
+            catchError((error) => of(RoleAction.saveAutoAssignmentsFail({ error })))
+          )
+      )
+    )
+  );
+
   // Loading Effects
   $roleLoading = createEffect(
     () =>
