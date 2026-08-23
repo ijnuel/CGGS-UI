@@ -107,11 +107,11 @@ export class StudentClassSubjectAssessmentScoreEffect {
     this.actions$.pipe(
       ofType(StudentClassSubjectAssessmentScoreActions.getStudentClassSubjectAssessmentScoreByProperties),
       mergeMap(({ properties }) => {
-        const params = new HttpParams().set('properties', JSON.stringify(properties));
         return this.http
-          .get<GenericResponseInterface<StudentClassSubjectAssessmentScoreListInterface[]>>(
+          .post<GenericResponseInterface<StudentClassSubjectAssessmentScoreListInterface[]>>(
             `${environment.baseUrl}/StudentClassSubjectAssessmentScore/GetByProperties`,
-            { params, withCredentials: true }
+            properties,
+            { withCredentials: true }
           )
           .pipe(
             retry(1),
@@ -262,11 +262,11 @@ export class StudentClassSubjectAssessmentScoreEffect {
     this.actions$.pipe(
       ofType(StudentClassSubjectAssessmentScoreActions.deleteManyStudentClassSubjectAssessmentScores),
       mergeMap(({ ids }) => {
-        const params = new HttpParams().set('ids', JSON.stringify(ids));
         return this.http
-          .delete<GenericResponseInterface<boolean>>(
+          .post<GenericResponseInterface<boolean>>(
             `${environment.baseUrl}/StudentClassSubjectAssessmentScore/DeleteMany`,
-            { params, withCredentials: true }
+            ids,
+            { withCredentials: true }
           )
           .pipe(
             map((response) => StudentClassSubjectAssessmentScoreActions.deleteManyStudentClassSubjectAssessmentScoresSuccess({ payload: response })),

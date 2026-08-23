@@ -132,10 +132,9 @@ export class ClassSubjectAssessmentEffect {
       ofType(ClassSubjectAssessmentAction.classSubjectAssessmentExists),
       switchMap(({ properties }) =>
         this.http
-          .post<GenericResponseInterface<boolean>>(
+          .get<GenericResponseInterface<boolean>>(
             `${environment.baseUrl}/ClassSubjectAssessment/Exists`,
-            properties,
-            { withCredentials: true }
+            { params: properties, withCredentials: true }
           )
           .pipe(
             map((payload) =>
@@ -272,7 +271,7 @@ export class ClassSubjectAssessmentEffect {
       ofType(ClassSubjectAssessmentAction.updateManyClassSubjectAssessments),
       switchMap(({ payload }) =>
         this.http
-          .post<GenericResponseInterface<ClassSubjectAssessmentListInterface[]>>(
+          .put<GenericResponseInterface<ClassSubjectAssessmentListInterface[]>>(
             `${environment.baseUrl}/ClassSubjectAssessment/UpdateMany`,
             payload,
             { withCredentials: true }
@@ -295,12 +294,10 @@ export class ClassSubjectAssessmentEffect {
       ofType(ClassSubjectAssessmentAction.deleteManyClassSubjectAssessments),
       switchMap(({ classSubjectAssessmentIds }) =>
         this.http
-          .delete<GenericResponseInterface<boolean>>(
+          .post<GenericResponseInterface<boolean>>(
             `${environment.baseUrl}/ClassSubjectAssessment/DeleteMany`,
-            {
-              params: { ids: classSubjectAssessmentIds },
-              withCredentials: true
-            }
+            classSubjectAssessmentIds,
+            { withCredentials: true }
           )
           .pipe(
             map((payload) =>

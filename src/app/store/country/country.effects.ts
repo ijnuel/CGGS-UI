@@ -132,10 +132,9 @@ export class CountryEffect {
       ofType(CountryAction.countryExists),
       switchMap(({ properties }) =>
         this.http
-          .post<GenericResponseInterface<boolean>>(
+          .get<GenericResponseInterface<boolean>>(
             `${environment.baseUrl}/Country/Exists`,
-            properties,
-            { withCredentials: true }
+            { params: properties, withCredentials: true }
           )
           .pipe(
             map((payload) =>
@@ -272,7 +271,7 @@ export class CountryEffect {
       ofType(CountryAction.updateManyCountrys),
       switchMap(({ payload }) =>
         this.http
-          .post<GenericResponseInterface<CountryListInterface[]>>(
+          .put<GenericResponseInterface<CountryListInterface[]>>(
             `${environment.baseUrl}/Country/UpdateMany`,
             payload,
             { withCredentials: true }
@@ -295,12 +294,10 @@ export class CountryEffect {
       ofType(CountryAction.deleteManyCountrys),
       switchMap(({ countryIds }) =>
         this.http
-          .delete<GenericResponseInterface<boolean>>(
+          .post<GenericResponseInterface<boolean>>(
             `${environment.baseUrl}/Country/DeleteMany`,
-            {
-              params: { ids: countryIds },
-              withCredentials: true
-            }
+            countryIds,
+            { withCredentials: true }
           )
           .pipe(
             map((payload) =>

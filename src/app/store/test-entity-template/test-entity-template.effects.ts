@@ -276,7 +276,7 @@ export class TestEntityTemplateEffect {
       ofType(TestEntityTemplateAction.updateManyTestEntityTemplates),
       switchMap(({ payload }) =>
         this.http
-          .post<GenericResponseInterface<TestEntityTemplateListInterface[]>>(
+          .put<GenericResponseInterface<TestEntityTemplateListInterface[]>>(
             `${environment.baseUrl}/TestEntityTemplate/UpdateMany`,
             payload,
             { withCredentials: true }
@@ -299,9 +299,7 @@ export class TestEntityTemplateEffect {
       ofType(TestEntityTemplateAction.deleteManyTestEntityTemplates),
       switchMap(({ ids }) =>
         this.http
-          .delete<GenericResponseInterface<boolean>>(
-            `${environment.baseUrl}/TestEntityTemplate/DeleteMany`,
-            { params: { ids }, withCredentials: true }
+          .post<GenericResponseInterface<boolean>>(`${environment.baseUrl}/TestEntityTemplate/DeleteMany`, ids, { withCredentials: true }
           )
           .pipe(
             map((payload) =>

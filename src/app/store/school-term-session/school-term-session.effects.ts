@@ -146,10 +146,9 @@ export class SchoolTermSessionEffect {
       ofType(SchoolTermSessionAction.schoolTermSessionExists),
       switchMap(({ properties }) =>
         this.http
-          .post<GenericResponseInterface<boolean>>(
+          .get<GenericResponseInterface<boolean>>(
             `${environment.baseUrl}/SchoolTermSession/Exists`,
-            properties,
-            { withCredentials: true }
+            { params: properties, withCredentials: true }
           )
           .pipe(
             map((payload) =>
@@ -286,7 +285,7 @@ export class SchoolTermSessionEffect {
       ofType(SchoolTermSessionAction.updateManySchoolTermSessions),
       switchMap(({ payload }) =>
         this.http
-          .post<GenericResponseInterface<SchoolTermSessionListInterface[]>>(
+          .put<GenericResponseInterface<SchoolTermSessionListInterface[]>>(
             `${environment.baseUrl}/SchoolTermSession/UpdateMany`,
             payload,
             { withCredentials: true }
@@ -309,12 +308,10 @@ export class SchoolTermSessionEffect {
       ofType(SchoolTermSessionAction.deleteManySchoolTermSessions),
       switchMap(({ schoolTermSessionIds }) =>
         this.http
-          .delete<GenericResponseInterface<boolean>>(
+          .post<GenericResponseInterface<boolean>>(
             `${environment.baseUrl}/SchoolTermSession/DeleteMany`,
-            {
-              params: { ids: schoolTermSessionIds },
-              withCredentials: true
-            }
+            schoolTermSessionIds,
+            { withCredentials: true }
           )
           .pipe(
             map((payload) =>

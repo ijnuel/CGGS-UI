@@ -134,10 +134,9 @@ export class FamilyEffect {
       ofType(FamilyAction.familyExists),
       switchMap(({ properties }) =>
         this.http
-          .post<GenericResponseInterface<boolean>>(
+          .get<GenericResponseInterface<boolean>>(
             `${environment.baseUrl}/Family/Exists`,
-            properties,
-            { withCredentials: true }
+            { params: properties, withCredentials: true }
           )
           .pipe(
             map((payload) =>
@@ -274,7 +273,7 @@ export class FamilyEffect {
       ofType(FamilyAction.updateManyFamilys),
       switchMap(({ payload }) =>
         this.http
-          .post<GenericResponseInterface<FamilyListInterface[]>>(
+          .put<GenericResponseInterface<FamilyListInterface[]>>(
             `${environment.baseUrl}/Family/UpdateMany`,
             payload,
             { withCredentials: true }
@@ -297,12 +296,10 @@ export class FamilyEffect {
       ofType(FamilyAction.deleteManyFamilys),
       switchMap(({ familyIds }) =>
         this.http
-          .delete<GenericResponseInterface<boolean>>(
+          .post<GenericResponseInterface<boolean>>(
             `${environment.baseUrl}/Family/DeleteMany`,
-            {
-              params: { ids: familyIds },
-              withCredentials: true
-            }
+            familyIds,
+            { withCredentials: true }
           )
           .pipe(
             map((payload) =>

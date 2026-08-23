@@ -134,10 +134,9 @@ export class PrincipalRemarkEffect {
       ofType(PrincipalRemarkAction.principalRemarkExists),
       switchMap(({ properties }) =>
         this.http
-          .post<GenericResponseInterface<boolean>>(
+          .get<GenericResponseInterface<boolean>>(
             `${environment.baseUrl}/PrincipalRemark/Exists`,
-            properties,
-            { withCredentials: true }
+            { params: properties, withCredentials: true }
           )
           .pipe(
             map((payload) =>
@@ -274,7 +273,7 @@ export class PrincipalRemarkEffect {
       ofType(PrincipalRemarkAction.updateManyPrincipalRemarks),
       switchMap(({ payload }) =>
         this.http
-          .post<GenericResponseInterface<PrincipalRemarkListInterface[]>>(
+          .put<GenericResponseInterface<PrincipalRemarkListInterface[]>>(
             `${environment.baseUrl}/PrincipalRemark/UpdateMany`,
             payload,
             { withCredentials: true }
@@ -297,12 +296,10 @@ export class PrincipalRemarkEffect {
       ofType(PrincipalRemarkAction.deleteManyPrincipalRemarks),
       switchMap(({ principalRemarkIds }) =>
         this.http
-          .delete<GenericResponseInterface<boolean>>(
+          .post<GenericResponseInterface<boolean>>(
             `${environment.baseUrl}/PrincipalRemark/DeleteMany`,
-            {
-              params: { ids: principalRemarkIds },
-              withCredentials: true
-            }
+            principalRemarkIds,
+            { withCredentials: true }
           )
           .pipe(
             map((payload) =>

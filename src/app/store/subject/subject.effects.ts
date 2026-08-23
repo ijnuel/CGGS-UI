@@ -134,10 +134,9 @@ export class SubjectEffect {
       ofType(SubjectAction.subjectExists),
       switchMap(({ properties }) =>
         this.http
-          .post<GenericResponseInterface<boolean>>(
+          .get<GenericResponseInterface<boolean>>(
             `${environment.baseUrl}/Subject/Exists`,
-            properties,
-            { withCredentials: true }
+            { params: properties, withCredentials: true }
           )
           .pipe(
             map((payload) =>
@@ -274,7 +273,7 @@ export class SubjectEffect {
       ofType(SubjectAction.updateManySubjects),
       switchMap(({ payload }) =>
         this.http
-          .post<GenericResponseInterface<SubjectListInterface[]>>(
+          .put<GenericResponseInterface<SubjectListInterface[]>>(
             `${environment.baseUrl}/Subject/UpdateMany`,
             payload,
             { withCredentials: true }
@@ -297,12 +296,10 @@ export class SubjectEffect {
       ofType(SubjectAction.deleteManySubjects),
       switchMap(({ subjectIds }) =>
         this.http
-          .delete<GenericResponseInterface<boolean>>(
+          .post<GenericResponseInterface<boolean>>(
             `${environment.baseUrl}/Subject/DeleteMany`,
-            {
-              params: { ids: subjectIds },
-              withCredentials: true
-            }
+            subjectIds,
+            { withCredentials: true }
           )
           .pipe(
             map((payload) =>

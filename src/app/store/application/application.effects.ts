@@ -132,10 +132,9 @@ export class ApplicationEffect {
       ofType(ApplicationAction.applicationExists),
       switchMap(({ properties }) =>
         this.http
-          .post<GenericResponseInterface<boolean>>(
+          .get<GenericResponseInterface<boolean>>(
             `${environment.baseUrl}/Application/Exists`,
-            properties,
-            { withCredentials: true }
+            { params: properties, withCredentials: true }
           )
           .pipe(
             map((payload) =>
@@ -272,7 +271,7 @@ export class ApplicationEffect {
       ofType(ApplicationAction.updateManyApplications),
       switchMap(({ payload }) =>
         this.http
-          .post<GenericResponseInterface<ApplicationListInterface[]>>(
+          .put<GenericResponseInterface<ApplicationListInterface[]>>(
             `${environment.baseUrl}/Application/UpdateMany`,
             payload,
             { withCredentials: true }
@@ -295,12 +294,10 @@ export class ApplicationEffect {
       ofType(ApplicationAction.deleteManyApplications),
       switchMap(({ applicationIds }) =>
         this.http
-          .delete<GenericResponseInterface<boolean>>(
+          .post<GenericResponseInterface<boolean>>(
             `${environment.baseUrl}/Application/DeleteMany`,
-            {
-              params: { ids: applicationIds },
-              withCredentials: true
-            }
+            applicationIds,
+            { withCredentials: true }
           )
           .pipe(
             map((payload) =>

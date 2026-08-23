@@ -134,10 +134,9 @@ export class ClassEffect {
       ofType(ClassAction.classExists),
       switchMap(({ properties }) =>
         this.http
-          .post<GenericResponseInterface<boolean>>(
+          .get<GenericResponseInterface<boolean>>(
             `${environment.baseUrl}/Class/Exists`,
-            properties,
-            { withCredentials: true }
+            { params: properties, withCredentials: true }
           )
           .pipe(
             map((payload) =>
@@ -274,7 +273,7 @@ export class ClassEffect {
       ofType(ClassAction.updateManyClasss),
       switchMap(({ payload }) =>
         this.http
-          .post<GenericResponseInterface<ClassListInterface[]>>(
+          .put<GenericResponseInterface<ClassListInterface[]>>(
             `${environment.baseUrl}/Class/UpdateMany`,
             payload,
             { withCredentials: true }
@@ -297,12 +296,10 @@ export class ClassEffect {
       ofType(ClassAction.deleteManyClasss),
       switchMap(({ classIds }) =>
         this.http
-          .delete<GenericResponseInterface<boolean>>(
+          .post<GenericResponseInterface<boolean>>(
             `${environment.baseUrl}/Class/DeleteMany`,
-            {
-              params: { ids: classIds },
-              withCredentials: true
-            }
+            classIds,
+            { withCredentials: true }
           )
           .pipe(
             map((payload) =>

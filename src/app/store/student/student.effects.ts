@@ -168,10 +168,9 @@ export class StudentEffect {
       ofType(StudentAction.studentExists),
       switchMap(({ properties }) =>
         this.http
-          .post<GenericResponseInterface<boolean>>(
+          .get<GenericResponseInterface<boolean>>(
             `${environment.baseUrl}/Student/Exists`,
-            properties,
-            { withCredentials: true }
+            { params: properties, withCredentials: true }
           )
           .pipe(
             map((payload) =>
@@ -314,7 +313,7 @@ export class StudentEffect {
       ofType(StudentAction.updateManyStudents),
       switchMap(({ payload }) =>
         this.http
-          .post<GenericResponseInterface<StudentListInterface[]>>(
+          .put<GenericResponseInterface<StudentListInterface[]>>(
             `${environment.baseUrl}/Student/UpdateMany`,
             payload,
             { withCredentials: true }
@@ -339,12 +338,10 @@ export class StudentEffect {
       ofType(StudentAction.deleteManyStudents),
       switchMap(({ studentIds }) =>
         this.http
-          .delete<GenericResponseInterface<boolean>>(
+          .post<GenericResponseInterface<boolean>>(
             `${environment.baseUrl}/Student/DeleteMany`,
-            {
-              params: { ids: studentIds },
-              withCredentials: true
-            }
+            studentIds,
+            { withCredentials: true }
           )
           .pipe(
             map((payload) =>

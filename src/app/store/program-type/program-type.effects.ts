@@ -275,7 +275,7 @@ export class ProgramTypeEffect {
       ofType(ProgramTypeAction.updateManyProgramTypes),
       switchMap(({ payload }) =>
         this.http
-          .post<GenericResponseInterface<number>>(
+          .put<GenericResponseInterface<number>>(
             `${environment.baseUrl}/ProgramType/UpdateMany`,
             payload,
             { withCredentials: true }
@@ -298,9 +298,7 @@ export class ProgramTypeEffect {
       ofType(ProgramTypeAction.deleteManyProgramTypes),
       switchMap(({ ids }) =>
         this.http
-          .delete<GenericResponseInterface<number>>(
-            `${environment.baseUrl}/ProgramType/DeleteMany`,
-            { params: { ids }, withCredentials: true }
+          .post<GenericResponseInterface<number>>(`${environment.baseUrl}/ProgramType/DeleteMany`, ids, { withCredentials: true }
           )
           .pipe(
             map((payload) =>

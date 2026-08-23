@@ -134,10 +134,9 @@ export class SessionEffect {
       ofType(SessionAction.sessionExists),
       switchMap(({ properties }) =>
         this.http
-          .post<GenericResponseInterface<boolean>>(
+          .get<GenericResponseInterface<boolean>>(
             `${environment.baseUrl}/Session/Exists`,
-            properties,
-            { withCredentials: true }
+            { params: properties, withCredentials: true }
           )
           .pipe(
             map((payload) =>
@@ -274,7 +273,7 @@ export class SessionEffect {
       ofType(SessionAction.updateManySessions),
       switchMap(({ payload }) =>
         this.http
-          .post<GenericResponseInterface<SessionListInterface[]>>(
+          .put<GenericResponseInterface<SessionListInterface[]>>(
             `${environment.baseUrl}/Session/UpdateMany`,
             payload,
             { withCredentials: true }
@@ -297,12 +296,10 @@ export class SessionEffect {
       ofType(SessionAction.deleteManySessions),
       switchMap(({ sessionIds }) =>
         this.http
-          .delete<GenericResponseInterface<boolean>>(
+          .post<GenericResponseInterface<boolean>>(
             `${environment.baseUrl}/Session/DeleteMany`,
-            {
-              params: { ids: sessionIds },
-              withCredentials: true
-            }
+            sessionIds,
+            { withCredentials: true }
           )
           .pipe(
             map((payload) =>

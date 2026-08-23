@@ -108,12 +108,10 @@ export class ClassSubjectEffect {
       ofType(ClassSubjectAction.getClassSubjectByProperties),
       switchMap(({ queryPropertiesString }) =>
         this.http
-          .get<GenericResponseInterface<ClassSubjectListInterface>>(
+          .post<GenericResponseInterface<ClassSubjectListInterface>>(
             `${environment.baseUrl}/ClassSubject/GetByProperties`,
-            {
-              params: { queryPropertiesString },
-              withCredentials: true
-            }
+            { queryPropertiesString },
+            { withCredentials: true }
           )
           .pipe(
             retry(1),
@@ -179,10 +177,9 @@ export class ClassSubjectEffect {
       ofType(ClassSubjectAction.classSubjectExists),
       switchMap(({ properties }) =>
         this.http
-          .post<GenericResponseInterface<boolean>>(
+          .get<GenericResponseInterface<boolean>>(
             `${environment.baseUrl}/ClassSubject/Exists`,
-            properties,
-            { withCredentials: true }
+            { params: properties, withCredentials: true }
           )
           .pipe(
             map((payload) =>
@@ -319,7 +316,7 @@ export class ClassSubjectEffect {
       ofType(ClassSubjectAction.updateManyClassSubjects),
       switchMap(({ payload }) =>
         this.http
-          .post<GenericResponseInterface<ClassSubjectListInterface[]>>(
+          .put<GenericResponseInterface<ClassSubjectListInterface[]>>(
             `${environment.baseUrl}/ClassSubject/UpdateMany`,
             payload,
             { withCredentials: true }
@@ -342,12 +339,10 @@ export class ClassSubjectEffect {
       ofType(ClassSubjectAction.deleteManyClassSubjects),
       switchMap(({ classSubjectIds }) =>
         this.http
-          .delete<GenericResponseInterface<boolean>>(
+          .post<GenericResponseInterface<boolean>>(
             `${environment.baseUrl}/ClassSubject/DeleteMany`,
-            {
-              params: { ids: classSubjectIds },
-              withCredentials: true
-            }
+            classSubjectIds,
+            { withCredentials: true }
           )
           .pipe(
             map((payload) =>

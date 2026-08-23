@@ -14,8 +14,9 @@ export class ClassSubjectResultEffects {
     this.actions$.pipe(
       ofType(ClassSubjectResultActions.loadClassSubjectResults),
       switchMap(() =>
-        this.http.get<GenericResponseInterface<ClassSubjectResultInterface[]>>(
+        this.http.post<GenericResponseInterface<ClassSubjectResultInterface[]>>(
           `${environment.baseUrl}/ClassSubjectResult/GetAll`,
+          {},
           { withCredentials: true }
         ).pipe(
           map(payload => ClassSubjectResultActions.loadClassSubjectResultsSuccess({ payload })),
@@ -84,10 +85,9 @@ export class ClassSubjectResultEffects {
     this.actions$.pipe(
       ofType(ClassSubjectResultActions.classSubjectResultExists),
       switchMap(({ properties }) =>
-        this.http.post<GenericResponseInterface<boolean>>(
+        this.http.get<GenericResponseInterface<boolean>>(
           `${environment.baseUrl}/ClassSubjectResult/Exists`,
-          properties,
-          { withCredentials: true }
+          { params: properties, withCredentials: true }
         ).pipe(
           map(payload => ClassSubjectResultActions.classSubjectResultExistsSuccess({ payload })),
           catchError(error => of(ClassSubjectResultActions.classSubjectResultExistsFail({ error })))
@@ -194,10 +194,7 @@ export class ClassSubjectResultEffects {
     this.actions$.pipe(
       ofType(ClassSubjectResultActions.deleteManyClassSubjectResults),
       switchMap(({ ids }) =>
-        this.http.request<GenericResponseInterface<any>>('delete', `${environment.baseUrl}/ClassSubjectResult/DeleteMany`, {
-          body: ids,
-          withCredentials: true
-        }).pipe(
+        this.http.post<GenericResponseInterface<any>>(`${environment.baseUrl}/ClassSubjectResult/DeleteMany`, ids, { withCredentials: true }).pipe(
           map(payload => ClassSubjectResultActions.deleteManyClassSubjectResultsSuccess({ payload })),
           catchError(error => of(ClassSubjectResultActions.deleteManyClassSubjectResultsFail({ error })))
         )

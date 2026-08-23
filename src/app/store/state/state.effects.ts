@@ -134,10 +134,9 @@ export class StateEffect {
       ofType(StateAction.stateExists),
       switchMap(({ properties }) =>
         this.http
-          .post<GenericResponseInterface<boolean>>(
+          .get<GenericResponseInterface<boolean>>(
             `${environment.baseUrl}/State/Exists`,
-            properties,
-            { withCredentials: true }
+            { params: properties, withCredentials: true }
           )
           .pipe(
             map((payload) =>
@@ -274,7 +273,7 @@ export class StateEffect {
       ofType(StateAction.updateManyStates),
       switchMap(({ payload }) =>
         this.http
-          .post<GenericResponseInterface<StateListInterface[]>>(
+          .put<GenericResponseInterface<StateListInterface[]>>(
             `${environment.baseUrl}/State/UpdateMany`,
             payload,
             { withCredentials: true }
@@ -297,12 +296,10 @@ export class StateEffect {
       ofType(StateAction.deleteManyStates),
       switchMap(({ stateIds }) =>
         this.http
-          .delete<GenericResponseInterface<boolean>>(
+          .post<GenericResponseInterface<boolean>>(
             `${environment.baseUrl}/State/DeleteMany`,
-            {
-              params: { ids: stateIds },
-              withCredentials: true
-            }
+            stateIds,
+            { withCredentials: true }
           )
           .pipe(
             map((payload) =>

@@ -134,10 +134,9 @@ export class ProgrammeGradeRemarkEffect {
       ofType(ProgrammeGradeRemarkAction.programmeGradeRemarkExists),
       switchMap(({ properties }) =>
         this.http
-          .post<GenericResponseInterface<boolean>>(
+          .get<GenericResponseInterface<boolean>>(
             `${environment.baseUrl}/ProgrammeGradeRemark/Exists`,
-            properties,
-            { withCredentials: true }
+            { params: properties, withCredentials: true }
           )
           .pipe(
             map((payload) =>
@@ -277,7 +276,7 @@ export class ProgrammeGradeRemarkEffect {
       ofType(ProgrammeGradeRemarkAction.updateManyProgrammeGradeRemarks),
       switchMap(({ payload }) =>
         this.http
-          .post<GenericResponseInterface<ProgrammeGradeRemarkListInterface[]>>(
+          .put<GenericResponseInterface<ProgrammeGradeRemarkListInterface[]>>(
             `${environment.baseUrl}/ProgrammeGradeRemark/UpdateMany`,
             payload,
             { withCredentials: true }
@@ -300,12 +299,10 @@ export class ProgrammeGradeRemarkEffect {
       ofType(ProgrammeGradeRemarkAction.deleteManyProgrammeGradeRemarks),
       switchMap(({ programmeGradeRemarkIds }) =>
         this.http
-          .delete<GenericResponseInterface<boolean>>(
+          .post<GenericResponseInterface<boolean>>(
             `${environment.baseUrl}/ProgrammeGradeRemark/DeleteMany`,
-            {
-              params: { ids: programmeGradeRemarkIds },
-              withCredentials: true
-            }
+            programmeGradeRemarkIds,
+            { withCredentials: true }
           )
           .pipe(
             map((payload) =>

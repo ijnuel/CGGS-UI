@@ -134,10 +134,9 @@ export class CompanyEffect {
       ofType(CompanyAction.companyExists),
       switchMap(({ properties }) =>
         this.http
-          .post<GenericResponseInterface<boolean>>(
+          .get<GenericResponseInterface<boolean>>(
             `${environment.baseUrl}/Company/Exists`,
-            properties,
-            { withCredentials: true }
+            { params: properties, withCredentials: true }
           )
           .pipe(
             map((payload) =>
@@ -274,7 +273,7 @@ export class CompanyEffect {
       ofType(CompanyAction.updateManyCompanys),
       switchMap(({ payload }) =>
         this.http
-          .post<GenericResponseInterface<CompanyListInterface[]>>(
+          .put<GenericResponseInterface<CompanyListInterface[]>>(
             `${environment.baseUrl}/Company/UpdateMany`,
             payload,
             { withCredentials: true }
@@ -297,12 +296,10 @@ export class CompanyEffect {
       ofType(CompanyAction.deleteManyCompanys),
       switchMap(({ companyIds }) =>
         this.http
-          .delete<GenericResponseInterface<boolean>>(
+          .post<GenericResponseInterface<boolean>>(
             `${environment.baseUrl}/Company/DeleteMany`,
-            {
-              params: { ids: companyIds },
-              withCredentials: true
-            }
+            companyIds,
+            { withCredentials: true }
           )
           .pipe(
             map((payload) =>

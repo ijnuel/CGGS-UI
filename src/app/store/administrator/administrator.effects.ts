@@ -134,10 +134,9 @@ export class AdministratorEffect {
       ofType(AdministratorAction.administratorExists),
       switchMap(({ properties }) =>
         this.http
-          .post<GenericResponseInterface<boolean>>(
+          .get<GenericResponseInterface<boolean>>(
             `${environment.baseUrl}/Administrator/Exists`,
-            properties,
-            { withCredentials: true }
+            { params: properties, withCredentials: true }
           )
           .pipe(
             map((payload) =>
@@ -281,7 +280,7 @@ export class AdministratorEffect {
       ofType(AdministratorAction.updateManyAdministrators),
       switchMap(({ payload }) =>
         this.http
-          .post<GenericResponseInterface<AdministratorListInterface[]>>(
+          .put<GenericResponseInterface<AdministratorListInterface[]>>(
             `${environment.baseUrl}/Administrator/UpdateMany`,
             payload,
             { withCredentials: true }
@@ -304,12 +303,10 @@ export class AdministratorEffect {
       ofType(AdministratorAction.deleteManyAdministrators),
       switchMap(({ administratorIds }) =>
         this.http
-          .delete<GenericResponseInterface<boolean>>(
+          .post<GenericResponseInterface<boolean>>(
             `${environment.baseUrl}/Administrator/DeleteMany`,
-            {
-              params: { ids: administratorIds },
-              withCredentials: true
-            }
+            administratorIds,
+            { withCredentials: true }
           )
           .pipe(
             map((payload) =>

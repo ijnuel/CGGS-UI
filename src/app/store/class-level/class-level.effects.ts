@@ -132,10 +132,9 @@ export class ClassLevelEffect {
       ofType(ClassLevelAction.classLevelExists),
       switchMap(({ properties }) =>
         this.http
-          .post<GenericResponseInterface<boolean>>(
+          .get<GenericResponseInterface<boolean>>(
             `${environment.baseUrl}/ClassLevel/Exists`,
-            properties,
-            { withCredentials: true }
+            { params: properties, withCredentials: true }
           )
           .pipe(
             map((payload) =>
@@ -272,7 +271,7 @@ export class ClassLevelEffect {
       ofType(ClassLevelAction.updateManyClassLevels),
       switchMap(({ payload }) =>
         this.http
-          .post<GenericResponseInterface<ClassLevelListInterface[]>>(
+          .put<GenericResponseInterface<ClassLevelListInterface[]>>(
             `${environment.baseUrl}/ClassLevel/UpdateMany`,
             payload,
             { withCredentials: true }
@@ -295,12 +294,10 @@ export class ClassLevelEffect {
       ofType(ClassLevelAction.deleteManyClassLevels),
       switchMap(({ classLevelIds }) =>
         this.http
-          .delete<GenericResponseInterface<boolean>>(
+          .post<GenericResponseInterface<boolean>>(
             `${environment.baseUrl}/ClassLevel/DeleteMany`,
-            {
-              params: { ids: classLevelIds },
-              withCredentials: true
-            }
+            classLevelIds,
+            { withCredentials: true }
           )
           .pipe(
             map((payload) =>

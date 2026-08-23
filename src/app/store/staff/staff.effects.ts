@@ -136,10 +136,9 @@ export class StaffEffect {
       ofType(StaffAction.staffExists),
       switchMap(({ properties }) =>
         this.http
-          .post<GenericResponseInterface<boolean>>(
+          .get<GenericResponseInterface<boolean>>(
             `${environment.baseUrl}/Staff/Exists`,
-            properties,
-            { withCredentials: true }
+            { params: properties, withCredentials: true }
           )
           .pipe(
             map((payload) =>
@@ -276,7 +275,7 @@ export class StaffEffect {
       ofType(StaffAction.updateManyStaffs),
       switchMap(({ payload }) =>
         this.http
-          .post<GenericResponseInterface<StaffListInterface[]>>(
+          .put<GenericResponseInterface<StaffListInterface[]>>(
             `${environment.baseUrl}/Staff/UpdateMany`,
             payload,
             { withCredentials: true }
@@ -299,12 +298,10 @@ export class StaffEffect {
       ofType(StaffAction.deleteManyStaffs),
       switchMap(({ staffIds }) =>
         this.http
-          .delete<GenericResponseInterface<boolean>>(
+          .post<GenericResponseInterface<boolean>>(
             `${environment.baseUrl}/Staff/DeleteMany`,
-            {
-              params: { ids: staffIds },
-              withCredentials: true
-            }
+            staffIds,
+            { withCredentials: true }
           )
           .pipe(
             map((payload) =>

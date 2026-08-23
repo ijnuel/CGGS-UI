@@ -134,10 +134,9 @@ export class LocalGovernmentAreaEffect {
       ofType(LocalGovernmentAreaAction.localGovernmentAreaExists),
       switchMap(({ properties }) =>
         this.http
-          .post<GenericResponseInterface<boolean>>(
+          .get<GenericResponseInterface<boolean>>(
             `${environment.baseUrl}/LocalGovernmentArea/Exists`,
-            properties,
-            { withCredentials: true }
+            { params: properties, withCredentials: true }
           )
           .pipe(
             map((payload) =>
@@ -274,7 +273,7 @@ export class LocalGovernmentAreaEffect {
       ofType(LocalGovernmentAreaAction.updateManyLocalGovernmentAreas),
       switchMap(({ payload }) =>
         this.http
-          .post<GenericResponseInterface<LocalGovernmentAreaListInterface[]>>(
+          .put<GenericResponseInterface<LocalGovernmentAreaListInterface[]>>(
             `${environment.baseUrl}/LocalGovernmentArea/UpdateMany`,
             payload,
             { withCredentials: true }
@@ -297,12 +296,10 @@ export class LocalGovernmentAreaEffect {
       ofType(LocalGovernmentAreaAction.deleteManyLocalGovernmentAreas),
       switchMap(({ localGovernmentAreaIds }) =>
         this.http
-          .delete<GenericResponseInterface<boolean>>(
+          .post<GenericResponseInterface<boolean>>(
             `${environment.baseUrl}/LocalGovernmentArea/DeleteMany`,
-            {
-              params: { ids: localGovernmentAreaIds },
-              withCredentials: true
-            }
+            localGovernmentAreaIds,
+            { withCredentials: true }
           )
           .pipe(
             map((payload) =>
