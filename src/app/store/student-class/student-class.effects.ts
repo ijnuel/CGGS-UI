@@ -111,7 +111,7 @@ export class StudentClassEffect {
       ofType(StudentClassAction.editStudentClass),
       switchMap(({ payload }) =>
         this.http
-          .post<GenericResponseInterface<StudentClassListInterface>>(
+          .put<GenericResponseInterface<StudentClassListInterface>>(
             `${environment.baseUrl}/StudentClass/Update`,
             payload,
             { withCredentials: true }
