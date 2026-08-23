@@ -1,0 +1,55 @@
+@if ({ downloadLoading: downloadLoading$ | async, importLoading: importLoading$ | async,
+  importSuccess: importSuccess$ | async, importCreated: importCreated$ | async,
+  importErrors: importErrors$ | async }; as obs) {
+
+<h2 mat-dialog-title class="flex items-center justify-between">
+  <span>Bulk Import Students</span>
+</h2>
+
+<mat-dialog-content style="min-width: 460px; padding-top: 8px;">
+  <div class="flex flex-col gap-6">
+
+    <div>
+      <div class="text-sm text-gray-500 mb-2">Step 1 — Download the template, fill it in, then upload below</div>
+      <button class="sec-btn" (click)="downloadTemplate()" [disabled]="obs.downloadLoading">
+        {{ obs.downloadLoading ? 'Downloading...' : 'Download Template' }}
+      </button>
+    </div>
+
+    <div>
+      <div class="text-sm text-gray-500 mb-2">Step 2 — Upload completed template</div>
+      <div class="flex items-center gap-3 flex-wrap">
+        <label class="cursor-pointer">
+          <input type="file" accept=".xlsx" class="hidden" (change)="onFileChange($event)" />
+          <span class="cancel-btn inline-block">{{ importFile ? importFile.name : 'Choose File' }}</span>
+        </label>
+        <button class="sec-btn" (click)="uploadFile()" [disabled]="!importFile || obs.importLoading">
+          {{ obs.importLoading ? 'Importing...' : 'Import' }}
+        </button>
+      </div>
+    </div>
+
+    @if (obs.importSuccess) {
+    <div>
+      <div class="text-sm font-medium text-green-700">{{ obs.importCreated }} student(s) created successfully.</div>
+      @if (obs.importErrors && obs.importErrors.length > 0) {
+      <div class="mt-2">
+        <div class="text-sm font-medium text-red-600 mb-1">Errors ({{ obs.importErrors.length }}):</div>
+        <ul class="text-sm text-red-500 list-disc list-inside max-h-40 overflow-y-auto">
+          @for (err of obs.importErrors; track $index) {
+          <li>{{ err }}</li>
+          }
+        </ul>
+      </div>
+      }
+    </div>
+    }
+
+  </div>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button class="cancel-btn" (click)="close()">Close</button>
+</mat-dialog-actions>
+
+}

@@ -9,9 +9,11 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatRadioModule } from '@angular/material/radio';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatDialogModule } from '@angular/material/dialog';
 import { StudentComponent } from './student.component';
 import { SharedModule } from '../../../shared/shared.module';
 import { CreateUpdateStudentComponent } from './create-update-student/create-update-student.component';
+import { StudentBulkImportDialogComponent } from './create-update-student/student-bulk-import-dialog.component';
 import { provideNativeDateAdapter } from '@angular/material/core';
 import { ViewStudentComponent } from './view-student/view-student.component';
 import { StudentFeesDialogComponent } from './view-student/student-fees-dialog.component';
@@ -39,7 +41,7 @@ const routes: Routes = [
 ];
 
 @NgModule({
-    declarations: [StudentComponent, CreateUpdateStudentComponent, ViewStudentComponent, StudentFeesDialogComponent],
+    declarations: [StudentComponent, CreateUpdateStudentComponent, ViewStudentComponent, StudentFeesDialogComponent, StudentBulkImportDialogComponent],
     imports: [
         CommonModule,
         SharedModule,
@@ -53,6 +55,7 @@ const routes: Routes = [
         MatSelectModule,
         MatRadioModule,
         MatProgressSpinnerModule,
+        MatDialogModule,
     ],
     providers: [provideNativeDateAdapter()],
 })
