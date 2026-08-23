@@ -220,6 +220,9 @@ export class ViewClassComponent implements OnInit, OnDestroy {
     if (!this.editStreamForm.valid || !this.editingStudentClass) return;
     this.studentClassFacade.updateStudentClass({
       id: this.editingStudentClass.id,
+      studentId: this.editingStudentClass.studentId,
+      classId: this.editingStudentClass.classId,
+      sessionId: this.editingStudentClass.sessionId,
       streamId: this.editStreamForm.value.streamId ?? undefined,
     });
     this.studentClassFacade.updateSuccess$.pipe(
