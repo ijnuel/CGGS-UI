@@ -69,7 +69,7 @@ export class AppInterceptorService implements HttpInterceptor {
     request: HttpRequest<any>,
     next: HttpHandler
   ): Observable<HttpEvent<any>> {
-    const modifiedRequest = request.body
+    const modifiedRequest = request.body && !(request.body instanceof FormData)
       ? request.clone({ body: serializeDates(request.body) })
       : request;
 
