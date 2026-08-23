@@ -134,9 +134,7 @@ export class LocalGovernmentAreaEffect {
       ofType(LocalGovernmentAreaAction.localGovernmentAreaExists),
       switchMap(({ properties }) =>
         this.http
-          .get<GenericResponseInterface<boolean>>(
-            `${environment.baseUrl}/LocalGovernmentArea/Exists`,
-            { params: properties, withCredentials: true }
+          .get<GenericResponseInterface<boolean>>(`${environment.baseUrl}/LocalGovernmentArea/Exists`, { params: properties as any, withCredentials: true }
           )
           .pipe(
             map((payload) =>

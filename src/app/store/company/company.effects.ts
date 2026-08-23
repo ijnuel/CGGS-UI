@@ -134,9 +134,7 @@ export class CompanyEffect {
       ofType(CompanyAction.companyExists),
       switchMap(({ properties }) =>
         this.http
-          .get<GenericResponseInterface<boolean>>(
-            `${environment.baseUrl}/Company/Exists`,
-            { params: properties, withCredentials: true }
+          .get<GenericResponseInterface<boolean>>(`${environment.baseUrl}/Company/Exists`, { params: properties as any, withCredentials: true }
           )
           .pipe(
             map((payload) =>

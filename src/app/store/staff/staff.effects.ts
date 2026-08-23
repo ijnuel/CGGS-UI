@@ -136,9 +136,7 @@ export class StaffEffect {
       ofType(StaffAction.staffExists),
       switchMap(({ properties }) =>
         this.http
-          .get<GenericResponseInterface<boolean>>(
-            `${environment.baseUrl}/Staff/Exists`,
-            { params: properties, withCredentials: true }
+          .get<GenericResponseInterface<boolean>>(`${environment.baseUrl}/Staff/Exists`, { params: properties as any, withCredentials: true }
           )
           .pipe(
             map((payload) =>

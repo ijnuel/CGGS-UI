@@ -132,9 +132,7 @@ export class CountryEffect {
       ofType(CountryAction.countryExists),
       switchMap(({ properties }) =>
         this.http
-          .get<GenericResponseInterface<boolean>>(
-            `${environment.baseUrl}/Country/Exists`,
-            { params: properties, withCredentials: true }
+          .get<GenericResponseInterface<boolean>>(`${environment.baseUrl}/Country/Exists`, { params: properties as any, withCredentials: true }
           )
           .pipe(
             map((payload) =>

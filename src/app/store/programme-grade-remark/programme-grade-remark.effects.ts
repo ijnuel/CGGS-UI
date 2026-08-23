@@ -134,9 +134,7 @@ export class ProgrammeGradeRemarkEffect {
       ofType(ProgrammeGradeRemarkAction.programmeGradeRemarkExists),
       switchMap(({ properties }) =>
         this.http
-          .get<GenericResponseInterface<boolean>>(
-            `${environment.baseUrl}/ProgrammeGradeRemark/Exists`,
-            { params: properties, withCredentials: true }
+          .get<GenericResponseInterface<boolean>>(`${environment.baseUrl}/ProgrammeGradeRemark/Exists`, { params: properties as any, withCredentials: true }
           )
           .pipe(
             map((payload) =>

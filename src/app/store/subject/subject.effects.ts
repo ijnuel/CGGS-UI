@@ -134,9 +134,7 @@ export class SubjectEffect {
       ofType(SubjectAction.subjectExists),
       switchMap(({ properties }) =>
         this.http
-          .get<GenericResponseInterface<boolean>>(
-            `${environment.baseUrl}/Subject/Exists`,
-            { params: properties, withCredentials: true }
+          .get<GenericResponseInterface<boolean>>(`${environment.baseUrl}/Subject/Exists`, { params: properties as any, withCredentials: true }
           )
           .pipe(
             map((payload) =>

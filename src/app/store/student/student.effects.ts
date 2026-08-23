@@ -168,9 +168,7 @@ export class StudentEffect {
       ofType(StudentAction.studentExists),
       switchMap(({ properties }) =>
         this.http
-          .get<GenericResponseInterface<boolean>>(
-            `${environment.baseUrl}/Student/Exists`,
-            { params: properties, withCredentials: true }
+          .get<GenericResponseInterface<boolean>>(`${environment.baseUrl}/Student/Exists`, { params: properties as any, withCredentials: true }
           )
           .pipe(
             map((payload) =>

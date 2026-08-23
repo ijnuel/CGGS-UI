@@ -132,9 +132,7 @@ export class ApplicationEffect {
       ofType(ApplicationAction.applicationExists),
       switchMap(({ properties }) =>
         this.http
-          .get<GenericResponseInterface<boolean>>(
-            `${environment.baseUrl}/Application/Exists`,
-            { params: properties, withCredentials: true }
+          .get<GenericResponseInterface<boolean>>(`${environment.baseUrl}/Application/Exists`, { params: properties as any, withCredentials: true }
           )
           .pipe(
             map((payload) =>

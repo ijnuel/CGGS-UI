@@ -134,9 +134,7 @@ export class PrincipalRemarkEffect {
       ofType(PrincipalRemarkAction.principalRemarkExists),
       switchMap(({ properties }) =>
         this.http
-          .get<GenericResponseInterface<boolean>>(
-            `${environment.baseUrl}/PrincipalRemark/Exists`,
-            { params: properties, withCredentials: true }
+          .get<GenericResponseInterface<boolean>>(`${environment.baseUrl}/PrincipalRemark/Exists`, { params: properties as any, withCredentials: true }
           )
           .pipe(
             map((payload) =>

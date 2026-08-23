@@ -132,9 +132,7 @@ export class ClassSubjectAssessmentEffect {
       ofType(ClassSubjectAssessmentAction.classSubjectAssessmentExists),
       switchMap(({ properties }) =>
         this.http
-          .get<GenericResponseInterface<boolean>>(
-            `${environment.baseUrl}/ClassSubjectAssessment/Exists`,
-            { params: properties, withCredentials: true }
+          .get<GenericResponseInterface<boolean>>(`${environment.baseUrl}/ClassSubjectAssessment/Exists`, { params: properties as any, withCredentials: true }
           )
           .pipe(
             map((payload) =>

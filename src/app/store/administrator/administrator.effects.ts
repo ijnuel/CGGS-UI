@@ -134,9 +134,7 @@ export class AdministratorEffect {
       ofType(AdministratorAction.administratorExists),
       switchMap(({ properties }) =>
         this.http
-          .get<GenericResponseInterface<boolean>>(
-            `${environment.baseUrl}/Administrator/Exists`,
-            { params: properties, withCredentials: true }
+          .get<GenericResponseInterface<boolean>>(`${environment.baseUrl}/Administrator/Exists`, { params: properties as any, withCredentials: true }
           )
           .pipe(
             map((payload) =>

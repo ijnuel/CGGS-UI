@@ -134,9 +134,7 @@ export class FamilyEffect {
       ofType(FamilyAction.familyExists),
       switchMap(({ properties }) =>
         this.http
-          .get<GenericResponseInterface<boolean>>(
-            `${environment.baseUrl}/Family/Exists`,
-            { params: properties, withCredentials: true }
+          .get<GenericResponseInterface<boolean>>(`${environment.baseUrl}/Family/Exists`, { params: properties as any, withCredentials: true }
           )
           .pipe(
             map((payload) =>

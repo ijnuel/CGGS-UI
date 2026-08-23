@@ -85,9 +85,7 @@ export class ClassSubjectResultEffects {
     this.actions$.pipe(
       ofType(ClassSubjectResultActions.classSubjectResultExists),
       switchMap(({ properties }) =>
-        this.http.get<GenericResponseInterface<boolean>>(
-          `${environment.baseUrl}/ClassSubjectResult/Exists`,
-          { params: properties, withCredentials: true }
+        this.http.get<GenericResponseInterface<boolean>>(`${environment.baseUrl}/ClassSubjectResult/Exists`, { params: properties as any, withCredentials: true }
         ).pipe(
           map(payload => ClassSubjectResultActions.classSubjectResultExistsSuccess({ payload })),
           catchError(error => of(ClassSubjectResultActions.classSubjectResultExistsFail({ error })))

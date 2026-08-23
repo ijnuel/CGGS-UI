@@ -134,9 +134,7 @@ export class StateEffect {
       ofType(StateAction.stateExists),
       switchMap(({ properties }) =>
         this.http
-          .get<GenericResponseInterface<boolean>>(
-            `${environment.baseUrl}/State/Exists`,
-            { params: properties, withCredentials: true }
+          .get<GenericResponseInterface<boolean>>(`${environment.baseUrl}/State/Exists`, { params: properties as any, withCredentials: true }
           )
           .pipe(
             map((payload) =>

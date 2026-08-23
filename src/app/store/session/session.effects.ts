@@ -134,9 +134,7 @@ export class SessionEffect {
       ofType(SessionAction.sessionExists),
       switchMap(({ properties }) =>
         this.http
-          .get<GenericResponseInterface<boolean>>(
-            `${environment.baseUrl}/Session/Exists`,
-            { params: properties, withCredentials: true }
+          .get<GenericResponseInterface<boolean>>(`${environment.baseUrl}/Session/Exists`, { params: properties as any, withCredentials: true }
           )
           .pipe(
             map((payload) =>

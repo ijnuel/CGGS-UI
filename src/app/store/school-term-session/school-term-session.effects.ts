@@ -146,9 +146,7 @@ export class SchoolTermSessionEffect {
       ofType(SchoolTermSessionAction.schoolTermSessionExists),
       switchMap(({ properties }) =>
         this.http
-          .get<GenericResponseInterface<boolean>>(
-            `${environment.baseUrl}/SchoolTermSession/Exists`,
-            { params: properties, withCredentials: true }
+          .get<GenericResponseInterface<boolean>>(`${environment.baseUrl}/SchoolTermSession/Exists`, { params: properties as any, withCredentials: true }
           )
           .pipe(
             map((payload) =>

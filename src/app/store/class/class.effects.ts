@@ -134,9 +134,7 @@ export class ClassEffect {
       ofType(ClassAction.classExists),
       switchMap(({ properties }) =>
         this.http
-          .get<GenericResponseInterface<boolean>>(
-            `${environment.baseUrl}/Class/Exists`,
-            { params: properties, withCredentials: true }
+          .get<GenericResponseInterface<boolean>>(`${environment.baseUrl}/Class/Exists`, { params: properties as any, withCredentials: true }
           )
           .pipe(
             map((payload) =>
