@@ -221,6 +221,16 @@ export const updateManyStudentsFail = createAction(
   props<{ error: string }>()
 );
 
+// Download Import Template
+export const downloadStudentTemplate = createAction('[Student] Download Template');
+export const downloadStudentTemplateSuccess = createAction('[Student/API] Download Template Success');
+export const downloadStudentTemplateFail = createAction('[Student/API] Download Template Fail', props<{ error: string }>());
+
+// Import Students
+export const importStudents = createAction('[Student] Import', props<{ file: File }>());
+export const importStudentsSuccess = createAction('[Student/API] Import Success', props<{ created: number; errors: string[] }>());
+export const importStudentsFail = createAction('[Student/API] Import Fail', props<{ error: string }>());
+
 // Delete Many
 export const deleteManyStudents = createAction(
   '[Student] Delete Many',

@@ -3,7 +3,9 @@ genderList: genderList$ | async, religionList: religionList$ | async,
 countryList: countryList$ | async, selectedCountryStateList:
 selectedCountryStateList$ | async, selectedStateLgaList: selectedStateLgaList$ |
 async, familyList: familyList$ | async, classList: classList$ | async,
-error: error$ | async }; as obs ) {
+error: error$ | async, downloadLoading: downloadLoading$ | async,
+importLoading: importLoading$ | async, importSuccess: importSuccess$ | async,
+importCreated: importCreated$ | async, importErrors: importErrors$ | async }; as obs ) {
 <div class="pl-8 pr-9 pt-6">
   <div class="flex item-center justify-between">
     <div class="text-xl font-bold">{{ isEditMode ? 'Edit' : 'Create' }} Student</div>
@@ -227,6 +229,50 @@ error: error$ | async }; as obs ) {
       </div>
       }
     </form>
+
+    @if (!isEditMode) {
+    <div class="mt-10 border rounded-lg p-6">
+      <div class="text-base font-semibold mb-4">Bulk Import Students</div>
+
+      <div class="flex flex-col gap-4">
+        <div>
+          <div class="text-sm text-gray-500 mb-2">Step 1 — Download the template, fill it in, then upload below</div>
+          <button class="sec-btn" (click)="downloadTemplate()" [disabled]="obs.downloadLoading">
+            {{ obs.downloadLoading ? 'Downloading...' : 'Download Template' }}
+          </button>
+        </div>
+
+        <div>
+          <div class="text-sm text-gray-500 mb-2">Step 2 — Upload completed template</div>
+          <div class="flex items-center gap-4 flex-wrap">
+            <label class="cursor-pointer">
+              <input type="file" accept=".xlsx" class="hidden" (change)="onFileChange($event)" />
+              <span class="cancel-btn inline-block">{{ importFile ? importFile.name : 'Choose File' }}</span>
+            </label>
+            <button class="sec-btn" (click)="uploadFile()" [disabled]="!importFile || obs.importLoading">
+              {{ obs.importLoading ? 'Importing...' : 'Import' }}
+            </button>
+          </div>
+        </div>
+
+        @if (obs.importSuccess) {
+        <div class="mt-2">
+          <div class="text-sm font-medium text-green-700">{{ obs.importCreated }} student(s) created successfully.</div>
+          @if (obs.importErrors && obs.importErrors.length > 0) {
+          <div class="mt-2">
+            <div class="text-sm font-medium text-red-600 mb-1">Errors ({{ obs.importErrors.length }}):</div>
+            <ul class="text-sm text-red-500 list-disc list-inside max-h-40 overflow-y-auto">
+              @for (err of obs.importErrors; track $index) {
+              <li>{{ err }}</li>
+              }
+            </ul>
+          </div>
+          }
+        </div>
+        }
+      </div>
+    </div>
+    }
 
     <div class="actions-btn flex justify-end mt-10 gap-5 form-container mx-auto px-3">
       <button class="cancel-btn" routerLink="/app/student">Cancel</button>

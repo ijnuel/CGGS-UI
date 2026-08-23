@@ -24,6 +24,11 @@ import {
   selectStudentError,
   selectStudentCreateSuccess,
   selectStudentUpdateSuccess,
+  selectDownloadLoading,
+  selectImportLoading,
+  selectImportSuccess,
+  selectImportCreated,
+  selectImportErrors,
 } from './student.selector';
 import { StudentState } from './student.reducer';
 import { ClassLevelFacade } from '../class-level/class-level.facade';
@@ -44,6 +49,11 @@ export class StudentFacade {
   error$: Observable<string | null>;
   createSuccess$: Observable<boolean>;
   updateSuccess$: Observable<boolean>;
+  downloadLoading$: Observable<boolean>;
+  importLoading$: Observable<boolean>;
+  importSuccess$: Observable<boolean>;
+  importCreated$: Observable<number>;
+  importErrors$: Observable<string[]>;
   currentPageQuery: PageQueryInterface = {
     start: 0,
     recordsPerPage: 10,
@@ -145,6 +155,11 @@ export class StudentFacade {
     this.error$ = this.store.select(selectStudentError);
     this.createSuccess$ = this.store.select(selectStudentCreateSuccess);
     this.updateSuccess$ = this.store.select(selectStudentUpdateSuccess);
+    this.downloadLoading$ = this.store.select(selectDownloadLoading);
+    this.importLoading$ = this.store.select(selectImportLoading);
+    this.importSuccess$ = this.store.select(selectImportSuccess);
+    this.importCreated$ = this.store.select(selectImportCreated);
+    this.importErrors$ = this.store.select(selectImportErrors);
 
     this.classLevelFacade.getClassLevelAll({ nestedProperties: [{ name: 'programmeType' }] });
     this.sessionFacade.getSessionAll();
@@ -205,5 +220,13 @@ export class StudentFacade {
 
   deleteManyStudents(studentIds: string[]): void {
     this.store.dispatch(StudentAction.deleteManyStudents({ studentIds }));
+  }
+
+  downloadStudentTemplate(): void {
+    this.store.dispatch(StudentAction.downloadStudentTemplate());
+  }
+
+  importStudents(file: File): void {
+    this.store.dispatch(StudentAction.importStudents({ file }));
   }
 }

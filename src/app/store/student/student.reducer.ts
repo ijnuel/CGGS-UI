@@ -21,6 +21,11 @@ export interface StudentState {
   error: string | null;
   createSuccess: boolean;
   updateSuccess: boolean;
+  downloadLoading: boolean;
+  importLoading: boolean;
+  importSuccess: boolean;
+  importCreated: number;
+  importErrors: string[];
 }
 
 export const initialState: StudentState = {
@@ -36,6 +41,11 @@ export const initialState: StudentState = {
   error: null,
   createSuccess: false,
   updateSuccess: false,
+  downloadLoading: false,
+  importLoading: false,
+  importSuccess: false,
+  importCreated: 0,
+  importErrors: [],
 };
 
 export const reducer = createReducer(
@@ -311,6 +321,43 @@ export const reducer = createReducer(
     ...state,
     loading: false,
     error,
+  })),
+
+  // Download Template
+  on(StudentAction.downloadStudentTemplate, (state) => ({
+    ...state,
+    downloadLoading: true,
+  })),
+  on(StudentAction.downloadStudentTemplateSuccess, (state) => ({
+    ...state,
+    downloadLoading: false,
+  })),
+  on(StudentAction.downloadStudentTemplateFail, (state, { error }) => ({
+    ...state,
+    downloadLoading: false,
+    error,
+  })),
+
+  // Import Students
+  on(StudentAction.importStudents, (state) => ({
+    ...state,
+    importLoading: true,
+    importSuccess: false,
+    importCreated: 0,
+    importErrors: [],
+  })),
+  on(StudentAction.importStudentsSuccess, (state, { created, errors }) => ({
+    ...state,
+    importLoading: false,
+    importSuccess: true,
+    importCreated: created,
+    importErrors: errors,
+  })),
+  on(StudentAction.importStudentsFail, (state, { error }) => ({
+    ...state,
+    importLoading: false,
+    importSuccess: false,
+    error,
   }))
 );
 
@@ -330,3 +377,8 @@ export const getLoading = (state: StudentState) => state.loading;
 export const getError = (state: StudentState) => state.error;
 export const getCreateSuccess = (state: StudentState) => state.createSuccess;
 export const getUpdateSuccess = (state: StudentState) => state.updateSuccess;
+export const getDownloadLoading = (state: StudentState) => state.downloadLoading;
+export const getImportLoading = (state: StudentState) => state.importLoading;
+export const getImportSuccess = (state: StudentState) => state.importSuccess;
+export const getImportCreated = (state: StudentState) => state.importCreated;
+export const getImportErrors = (state: StudentState) => state.importErrors;

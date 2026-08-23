@@ -9,6 +9,11 @@ import {
   getCount,
   getLoading,
   getError,
+  getDownloadLoading,
+  getImportLoading,
+  getImportSuccess,
+  getImportCreated,
+  getImportErrors,
   StudentState,
 } from './student.reducer';
 
@@ -69,3 +74,9 @@ export const selectStudentUpdateSuccess = createSelector(
     selectStudentState,
     (state) => state.updateSuccess
 );
+
+export const selectDownloadLoading = createSelector(selectStudentState, getDownloadLoading);
+export const selectImportLoading = createSelector(selectStudentState, getImportLoading);
+export const selectImportSuccess = createSelector(selectStudentState, getImportSuccess);
+export const selectImportCreated = createSelector(selectStudentState, getImportCreated);
+export const selectImportErrors = createSelector(selectStudentState, getImportErrors);

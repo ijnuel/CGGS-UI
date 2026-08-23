@@ -28,6 +28,12 @@ export class CreateUpdateStudentComponent implements OnInit, OnDestroy {
   error$: Observable<string | null>;
   studentById$: Observable<StudentListInterface | null>;
   dropdownLoading$: Observable<boolean>;
+  downloadLoading$: Observable<boolean>;
+  importLoading$: Observable<boolean>;
+  importSuccess$: Observable<boolean>;
+  importCreated$: Observable<number>;
+  importErrors$: Observable<string[]>;
+  importFile: File | null = null;
 
   formGroup: FormGroup<{
     firstName: FormControl;
@@ -86,6 +92,11 @@ export class CreateUpdateStudentComponent implements OnInit, OnDestroy {
       map(students => students?.[0] ?? null)
     );
     this.dropdownLoading$ = this.sharedFacade.selectedLoading$;
+    this.downloadLoading$ = this.studentFacade.downloadLoading$;
+    this.importLoading$ = this.studentFacade.importLoading$;
+    this.importSuccess$ = this.studentFacade.importSuccess$;
+    this.importCreated$ = this.studentFacade.importCreated$;
+    this.importErrors$ = this.studentFacade.importErrors$;
     this.genderList$ = this.sharedFacade.selectGenderList$;
     this.religionList$ = this.sharedFacade.selectReligionList$;
     this.countryList$ = this.sharedFacade.selectCountryList$;
@@ -229,6 +240,20 @@ export class CreateUpdateStudentComponent implements OnInit, OnDestroy {
     } else {
       this.studentFacade.createStudent(formData);
     }
+  }
+
+  downloadTemplate(): void {
+    this.studentFacade.downloadStudentTemplate();
+  }
+
+  onFileChange(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    this.importFile = input.files?.[0] ?? null;
+  }
+
+  uploadFile(): void {
+    if (!this.importFile) return;
+    this.studentFacade.importStudents(this.importFile);
   }
 
   ngOnDestroy(): void {

@@ -353,6 +353,61 @@ export class StudentEffect {
     )
   );
 
+  // Download Import Template
+  $downloadStudentTemplate = createEffect(() =>
+    this.actions$.pipe(
+      ofType(StudentAction.downloadStudentTemplate),
+      switchMap(() =>
+        this.http
+          .get(`${environment.baseUrl}/Student/DownloadImportTemplate`, {
+            responseType: 'blob',
+            withCredentials: true,
+          })
+          .pipe(
+            map((blob) => {
+              const anchor = document.createElement('a');
+              anchor.href = URL.createObjectURL(blob);
+              anchor.download = 'Student_Import_Template.xlsx';
+              anchor.click();
+              URL.revokeObjectURL(anchor.href);
+              return StudentAction.downloadStudentTemplateSuccess();
+            }),
+            catchError((error) =>
+              of(StudentAction.downloadStudentTemplateFail({ error: error?.message ?? 'Download failed' }))
+            )
+          )
+      )
+    )
+  );
+
+  // Import Students
+  $importStudents = createEffect(() =>
+    this.actions$.pipe(
+      ofType(StudentAction.importStudents),
+      switchMap(({ file }) => {
+        const formData = new FormData();
+        formData.append('file', file);
+        return this.http
+          .post<GenericResponseInterface<{ created: number; errors: string[] }>>(
+            `${environment.baseUrl}/Student/ImportStudents`,
+            formData,
+            { withCredentials: true }
+          )
+          .pipe(
+            map((res) =>
+              StudentAction.importStudentsSuccess({
+                created: res.entity?.created ?? 0,
+                errors: res.entity?.errors ?? [],
+              })
+            ),
+            catchError((error) =>
+              of(StudentAction.importStudentsFail({ error: error?.message ?? 'Import failed' }))
+            )
+          );
+      })
+    )
+  );
+
   // Loading Effects
   $studentLoading = createEffect(
     () =>
