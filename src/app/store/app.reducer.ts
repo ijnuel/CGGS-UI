@@ -39,6 +39,8 @@ import * as fromCompanyAnnouncement from './company-announcement/company-announc
 import * as fromCompanyCoreValue from './company-core-value/company-core-value.reducer';
 import * as fromCompanyGalleryImage from './company-gallery-image/company-gallery-image.reducer';
 import * as fromProgrammeTypeStream from './programme-type-stream/programme-type-stream.reducer';
+import * as fromRefund from './refund/refund.reducer';
+import * as fromWalletTransaction from './wallet-transaction/wallet-transaction.reducer';
 
 export const appFeatureKey = 'appFeatureKey';
 
@@ -82,6 +84,8 @@ export interface AppState {
   [fromCompanyCoreValue.companyCoreValueFeatureKey]: fromCompanyCoreValue.CompanyCoreValueState;
   [fromCompanyGalleryImage.companyGalleryImageFeatureKey]: fromCompanyGalleryImage.CompanyGalleryImageState;
   [fromProgrammeTypeStream.programmeTypeStreamFeatureKey]: fromProgrammeTypeStream.ProgrammeTypeStreamState;
+  [fromRefund.refundFeatureKey]: fromRefund.RefundState;
+  [fromWalletTransaction.walletTransactionFeatureKey]: fromWalletTransaction.WalletTransactionState;
 }
 
 export const reducers = {
@@ -124,6 +128,8 @@ export const reducers = {
   [fromCompanyCoreValue.companyCoreValueFeatureKey]: fromCompanyCoreValue.reducer,
   [fromCompanyGalleryImage.companyGalleryImageFeatureKey]: fromCompanyGalleryImage.reducer,
   [fromProgrammeTypeStream.programmeTypeStreamFeatureKey]: fromProgrammeTypeStream.programmeTypeStreamReducer,
+  [fromRefund.refundFeatureKey]: fromRefund.reducer,
+  [fromWalletTransaction.walletTransactionFeatureKey]: fromWalletTransaction.reducer,
 };
 
 export const selectAppState = createFeatureSelector<AppState>(appFeatureKey);

@@ -278,5 +278,23 @@ export class SharedEffect {
     )
   );
 
+  $refundStatusList = createEffect(() =>
+    this.actions$.pipe(
+      ofType(SharedAction.getRefundStatusList),
+      switchMap(() =>
+        this.http
+          .get<GenericResponseInterface<DropdownListInterface[]>>(
+            `${environment.baseUrl}/Enums/GetRefundStatus`,
+            { withCredentials: true }
+          )
+          .pipe(
+            retry(1),
+            map((payload) => SharedAction.getRefundStatusListSuccess({ payload })),
+            catchError((error) => of(SharedAction.getRefundStatusListFail({ error })))
+          )
+      )
+    )
+  );
+
   constructor(private actions$: Actions, private http: HttpClient) {}
 }

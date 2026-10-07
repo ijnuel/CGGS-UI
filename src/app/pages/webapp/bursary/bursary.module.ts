@@ -25,6 +25,7 @@ import { PaymentsComponent } from './payments/payments.component';
 import { TransactionsComponent } from './transactions/transactions.component';
 import { ViewTransactionComponent } from './transactions/view-transaction/view-transaction.component';
 import { DebtorsReportComponent } from './debtors-report/debtors-report.component';
+import { RefundsComponent } from './refunds/refunds.component';
 
 const routes: Routes = [
   { path: '', component: BursaryComponent },
@@ -35,6 +36,7 @@ const routes: Routes = [
   { path: 'transactions', component: TransactionsComponent },
   { path: 'transactions/:id', component: ViewTransactionComponent },
   { path: 'debtors-report', component: DebtorsReportComponent },
+  { path: 'refunds', component: RefundsComponent },
 ];
 
 @NgModule({
@@ -49,6 +51,7 @@ const routes: Routes = [
     TransactionsComponent,
     ViewTransactionComponent,
     DebtorsReportComponent,
+    RefundsComponent,
   ],
   imports: [
     CommonModule,

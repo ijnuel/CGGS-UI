@@ -4,7 +4,7 @@ import { of } from 'rxjs';
 import { catchError, map, switchMap, tap, retry } from 'rxjs/operators';
 import * as AuthAction from './auth.actions';
 import { environment } from '../../../environments/environment';
-import { LoginResponseInterface, ChangePasswordDto } from '../../types/auth';
+import { LoginResponseInterface, ChangePasswordDto, ResetPasswordDto } from '../../types/auth';
 import {
     CurrentUserInterface,
     GenericResponseInterface,
@@ -178,6 +178,54 @@ export class AuthEffect {
         )
     );
 
+    $forgotPassword = createEffect(() =>
+        this.actions$.pipe(
+            ofType(AuthAction.forgotPassword),
+            switchMap(({ email }) =>
+                this.http
+                    .post<{ entity: boolean }>(
+                        `${environment.baseUrl}/Account/ForgotPassword`,
+                        null,
+                        { params: { email }, withCredentials: true }
+                    )
+                    .pipe(
+                        map((response) => {
+                            this.toast.openToast('If that email exists, a reset link has been sent.', NotificationTypeEnums.SUCCESS);
+                            return AuthAction.forgotPasswordSuccess({ payload: response as any });
+                        }),
+                        catchError((error) => {
+                            this.toast.openToast('Failed to send reset email. Please try again.', NotificationTypeEnums.ERROR);
+                            return of(AuthAction.forgotPasswordFail({ error: error?.error?.message ?? error?.message ?? String(error) }));
+                        })
+                    )
+            )
+        )
+    );
+
+    $resetPassword = createEffect(() =>
+        this.actions$.pipe(
+            ofType(AuthAction.resetPassword),
+            switchMap(({ payload }) =>
+                this.http
+                    .post<{ entity: boolean }>(
+                        `${environment.baseUrl}/Account/ResetPassword`,
+                        payload,
+                        { withCredentials: true }
+                    )
+                    .pipe(
+                        map((response) => {
+                            this.toast.openToast('Password reset successfully!', NotificationTypeEnums.SUCCESS);
+                            return AuthAction.resetPasswordSuccess({ payload: response as any });
+                        }),
+                        catchError((error) => {
+                            this.toast.openToast('Failed to reset password. The link may have expired.', NotificationTypeEnums.ERROR);
+                            return of(AuthAction.resetPasswordFail({ error: error?.error?.message ?? error?.message ?? String(error) }));
+                        })
+                    )
+            )
+        )
+    );
+
     $authLoading = createEffect(
         () =>
             this.actions$.pipe(
@@ -187,7 +235,9 @@ export class AuthEffect {
                     AuthAction.getCurrentUser,
                     AuthAction.switchCompany,
                     AuthAction.getUserCompanies,
-                    AuthAction.changePassword
+                    AuthAction.changePassword,
+                    AuthAction.forgotPassword,
+                    AuthAction.resetPassword
                 ),
                 tap((action) => {
                     this.errorLoadingFacade.globalLoadingShow(action.type);
@@ -209,7 +259,11 @@ export class AuthEffect {
                     AuthAction.getUserCompaniesSuccess,
                     AuthAction.getUserCompaniesFail,
                     AuthAction.changePasswordSuccess,
-                    AuthAction.changePasswordFail
+                    AuthAction.changePasswordFail,
+                    AuthAction.forgotPasswordSuccess,
+                    AuthAction.forgotPasswordFail,
+                    AuthAction.resetPasswordSuccess,
+                    AuthAction.resetPasswordFail
                 ),
                 tap(() => {
                     this.errorLoadingFacade.globalLoadingHide();

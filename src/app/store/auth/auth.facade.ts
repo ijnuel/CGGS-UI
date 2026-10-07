@@ -12,6 +12,7 @@ import {
     CurrentUserInterface,
     CompanyListInterface,
 } from '../../types';
+import { ResetPasswordDto } from '../../types/auth';
 
 @Injectable()
 export class AuthFacade {
@@ -30,6 +31,10 @@ export class AuthFacade {
     selectedLoading$ = this.store.pipe(select(AuthSelector.selectLoading));
 
     selectedError$ = this.store.pipe(select(AuthSelector.selectError));
+
+    forgotPasswordSent$ = this.store.pipe(select(AuthSelector.selectForgotPasswordSent));
+
+    passwordResetDone$ = this.store.pipe(select(AuthSelector.selectPasswordResetDone));
 
     constructor(
         private readonly store: Store,
@@ -97,6 +102,26 @@ export class AuthFacade {
     > {
         return this.actionsListener$
             .pipe(ofType(AuthActions.changePasswordSuccess))
+            .pipe(map(({ payload }) => payload));
+    }
+
+    forgotPassword(email: string) {
+        this.store.dispatch(AuthActions.forgotPassword({ email }));
+    }
+
+    forgotPasswordSuccessAction(): Observable<GenericResponseInterface<boolean>> {
+        return this.actionsListener$
+            .pipe(ofType(AuthActions.forgotPasswordSuccess))
+            .pipe(map(({ payload }) => payload));
+    }
+
+    resetPassword(payload: ResetPasswordDto) {
+        this.store.dispatch(AuthActions.resetPassword({ payload }));
+    }
+
+    resetPasswordSuccessAction(): Observable<GenericResponseInterface<boolean>> {
+        return this.actionsListener$
+            .pipe(ofType(AuthActions.resetPasswordSuccess))
             .pipe(map(({ payload }) => payload));
     }
 }

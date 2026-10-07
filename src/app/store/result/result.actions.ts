@@ -27,22 +27,6 @@ export const getResultMarkSheetFail = createAction(
   props<{ error: string }>()
 );
 
-// Update Result MarkSheet
-export const updateResultMarkSheet = createAction(
-  '[Result] Update MarkSheet',
-  props<{ payload: StudentAssessmentScoreInterface[] }>()
-);
-
-export const updateResultMarkSheetSuccess = createAction(
-  '[Result/API] Update MarkSheet Success',
-  props<{ payload: GenericResponseInterface<StudentAssessmentScoreInterface[]> }>()
-);
-
-export const updateResultMarkSheetFail = createAction(
-  '[Result/API] Update MarkSheet Fail',
-  props<{ error: string }>()
-); 
-
 // Generate Student Result
 export const generateStudentResult = createAction(
   '[Result] Generate Student Result',

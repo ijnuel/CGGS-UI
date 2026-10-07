@@ -33,9 +33,16 @@ export class SchoolSettingsComponent implements OnInit, OnDestroy {
     vision: FormControl;
     teacherShortCode: FormControl;
     studentShortCode: FormControl;
+    phoneNumber: FormControl;
+    email: FormControl;
+    whatsApp: FormControl;
+    facebookUrl: FormControl;
+    instagramUrl: FormControl;
+    yearFounded: FormControl;
   }>;
 
   get fc() { return this.formGroup.controls; }
+  readonly currentYear = new Date().getFullYear();
 
   private companyId = '';
   private destroy$ = new Subject<void>();
@@ -57,6 +64,12 @@ export class SchoolSettingsComponent implements OnInit, OnDestroy {
       vision:           [''],
       teacherShortCode: ['', [Validators.maxLength(20)]],
       studentShortCode: ['', [Validators.maxLength(20)]],
+      phoneNumber:      ['', [Validators.maxLength(50)]],
+      email:            ['', [Validators.email, Validators.maxLength(255)]],
+      whatsApp:         ['', [Validators.maxLength(50)]],
+      facebookUrl:      ['', [Validators.maxLength(500)]],
+      instagramUrl:     ['', [Validators.maxLength(500)]],
+      yearFounded:      [null as number | null],
     });
   }
 
@@ -122,6 +135,12 @@ export class SchoolSettingsComponent implements OnInit, OnDestroy {
       vision:           this.company.vision           ?? '',
       teacherShortCode: this.company.teacherShortCode ?? '',
       studentShortCode: this.company.studentShortCode ?? '',
+      phoneNumber:      this.company.phoneNumber      ?? '',
+      email:            this.company.email            ?? '',
+      whatsApp:         this.company.whatsApp         ?? '',
+      facebookUrl:      this.company.facebookUrl      ?? '',
+      instagramUrl:     this.company.instagramUrl     ?? '',
+      yearFounded:      this.company.yearFounded      ?? null,
     });
     this.editMode = true;
   }

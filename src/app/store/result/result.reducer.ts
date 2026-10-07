@@ -70,26 +70,6 @@ export const resultReducer = createReducer(
     error,
   })),
   
-  // Update Result MarkSheet
-  on(ResultActions.updateResultMarkSheet, (state) => ({
-    ...state,
-    loading: true,
-    error: null,
-  })),
-  
-  on(ResultActions.updateResultMarkSheetSuccess, (state, { payload }) => ({
-    ...state,
-    resultMarkSheet: payload.entity,
-    loading: false,
-    error: null,
-  })),
-  
-  on(ResultActions.updateResultMarkSheetFail, (state, { error }) => ({
-    ...state,
-    loading: false,
-    error,
-  })),
-
   // Generate Student Result
   on(ResultActions.generateStudentResult, (state) => ({
     ...state,

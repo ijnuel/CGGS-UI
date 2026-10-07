@@ -27,6 +27,7 @@ export class SharedFacade {
   selectSkillGradeList$ = this.store.pipe(select(SharedSelector.selectSkillGradeList));
   selectPaymentGatewayList$ = this.store.pipe(select(SharedSelector.selectPaymentGatewayList));
   selectActivePaymentGatewayList$ = this.store.pipe(select(SharedSelector.selectActivePaymentGatewayList));
+  selectRefundStatusList$ = this.store.pipe(select(SharedSelector.selectRefundStatusList));
 
   selectedLoading$ = this.store.pipe(select(SharedSelector.selectLoading));
 
@@ -76,5 +77,9 @@ export class SharedFacade {
 
   getActivePaymentGatewayList() {
     this.store.dispatch(SharedActions.getActivePaymentGatewayList());
+  }
+
+  getRefundStatusList() {
+    this.store.dispatch(SharedActions.getRefundStatusList());
   }
 }

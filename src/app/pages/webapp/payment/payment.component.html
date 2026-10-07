@@ -20,20 +20,38 @@
     </button>
   </div>
 
+  <!-- Family: Student Selector -->
+  <div *ngIf="isFamily && familyStudents.length > 1" class="mb-6">
+    <mat-form-field class="w-full" hideRequiredMarker>
+      <mat-label>Select Child</mat-label>
+      <mat-select [value]="selectedFamilyStudentId" (selectionChange)="selectFamilyStudent($event.value)">
+        <mat-option *ngFor="let s of familyStudents" [value]="s.id">
+          {{ s.firstName }} {{ s.lastName }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+  </div>
+
   <!-- Wallet Balance Card -->
-  <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-5 mb-6 flex items-center gap-4">
-    <div class="w-12 h-12 rounded-full flex items-center justify-center flex-shrink-0"
-         style="background: linear-gradient(135deg, var(--app-gradient-from), var(--app-gradient-to));">
-      <mat-icon class="text-white">account_balance_wallet</mat-icon>
+  <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-5 mb-6 flex items-center gap-4 justify-between">
+    <div class="flex items-center gap-4">
+      <div class="w-12 h-12 rounded-full flex items-center justify-center flex-shrink-0"
+           style="background: linear-gradient(135deg, var(--app-gradient-from), var(--app-gradient-to));">
+        <mat-icon class="text-white">account_balance_wallet</mat-icon>
+      </div>
+      <div>
+        <p class="text-xs text-gray-500 uppercase tracking-wide">Wallet Balance</p>
+        <p class="text-2xl font-bold mt-0.5"
+           [class.text-green-600]="walletBalance > 0"
+           [class.text-gray-400]="walletBalance === 0">
+          ₦{{ walletBalance | number:'1.2-2' }}
+        </p>
+      </div>
     </div>
-    <div>
-      <p class="text-xs text-gray-500 uppercase tracking-wide">Wallet Balance</p>
-      <p class="text-2xl font-bold mt-0.5"
-         [class.text-green-600]="walletBalance > 0"
-         [class.text-gray-400]="walletBalance === 0">
-        ₦{{ walletBalance | number:'1.2-2' }}
-      </p>
-    </div>
+    <a routerLink="wallet-history" mat-stroked-button class="!text-xs flex-shrink-0">
+      <mat-icon class="!text-base !mr-1">history</mat-icon>
+      History
+    </a>
   </div>
 
   <!-- Term Session Filter -->

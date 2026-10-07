@@ -3,6 +3,7 @@ import {
     LoginResponseInterface,
     LoginPayloadInterface,
     ChangePasswordDto,
+    ResetPasswordDto,
 } from '../../types/auth';
 import { GenericResponseInterface, CurrentUserInterface, CompanyListInterface } from '../../types';
 
@@ -80,5 +81,35 @@ export const changePasswordSuccess = createAction(
 
 export const changePasswordFail = createAction(
     '[Auth/API] Change Password Fail',
+    props<{ error: string }>()
+);
+
+export const forgotPassword = createAction(
+    '[Auth] Forgot Password',
+    props<{ email: string }>()
+);
+
+export const forgotPasswordSuccess = createAction(
+    '[Auth/API] Forgot Password Success',
+    props<{ payload: GenericResponseInterface<boolean> }>()
+);
+
+export const forgotPasswordFail = createAction(
+    '[Auth/API] Forgot Password Fail',
+    props<{ error: string }>()
+);
+
+export const resetPassword = createAction(
+    '[Auth] Reset Password',
+    props<{ payload: ResetPasswordDto }>()
+);
+
+export const resetPasswordSuccess = createAction(
+    '[Auth/API] Reset Password Success',
+    props<{ payload: GenericResponseInterface<boolean> }>()
+);
+
+export const resetPasswordFail = createAction(
+    '[Auth/API] Reset Password Fail',
     props<{ error: string }>()
 );

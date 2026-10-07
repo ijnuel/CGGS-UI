@@ -27,3 +27,13 @@ export const selectError = createSelector(
     selectAuthState,
     (state: AuthState) => state.error
 );
+
+export const selectForgotPasswordSent = createSelector(
+    selectAuthState,
+    (state: AuthState) => state.forgotPasswordSent
+);
+
+export const selectPasswordResetDone = createSelector(
+    selectAuthState,
+    (state: AuthState) => state.passwordResetDone
+);

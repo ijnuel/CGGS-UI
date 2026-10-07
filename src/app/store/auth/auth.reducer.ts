@@ -10,6 +10,8 @@ export interface AuthState {
     userCompanies: CompanyListInterface[] | null;
     loading: boolean;
     error: string | null;
+    forgotPasswordSent: boolean;
+    passwordResetDone: boolean;
 }
 
 export const initialState: AuthState = {
@@ -18,6 +20,8 @@ export const initialState: AuthState = {
     userCompanies: null,
     loading: false,
     error: null,
+    forgotPasswordSent: false,
+    passwordResetDone: false,
 };
 
 export const authReducer = createReducer(
@@ -72,5 +76,11 @@ export const authReducer = createReducer(
         ...state,
         loading: false,
         error,
-    }))
+    })),
+    on(AuthActions.forgotPassword, (state) => ({ ...state, loading: true, error: null, forgotPasswordSent: false })),
+    on(AuthActions.forgotPasswordSuccess, (state) => ({ ...state, loading: false, forgotPasswordSent: true })),
+    on(AuthActions.forgotPasswordFail, (state, { error }) => ({ ...state, loading: false, error })),
+    on(AuthActions.resetPassword, (state) => ({ ...state, loading: true, error: null, passwordResetDone: false })),
+    on(AuthActions.resetPasswordSuccess, (state) => ({ ...state, loading: false, passwordResetDone: true })),
+    on(AuthActions.resetPasswordFail, (state, { error }) => ({ ...state, loading: false, error }))
 );

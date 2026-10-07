@@ -14,6 +14,12 @@ export interface CompanyListInterface {
     studentShortCode?: string;
     logo?: string;
     isCurrent?: boolean;
+    phoneNumber?: string;
+    email?: string;
+    whatsApp?: string;
+    facebookUrl?: string;
+    instagramUrl?: string;
+    yearFounded?: number;
     administratorCompanies?: AdministratorListInterface[];
 }
 
@@ -30,4 +36,10 @@ export interface CompanyFormInterface {
     teacherShortCode?: string;
     studentShortCode?: string;
     logo?: string;
+    phoneNumber?: string;
+    email?: string;
+    whatsApp?: string;
+    facebookUrl?: string;
+    instagramUrl?: string;
+    yearFounded?: number;
 }

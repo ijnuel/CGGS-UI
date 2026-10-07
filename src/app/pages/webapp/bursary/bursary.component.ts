@@ -56,5 +56,13 @@ export class BursaryComponent {
       roles: [],
       url: '/app/bursary/debtors-report',
     },
+    {
+      name: 'Refunds',
+      icon: '',
+      matIcon: 'undo',
+      description: 'Review and process student refund requests',
+      roles: [],
+      url: '/app/bursary/refunds',
+    },
   ];
 }

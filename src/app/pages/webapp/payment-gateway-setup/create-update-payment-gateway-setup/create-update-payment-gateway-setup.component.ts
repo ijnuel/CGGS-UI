@@ -10,6 +10,7 @@ import { PaymentGatewaySetupListInterface } from '../../../../types/payment-gate
 import { DropdownListInterface } from '../../../../types';
 import { getErrorMessageHelper } from '../../../../services/helper.service';
 import { PaymentGatewayEnum } from '../../../../types/fee';
+import { environment } from '../../../../../environments/environment';
 
 export interface PaymentGatewaySetupDialogData {
   id?: string;
@@ -71,6 +72,22 @@ export class CreateUpdatePaymentGatewaySetupComponent implements OnInit, OnDestr
     if (this.isPaystack) return 'pk_live_... or pk_test_...';
     if (this.isFlutterwave) return 'FLWPUBK_TEST-...';
     return '';
+  }
+
+  get webhookUrl(): string | null {
+    const gw = this.selectedGateway;
+    if (gw === null) return null;
+    const name = PaymentGatewayEnum[gw];
+    return `${environment.baseUrl}/PaymentGateway/webhook/${name}`;
+  }
+
+  webhookCopied = false;
+  copyWebhookUrl() {
+    if (!this.webhookUrl) return;
+    navigator.clipboard.writeText(this.webhookUrl).then(() => {
+      this.webhookCopied = true;
+      setTimeout(() => this.webhookCopied = false, 2000);
+    });
   }
 
   constructor(

@@ -94,6 +94,10 @@ import { CompanyGalleryImageEffect } from './store/company-gallery-image/company
 import { CompanyGalleryImageFacade } from './store/company-gallery-image/company-gallery-image.facade';
 import { ProgrammeTypeStreamEffect } from './store/programme-type-stream/programme-type-stream.effects';
 import { ProgrammeTypeStreamFacade } from './store/programme-type-stream/programme-type-stream.facade';
+import { RefundEffect } from './store/refund/refund.effects';
+import { RefundFacade } from './store/refund/refund.facade';
+import { WalletTransactionEffect } from './store/wallet-transaction/wallet-transaction.effects';
+import { WalletTransactionFacade } from './store/wallet-transaction/wallet-transaction.facade';
 // import { provideStoreDevtools } from '@ngrx/store-devtools';
 
 export const appConfig: ApplicationConfig = {
@@ -139,6 +143,8 @@ export const appConfig: ApplicationConfig = {
         CompanyCoreValueEffect,
         CompanyGalleryImageEffect,
         ProgrammeTypeStreamEffect,
+        RefundEffect,
+        WalletTransactionEffect,
       ]),
     ),
     provideAnimations(),
@@ -219,5 +225,7 @@ export const appConfig: ApplicationConfig = {
     CompanyCoreValueFacade,
     CompanyGalleryImageFacade,
     ProgrammeTypeStreamFacade,
+    RefundFacade,
+    WalletTransactionFacade,
   ],
 };

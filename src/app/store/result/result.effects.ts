@@ -38,24 +38,6 @@ export class ResultEffect {
     )
   );
 
-  updateResultMarkSheet$ = createEffect(() =>
-    this.actions$.pipe(
-      ofType(ResultActions.updateResultMarkSheet),
-      mergeMap(({ payload }) =>
-        this.http
-          .put<GenericResponseInterface<StudentAssessmentScoreInterface[]>>(
-            `${environment.baseUrl}/Result/UpdateResultMarkSheet`,
-            payload,
-            { withCredentials: true }
-          )
-          .pipe(
-            map((response) => ResultActions.updateResultMarkSheetSuccess({ payload: response })),
-            catchError((error) => of(ResultActions.updateResultMarkSheetFail({ error: error?.message ?? String(error) })))
-          )
-      )
-    )
-  );
-
   generateStudentResult$ = createEffect(() =>
     this.actions$.pipe(
       ofType(ResultActions.generateStudentResult),

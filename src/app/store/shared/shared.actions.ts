@@ -160,3 +160,15 @@ export const getActivePaymentGatewayListFail = createAction(
   '[Shared/API] Get Active Payment Gateway List Fail',
   props<{ error: string }>()
 );
+
+export const getRefundStatusList = createAction('[Shared] Get Refund Status List');
+
+export const getRefundStatusListSuccess = createAction(
+  '[Shared/API] Get Refund Status List Success',
+  props<{ payload: GenericResponseInterface<DropdownListInterface[]> }>()
+);
+
+export const getRefundStatusListFail = createAction(
+  '[Shared/API] Get Refund Status List Fail',
+  props<{ error: string }>()
+);

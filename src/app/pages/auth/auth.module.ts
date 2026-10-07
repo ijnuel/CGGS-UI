@@ -11,6 +11,8 @@ import { SharedModule } from '../../shared/shared.module';
 import { ToastNotificationService } from '../../services/toast-notification.service';
 import { LoginGuard } from '../../services/login.guard';
 import { CreateProfileComponent } from './create-profile/create-profile.component';
+import { ForgotPasswordComponent } from './forgot-password/forgot-password.component';
+import { ResetPasswordComponent } from './reset-password/reset-password.component';
 import { MatOptionModule } from '@angular/material/core';
 import { MatSelectModule } from '@angular/material/select';
 
@@ -34,12 +36,20 @@ const routes: Routes = [
         component: CreateProfileComponent,
         canActivate: [LoginGuard],
       },
+      {
+        path: 'forgot-password',
+        component: ForgotPasswordComponent,
+      },
+      {
+        path: 'reset-password',
+        component: ResetPasswordComponent,
+      },
     ],
   },
 ];
 
 @NgModule({
-  declarations: [AuthComponent, LoginComponent, CreateProfileComponent],
+  declarations: [AuthComponent, LoginComponent, CreateProfileComponent, ForgotPasswordComponent, ResetPasswordComponent],
   imports: [
     RouterModule.forChild(routes),
     CommonModule,

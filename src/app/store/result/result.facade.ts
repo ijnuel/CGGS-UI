@@ -82,10 +82,6 @@ export class ResultFacade {
     this.store.dispatch(ResultActions.getResultMarkSheet({ schoolTermSessionId, classId, subjectId }));
   }
 
-  updateResultMarkSheet(payload: StudentAssessmentScoreInterface[]): void {
-    this.store.dispatch(ResultActions.updateResultMarkSheet({ payload }));
-  }
-
   generateStudentResult(schoolTermSessionId: string, studentId: string, hideOverallPosition: boolean): void {
     this.store.dispatch(ResultActions.generateStudentResult({ schoolTermSessionId, studentId, hideOverallPosition }));
   }

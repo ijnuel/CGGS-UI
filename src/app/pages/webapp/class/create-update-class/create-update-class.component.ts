@@ -1,5 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { BehaviorSubject, Observable, Subject, takeUntil } from 'rxjs';
+import { map } from 'rxjs/operators';
 import { ClassFacade } from '../../../../store/class/class.facade';
 import {
     FormBuilder,
@@ -22,10 +23,12 @@ export class CreateUpdateClassComponent implements OnInit, OnDestroy {
     loading$: Observable<boolean>;
     error$: Observable<string | null>;
     classById$: Observable<ClassListInterface | null>;
+    classAll$: Observable<ClassListInterface[]>;
     dropdownLoading$: Observable<boolean>;
 
     formGroup: FormGroup<{
         name: FormControl;
+        nextClassId: FormControl;
     }>;
 
     get formControl() {
@@ -46,14 +49,18 @@ export class CreateUpdateClassComponent implements OnInit, OnDestroy {
         this.loading$ = this.classFacade.loading$;
         this.error$ = this.classFacade.error$;
         this.classById$ = this.classFacade.classById$;
+        this.classAll$ = this.classFacade.classAll$.pipe(map(list => list ?? []));
         this.dropdownLoading$ = this.sharedFacade.selectedLoading$;
 
         this.formGroup = this.fb.group({
             name: ['', [Validators.required, Validators.maxLength(255)]],
+            nextClassId: [null as string | null],
         });
     }
 
     ngOnInit() {
+        this.classFacade.getClassAll();
+
         const classId = this.route.snapshot.params['id'];
         if (classId) {
             this.isEditMode = true;
@@ -61,7 +68,8 @@ export class CreateUpdateClassComponent implements OnInit, OnDestroy {
             this.classById$.pipe(takeUntil(this.unsubscribe$)).subscribe((data) => {
                 if (data) {
                     this.formGroup.patchValue({
-                        name: data.name
+                        name: data.name,
+                        nextClassId: data.nextClassId ?? null,
                     });
                 }
             });

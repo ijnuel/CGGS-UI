@@ -16,6 +16,7 @@ import {
   SchoolTermSessionListInterface,
   DropdownListInterface,
 } from '../../../types';
+import { UserRolesEnum } from '../../../types/auth';
 import { environment } from '../../../../environments/environment';
 import { getClassLabel } from '../../../services/helper.service';
 import { PaymentDialogComponent, PaymentDialogData, PaymentDialogResult } from './payment-dialog/payment-dialog.component';
@@ -38,8 +39,12 @@ export class PaymentComponent implements OnInit, OnDestroy {
   student: StudentListInterface | null = null;
   walletBalance = 0;
   initiatingPayment = false;
+  isFamily = false;
+  familyStudents: StudentListInterface[] = [];
+  selectedFamilyStudentId: string | null = null;
 
   readonly PaymentStatusEnum = PaymentStatusEnum;
+  readonly UserRolesEnum = UserRolesEnum;
   readonly getClassLabel = (fee: FeeListInterface) => getClassLabel(fee.studentClass?.class);
 
   constructor(
@@ -77,41 +82,82 @@ export class PaymentComponent implements OnInit, OnDestroy {
       take(1),
       takeUntil(this.destroy$)
     ).subscribe(currentUser => {
-      this.studentFacade.getStudentByProperties({
-        queryProperties: [{ name: 'userId', value: currentUser!.userId }],
-        nestedProperties: [
-          {
-            name: 'studentClasses',
-            innerNestedProperties: [
-              {
-                name: 'class',
-                innerNestedProperties: [
-                  { name: 'classLevel', innerNestedProperties: [{ name: 'programmeType' }] }
-                ]
-              },
-              { name: 'session' },
-              {
-                name: 'fees',
-                innerNestedProperties: [
-                  { name: 'schoolTermSession', innerNestedProperties: [{ name: 'session' }] },
-                  { name: 'feeLines', innerNestedProperties: [{ name: 'feeType' }, { name: 'feeSetup' }] }
-                ]
+      if (currentUser!.userType === UserRolesEnum.Family) {
+        this.isFamily = true;
+        this.http.get<any>(`${environment.baseUrl}/Family/GetMyStudents`, { withCredentials: true })
+          .pipe(takeUntil(this.destroy$))
+          .subscribe({
+            next: (res) => {
+              this.familyStudents = res?.entity ?? [];
+              if (this.familyStudents.length === 1) {
+                this.selectFamilyStudent(this.familyStudents[0].id);
               }
+            },
+            error: () => {}
+          });
+      } else {
+        this.loadStudentByUserId(currentUser!.userId);
+      }
+    });
+  }
+
+  selectFamilyStudent(studentId: string) {
+    this.selectedFamilyStudentId = studentId;
+    this.student = null;
+    this.allFees$.next([]);
+    this.loadStudentById(studentId);
+  }
+
+  private loadStudentByUserId(userId: string) {
+    this.studentFacade.getStudentByProperties({
+      queryProperties: [{ name: 'userId', value: userId }],
+      nestedProperties: this.studentNestedProperties(),
+    });
+    this.subscribeToStudentResult();
+  }
+
+  private loadStudentById(studentId: string) {
+    this.studentFacade.getStudentByProperties({
+      queryProperties: [{ name: 'id', value: studentId }],
+      nestedProperties: this.studentNestedProperties(),
+    });
+    this.subscribeToStudentResult();
+  }
+
+  private studentNestedProperties() {
+    return [
+      {
+        name: 'studentClasses',
+        innerNestedProperties: [
+          {
+            name: 'class',
+            innerNestedProperties: [
+              { name: 'classLevel', innerNestedProperties: [{ name: 'programmeType' }] }
             ]
           },
-          { name: 'studentWallet' }
+          { name: 'session' },
+          {
+            name: 'fees',
+            innerNestedProperties: [
+              { name: 'schoolTermSession', innerNestedProperties: [{ name: 'session' }] },
+              { name: 'feeLines', innerNestedProperties: [{ name: 'feeType' }, { name: 'feeSetup' }] }
+            ]
+          }
         ]
-      });
+      },
+      { name: 'studentWallet' }
+    ];
+  }
 
-      this.studentFacade.studentByProperties$.pipe(
-        filter(students => !!students && students.length > 0),
-        take(1),
-        takeUntil(this.destroy$)
-      ).subscribe(students => {
-        this.student = students![0];
-        this.walletBalance = this.student.studentWallet?.balance ?? 0;
-        this.extractFees(this.student);
-      });
+  private subscribeToStudentResult() {
+    this.studentFacade.studentByProperties$.pipe(
+      filter(students => !!students && students.length > 0),
+      take(1),
+      takeUntil(this.destroy$)
+    ).subscribe(students => {
+      this.student = students![0];
+      this.walletBalance = this.student.studentWallet?.balance ?? 0;
+      this.extractFees(this.student);
     });
   }
 
