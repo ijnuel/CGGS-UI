@@ -1,5 +1,5 @@
 import { Component, Inject, OnDestroy, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { AbstractControl, FormBuilder, FormGroup, ValidationErrors, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { HttpClient } from '@angular/common/http';
 import { Subject } from 'rxjs';
@@ -142,8 +142,10 @@ interface PaymentFormState {
                     </mat-form-field>
                     <mat-form-field class="col-span-1">
                       <mat-label>Payment Date</mat-label>
-                      <input matInput type="date" formControlName="paymentDate" />
-                      <mat-error>Required</mat-error>
+                      <input matInput [matDatepicker]="feeDatePicker" formControlName="paymentDate" [max]="today" />
+                      <mat-datepicker-toggle matIconSuffix [for]="feeDatePicker"></mat-datepicker-toggle>
+                      <mat-datepicker #feeDatePicker></mat-datepicker>
+                      <mat-error>{{ dateErrorMessage(feeState.form) }}</mat-error>
                     </mat-form-field>
                     <mat-form-field class="col-span-1">
                       <mat-label>Payment Method</mat-label>
@@ -229,8 +231,10 @@ interface PaymentFormState {
                         </mat-form-field>
                         <mat-form-field class="col-span-1">
                           <mat-label>Payment Date</mat-label>
-                          <input matInput type="date" formControlName="paymentDate" />
-                          <mat-error>Required</mat-error>
+                          <input matInput [matDatepicker]="lineDatePicker" formControlName="paymentDate" [max]="today" />
+                          <mat-datepicker-toggle matIconSuffix [for]="lineDatePicker"></mat-datepicker-toggle>
+                          <mat-datepicker #lineDatePicker></mat-datepicker>
+                          <mat-error>{{ dateErrorMessage(lineState.form) }}</mat-error>
                         </mat-form-field>
                         <mat-form-field class="col-span-1">
                           <mat-label>Payment Method</mat-label>
@@ -324,14 +328,34 @@ export class StudentFeesDialogComponent implements OnInit, OnDestroy {
 
   // ── Form helpers ──────────────────────────────────────────────────────────
 
-  private todayStr(): string {
-    return new Date().toISOString().substring(0, 10);
+  readonly today = new Date();
+
+  private notFutureDate(control: AbstractControl): ValidationErrors | null {
+    const value: Date | null = control.value;
+    if (!value) return null;
+    const endOfToday = new Date();
+    endOfToday.setHours(23, 59, 59, 999);
+    return value.getTime() > endOfToday.getTime() ? { futureDate: true } : null;
+  }
+
+  dateErrorMessage(form: FormGroup): string {
+    return form.get('paymentDate')?.hasError('futureDate') ? 'Cannot be a future date' : 'Required';
+  }
+
+  // Format as yyyy-MM-dd using local date parts to avoid timezone shifts
+  private toDateStr(date: Date): string {
+    const pad = (n: number) => String(n).padStart(2, '0');
+    return `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}`;
+  }
+
+  private paymentPayload(form: FormGroup) {
+    return { ...form.value, paymentDate: this.toDateStr(form.value.paymentDate) };
   }
 
   private buildForm(max: number): FormGroup {
     return this.fb.group({
       amount: [null, [Validators.required, Validators.min(0.01), Validators.max(max)]],
-      paymentDate: [this.todayStr(), Validators.required],
+      paymentDate: [new Date(), [Validators.required, this.notFutureDate]],
       paymentMethod: ['Cash'],
       transactionId: [''],
       narration: [''],
@@ -366,7 +390,7 @@ export class StudentFeesDialogComponent implements OnInit, OnDestroy {
     state.error = null;
     this.http.post<any>(
       `${environment.baseUrl}/Payment/PostManualFeePayment`,
-      { feeId: fee.id, ...state.form.value },
+      { feeId: fee.id, ...this.paymentPayload(state.form) },
       { withCredentials: true }
     ).subscribe({
       next: () => {
@@ -389,7 +413,7 @@ export class StudentFeesDialogComponent implements OnInit, OnDestroy {
     state.error = null;
     this.http.post<any>(
       `${environment.baseUrl}/Payment/PostManualFeeLinePayment`,
-      { feeLineId: fl.id, ...state.form.value },
+      { feeLineId: fl.id, ...this.paymentPayload(state.form) },
       { withCredentials: true }
     ).subscribe({
       next: () => {
