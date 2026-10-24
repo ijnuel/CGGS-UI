@@ -296,5 +296,23 @@ export class SharedEffect {
     )
   );
 
+  $paymentMethodList = createEffect(() =>
+    this.actions$.pipe(
+      ofType(SharedAction.getPaymentMethodList),
+      switchMap(() =>
+        this.http
+          .get<GenericResponseInterface<DropdownListInterface[]>>(
+            `${environment.baseUrl}/Enums/GetPaymentMethod`,
+            { withCredentials: true }
+          )
+          .pipe(
+            retry(1),
+            map((payload) => SharedAction.getPaymentMethodListSuccess({ payload })),
+            catchError((error) => of(SharedAction.getPaymentMethodListFail({ error })))
+          )
+      )
+    )
+  );
+
   constructor(private actions$: Actions, private http: HttpClient) {}
 }

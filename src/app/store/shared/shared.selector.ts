@@ -76,3 +76,8 @@ export const selectRefundStatusList = createSelector(
   fromShared.selectSharedState,
   fromShared.getRefundStatusList
 );
+
+export const selectPaymentMethodList = createSelector(
+  fromShared.selectSharedState,
+  fromShared.getPaymentMethodList
+);
