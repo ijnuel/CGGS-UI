@@ -172,3 +172,15 @@ export const getRefundStatusListFail = createAction(
   '[Shared/API] Get Refund Status List Fail',
   props<{ error: string }>()
 );
+
+export const getPaymentMethodList = createAction('[Shared] Get Payment Method List');
+
+export const getPaymentMethodListSuccess = createAction(
+  '[Shared/API] Get Payment Method List Success',
+  props<{ payload: GenericResponseInterface<DropdownListInterface[]> }>()
+);
+
+export const getPaymentMethodListFail = createAction(
+  '[Shared/API] Get Payment Method List Fail',
+  props<{ error: string }>()
+);

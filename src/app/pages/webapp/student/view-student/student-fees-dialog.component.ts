@@ -1,11 +1,12 @@
 import { Component, Inject, OnDestroy, OnInit } from '@angular/core';
-import { AbstractControl, FormBuilder, FormGroup, ValidationErrors, Validators } from '@angular/forms';
+import { AbstractControl, FormBuilder, FormControl, FormGroup, ValidationErrors, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { HttpClient } from '@angular/common/http';
 import { Subject } from 'rxjs';
 import { filter, takeUntil } from 'rxjs/operators';
-import { FeeListInterface, FeeLineListInterface, PaymentStatusEnum, StudentListInterface } from '../../../../types';
+import { DropdownListInterface, FeeListInterface, FeeLineListInterface, PaymentStatusEnum, StudentListInterface } from '../../../../types';
 import { StudentFacade } from '../../../../store/student/student.facade';
+import { SharedFacade } from '../../../../store/shared/shared.facade';
 import { environment } from '../../../../../environments/environment';
 import { getClassLabel } from '../../../../services/helper.service';
 
@@ -147,10 +148,16 @@ interface PaymentFormState {
                       <mat-datepicker #feeDatePicker></mat-datepicker>
                       <mat-error>{{ dateErrorMessage(feeState.form) }}</mat-error>
                     </mat-form-field>
-                    <mat-form-field class="col-span-1">
-                      <mat-label>Payment Method</mat-label>
-                      <input matInput formControlName="paymentMethod" placeholder="e.g. Cash, Transfer" />
-                    </mat-form-field>
+                    <div class="col-span-1">
+                      <app-searchable-mat-select
+                        [options]="manualPaymentMethods"
+                        label="Payment Method"
+                        placeholder="Select method"
+                        [valueKey]="'description'"
+                        formInputClass="w-full"
+                        [formControl]="paymentMethodControl(feeState.form)"
+                      ></app-searchable-mat-select>
+                    </div>
                     <mat-form-field class="col-span-1">
                       <mat-label>Transaction ID</mat-label>
                       <input matInput formControlName="transactionId" placeholder="Optional reference" />
@@ -236,10 +243,16 @@ interface PaymentFormState {
                           <mat-datepicker #lineDatePicker></mat-datepicker>
                           <mat-error>{{ dateErrorMessage(lineState.form) }}</mat-error>
                         </mat-form-field>
-                        <mat-form-field class="col-span-1">
-                          <mat-label>Payment Method</mat-label>
-                          <input matInput formControlName="paymentMethod" placeholder="e.g. Cash, Transfer" />
-                        </mat-form-field>
+                        <div class="col-span-1">
+                          <app-searchable-mat-select
+                            [options]="manualPaymentMethods"
+                            label="Payment Method"
+                            placeholder="Select method"
+                            [valueKey]="'description'"
+                            formInputClass="w-full"
+                            [formControl]="paymentMethodControl(lineState.form)"
+                          ></app-searchable-mat-select>
+                        </div>
                         <mat-form-field class="col-span-1">
                           <mat-label>Transaction ID</mat-label>
                           <input matInput formControlName="transactionId" placeholder="Optional reference" />
@@ -279,6 +292,8 @@ export class StudentFeesDialogComponent implements OnInit, OnDestroy {
   feeGroups: FeeGroup[];
   walletBalance: number;
   refetching = false;
+  // Wallet payments go through the wallet flow, so it isn't offered for manual posting
+  manualPaymentMethods: DropdownListInterface[] = [];
 
   private collapsedGroups = new Set<string>();
   private formStates = new Map<string, PaymentFormState>();
@@ -289,6 +304,7 @@ export class StudentFeesDialogComponent implements OnInit, OnDestroy {
     private fb: FormBuilder,
     private http: HttpClient,
     private studentFacade: StudentFacade,
+    private sharedFacade: SharedFacade,
     public dialogRef: MatDialogRef<StudentFeesDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: StudentFeesDialogData,
   ) {
@@ -297,6 +313,13 @@ export class StudentFeesDialogComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
+    this.sharedFacade.getPaymentMethodList();
+    this.sharedFacade.selectPaymentMethodList$
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe((list) => {
+        this.manualPaymentMethods = (list ?? []).filter((m) => m.name !== 'Wallet');
+      });
+
     this.studentFacade.studentByProperties$.pipe(
       takeUntil(this.unsubscribe$),
       filter(() => this.refetching),
@@ -336,6 +359,10 @@ export class StudentFeesDialogComponent implements OnInit, OnDestroy {
     const endOfToday = new Date();
     endOfToday.setHours(23, 59, 59, 999);
     return value.getTime() > endOfToday.getTime() ? { futureDate: true } : null;
+  }
+
+  paymentMethodControl(form: FormGroup): FormControl {
+    return form.get('paymentMethod') as FormControl;
   }
 
   dateErrorMessage(form: FormGroup): string {

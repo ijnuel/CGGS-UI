@@ -28,6 +28,7 @@ export class SharedFacade {
   selectPaymentGatewayList$ = this.store.pipe(select(SharedSelector.selectPaymentGatewayList));
   selectActivePaymentGatewayList$ = this.store.pipe(select(SharedSelector.selectActivePaymentGatewayList));
   selectRefundStatusList$ = this.store.pipe(select(SharedSelector.selectRefundStatusList));
+  selectPaymentMethodList$ = this.store.pipe(select(SharedSelector.selectPaymentMethodList));
 
   selectedLoading$ = this.store.pipe(select(SharedSelector.selectLoading));
 
@@ -81,5 +82,9 @@ export class SharedFacade {
 
   getRefundStatusList() {
     this.store.dispatch(SharedActions.getRefundStatusList());
+  }
+
+  getPaymentMethodList() {
+    this.store.dispatch(SharedActions.getPaymentMethodList());
   }
 }
