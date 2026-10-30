@@ -112,5 +112,29 @@ export class BursaryComponent {
       roles: [],
       url: '/app/bursary/unbilled-students',
     },
+    {
+      name: 'Wallet Balances',
+      icon: '',
+      matIcon: 'savings',
+      description: 'Credit held in student wallets and wallet activity',
+      roles: [],
+      url: '/app/bursary/wallet-report',
+    },
+    {
+      name: 'Refunds Report',
+      icon: '',
+      matIcon: 'currency_exchange',
+      description: 'Refund requests by status with totals, for a date range',
+      roles: [],
+      url: '/app/bursary/refunds-report',
+    },
+    {
+      name: 'Fee Setup Summary',
+      icon: '',
+      matIcon: 'table_view',
+      description: 'Fees set up per class and term, with totals per student type',
+      roles: [],
+      url: '/app/bursary/fee-setup-summary',
+    },
   ];
 }
