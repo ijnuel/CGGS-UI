@@ -1,0 +1,35 @@
+<div class="pl-8 pr-9 pt-6">
+  <div class="text-xl font-bold mb-2">Cash Book</div>
+  <p class="text-sm text-gray-500 mb-6">
+    Generates an Excel report of payments received between two dates, totalled per day and per payment method,
+    with a sheet listing every payment. Payments settled from a student's wallet are shown separately because that
+    money was received earlier, when the wallet was funded.
+  </p>
+
+  <form [formGroup]="form" class="mb-6">
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-x-4 gap-y-2 mb-4">
+      <mat-form-field class="form-input">
+        <mat-label>Start Date</mat-label>
+        <input matInput [matDatepicker]="startPicker" formControlName="startDate" [max]="today" />
+        <mat-datepicker-toggle matIconSuffix [for]="startPicker"></mat-datepicker-toggle>
+        <mat-datepicker #startPicker></mat-datepicker>
+        <mat-error>Required</mat-error>
+      </mat-form-field>
+
+      <mat-form-field class="form-input">
+        <mat-label>End Date</mat-label>
+        <input matInput [matDatepicker]="endPicker" formControlName="endDate" [max]="today" />
+        <mat-datepicker-toggle matIconSuffix [for]="endPicker"></mat-datepicker-toggle>
+        <mat-datepicker #endPicker></mat-datepicker>
+        <mat-error>Required</mat-error>
+      </mat-form-field>
+    </div>
+    <p *ngIf="rangeInvalid" class="text-sm text-red-600">End date cannot be before start date.</p>
+  </form>
+
+  <div class="flex justify-end">
+    <button class="sec-btn" (click)="generate()" [disabled]="generating || form.invalid || rangeInvalid">
+      {{ generating ? 'Generating...' : 'Generate Cash Book' }}
+    </button>
+  </div>
+</div>

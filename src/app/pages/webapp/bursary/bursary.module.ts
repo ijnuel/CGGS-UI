@@ -14,6 +14,8 @@ import { MatTabsModule } from '@angular/material/tabs';
 import { MatCardModule } from '@angular/material/card';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatDialogModule } from '@angular/material/dialog';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { provideNativeDateAdapter } from '@angular/material/core';
 import { SharedModule } from '../../../shared/shared.module';
 import { BursaryComponent } from './bursary.component';
 import { FeeTypeComponent } from './fee-type/fee-type.component';
@@ -26,6 +28,9 @@ import { TransactionsComponent } from './transactions/transactions.component';
 import { ViewTransactionComponent } from './transactions/view-transaction/view-transaction.component';
 import { DebtorsReportComponent } from './debtors-report/debtors-report.component';
 import { RefundsComponent } from './refunds/refunds.component';
+import { FeeCollectionSummaryComponent } from './fee-collection-summary/fee-collection-summary.component';
+import { CashBookComponent } from './cash-book/cash-book.component';
+import { StudentStatementComponent } from './student-statement/student-statement.component';
 
 const routes: Routes = [
   { path: '', component: BursaryComponent },
@@ -37,6 +42,9 @@ const routes: Routes = [
   { path: 'transactions/:id', component: ViewTransactionComponent },
   { path: 'debtors-report', component: DebtorsReportComponent },
   { path: 'refunds', component: RefundsComponent },
+  { path: 'fee-collection-summary', component: FeeCollectionSummaryComponent },
+  { path: 'cash-book', component: CashBookComponent },
+  { path: 'student-statement', component: StudentStatementComponent },
 ];
 
 @NgModule({
@@ -52,6 +60,9 @@ const routes: Routes = [
     ViewTransactionComponent,
     DebtorsReportComponent,
     RefundsComponent,
+    FeeCollectionSummaryComponent,
+    CashBookComponent,
+    StudentStatementComponent,
   ],
   imports: [
     CommonModule,
@@ -71,6 +82,8 @@ const routes: Routes = [
     MatCheckboxModule,
     MatSelectModule,
     MatDialogModule,
+    MatDatepickerModule,
   ],
+  providers: [provideNativeDateAdapter()],
 })
 export class BursaryModule {}

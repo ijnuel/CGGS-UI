@@ -1,0 +1,24 @@
+<div class="pl-8 pr-9 pt-6">
+  <div class="text-xl font-bold mb-2">Student Statement</div>
+  <p class="text-sm text-gray-500 mb-6">
+    Generates a printable PDF statement of account for a student: fees billed per term, payments and wallet credits
+    received, and a running balance. You can also download it from the student's profile page.
+  </p>
+
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-x-4 gap-y-2 mb-4">
+    <app-searchable-mat-select
+      [options]="students"
+      label="Student"
+      placeholder="Search by name or student number"
+      valueKey="id"
+      [labelFn]="studentLabelFn"
+      [formControl]="studentControl">
+    </app-searchable-mat-select>
+  </div>
+
+  <div class="flex justify-end">
+    <button class="sec-btn" (click)="generate()" [disabled]="generating || studentControl.invalid">
+      {{ generating ? 'Generating...' : 'Generate Statement' }}
+    </button>
+  </div>
+</div>

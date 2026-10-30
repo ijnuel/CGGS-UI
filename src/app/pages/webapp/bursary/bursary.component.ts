@@ -64,5 +64,29 @@ export class BursaryComponent {
       roles: [],
       url: '/app/bursary/refunds',
     },
+    {
+      name: 'Fee Collection Summary',
+      icon: '',
+      matIcon: 'insights',
+      description: 'Billed vs collected vs outstanding by class, fee type and term',
+      roles: [],
+      url: '/app/bursary/fee-collection-summary',
+    },
+    {
+      name: 'Cash Book',
+      icon: '',
+      matIcon: 'point_of_sale',
+      description: 'Payments received in a date range by day and payment method',
+      roles: [],
+      url: '/app/bursary/cash-book',
+    },
+    {
+      name: 'Student Statement',
+      icon: '',
+      matIcon: 'request_quote',
+      description: "Printable statement of a student's fees, payments and balance",
+      roles: [],
+      url: '/app/bursary/student-statement',
+    },
   ];
 }
