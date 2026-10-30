@@ -28,8 +28,9 @@ import { TransactionsComponent } from './transactions/transactions.component';
 import { ViewTransactionComponent } from './transactions/view-transaction/view-transaction.component';
 import { DebtorsReportComponent } from './debtors-report/debtors-report.component';
 import { RefundsComponent } from './refunds/refunds.component';
-import { FeeCollectionSummaryComponent } from './fee-collection-summary/fee-collection-summary.component';
-import { CashBookComponent } from './cash-book/cash-book.component';
+import { SessionTermReportComponent } from './session-term-report/session-term-report.component';
+import { DateRangeReportComponent } from './date-range-report/date-range-report.component';
+import { ReportPageConfig } from './report-page-config';
 import { StudentStatementComponent } from './student-statement/student-statement.component';
 
 const routes: Routes = [
@@ -42,8 +43,67 @@ const routes: Routes = [
   { path: 'transactions/:id', component: ViewTransactionComponent },
   { path: 'debtors-report', component: DebtorsReportComponent },
   { path: 'refunds', component: RefundsComponent },
-  { path: 'fee-collection-summary', component: FeeCollectionSummaryComponent },
-  { path: 'cash-book', component: CashBookComponent },
+  {
+    path: 'fee-collection-summary',
+    component: SessionTermReportComponent,
+    data: {
+      title: 'Fee Collection Summary',
+      description: 'Generates an Excel report of fees billed, collected and outstanding, with the collection rate, broken down by class and by fee type. Leave Term blank to cover the whole session and get an extra breakdown by term.',
+      endpoint: 'BursaryReport/GenerateFeeCollectionSummary',
+      fileName: 'Fee Collection Summary',
+      buttonLabel: 'Generate Collection Summary',
+      successMessage: 'Fee collection summary generated successfully',
+    } as ReportPageConfig,
+  },
+  {
+    path: 'cash-book',
+    component: DateRangeReportComponent,
+    data: {
+      title: 'Cash Book',
+      description: "Generates an Excel report of payments received between two dates, totalled per day and per payment method, with a sheet listing every payment. Payments settled from a student's wallet are shown separately because that money was received earlier, when the wallet was funded.",
+      endpoint: 'BursaryReport/GenerateCashBook',
+      fileName: 'Cash Book',
+      buttonLabel: 'Generate Cash Book',
+      successMessage: 'Cash book generated successfully',
+    } as ReportPageConfig,
+  },
+  {
+    path: 'online-payments-reconciliation',
+    component: DateRangeReportComponent,
+    data: {
+      title: 'Online Payments Reconciliation',
+      description: "Generates an Excel report of online payment transactions started between two dates, by gateway, showing how much of each was applied to fees or the student's wallet. Successful payments that were not applied and payments still pending are listed on an Exceptions sheet.",
+      endpoint: 'BursaryReport/GenerateGatewayReconciliation',
+      fileName: 'Online Payments Reconciliation',
+      buttonLabel: 'Generate Reconciliation',
+      successMessage: 'Online payments reconciliation generated successfully',
+    } as ReportPageConfig,
+  },
+  {
+    path: 'manual-payment-audit',
+    component: DateRangeReportComponent,
+    data: {
+      title: 'Manual Payment Audit',
+      description: 'Generates an Excel report of payments posted manually between two dates: who entered each one, when it was entered compared with its payment date, and whether it was later reversed. Includes a summary per user.',
+      endpoint: 'BursaryReport/GenerateManualPaymentAudit',
+      fileName: 'Manual Payment Audit',
+      buttonLabel: 'Generate Audit',
+      successMessage: 'Manual payment audit generated successfully',
+    } as ReportPageConfig,
+  },
+  {
+    path: 'unbilled-students',
+    component: SessionTermReportComponent,
+    data: {
+      title: 'Unbilled Students',
+      description: 'Generates an Excel report of students enrolled in a class for the session who have no fees for the selected term, and a per-class summary that also flags classes with no fee setup for that term.',
+      endpoint: 'BursaryReport/GenerateUnbilledStudents',
+      fileName: 'Unbilled Students',
+      buttonLabel: 'Generate Report',
+      successMessage: 'Unbilled students report generated successfully',
+      termRequired: true,
+    } as ReportPageConfig,
+  },
   { path: 'student-statement', component: StudentStatementComponent },
 ];
 
@@ -60,8 +120,8 @@ const routes: Routes = [
     ViewTransactionComponent,
     DebtorsReportComponent,
     RefundsComponent,
-    FeeCollectionSummaryComponent,
-    CashBookComponent,
+    SessionTermReportComponent,
+    DateRangeReportComponent,
     StudentStatementComponent,
   ],
   imports: [

@@ -1,6 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, ValidatorFn, Validators } from '@angular/forms';
 import { HttpClient, HttpParams } from '@angular/common/http';
+import { ActivatedRoute } from '@angular/router';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { SessionFacade } from '../../../../store/session/session.facade';
@@ -8,12 +9,15 @@ import { SessionListInterface, TermEnum } from '../../../../types';
 import { ToastNotificationService, NotificationTypeEnums } from '../../../../services/toast-notification.service';
 import { downloadBlob } from '../../../../services/helper.service';
 import { environment } from '../../../../../environments/environment';
+import { ReportPageConfig } from '../report-page-config';
 
 @Component({
-  selector: 'app-fee-collection-summary',
-  templateUrl: './fee-collection-summary.component.html',
+  selector: 'app-session-term-report',
+  templateUrl: './session-term-report.component.html',
 })
-export class FeeCollectionSummaryComponent implements OnInit, OnDestroy {
+export class SessionTermReportComponent implements OnInit, OnDestroy {
+  readonly config: ReportPageConfig;
+
   form: FormGroup<{
     sessionId: FormControl<string | null>;
     term: FormControl<TermEnum | null>;
@@ -34,10 +38,13 @@ export class FeeCollectionSummaryComponent implements OnInit, OnDestroy {
     private http: HttpClient,
     private sessionFacade: SessionFacade,
     private toastService: ToastNotificationService,
+    route: ActivatedRoute,
   ) {
+    this.config = route.snapshot.data as ReportPageConfig;
+    const termValidators: ValidatorFn[] = this.config.termRequired ? [Validators.required] : [];
     this.form = this.fb.group({
       sessionId: ['', Validators.required],
-      term: [null as TermEnum | null],
+      term: [null as TermEnum | null, termValidators],
     });
   }
 
@@ -64,7 +71,7 @@ export class FeeCollectionSummaryComponent implements OnInit, OnDestroy {
     if (term) params = params.set('term', term);
 
     this.http
-      .get(`${environment.baseUrl}/BursaryReport/GenerateFeeCollectionSummary`, {
+      .get(`${environment.baseUrl}/${this.config.endpoint}`, {
         params,
         responseType: 'blob',
         withCredentials: true,
@@ -73,8 +80,8 @@ export class FeeCollectionSummaryComponent implements OnInit, OnDestroy {
       .subscribe({
         next: (blob) => {
           this.generating = false;
-          downloadBlob(blob, 'Fee Collection Summary.xlsx');
-          this.toastService.openToast('Fee collection summary generated successfully', NotificationTypeEnums.SUCCESS);
+          downloadBlob(blob, `${this.config.fileName}.xlsx`);
+          this.toastService.openToast(this.config.successMessage, NotificationTypeEnums.SUCCESS);
         },
         // The HTTP interceptor already shows the API's error message
         error: () => { this.generating = false; },

@@ -88,5 +88,29 @@ export class BursaryComponent {
       roles: [],
       url: '/app/bursary/student-statement',
     },
+    {
+      name: 'Online Payments Reconciliation',
+      icon: '',
+      matIcon: 'rule',
+      description: 'Gateway payments vs what was applied; flags unapplied and pending',
+      roles: [],
+      url: '/app/bursary/online-payments-reconciliation',
+    },
+    {
+      name: 'Manual Payment Audit',
+      icon: '',
+      matIcon: 'fact_check',
+      description: 'Manually posted payments by user, backdating and reversals',
+      roles: [],
+      url: '/app/bursary/manual-payment-audit',
+    },
+    {
+      name: 'Unbilled Students',
+      icon: '',
+      matIcon: 'person_search',
+      description: 'Enrolled students with no fees for a term, and classes with no fee setup',
+      roles: [],
+      url: '/app/bursary/unbilled-students',
+    },
   ];
 }
