@@ -7,8 +7,9 @@
   </div>
   <p class="text-sm text-gray-500 mb-6">
     Generates an Excel report of all students with outstanding fees for the selected session and all
-    prior sessions. Select a specific class to get a single-sheet report, or leave Class blank to
-    generate one sheet per class.
+    prior sessions, with each parent's name, phone and email. Each student's debt is also split by age:
+    the latest term of the selected session, earlier terms of that session, and previous sessions.
+    Select a specific class to get a single-sheet report, or leave Class blank to generate one sheet per class.
   </p>
 
   <form [formGroup]="form" class="mb-6">
@@ -33,7 +34,7 @@
     </div>
 
     <mat-checkbox formControlName="consolidated" color="primary">
-      Consolidated report (Name, Student No and Total only — no session/fee breakdown)
+      Consolidated report (one row per student with parent contact, aging and total — no session/fee breakdown)
     </mat-checkbox>
   </form>
 

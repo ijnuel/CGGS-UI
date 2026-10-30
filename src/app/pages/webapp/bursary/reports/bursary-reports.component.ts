@@ -21,7 +21,7 @@ export class BursaryReportsComponent {
           name: 'Debtors Report',
           icon: '',
           matIcon: 'summarize',
-          description: 'Generate Excel report of students with outstanding fees',
+          description: 'Students with outstanding fees, by age of debt, with parent contacts',
           roles: [],
           url: '/app/bursary/debtors-report',
         },
