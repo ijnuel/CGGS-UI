@@ -1,0 +1,17 @@
+<div class="pl-8 pr-9 pt-6">
+  <div class="flex items-center gap-3 mb-2">
+    <button mat-icon-button routerLink="/app/bursary" style="color: var(--app-primary);">
+      <mat-icon>arrow_back</mat-icon>
+    </button>
+    <div>
+      <h3 class="text-xl font-bold" style="color: var(--app-primary)">Bursary Reports</h3>
+      <p class="text-sm text-gray-500 mt-1">Download Excel and PDF reports on fees, payments and wallets</p>
+    </div>
+  </div>
+
+  <section *ngFor="let group of groups" class="mt-6">
+    <h4 class="text-base font-semibold text-gray-700">{{ group.title }}</h4>
+    <p class="text-sm text-gray-500">{{ group.description }}</p>
+    <app-card [cards]="group.cards"></app-card>
+  </section>
+</div>
