@@ -1,18 +1,21 @@
 import { Component, OnDestroy } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { HttpClient, HttpParams } from '@angular/common/http';
+import { ActivatedRoute } from '@angular/router';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { ToastNotificationService, NotificationTypeEnums } from '../../../../services/toast-notification.service';
 import { downloadBlob, toLocalDateString } from '../../../../services/helper.service';
 import { environment } from '../../../../../environments/environment';
+import { ReportPageConfig } from '../report-page-config';
 
 @Component({
-  selector: 'app-cash-book',
-  templateUrl: './cash-book.component.html',
+  selector: 'app-date-range-report',
+  templateUrl: './date-range-report.component.html',
 })
-export class CashBookComponent implements OnDestroy {
+export class DateRangeReportComponent implements OnDestroy {
   readonly today = new Date();
+  readonly config: ReportPageConfig;
 
   form: FormGroup<{
     startDate: FormControl<Date | null>;
@@ -27,7 +30,9 @@ export class CashBookComponent implements OnDestroy {
     private fb: FormBuilder,
     private http: HttpClient,
     private toastService: ToastNotificationService,
+    route: ActivatedRoute,
   ) {
+    this.config = route.snapshot.data as ReportPageConfig;
     const firstOfMonth = new Date(this.today.getFullYear(), this.today.getMonth(), 1);
     this.form = this.fb.group({
       startDate: [firstOfMonth as Date | null, Validators.required],
@@ -50,7 +55,7 @@ export class CashBookComponent implements OnDestroy {
     const params = new HttpParams().set('startDate', startDate).set('endDate', endDate);
 
     this.http
-      .get(`${environment.baseUrl}/BursaryReport/GenerateCashBook`, {
+      .get(`${environment.baseUrl}/${this.config.endpoint}`, {
         params,
         responseType: 'blob',
         withCredentials: true,
@@ -59,8 +64,8 @@ export class CashBookComponent implements OnDestroy {
       .subscribe({
         next: (blob) => {
           this.generating = false;
-          downloadBlob(blob, `Cash Book ${startDate} to ${endDate}.xlsx`);
-          this.toastService.openToast('Cash book generated successfully', NotificationTypeEnums.SUCCESS);
+          downloadBlob(blob, `${this.config.fileName} ${startDate} to ${endDate}.xlsx`);
+          this.toastService.openToast(this.config.successMessage, NotificationTypeEnums.SUCCESS);
         },
         // The HTTP interceptor already shows the API's error message
         error: () => { this.generating = false; },
