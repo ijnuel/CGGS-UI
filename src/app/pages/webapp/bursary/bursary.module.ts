@@ -104,6 +104,42 @@ const routes: Routes = [
       termRequired: true,
     } as ReportPageConfig,
   },
+  {
+    path: 'wallet-report',
+    component: DateRangeReportComponent,
+    data: {
+      title: 'Wallet Balances',
+      description: "Generates an Excel report of every student's current wallet balance (money held on their behalf), plus the credits received and amounts applied to fees per student, and each wallet movement, between two dates.",
+      endpoint: 'BursaryReport/GenerateWalletReport',
+      fileName: 'Wallet Report',
+      buttonLabel: 'Generate Wallet Report',
+      successMessage: 'Wallet report generated successfully',
+    } as ReportPageConfig,
+  },
+  {
+    path: 'refunds-report',
+    component: DateRangeReportComponent,
+    data: {
+      title: 'Refunds Report',
+      description: 'Generates an Excel report of refund requests made between two dates, totalled by status, with the requester, original transaction, gateway, and processing details for each. Pending, processing and failed refunds are highlighted.',
+      endpoint: 'BursaryReport/GenerateRefundsReport',
+      fileName: 'Refunds Report',
+      buttonLabel: 'Generate Refunds Report',
+      successMessage: 'Refunds report generated successfully',
+    } as ReportPageConfig,
+  },
+  {
+    path: 'fee-setup-summary',
+    component: SessionTermReportComponent,
+    data: {
+      title: 'Fee Setup Summary',
+      description: 'Generates an Excel report of the fees set up for each class: every fee item with who it applies to (all students, new students only, or a stream) and whether it is compulsory, plus each class\'s total for a returning and a new student. Leave Term blank to cover the whole session.',
+      endpoint: 'BursaryReport/GenerateFeeSetupSummary',
+      fileName: 'Fee Setup Summary',
+      buttonLabel: 'Generate Fee Setup Summary',
+      successMessage: 'Fee setup summary generated successfully',
+    } as ReportPageConfig,
+  },
   { path: 'student-statement', component: StudentStatementComponent },
 ];
 
