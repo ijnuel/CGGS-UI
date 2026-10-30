@@ -85,6 +85,11 @@
           <mat-icon>receipt_long</mat-icon>
           Fees
         </button>
+        <button mat-stroked-button (click)="downloadStatement()" [disabled]="generatingStatement"
+                style="color: var(--app-primary); border-color: var(--app-primary);">
+          <mat-icon>request_quote</mat-icon>
+          {{ generatingStatement ? 'Generating...' : 'Statement' }}
+        </button>
         <button mat-raised-button color="primary" (click)="navigateToEdit()">
           <mat-icon>edit</mat-icon>
           Edit

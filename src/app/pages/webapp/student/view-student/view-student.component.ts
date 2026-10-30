@@ -4,6 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Observable, Subject, combineLatest } from 'rxjs';
 import { map, takeUntil } from 'rxjs/operators';
 import { MatDialog } from '@angular/material/dialog';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { StudentFacade } from '../../../../store/student/student.facade';
 import { SharedFacade } from '../../../../store/shared/shared.facade';
 import { GlobalLoadingFacade } from '../../../../store/global-loading/global-loading.facade';
@@ -20,7 +21,8 @@ import {
 import { RoleDialogComponent, RoleDialogData } from '../../../../shared/role-dialog/role-dialog.component';
 import { StudentFeesDialogComponent, StudentFeesDialogData, FeeGroup } from './student-fees-dialog.component';
 import { ConfirmDialogComponent } from '../../../../shared/confirm-dialog/confirm-dialog.component';
-import { getClassLabel } from '../../../../services/helper.service';
+import { getClassLabel, openBlobInNewTab } from '../../../../services/helper.service';
+import { environment } from '../../../../../environments/environment';
 
 @Component({
   selector: 'app-view-student',
@@ -40,6 +42,7 @@ export class ViewStudentComponent implements OnInit, OnDestroy {
   photoUploading = false;
   photoDeleting = false;
   entityInitials = 'U';
+  generatingStatement = false;
 
   readonly PaymentStatusEnum = PaymentStatusEnum;
 
@@ -52,6 +55,7 @@ export class ViewStudentComponent implements OnInit, OnDestroy {
     private router: Router,
     private location: Location,
     private dialog: MatDialog,
+    private http: HttpClient,
     private studentFacade: StudentFacade,
     private sharedFacade: SharedFacade,
     private globalLoadingFacade: GlobalLoadingFacade,
@@ -176,6 +180,26 @@ export class ViewStudentComponent implements OnInit, OnDestroy {
           this.userRoles = allRoles.filter(r => nameSet.has(r.name));
           this.rolesLoading = false;
         }
+      });
+  }
+
+  downloadStatement() {
+    if (!this.studentId) return;
+    this.generatingStatement = true;
+    this.http
+      .get(`${environment.baseUrl}/BursaryReport/GenerateStudentStatement`, {
+        params: new HttpParams().set('studentId', this.studentId),
+        responseType: 'blob',
+        withCredentials: true,
+      })
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe({
+        next: (blob) => {
+          this.generatingStatement = false;
+          openBlobInNewTab(blob);
+        },
+        // The HTTP interceptor already shows the API's error message
+        error: () => { this.generatingStatement = false; },
       });
   }
 

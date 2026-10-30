@@ -1,0 +1,34 @@
+<div class="pl-8 pr-9 pt-6">
+  <div class="text-xl font-bold mb-2">Fee Collection Summary</div>
+  <p class="text-sm text-gray-500 mb-6">
+    Generates an Excel report of fees billed, collected and outstanding, with the collection rate, broken down
+    by class and by fee type. Leave Term blank to cover the whole session and get an extra breakdown by term.
+  </p>
+
+  <form [formGroup]="form" class="mb-6">
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-x-4 gap-y-2 mb-4">
+      <app-searchable-mat-select
+        [options]="sessions"
+        label="Session"
+        placeholder="Select session"
+        valueKey="id"
+        [labelKeys]="['name']"
+        [formControl]="form.controls.sessionId">
+      </app-searchable-mat-select>
+
+      <app-searchable-mat-select
+        [options]="terms"
+        label="Term (optional — leave blank for the whole session)"
+        placeholder="All terms"
+        valueKey="value"
+        [formControl]="form.controls.term">
+      </app-searchable-mat-select>
+    </div>
+  </form>
+
+  <div class="flex justify-end">
+    <button class="sec-btn" (click)="generate()" [disabled]="generating || form.invalid">
+      {{ generating ? 'Generating...' : 'Generate Collection Summary' }}
+    </button>
+  </div>
+</div>
