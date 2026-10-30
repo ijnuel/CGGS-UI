@@ -1,5 +1,10 @@
 <div class="pl-8 pr-9 pt-6">
-  <div class="text-xl font-bold mb-2">Debtors Report</div>
+  <div class="flex items-center gap-2 mb-2 -ml-3">
+    <button mat-icon-button routerLink="/app/bursary/reports" aria-label="Back to reports" style="color: var(--app-primary);">
+      <mat-icon>arrow_back</mat-icon>
+    </button>
+    <div class="text-xl font-bold">Debtors Report</div>
+  </div>
   <p class="text-sm text-gray-500 mb-6">
     Generates an Excel report of all students with outstanding fees for the selected session and all
     prior sessions. Select a specific class to get a single-sheet report, or leave Class blank to

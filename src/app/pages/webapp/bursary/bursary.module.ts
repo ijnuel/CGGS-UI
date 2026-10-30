@@ -31,10 +31,12 @@ import { RefundsComponent } from './refunds/refunds.component';
 import { SessionTermReportComponent } from './session-term-report/session-term-report.component';
 import { DateRangeReportComponent } from './date-range-report/date-range-report.component';
 import { ReportPageConfig } from './report-page-config';
+import { BursaryReportsComponent } from './reports/bursary-reports.component';
 import { StudentStatementComponent } from './student-statement/student-statement.component';
 
 const routes: Routes = [
   { path: '', component: BursaryComponent },
+  { path: 'reports', component: BursaryReportsComponent },
   { path: 'fee-type', component: FeeTypeComponent },
   { path: 'fee-setup', component: FeeSetupComponent },
   { path: 'generate-fees', component: GenerateFeesComponent },
@@ -146,6 +148,7 @@ const routes: Routes = [
 @NgModule({
   declarations: [
     BursaryComponent,
+    BursaryReportsComponent,
     FeeTypeComponent,
     CreateUpdateFeeTypeComponent,
     FeeSetupComponent,
