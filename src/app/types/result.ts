@@ -102,3 +102,64 @@ export interface PromotionResultInterface {
   isAutoPromotion: boolean;
   studentResults: StudentPromotionResultInterface[];
 }
+// Student portal: results history, subject progress and on-screen report card
+export interface StudentResultsOverviewInterface {
+  studentId: string;
+  terms: TermResultSummaryInterface[];
+  sessions: { sessionName: string; average: number; termCount: number }[];
+  subjects: { subjectName: string; points: { schoolTermSessionId: string; label: string; score: number; grade: string }[] }[];
+}
+
+export interface TermResultSummaryInterface {
+  schoolTermSessionId: string;
+  sessionName: string;
+  term: number;
+  className: string;
+  percentage: number;
+  grade: string;
+  remark: string;
+  position: string;
+  pupilsInClass: number;
+  subjectCount: number;
+}
+
+export interface ReportCardInterface {
+  studentId: string;
+  schoolTermSessionId: string;
+  term: number;
+  session: string;
+  studentName: string;
+  studentNo: string;
+  className: string;
+  termBegins: string;
+  termEnds: string;
+  nextTermBegins: string | null;
+  timesSchoolOpened: number;
+  timesPresent: number;
+  timesAbsent: number;
+  pupilsInClass: number;
+  position: string;
+  total: number;
+  percentage: number;
+  grade: string;
+  remark: string;
+  isThirdTerm: boolean;
+  isPromoted: boolean;
+  classTeacherName: string;
+  classTeacherRemarks: string;
+  principalRemarks: string;
+  assessmentColumns: { name: string; weight: number }[];
+  subjects: {
+    subjectName: string;
+    scores: (number | null)[];
+    totalScore: number;
+    term1Score: number | null;
+    term2Score: number | null;
+    termAverage: number | null;
+    grade: string;
+    remark: string;
+    position: string;
+  }[];
+  effectiveAreas: { name: string; grade: string }[];
+  psychomotorSkills: { name: string; grade: string }[];
+}

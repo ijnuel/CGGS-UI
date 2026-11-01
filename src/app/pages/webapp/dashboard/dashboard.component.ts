@@ -95,7 +95,7 @@ export class DashboardComponent implements OnInit {
         roles: [UserRolesEnum.Staff],
       },
       {
-        label: 'My Result', count$: of(null),
+        label: 'My Results', count$: of(null),
         icon: 'assignment_ind', color: 'text-green-500', bg: 'bg-green-50',
         route: '/app/result/my-result', hideCount: true,
         roles: [UserRolesEnum.Student],
@@ -135,8 +135,8 @@ export class DashboardComponent implements OnInit {
         roles: [UserRolesEnum.Staff],
       },
       {
-        label: 'My Result', icon: 'assignment_ind', route: '/app/result/my-result',
-        description: 'View your personal result sheet',
+        label: 'My Results', icon: 'assignment_ind', route: '/app/result/my-result',
+        description: 'Results by term, subject progress and report cards',
         roles: [UserRolesEnum.Student],
       },
       {

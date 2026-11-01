@@ -4,6 +4,7 @@ import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { GenericResponseInterface } from '../types';
 import { StudentFeeSummaryInterface, StudentReceiptInterface } from '../types/fee';
+import { ReportCardInterface, StudentResultsOverviewInterface } from '../types/result';
 import { environment } from '../../environments/environment';
 
 // Self-service calls for students and families. studentId can be left out for a student
@@ -35,6 +36,33 @@ export class StudentPortalService {
   downloadReceipt(transactionId: string): Observable<Blob> {
     return this.http.get(`${environment.baseUrl}/Report/PaymentReceipt`, {
       params: new HttpParams().set('transactionId', transactionId),
+      responseType: 'blob',
+      withCredentials: true,
+    });
+  }
+
+  getResults(studentId?: string | null): Observable<StudentResultsOverviewInterface> {
+    return this.http
+      .get<GenericResponseInterface<StudentResultsOverviewInterface>>(`${this.baseUrl}/GetMyResults`, this.options(studentId))
+      .pipe(map((r) => r.entity));
+  }
+
+  getReportCard(schoolTermSessionId: string, studentId?: string | null): Observable<ReportCardInterface> {
+    const { params, withCredentials } = this.options(studentId);
+    return this.http
+      .get<GenericResponseInterface<ReportCardInterface>>(`${this.baseUrl}/GetMyReportCard`, {
+        params: params.set('schoolTermSessionId', schoolTermSessionId),
+        withCredentials,
+      })
+      .pipe(map((r) => r.entity));
+  }
+
+  downloadResult(schoolTermSessionId: string, studentId: string): Observable<Blob> {
+    return this.http.get(`${environment.baseUrl}/Result/GenerateStudentResult`, {
+      params: new HttpParams()
+        .set('schoolTermSessionId', schoolTermSessionId)
+        .set('studentId', studentId)
+        .set('hideOverallPosition', 'false'),
       responseType: 'blob',
       withCredentials: true,
     });

@@ -18,10 +18,10 @@ export default [
     url: '/app/result/view'
   },
   {
-    name: 'View My Result',
+    name: 'My Results',
     icon: 'assets/icons/result-icon.svg',
     matIcon: 'assignment_ind',
-    description: 'View and download your personal result sheet',
+    description: 'Results by term, subject progress and report cards',
     roles: [UserRolesEnum.Student],
     url: '/app/result/my-result'
   },
