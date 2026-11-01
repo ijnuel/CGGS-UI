@@ -1,13 +1,12 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Observable, Subject } from 'rxjs';
-import { filter, takeUntil } from 'rxjs/operators';
+import { takeUntil } from 'rxjs/operators';
 import { ResultFacade } from '../../../../store/result/result.facade';
 import { ClassFacade } from '../../../../store/class/class.facade';
 import { SessionFacade } from '../../../../store/session/session.facade';
 import { ClassListInterface, SessionListInterface } from '../../../../types';
 import { PromotionResultInterface } from '../../../../types/result';
-import { ToastNotificationService, NotificationTypeEnums } from '../../../../services/toast-notification.service';
 import { getClassLabel } from '../../../../services/helper.service';
 
 @Component({
@@ -26,7 +25,6 @@ export class PromoteStudentsComponent implements OnInit, OnDestroy {
   promoting$ = this.resultFacade.promotingStudents$;
   classLabelFn = (cls: ClassListInterface): string => getClassLabel(cls) || cls?.name || '';
   promotionResult$: Observable<PromotionResultInterface | null>;
-  promotionError$: Observable<string | null>;
 
   private destroy$ = new Subject<void>();
 
@@ -35,7 +33,6 @@ export class PromoteStudentsComponent implements OnInit, OnDestroy {
     private resultFacade: ResultFacade,
     private classFacade: ClassFacade,
     private sessionFacade: SessionFacade,
-    private toastService: ToastNotificationService,
   ) {
     this.form = this.fb.group({
       classId: ['', Validators.required],
@@ -45,7 +42,6 @@ export class PromoteStudentsComponent implements OnInit, OnDestroy {
     this.classes$ = this.classFacade.classAll$;
     this.sessions$ = this.sessionFacade.sessionAll$;
     this.promotionResult$ = this.resultFacade.promotionResult$;
-    this.promotionError$ = this.resultFacade.promotionError$;
   }
 
   ngOnInit(): void {
@@ -60,15 +56,6 @@ export class PromoteStudentsComponent implements OnInit, OnDestroy {
         if (!sessions || this.form.controls.sessionId.value) return;
         const current = sessions.find(s => s.isCurrent) ?? sessions[0];
         if (current) this.form.controls.sessionId.setValue(current.id);
-      });
-
-    this.promotionError$
-      .pipe(
-        filter((e): e is string => !!e),
-        takeUntil(this.destroy$),
-      )
-      .subscribe(error => {
-        this.toastService.openToast(error, NotificationTypeEnums.ERROR);
       });
   }
 

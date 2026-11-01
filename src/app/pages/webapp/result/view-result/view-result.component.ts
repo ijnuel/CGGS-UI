@@ -32,8 +32,6 @@ export class ViewResultComponent implements OnInit, OnDestroy {
   classes$: Observable<ClassListInterface[] | null>;
   generatingClassResult$ = this.resultFacade.generatingClassResult$;
   generatingBroadSheet$ = this.resultFacade.generatingBroadSheet$;
-  generateClassResultError$ = this.resultFacade.generateClassResultError$;
-  generateBroadSheetError$ = this.resultFacade.generateBroadSheetError$;
 
   private destroy$ = new Subject<void>();
   private hasAutoSelectedSchoolTermSession = false;
@@ -114,24 +112,6 @@ export class ViewResultComponent implements OnInit, OnDestroy {
         this.toastService.openToast('Broad sheet generated successfully', NotificationTypeEnums.SUCCESS);
         this.resultFacade.clearGeneratedBroadSheet();
       setTimeout(() => URL.revokeObjectURL(fileURL), 5000);
-      });
-
-    this.generateClassResultError$
-      .pipe(
-        filter((error): error is string => !!error),
-        takeUntil(this.destroy$)
-      )
-      .subscribe((error) => {
-        this.toastService.openToast(error, NotificationTypeEnums.ERROR);
-      });
-
-    this.generateBroadSheetError$
-      .pipe(
-        filter((error): error is string => !!error),
-        takeUntil(this.destroy$)
-      )
-      .subscribe((error) => {
-        this.toastService.openToast(error, NotificationTypeEnums.ERROR);
       });
   }
 
