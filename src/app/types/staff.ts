@@ -50,3 +50,25 @@ export interface StaffFormInterface {
     residentialStateId: string;
     phoneNumber: string;
 }
+
+// Classes and subjects assigned to the signed-in staff member (Staff/GetMyAssignments)
+export interface StaffAssignmentsInterface {
+    staffId: string;
+    formClasses: StaffFormClassInterface[];
+    classSubjects: StaffClassSubjectInterface[];
+}
+
+export interface StaffFormClassInterface {
+    classId: string;
+    className: string;
+    students: { studentId: string; studentNo: string; name: string }[];
+}
+
+export interface StaffClassSubjectInterface {
+    classSubjectId: string;
+    classId: string;
+    className: string;
+    subjectId: string;
+    subjectName: string;
+    schoolTermSessionId: string;
+}

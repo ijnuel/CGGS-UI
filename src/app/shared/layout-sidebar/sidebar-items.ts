@@ -11,15 +11,22 @@ export default [
   {
     name: 'People',
     icon: 'assets/icons/student-icon.svg',
-    roles: [UserRolesEnum.SuperAdmin, UserRolesEnum.Admin, UserRolesEnum.Staff],
+    roles: [UserRolesEnum.SuperAdmin, UserRolesEnum.Admin],
     url: '/app/people'
   },
 
   {
     name: 'Classes',
     icon: 'assets/icons/class-icon.svg',
-    roles: [UserRolesEnum.SuperAdmin, UserRolesEnum.Admin, UserRolesEnum.Staff],
+    roles: [UserRolesEnum.SuperAdmin, UserRolesEnum.Admin],
     url: '/app/class'
+  },
+
+  {
+    name: 'My Classes',
+    icon: 'assets/icons/class-icon.svg',
+    roles: [UserRolesEnum.Staff],
+    url: '/app/my-classes'
   },
 
   {
@@ -31,7 +38,7 @@ export default [
   {
     name: 'Bursary',
     icon: 'assets/icons/result-icon.svg',
-    roles: [UserRolesEnum.SuperAdmin, UserRolesEnum.Admin, UserRolesEnum.Staff],
+    roles: [UserRolesEnum.SuperAdmin, UserRolesEnum.Admin],
     url: '/app/bursary'
   },
   {
@@ -50,14 +57,14 @@ export default [
   {
     name: 'Admin Setup',
     icon: 'assets/icons/admin-setup-icon.svg',
-    roles: [UserRolesEnum.SuperAdmin, UserRolesEnum.Admin, UserRolesEnum.Staff],
+    roles: [UserRolesEnum.SuperAdmin, UserRolesEnum.Admin],
     url: '/app/admin-setup'
   },
 
   ...(environment.production ? [] : [{
     name: 'Test Entity Templates',
     icon: 'assets/icons/settings-icon.svg',
-    roles: [UserRolesEnum.SuperAdmin, UserRolesEnum.Admin, UserRolesEnum.Staff],
+    roles: [UserRolesEnum.SuperAdmin, UserRolesEnum.Admin],
     url: '/app/test-entity-template'
   }]),
 

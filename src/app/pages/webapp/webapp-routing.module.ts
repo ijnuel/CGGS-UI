@@ -5,7 +5,7 @@ import { RoleGuard } from '../../services/role.guard';
 import { UserRolesEnum } from '../../types/auth';
 
 const ALL_AUTHENTICATED   = [UserRolesEnum.SuperAdmin, UserRolesEnum.Admin, UserRolesEnum.Staff, UserRolesEnum.Student, UserRolesEnum.Family, UserRolesEnum.Guest];
-const ADMIN_AND_ABOVE     = [UserRolesEnum.SuperAdmin, UserRolesEnum.Admin, UserRolesEnum.Staff];
+const ADMIN_AND_ABOVE     = [UserRolesEnum.SuperAdmin, UserRolesEnum.Admin];
 const STAFF_AND_ABOVE     = [UserRolesEnum.SuperAdmin, UserRolesEnum.Admin, UserRolesEnum.Staff];
 const SUPERADMIN_ONLY     = [UserRolesEnum.SuperAdmin];
 
@@ -42,6 +42,12 @@ const routes: Routes = [
         path: 'result',
         data: { roles: [...STAFF_AND_ABOVE, UserRolesEnum.Student] },
         loadChildren: () => import('./result/result.module').then((m) => m.ResultModule),
+      },
+
+      {
+        path: 'my-classes',
+        data: { roles: [UserRolesEnum.Staff] },
+        loadChildren: () => import('./my-classes/my-classes.module').then((m) => m.MyClassesModule),
       },
 
       // ── All authenticated (student payment) ──────────────────────────────

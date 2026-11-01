@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-import { async, Observable, Subject } from 'rxjs';
-import { filter, takeUntil } from 'rxjs/operators';
+import { async, combineLatest, Observable, Subject } from 'rxjs';
+import { filter, map, takeUntil } from 'rxjs/operators';
 import { ResultFacade } from '../../../../store/result/result.facade';
 import { SchoolTermSessionFacade } from '../../../../store/school-term-session/school-term-session.facade';
 import { ClassFacade } from '../../../../store/class/class.facade';
@@ -14,6 +14,7 @@ import {
   NotificationTypeEnums,
 } from '../../../../services/toast-notification.service';
 import { getClassLabel } from '../../../../services/helper.service';
+import { StaffAssignmentService } from '../../../../services/staff-assignment.service';
 
 @Component({
   selector: 'app-view-result',
@@ -42,7 +43,8 @@ export class ViewResultComponent implements OnInit, OnDestroy {
     private resultFacade: ResultFacade,
     private schoolTermSessionFacade: SchoolTermSessionFacade,
     private classFacade: ClassFacade,
-    private toastService: ToastNotificationService
+    private toastService: ToastNotificationService,
+    private staffAssignmentService: StaffAssignmentService
   ) {
     this.viewResultForm = this.fb.group({
       schoolTermSessionId: ['', Validators.required],
@@ -51,7 +53,14 @@ export class ViewResultComponent implements OnInit, OnDestroy {
     });
 
     this.schoolTermSessions$ = this.schoolTermSessionFacade.schoolTermSessionAll$;
-    this.classes$ = this.classFacade.classAll$;
+    // Staff can only view results for classes they are class teacher for
+    this.classes$ = combineLatest([this.classFacade.classAll$, this.staffAssignmentService.myScope$()]).pipe(
+      map(([classes, scope]) => {
+        if (!classes || !scope) return classes;
+        const formClassIds = new Set(scope.formClasses.map(c => c.classId));
+        return classes.filter(c => formClassIds.has(c.id));
+      })
+    );
   }
 
   getClassName(item: ClassListInterface): string {
