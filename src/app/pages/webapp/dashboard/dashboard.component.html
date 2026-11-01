@@ -14,6 +14,21 @@
     </div>
   </ng-container>
 
+  <!-- Unpaid fees reminder (students) -->
+  <div *ngIf="feeReminder" class="rounded-xl border border-amber-200 bg-amber-50 p-4 mb-8 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+    <div class="flex items-start gap-3">
+      <mat-icon class="text-amber-600">notifications_active</mat-icon>
+      <div>
+        <p class="font-semibold text-gray-800">You have ₦{{ feeReminder.netDue | number:'1.2-2' }} in unpaid fees</p>
+        <p class="text-sm text-gray-600">
+          {{ termsOwing }} term{{ termsOwing === 1 ? '' : 's' }} still have a balance.
+          See the breakdown and pay online on your fees page.
+        </p>
+      </div>
+    </div>
+    <a mat-raised-button color="primary" routerLink="/app/payment">Pay now</a>
+  </div>
+
   <!-- Stats Grid -->
   <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4 mb-8">
     <a *ngFor="let stat of stats"

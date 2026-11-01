@@ -15,10 +15,13 @@ import {
   StudentListInterface,
   SchoolTermSessionListInterface,
   DropdownListInterface,
+  TermEnum,
 } from '../../../types';
 import { UserRolesEnum } from '../../../types/auth';
 import { environment } from '../../../../environments/environment';
-import { getClassLabel } from '../../../services/helper.service';
+import { getClassLabel, openBlobInNewTab } from '../../../services/helper.service';
+import { StudentPortalService } from '../../../services/student-portal.service';
+import { StudentFeeSummaryInterface } from '../../../types/fee';
 import { PaymentDialogComponent, PaymentDialogData, PaymentDialogResult } from './payment-dialog/payment-dialog.component';
 
 @Component({
@@ -28,6 +31,8 @@ import { PaymentDialogComponent, PaymentDialogData, PaymentDialogResult } from '
 })
 export class PaymentComponent implements OnInit, OnDestroy {
   private destroy$ = new Subject<void>();
+  feeSummary: StudentFeeSummaryInterface | null = null;
+  downloadingStatement = false;
   private allFees$ = new BehaviorSubject<FeeListInterface[]>([]);
   private selectedTermSessionId$ = new BehaviorSubject<string | null>(null);
 
@@ -55,6 +60,7 @@ export class PaymentComponent implements OnInit, OnDestroy {
     private globalLoadingFacade: GlobalLoadingFacade,
     private dialog: MatDialog,
     private http: HttpClient,
+    private studentPortalService: StudentPortalService,
   ) {
     this.loading$ = this.studentFacade.loading$;
 
@@ -158,7 +164,35 @@ export class PaymentComponent implements OnInit, OnDestroy {
       this.student = students![0];
       this.walletBalance = this.student.studentWallet?.balance ?? 0;
       this.extractFees(this.student);
+      this.loadFeeSummary(this.student.id);
     });
+  }
+
+  private loadFeeSummary(studentId: string) {
+    this.feeSummary = null;
+    this.studentPortalService.getFeeSummary(studentId)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({ next: (summary) => this.feeSummary = summary, error: () => this.feeSummary = null });
+  }
+
+  get termsWithBalance() {
+    return (this.feeSummary?.terms ?? []).filter(t => t.outstanding > 0);
+  }
+
+  termLabel(term: number): string {
+    return `${TermEnum[term]} Term`;
+  }
+
+  downloadStatement() {
+    if (!this.student) return;
+    this.downloadingStatement = true;
+    this.studentPortalService.downloadStatement(this.student.id)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: (blob) => { this.downloadingStatement = false; openBlobInNewTab(blob); },
+        // The HTTP interceptor already shows the API's error message
+        error: () => { this.downloadingStatement = false; },
+      });
   }
 
   private extractFees(student: StudentListInterface) {

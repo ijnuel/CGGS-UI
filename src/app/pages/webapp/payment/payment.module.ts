@@ -17,15 +17,17 @@ import { PaymentComponent } from './payment.component';
 import { PaymentSuccessComponent } from './payment-success/payment-success.component';
 import { PaymentDialogComponent } from './payment-dialog/payment-dialog.component';
 import { WalletHistoryComponent } from './wallet-history/wallet-history.component';
+import { ReceiptsComponent } from './receipts/receipts.component';
 
 const routes: Routes = [
   { path: '', component: PaymentComponent },
   { path: 'success', component: PaymentSuccessComponent },
   { path: 'wallet-history', component: WalletHistoryComponent },
+  { path: 'receipts', component: ReceiptsComponent },
 ];
 
 @NgModule({
-  declarations: [PaymentComponent, PaymentSuccessComponent, PaymentDialogComponent, WalletHistoryComponent],
+  declarations: [PaymentComponent, PaymentSuccessComponent, PaymentDialogComponent, WalletHistoryComponent, ReceiptsComponent],
   imports: [
     CommonModule,
     SharedModule,
