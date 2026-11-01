@@ -1,0 +1,84 @@
+<div class="pl-8 pr-9 pt-6 pb-10">
+  <div class="mb-6">
+    <h3 class="text-xl font-bold" style="color: var(--app-primary)">My Classes</h3>
+    <p class="text-sm text-gray-500 mt-1">The classes you are class teacher for, and the subjects you teach</p>
+  </div>
+
+  <div *ngIf="loading" class="flex justify-center py-16">
+    <mat-spinner diameter="36"></mat-spinner>
+  </div>
+
+  <ng-container *ngIf="!loading">
+    <!-- Subjects taught this term -->
+    <section class="mb-8">
+      <h4 class="text-base font-semibold text-gray-700">
+        Subjects I Teach
+        <span *ngIf="currentTerm" class="text-sm font-normal text-gray-500">
+          — {{ termName(currentTerm.term) }}, {{ currentTerm.session?.name }}
+        </span>
+      </h4>
+      <p *ngIf="!subjects.length" class="text-sm text-gray-500 mt-2">
+        You have not been assigned any subjects for this term.
+      </p>
+      <div *ngIf="subjects.length" class="bg-white rounded-lg shadow-sm mt-3 overflow-x-auto">
+        <table class="w-full text-sm">
+          <thead class="text-left text-gray-500 border-b">
+            <tr>
+              <th class="px-4 py-3 font-medium">Class</th>
+              <th class="px-4 py-3 font-medium">Subject</th>
+              <th class="px-4 py-3"></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let s of subjects" class="border-b last:border-0">
+              <td class="px-4 py-3">{{ s.className }}</td>
+              <td class="px-4 py-3">{{ s.subjectName }}</td>
+              <td class="px-4 py-3 text-right">
+                <a mat-stroked-button routerLink="/app/result/update" [queryParams]="scoresLink(s)"
+                   style="color: var(--app-primary); border-color: var(--app-primary);">
+                  <mat-icon>edit_note</mat-icon> Enter scores
+                </a>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- Classes this staff member is class teacher for -->
+    <section>
+      <h4 class="text-base font-semibold text-gray-700">My Class</h4>
+      <p *ngIf="!formClasses.length" class="text-sm text-gray-500 mt-2">
+        You are not class teacher for any class.
+      </p>
+      <div *ngFor="let cls of formClasses" class="bg-white rounded-lg shadow-sm mt-3">
+        <div class="flex items-center justify-between px-4 py-3 border-b">
+          <div>
+            <div class="font-semibold text-gray-800">{{ cls.className }}</div>
+            <div class="text-xs text-gray-500">{{ cls.students.length }} student{{ cls.students.length === 1 ? '' : 's' }} this session</div>
+          </div>
+          <a mat-stroked-button routerLink="/app/result/view"
+             style="color: var(--app-primary); border-color: var(--app-primary);">
+            <mat-icon>bar_chart</mat-icon> Class results
+          </a>
+        </div>
+        <table *ngIf="cls.students.length" class="w-full text-sm">
+          <thead class="text-left text-gray-500 border-b">
+            <tr>
+              <th class="px-4 py-2 font-medium w-12">S/N</th>
+              <th class="px-4 py-2 font-medium">Student No</th>
+              <th class="px-4 py-2 font-medium">Name</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let st of cls.students; let i = index" class="border-b last:border-0">
+              <td class="px-4 py-2 text-gray-500">{{ i + 1 }}</td>
+              <td class="px-4 py-2">{{ st.studentNo }}</td>
+              <td class="px-4 py-2">{{ st.name }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+  </ng-container>
+</div>

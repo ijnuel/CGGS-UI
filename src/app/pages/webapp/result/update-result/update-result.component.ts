@@ -1,7 +1,7 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FormBuilder, FormGroup, FormControl, Validators } from '@angular/forms';
 import { combineLatest, Observable, Subject } from 'rxjs';
-import { takeUntil, map, filter, first, distinctUntilChanged, withLatestFrom } from 'rxjs/operators';
+import { takeUntil, map, filter, first, distinctUntilChanged, withLatestFrom, startWith } from 'rxjs/operators';
 import { Router, ActivatedRoute } from '@angular/router';
 import { ResultFacade } from '../../../../store/result/result.facade';
 import { StudentClassSubjectAssessmentScoreFacade } from '../../../../store/student-class-subject-assessment-score/student-class-subject-assessment-score.facade';
@@ -16,6 +16,7 @@ import { SchoolTermSessionListInterface, ClassListInterface, SubjectListInterfac
 import { ClassLevelListInterface } from '../../../../types/class-level';
 import { ToastNotificationService, NotificationTypeEnums } from '../../../../services/toast-notification.service';
 import { getClassLabel } from '../../../../services/helper.service';
+import { StaffAssignmentService } from '../../../../services/staff-assignment.service';
 
 @Component({
   selector: 'app-update-result',
@@ -68,7 +69,8 @@ export class UpdateResultComponent implements OnInit, OnDestroy {
     private sharedFacade: SharedFacade,
     private router: Router,
     private route: ActivatedRoute,
-    private toastService: ToastNotificationService
+    private toastService: ToastNotificationService,
+    private staffAssignmentService: StaffAssignmentService
   ) {
     this.updateResultForm = this.fb.group({
       schoolTermSessionId: ['', Validators.required],
@@ -78,12 +80,26 @@ export class UpdateResultComponent implements OnInit, OnDestroy {
 
     // Initialize observables
     this.schoolTermSessions$ = this.schoolTermSessionFacade.schoolTermSessionAll$;
+    const staffScope$ = this.staffAssignmentService.myScope$();
+    const termId$ = this.formControl.schoolTermSessionId.valueChanges.pipe(startWith(this.formControl.schoolTermSessionId.value));
+    const classId$ = this.formControl.classId.valueChanges.pipe(startWith(this.formControl.classId.value));
+    // Staff only see their form classes and the classes they teach in the selected term.
     // Class/GetAll currently returns classLevel: null; hydrate from class-levels
     // so the dropdown labels render with "{classLevel.name} {level} {name}".
     this.classes$ = combineLatest([
       this.classFacade.classAll$,
       this.classLevelFacade.classLevelAll$,
+      staffScope$,
+      termId$,
     ]).pipe(
+      map(([classes, levels, scope, termId]) => {
+        if (!classes || !scope) return [classes, levels] as const;
+        const allowed = new Set([
+          ...scope.formClasses.map(c => c.classId),
+          ...scope.classSubjects.filter(cs => cs.schoolTermSessionId === termId).map(cs => cs.classId),
+        ]);
+        return [classes.filter(c => allowed.has(c.id)), levels] as const;
+      }),
       map(([classes, levels]) => {
         if (!classes) return classes;
         const levelMap = new Map<string, ClassLevelListInterface>(
@@ -95,7 +111,18 @@ export class UpdateResultComponent implements OnInit, OnDestroy {
         }));
       })
     );
-    this.subjects$ = this.subjectFacade.subjectAll$;
+    // In a class they only teach (not their form class), staff only see their own subjects
+    this.subjects$ = combineLatest([this.subjectFacade.subjectAll$, staffScope$, termId$, classId$]).pipe(
+      map(([subjects, scope, termId, classId]) => {
+        if (!subjects || !scope || scope.formClasses.some(c => c.classId === classId)) return subjects;
+        const allowed = new Set(
+          scope.classSubjects
+            .filter(cs => cs.schoolTermSessionId === termId && cs.classId === classId)
+            .map(cs => cs.subjectId)
+        );
+        return subjects.filter(s => allowed.has(s.id));
+      })
+    );
     this.skillGrades$ = this.sharedFacade.selectSkillGradeList$.pipe(
       map(skillGrades => this.sortSkillGradesByValue(skillGrades))
     );

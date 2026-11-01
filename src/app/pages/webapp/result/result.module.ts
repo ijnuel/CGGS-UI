@@ -13,6 +13,7 @@ import { UpdateResultComponent } from './update-result/update-result.component';
 import { ViewResultComponent } from './view-result/view-result.component';
 import { StudentResultComponent } from './student-result/student-result.component';
 import { PromoteStudentsComponent } from './promote-students/promote-students.component';
+import { UserRolesEnum } from '../../../types/auth';
 import { SharedModule } from '../../../shared/shared.module';
 import { provideNativeDateAdapter } from '@angular/material/core';
 
@@ -24,18 +25,22 @@ const routes: Routes = [
     {
         path: 'view',
         component: ViewResultComponent,
+        data: { roles: [UserRolesEnum.SuperAdmin, UserRolesEnum.Admin, UserRolesEnum.Staff] },
     },
     {
         path: 'update',
         component: UpdateResultComponent,
+        data: { roles: [UserRolesEnum.SuperAdmin, UserRolesEnum.Admin, UserRolesEnum.Staff] },
     },
     {
         path: 'my-result',
         component: StudentResultComponent,
+        data: { roles: [UserRolesEnum.Student] },
     },
     {
         path: 'promote',
         component: PromoteStudentsComponent,
+        data: { roles: [UserRolesEnum.SuperAdmin, UserRolesEnum.Admin] },
     }
 ];
 
