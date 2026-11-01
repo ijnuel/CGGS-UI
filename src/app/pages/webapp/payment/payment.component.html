@@ -54,6 +54,54 @@
     </a>
   </div>
 
+  <!-- Fee summary across all terms -->
+  <div *ngIf="feeSummary" class="bg-white rounded-xl shadow-sm border border-gray-100 p-5 mb-6">
+    <div class="flex flex-col sm:flex-row sm:items-start justify-between gap-4">
+      <div>
+        <p class="text-xs text-gray-500 uppercase tracking-wide">Balance to pay</p>
+        <p class="text-2xl font-bold mt-0.5"
+           [class.text-red-600]="feeSummary.netDue > 0"
+           [class.text-green-600]="feeSummary.netDue <= 0">
+          ₦{{ feeSummary.netDue | number:'1.2-2' }}
+        </p>
+        <p class="text-xs text-gray-500 mt-1">
+          Outstanding fees ₦{{ feeSummary.outstanding | number:'1.2-2' }}
+          <ng-container *ngIf="feeSummary.walletBalance > 0">
+            less wallet credit ₦{{ feeSummary.walletBalance | number:'1.2-2' }}
+          </ng-container>
+          · Paid so far ₦{{ feeSummary.totalPaid | number:'1.2-2' }} of ₦{{ feeSummary.totalBilled | number:'1.2-2' }}
+        </p>
+      </div>
+      <div class="flex gap-2 flex-shrink-0">
+        <button mat-stroked-button (click)="downloadStatement()" [disabled]="downloadingStatement">
+          <mat-icon class="!text-base !mr-1">request_quote</mat-icon>
+          {{ downloadingStatement ? 'Generating...' : 'Statement' }}
+        </button>
+        <a mat-stroked-button routerLink="receipts" [queryParams]="isFamily && student ? { studentId: student.id } : {}">
+          <mat-icon class="!text-base !mr-1">receipt</mat-icon>
+          Receipts
+        </a>
+      </div>
+    </div>
+
+    <div *ngIf="termsWithBalance.length" class="mt-4 border-t border-gray-100 pt-3">
+      <p class="text-xs text-gray-500 uppercase tracking-wide mb-2">Outstanding by term</p>
+      <div class="flex flex-wrap gap-2">
+        <div *ngFor="let t of termsWithBalance"
+             class="rounded-lg border px-3 py-2 text-sm"
+             [class.border-red-200]="!t.isCurrent" [class.bg-red-50]="!t.isCurrent"
+             [class.border-amber-200]="t.isCurrent" [class.bg-amber-50]="t.isCurrent">
+          <div class="font-medium text-gray-800">
+            {{ termLabel(t.term) }} {{ t.sessionName }}
+            <span *ngIf="t.isCurrent" class="text-xs font-normal text-amber-700">· current</span>
+          </div>
+          <div class="text-gray-700">₦{{ t.outstanding | number:'1.2-2' }} of ₦{{ t.billed | number:'1.2-2' }}</div>
+          <div class="text-xs text-gray-500">{{ t.termStartDate | date:'d MMM' }} – {{ t.termEndDate | date:'d MMM yyyy' }}</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <!-- Term Session Filter -->
   <div class="mb-5">
     <mat-form-field class="w-full max-w-xs">

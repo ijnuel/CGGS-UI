@@ -6,6 +6,8 @@ import { StaffFacade } from '../../../store/staff/staff.facade';
 import { ClassFacade } from '../../../store/class/class.facade';
 import { CurrentUserInterface } from '../../../types';
 import { UserRolesEnum } from '../../../types/auth';
+import { StudentFeeSummaryInterface } from '../../../types/fee';
+import { StudentPortalService } from '../../../services/student-portal.service';
 
 interface StatItem {
   label: string;
@@ -38,6 +40,11 @@ export class DashboardComponent implements OnInit {
   stats: StatItem[] = [];
   quickLinks: QuickLinkItem[] = [];
 
+  feeReminder: StudentFeeSummaryInterface | null = null;
+
+  get termsOwing(): number {
+    return this.feeReminder?.terms.filter(t => t.outstanding > 0).length ?? 0;
+  }
   private allStats: StatItem[] = [];
   private allQuickLinks: QuickLinkItem[] = [];
 
@@ -46,6 +53,7 @@ export class DashboardComponent implements OnInit {
     private studentFacade: StudentFacade,
     private staffFacade: StaffFacade,
     private classFacade: ClassFacade,
+    private studentPortalService: StudentPortalService,
   ) {
     this.currentUser$ = this.authFacade.selectedCurrentUser$;
 
@@ -169,6 +177,14 @@ export class DashboardComponent implements OnInit {
       if (visibleLabels.has('Students')) this.studentFacade.studentCount();
       if (visibleLabels.has('Staff')) this.staffFacade.staffCount();
       if (visibleLabels.has('Classes')) this.classFacade.classCount();
+
+      // Remind students of any unpaid balance
+      if (user.userType === UserRolesEnum.Student) {
+        this.studentPortalService.getFeeSummary().subscribe({
+          next: (summary) => this.feeReminder = summary.netDue > 0 ? summary : null,
+          error: () => this.feeReminder = null,
+        });
+      }
     });
   }
 }

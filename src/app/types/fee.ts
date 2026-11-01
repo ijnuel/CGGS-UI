@@ -160,3 +160,37 @@ export interface InitiatePaymentRequest {
   feeId?: string;
   metaData?: Record<string, any>;
 }
+
+// Student/family self-service (StudentPortal API)
+export interface StudentFeeSummaryInterface {
+  studentId: string;
+  studentName: string;
+  totalBilled: number;
+  totalPaid: number;
+  outstanding: number;
+  walletBalance: number;
+  netDue: number;
+  terms: StudentTermFeeInterface[];
+}
+
+export interface StudentTermFeeInterface {
+  schoolTermSessionId: string;
+  sessionName: string;
+  term: TermEnum;
+  termStartDate: string;
+  termEndDate: string;
+  isCurrent: boolean;
+  billed: number;
+  paid: number;
+  outstanding: number;
+}
+
+export interface StudentReceiptInterface {
+  transactionId: string;
+  reference: string;
+  paidAt: string;
+  amount: number;
+  gateway: string;
+  purpose: string;
+  isRefunded: boolean;
+}

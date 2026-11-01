@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
+import { MatButtonModule } from '@angular/material/button';
 import { CommonModule } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
 import { DashboardComponent } from './dashboard.component';
@@ -13,6 +14,6 @@ const routes: Routes = [
 
 @NgModule({
   declarations: [DashboardComponent],
-  imports: [CommonModule, RouterModule.forChild(routes), MatIconModule],
+  imports: [CommonModule, RouterModule.forChild(routes), MatIconModule, MatButtonModule],
 })
 export class DashboardModule {}
