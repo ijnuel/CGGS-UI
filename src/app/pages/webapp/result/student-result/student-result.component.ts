@@ -1,16 +1,25 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-import { Observable, Subject } from 'rxjs';
-import { filter, take, takeUntil } from 'rxjs/operators';
-import { ResultFacade } from '../../../../store/result/result.facade';
-import { SchoolTermSessionFacade } from '../../../../store/school-term-session/school-term-session.facade';
-import { StudentFacade } from '../../../../store/student/student.facade';
-import { AuthFacade } from '../../../../store/auth/auth.facade';
-import { SchoolTermSessionListInterface, StudentListInterface } from '../../../../types';
-import {
-  ToastNotificationService,
-  NotificationTypeEnums,
-} from '../../../../services/toast-notification.service';
+import { ActivatedRoute } from '@angular/router';
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
+import { StudentPortalService } from '../../../../services/student-portal.service';
+import { openBlobInNewTab } from '../../../../services/helper.service';
+import { StudentResultsOverviewInterface, TermResultSummaryInterface } from '../../../../types/result';
+import { TermEnum } from '../../../../types';
+
+interface SubjectRow {
+  subjectName: string;
+  scores: (number | null)[]; // aligned with the term columns
+  change: number | null; // latest score minus the one before it
+  sparkPoints: { x: number; y: number; label: string }[];
+  sparkPath: string;
+}
+
+// Sparkline geometry. Every subject shares one vertical scale (the student's lowest to highest
+// score, padded) so slopes are comparable between rows yet large enough to read.
+const SPARK_WIDTH = 120;
+const SPARK_HEIGHT = 36;
+const SPARK_PAD = 5;
 
 @Component({
   selector: 'app-student-result',
@@ -18,101 +27,85 @@ import {
   styleUrls: ['./student-result.component.scss'],
 })
 export class StudentResultComponent implements OnInit, OnDestroy {
-  form: FormGroup<{
-    schoolTermSessionId: FormControl<string | null>;
-    hideOverallPosition: FormControl<boolean | null>;
-  }>;
+  readonly sparkWidth = SPARK_WIDTH;
+  readonly sparkHeight = SPARK_HEIGHT;
 
-  schoolTermSessions$: Observable<SchoolTermSessionListInterface[] | null>;
-  generatingStudentResult$ = this.resultFacade.generatingStudentResult$;
+  loading = true;
+  overview: StudentResultsOverviewInterface | null = null;
+  termsNewestFirst: TermResultSummaryInterface[] = [];
+  subjectRows: SubjectRow[] = [];
+  downloadingTermId: string | null = null;
+  studentId: string | null = null;
 
-  private student: StudentListInterface | null = null;
   private destroy$ = new Subject<void>();
-  private hasAutoSelectedSession = false;
 
-  constructor(
-    private fb: FormBuilder,
-    private resultFacade: ResultFacade,
-    private schoolTermSessionFacade: SchoolTermSessionFacade,
-    private studentFacade: StudentFacade,
-    private authFacade: AuthFacade,
-    private toastService: ToastNotificationService
-  ) {
-    this.form = this.fb.group({
-      schoolTermSessionId: ['', Validators.required],
-      hideOverallPosition: [false],
-    });
-
-    this.schoolTermSessions$ = this.schoolTermSessionFacade.schoolTermSessionAll$;
-  }
-
-  get formControl() {
-    return this.form.controls;
-  }
+  constructor(private route: ActivatedRoute, private studentPortalService: StudentPortalService) {}
 
   ngOnInit(): void {
-    this.schoolTermSessionFacade.getSchoolTermSessionAll({
-      nestedProperties: [{ name: 'session' }],
-    });
-
-    // Auto-select the current school term session
-    this.schoolTermSessions$
+    // A family can pass the child they are viewing; a student uses their own record
+    this.studentId = this.route.snapshot.queryParamMap.get('studentId');
+    this.studentPortalService
+      .getResults(this.studentId)
       .pipe(takeUntil(this.destroy$))
-      .subscribe((sessions) => {
-        if (this.hasAutoSelectedSession || !sessions || sessions.length === 0) return;
-        const defaultSession = sessions.find((s) => s.isCurrent) ?? sessions[0];
-        if (defaultSession && !this.formControl.schoolTermSessionId.value) {
-          this.formControl.schoolTermSessionId.setValue(defaultSession.id);
-          this.hasAutoSelectedSession = true;
-        }
-      });
-
-    // Fetch the student record that belongs to the current user
-    this.authFacade.selectedCurrentUser$
-      .pipe(
-        filter((user) => !!user),
-        take(1)
-      )
-      .subscribe((user) => {
-        this.studentFacade.getStudentByProperties({
-          queryProperties: [{ name: 'userId', value: user!.userId }],
-        });
-      });
-
-    this.studentFacade.studentByProperties$
-      .pipe(takeUntil(this.destroy$))
-      .subscribe((students) => {
-        this.student = students?.[0] ?? null;
-      });
-
-    // Open PDF when result is ready
-    this.resultFacade.generatedStudentResult$
-      .pipe(
-        filter((blob): blob is Blob => !!blob),
-        takeUntil(this.destroy$)
-      )
-      .subscribe((blob) => {
-        const fileURL = URL.createObjectURL(blob);
-        window.open(fileURL, '_blank');
-        this.toastService.openToast('Result generated successfully', NotificationTypeEnums.SUCCESS);
-        this.resultFacade.clearGeneratedStudentResult();
-        setTimeout(() => URL.revokeObjectURL(fileURL), 5000);
+      .subscribe({
+        next: (overview) => {
+          this.overview = overview;
+          this.termsNewestFirst = [...overview.terms].reverse();
+          this.subjectRows = this.buildSubjectRows(overview);
+          this.loading = false;
+        },
+        // The HTTP interceptor already shows the API's error message
+        error: () => { this.loading = false; },
       });
   }
 
-  generateResult(): void {
-    if (this.form.invalid) {
-      this.form.markAllAsTouched();
-      return;
-    }
-    if (!this.student) {
-      this.toastService.openToast('Student profile not found. Please try again.', NotificationTypeEnums.ERROR);
-      return;
-    }
-    const { schoolTermSessionId, hideOverallPosition } = this.form.value;
-    if (schoolTermSessionId) {
-      this.resultFacade.generateStudentResult(schoolTermSessionId, this.student.id, hideOverallPosition ?? false);
-    }
+  termLabel(term: { term: number; sessionName: string }): string {
+    return `${TermEnum[term.term]} Term ${term.sessionName}`;
+  }
+
+  shortTermLabel(term: { term: number; sessionName: string }): string {
+    return `${TermEnum[term.term]} ${term.sessionName}`;
+  }
+
+  downloadPdf(term: TermResultSummaryInterface): void {
+    if (!this.overview) return;
+    this.downloadingTermId = term.schoolTermSessionId;
+    this.studentPortalService
+      .downloadResult(term.schoolTermSessionId, this.overview.studentId)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: (blob) => { this.downloadingTermId = null; openBlobInNewTab(blob); },
+        error: () => { this.downloadingTermId = null; },
+      });
+  }
+
+  private buildSubjectRows(overview: StudentResultsOverviewInterface): SubjectRow[] {
+    const termIds = overview.terms.map((t) => t.schoolTermSessionId);
+    const step = termIds.length > 1 ? (SPARK_WIDTH - SPARK_PAD * 2) / (termIds.length - 1) : 0;
+    const allScores = overview.subjects.flatMap((s) => s.points.map((p) => p.score));
+    const low = Math.max(0, Math.floor(Math.min(...allScores) - 5));
+    const high = Math.min(100, Math.ceil(Math.max(...allScores) + 5));
+    const range = Math.max(high - low, 1);
+
+    return overview.subjects.map((subject) => {
+      const scores = termIds.map((id) => subject.points.find((p) => p.schoolTermSessionId === id)?.score ?? null);
+      const sparkPoints = scores
+        .map((score, i) => score === null ? null : {
+          x: SPARK_PAD + i * step,
+          y: SPARK_HEIGHT - SPARK_PAD - ((Math.min(Math.max(score, low), high) - low) / range) * (SPARK_HEIGHT - SPARK_PAD * 2),
+          label: `${this.termLabel(overview.terms[i])}: ${score}`,
+        })
+        .filter((p): p is { x: number; y: number; label: string } => p !== null);
+      const taken = scores.filter((s): s is number => s !== null);
+
+      return {
+        subjectName: subject.subjectName,
+        scores,
+        change: taken.length > 1 ? Math.round((taken[taken.length - 1] - taken[taken.length - 2]) * 100) / 100 : null,
+        sparkPoints,
+        sparkPath: sparkPoints.map((p, i) => `${i === 0 ? 'M' : 'L'}${p.x},${p.y}`).join(' '),
+      };
+    });
   }
 
   ngOnDestroy(): void {

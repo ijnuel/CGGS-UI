@@ -42,6 +42,12 @@ export default [
     url: '/app/bursary'
   },
   {
+    name: 'My Results',
+    icon: 'assets/icons/result-icon.svg',
+    roles: [UserRolesEnum.Student],
+    url: '/app/result/my-result'
+  },
+  {
     name: 'Payments',
     icon: 'assets/icons/result-icon.svg',
     roles: [UserRolesEnum.Student],

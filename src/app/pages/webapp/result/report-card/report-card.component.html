@@ -1,0 +1,123 @@
+<div class="p-6">
+  <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-6">
+    <div class="flex items-center gap-2 -ml-3">
+      <a mat-icon-button routerLink="/app/result/my-result" [queryParams]="studentId ? { studentId } : {}"
+         aria-label="Back to my results" style="color: var(--app-primary);">
+        <mat-icon>arrow_back</mat-icon>
+      </a>
+      <div>
+        <h3 class="text-2xl font-bold" style="color: var(--app-primary)">Report Card</h3>
+        <p class="text-sm text-gray-500 mt-1">{{ termLabel }}</p>
+      </div>
+    </div>
+    <button *ngIf="card" mat-stroked-button (click)="downloadPdf()" [disabled]="downloading">
+      <mat-icon>download</mat-icon> {{ downloading ? 'Opening...' : 'Download PDF' }}
+    </button>
+  </div>
+
+  <div *ngIf="loading" class="flex justify-center py-16">
+    <mat-spinner diameter="36"></mat-spinner>
+  </div>
+
+  <ng-container *ngIf="card">
+    <!-- Student and term details -->
+    <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-5 mb-6 grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
+      <div><p class="text-xs text-gray-500 uppercase tracking-wide">Student</p><p class="font-medium text-gray-800">{{ card.studentName }}</p><p class="text-gray-500">{{ card.studentNo }}</p></div>
+      <div><p class="text-xs text-gray-500 uppercase tracking-wide">Class</p><p class="font-medium text-gray-800">{{ card.className }}</p><p class="text-gray-500">{{ card.pupilsInClass }} in class</p></div>
+      <div><p class="text-xs text-gray-500 uppercase tracking-wide">Term</p><p class="font-medium text-gray-800">{{ card.termBegins | date:'d MMM' }} – {{ card.termEnds | date:'d MMM yyyy' }}</p>
+        <p *ngIf="card.nextTermBegins" class="text-gray-500">Next term begins {{ card.nextTermBegins | date:'d MMM yyyy' }}</p></div>
+      <div><p class="text-xs text-gray-500 uppercase tracking-wide">Attendance</p>
+        <p class="font-medium text-gray-800">{{ card.timesPresent }} of {{ card.timesSchoolOpened }} days</p>
+        <p class="text-gray-500">{{ card.timesAbsent }} absent</p></div>
+    </div>
+
+    <!-- Overall -->
+    <div class="flex flex-wrap gap-3 mb-6">
+      <div class="bg-white rounded-xl shadow-sm border border-gray-100 px-5 py-4 min-w-[150px]">
+        <p class="text-xs text-gray-500 uppercase tracking-wide">Average</p>
+        <p class="text-2xl font-bold text-gray-800">{{ card.percentage | number:'1.0-2' }}%</p>
+      </div>
+      <div class="bg-white rounded-xl shadow-sm border border-gray-100 px-5 py-4 min-w-[150px]">
+        <p class="text-xs text-gray-500 uppercase tracking-wide">Grade</p>
+        <p class="text-2xl font-bold text-gray-800">{{ card.grade || '—' }}</p>
+        <p *ngIf="card.remark" class="text-xs text-gray-500">{{ card.remark }}</p>
+      </div>
+      <div class="bg-white rounded-xl shadow-sm border border-gray-100 px-5 py-4 min-w-[150px]">
+        <p class="text-xs text-gray-500 uppercase tracking-wide">Position</p>
+        <p class="text-2xl font-bold text-gray-800">{{ card.position || '—' }}</p>
+        <p *ngIf="card.position" class="text-xs text-gray-500">of {{ card.pupilsInClass }}</p>
+      </div>
+      <div class="bg-white rounded-xl shadow-sm border border-gray-100 px-5 py-4 min-w-[150px]">
+        <p class="text-xs text-gray-500 uppercase tracking-wide">Total</p>
+        <p class="text-2xl font-bold text-gray-800">{{ card.total | number:'1.0-2' }}</p>
+        <p class="text-xs text-gray-500">{{ card.subjects.length }} subjects</p>
+      </div>
+      <div *ngIf="card.isThirdTerm" class="bg-white rounded-xl shadow-sm border border-gray-100 px-5 py-4 min-w-[150px]">
+        <p class="text-xs text-gray-500 uppercase tracking-wide">Promotion</p>
+        <p class="text-lg font-bold text-gray-800 flex items-center gap-1">
+          <mat-icon class="!text-xl">{{ card.isPromoted ? 'check_circle' : 'info' }}</mat-icon>
+          {{ card.isPromoted ? 'Promoted' : 'See class teacher' }}
+        </p>
+      </div>
+    </div>
+
+    <!-- Subjects -->
+    <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-x-auto mb-6">
+      <table class="w-full text-sm">
+        <thead class="text-left text-gray-500 border-b">
+          <tr>
+            <th class="px-4 py-3 font-medium">Subject</th>
+            <th *ngFor="let c of card.assessmentColumns" class="px-3 py-3 font-medium text-right whitespace-nowrap">{{ c.name }} ({{ c.weight }})</th>
+            <th class="px-3 py-3 font-medium text-right">Total</th>
+            <ng-container *ngIf="card.isThirdTerm">
+              <th class="px-3 py-3 font-medium text-right whitespace-nowrap">1st Term</th>
+              <th class="px-3 py-3 font-medium text-right whitespace-nowrap">2nd Term</th>
+              <th class="px-3 py-3 font-medium text-right">Average</th>
+            </ng-container>
+            <th class="px-3 py-3 font-medium">Grade</th>
+            <th class="px-3 py-3 font-medium">Remark</th>
+            <th class="px-3 py-3 font-medium">Position</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let s of card.subjects" class="border-b last:border-0">
+            <td class="px-4 py-3 font-medium text-gray-800">{{ s.subjectName }}</td>
+            <td *ngFor="let score of s.scores" class="px-3 py-3 text-right tabular-nums">{{ score === null ? '—' : (score | number:'1.0-2') }}</td>
+            <td class="px-3 py-3 text-right font-medium tabular-nums">{{ s.totalScore | number:'1.0-2' }}</td>
+            <ng-container *ngIf="card.isThirdTerm">
+              <td class="px-3 py-3 text-right tabular-nums">{{ s.term1Score === null ? '—' : (s.term1Score | number:'1.0-2') }}</td>
+              <td class="px-3 py-3 text-right tabular-nums">{{ s.term2Score === null ? '—' : (s.term2Score | number:'1.0-2') }}</td>
+              <td class="px-3 py-3 text-right tabular-nums">{{ s.termAverage === null ? '—' : (s.termAverage | number:'1.0-2') }}</td>
+            </ng-container>
+            <td class="px-3 py-3">{{ s.grade || '—' }}</td>
+            <td class="px-3 py-3 text-gray-600">{{ s.remark }}</td>
+            <td class="px-3 py-3">{{ s.position || '—' }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Skills and remarks -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+      <div *ngIf="card.effectiveAreas.length" class="bg-white rounded-xl shadow-sm border border-gray-100 p-5">
+        <p class="text-xs text-gray-500 uppercase tracking-wide mb-2">Affective areas</p>
+        <div *ngFor="let a of card.effectiveAreas" class="flex justify-between text-sm py-1 border-b last:border-0 border-gray-50">
+          <span>{{ a.name }}</span><span class="font-medium">{{ a.grade || '—' }}</span>
+        </div>
+      </div>
+      <div *ngIf="card.psychomotorSkills.length" class="bg-white rounded-xl shadow-sm border border-gray-100 p-5">
+        <p class="text-xs text-gray-500 uppercase tracking-wide mb-2">Psychomotor skills</p>
+        <div *ngFor="let p of card.psychomotorSkills" class="flex justify-between text-sm py-1 border-b last:border-0 border-gray-50">
+          <span>{{ p.name }}</span><span class="font-medium">{{ p.grade || '—' }}</span>
+        </div>
+      </div>
+      <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-5 text-sm">
+        <p class="text-xs text-gray-500 uppercase tracking-wide mb-1">Class teacher's remark</p>
+        <p class="text-gray-800">{{ card.classTeacherRemarks || '—' }}</p>
+        <p *ngIf="card.classTeacherName" class="text-xs text-gray-500 mt-1">{{ card.classTeacherName }}</p>
+        <p class="text-xs text-gray-500 uppercase tracking-wide mt-4 mb-1">Principal's remark</p>
+        <p class="text-gray-800">{{ card.principalRemarks || '—' }}</p>
+      </div>
+    </div>
+  </ng-container>
+</div>

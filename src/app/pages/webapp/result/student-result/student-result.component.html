@@ -1,52 +1,101 @@
 <div class="p-6">
-
-  <!-- Page header -->
-  <h2 class="text-xl font-semibold text-gray-800 mb-6">My Result</h2>
-
-  <!-- Criteria card -->
-  <div class="view-card mb-5">
-    <p class="text-sm font-semibold text-gray-700 mb-1">Select Term</p>
-    <p class="text-xs text-gray-400 mb-5">Choose a school term session to view your result</p>
-
-    <form [formGroup]="form">
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-5">
-        <mat-form-field>
-          <mat-label>School Term Session</mat-label>
-          <mat-select formControlName="schoolTermSessionId" required>
-            <mat-option *ngFor="let session of schoolTermSessions$ | async" [value]="session.id">
-              {{ session.session?.name }}, {{ session.termString }} Term
-            </mat-option>
-          </mat-select>
-          <mat-error *ngIf="formControl.schoolTermSessionId?.hasError('required')">
-            School term session is required
-          </mat-error>
-        </mat-form-field>
-      </div>
-
-      <div class="flex items-center gap-2">
-        <mat-checkbox formControlName="hideOverallPosition">
-          <span class="text-sm text-gray-700">Hide overall position on result sheet</span>
-        </mat-checkbox>
-      </div>
-    </form>
+  <div class="mb-6">
+    <h3 class="text-2xl font-bold" style="color: var(--app-primary)">My Results</h3>
+    <p class="text-sm text-gray-500 mt-1">Your published results for every term, and how each subject is going</p>
   </div>
 
-  <!-- Action card -->
-  <div class="action-card" [class.action-card-disabled]="form.invalid">
-    <div class="flex items-start justify-between mb-4">
-      <div class="action-icon-box">
-        <mat-icon class="action-icon">picture_as_pdf</mat-icon>
+  <div *ngIf="loading" class="flex justify-center py-16">
+    <mat-spinner diameter="36"></mat-spinner>
+  </div>
+
+  <div *ngIf="!loading && !overview?.terms?.length" class="flex flex-col items-center justify-center py-16 text-gray-400">
+    <mat-icon class="!text-6xl !w-16 !h-16 mb-4">assignment</mat-icon>
+    <p class="text-sm">No results have been published for you yet.</p>
+  </div>
+
+  <ng-container *ngIf="!loading && overview?.terms?.length">
+    <!-- Session averages -->
+    <div class="flex flex-wrap gap-3 mb-6">
+      <div *ngFor="let s of overview!.sessions" class="bg-white rounded-xl shadow-sm border border-gray-100 px-5 py-4 min-w-[180px]">
+        <p class="text-xs text-gray-500 uppercase tracking-wide">{{ s.sessionName }} average</p>
+        <p class="text-2xl font-bold text-gray-800 mt-0.5">{{ s.average | number:'1.0-2' }}%</p>
+        <p class="text-xs text-gray-500">{{ s.termCount }} term{{ s.termCount === 1 ? '' : 's' }}</p>
       </div>
-      <mat-spinner *ngIf="generatingStudentResult$ | async" diameter="20"></mat-spinner>
     </div>
-    <p class="action-title">Generate My Result Sheet</p>
-    <p class="action-desc">Produces a PDF result sheet for the selected term</p>
-    <button mat-raised-button color="primary" class="action-btn"
-      (click)="generateResult()"
-      [disabled]="form.invalid || (generatingStudentResult$ | async)">
-      <mat-spinner *ngIf="generatingStudentResult$ | async" diameter="16" class="inline-block"></mat-spinner>
-      {{ (generatingStudentResult$ | async) ? 'Generating…' : 'Generate' }}
-    </button>
-  </div>
 
+    <!-- Results history -->
+    <h4 class="text-base font-semibold text-gray-700 mb-2">Results by term</h4>
+    <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-x-auto mb-8">
+      <table class="w-full text-sm">
+        <thead class="text-left text-gray-500 border-b">
+          <tr>
+            <th class="px-4 py-3 font-medium">Term</th>
+            <th class="px-4 py-3 font-medium">Class</th>
+            <th class="px-4 py-3 font-medium text-right">Average</th>
+            <th class="px-4 py-3 font-medium">Grade</th>
+            <th class="px-4 py-3 font-medium">Position</th>
+            <th class="px-4 py-3"></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let t of termsNewestFirst" class="border-b last:border-0">
+            <td class="px-4 py-3 font-medium text-gray-800">{{ termLabel(t) }}</td>
+            <td class="px-4 py-3">{{ t.className }}</td>
+            <td class="px-4 py-3 text-right tabular-nums">{{ t.percentage | number:'1.0-2' }}%</td>
+            <td class="px-4 py-3">{{ t.grade || '—' }} <span *ngIf="t.remark" class="text-gray-500">· {{ t.remark }}</span></td>
+            <td class="px-4 py-3">{{ t.position || '—' }}<span *ngIf="t.position" class="text-gray-500"> of {{ t.pupilsInClass }}</span></td>
+            <td class="px-4 py-3 text-right whitespace-nowrap">
+              <a mat-stroked-button [routerLink]="t.schoolTermSessionId" [queryParams]="studentId ? { studentId } : {}" class="!mr-2">
+                <mat-icon>visibility</mat-icon> Report card
+              </a>
+              <button mat-stroked-button (click)="downloadPdf(t)" [disabled]="downloadingTermId === t.schoolTermSessionId">
+                <mat-icon>download</mat-icon> {{ downloadingTermId === t.schoolTermSessionId ? 'Opening...' : 'PDF' }}
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Subject progress -->
+    <h4 class="text-base font-semibold text-gray-700 mb-2">Subject progress</h4>
+    <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-x-auto">
+      <table class="w-full text-sm">
+        <thead class="text-left text-gray-500 border-b">
+          <tr>
+            <th class="px-4 py-3 font-medium">Subject</th>
+            <th *ngFor="let t of overview!.terms" class="px-4 py-3 font-medium text-right whitespace-nowrap">{{ shortTermLabel(t) }}</th>
+            <th *ngIf="overview!.terms.length > 1" class="px-4 py-3 font-medium">Trend</th>
+            <th *ngIf="overview!.terms.length > 1" class="px-4 py-3 font-medium text-right">Change</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let row of subjectRows" class="border-b last:border-0">
+            <td class="px-4 py-3 font-medium text-gray-800">{{ row.subjectName }}</td>
+            <td *ngFor="let score of row.scores" class="px-4 py-3 text-right tabular-nums">
+              {{ score === null ? '—' : (score | number:'1.0-2') }}
+            </td>
+            <td *ngIf="overview!.terms.length > 1" class="px-4 py-2">
+              <svg *ngIf="row.sparkPoints.length > 1" class="spark" [attr.width]="sparkWidth" [attr.height]="sparkHeight"
+                   [attr.viewBox]="'0 0 ' + sparkWidth + ' ' + sparkHeight" role="img"
+                   [attr.aria-label]="row.subjectName + ' scores by term'">
+                <path class="spark-line" [attr.d]="row.sparkPath"></path>
+                <circle *ngFor="let p of row.sparkPoints" class="spark-point" [attr.cx]="p.x" [attr.cy]="p.y" r="4">
+                  <title>{{ p.label }}</title>
+                </circle>
+              </svg>
+            </td>
+            <td *ngIf="overview!.terms.length > 1" class="px-4 py-3 text-right whitespace-nowrap tabular-nums">
+              <ng-container *ngIf="row.change !== null; else noChange">
+                <mat-icon class="change-icon">{{ row.change > 0 ? 'arrow_upward' : row.change < 0 ? 'arrow_downward' : 'remove' }}</mat-icon>
+                {{ row.change > 0 ? '+' : '' }}{{ row.change | number:'1.0-2' }}
+              </ng-container>
+              <ng-template #noChange><span class="text-gray-400">—</span></ng-template>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="text-xs text-gray-500 mt-2">Scores are each subject's total for that term, out of 100.</p>
+  </ng-container>
 </div>

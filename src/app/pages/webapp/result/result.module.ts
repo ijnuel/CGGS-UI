@@ -13,6 +13,7 @@ import { UpdateResultComponent } from './update-result/update-result.component';
 import { ViewResultComponent } from './view-result/view-result.component';
 import { StudentResultComponent } from './student-result/student-result.component';
 import { PromoteStudentsComponent } from './promote-students/promote-students.component';
+import { ReportCardComponent } from './report-card/report-card.component';
 import { UserRolesEnum } from '../../../types/auth';
 import { SharedModule } from '../../../shared/shared.module';
 import { provideNativeDateAdapter } from '@angular/material/core';
@@ -38,6 +39,11 @@ const routes: Routes = [
         data: { roles: [UserRolesEnum.Student] },
     },
     {
+        path: 'my-result/:termId',
+        component: ReportCardComponent,
+        data: { roles: [UserRolesEnum.Student] },
+    },
+    {
         path: 'promote',
         component: PromoteStudentsComponent,
         data: { roles: [UserRolesEnum.SuperAdmin, UserRolesEnum.Admin] },
@@ -45,7 +51,7 @@ const routes: Routes = [
 ];
 
 @NgModule({
-    declarations: [ResultComponent, UpdateResultComponent, ViewResultComponent, StudentResultComponent, PromoteStudentsComponent],
+    declarations: [ResultComponent, UpdateResultComponent, ViewResultComponent, StudentResultComponent, PromoteStudentsComponent, ReportCardComponent],
     imports: [
         CommonModule,
         SharedModule,
