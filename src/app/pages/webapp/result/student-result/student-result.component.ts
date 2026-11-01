@@ -98,15 +98,6 @@ export class StudentResultComponent implements OnInit, OnDestroy {
         this.resultFacade.clearGeneratedStudentResult();
         setTimeout(() => URL.revokeObjectURL(fileURL), 5000);
       });
-
-    this.resultFacade.generateStudentResultError$
-      .pipe(
-        filter((error): error is string => !!error),
-        takeUntil(this.destroy$)
-      )
-      .subscribe((error) => {
-        this.toastService.openToast(error, NotificationTypeEnums.ERROR);
-      });
   }
 
   generateResult(): void {
