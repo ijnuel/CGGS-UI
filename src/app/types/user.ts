@@ -18,5 +18,8 @@ export interface CurrentUserInterface {
   userType: UserRolesEnum;
   // Set after a super admin resets the password; the user must change it before anything else
   mustChangePassword?: boolean;
+  // Set while an admin is signed in as this user for support
+  impersonatorName?: string | null;
+  impersonationExpiresAt?: string | null;
   userTypeString: string;
 }

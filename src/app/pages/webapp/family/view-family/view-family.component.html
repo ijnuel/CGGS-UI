@@ -8,7 +8,9 @@
   </div>
   <div *ngIf="family$ | async as family">
     <p><strong>Name:</strong> {{ family.lastName }}</p>
-    <div class="mt-4">
+    <div class="mt-4 flex gap-2">
+      <app-support-sign-in-button [userId]="family.userId" [name]="(family.firstName ?? '') + ' ' + family.lastName">
+      </app-support-sign-in-button>
       <app-reset-password-button [userId]="family.userId" [name]="(family.firstName ?? '') + ' ' + family.lastName" [email]="family.email">
       </app-reset-password-button>
     </div>
