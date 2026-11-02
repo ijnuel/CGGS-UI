@@ -63,4 +63,12 @@ export default [
     roles: [],
     url: '/app/payment-gateway-setup'
   },
+  {
+    name: 'Support Sessions',
+    icon: 'assets/icons/admin-setup-icon.svg',
+    matIcon: 'support_agent',
+    description: 'Log of administrators signing in as other users',
+    roles: [],
+    url: '/app/support-sessions'
+  },
 ];

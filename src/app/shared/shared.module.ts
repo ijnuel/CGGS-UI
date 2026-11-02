@@ -22,6 +22,7 @@ import { SearchableMatSelectComponent } from './searchable-mat-select/searchable
 import { RoleDialogComponent } from './role-dialog/role-dialog.component';
 import { ResetPasswordDialogComponent } from './reset-password-dialog/reset-password-dialog.component';
 import { ResetPasswordButtonComponent } from './reset-password-button/reset-password-button.component';
+import { ImpersonationBannerComponent, SupportSignInButtonComponent, SupportSignInDialogComponent } from './support-sign-in/support-sign-in.component';
 import { TypeToConfirmDialogComponent } from './type-to-confirm-dialog/type-to-confirm-dialog.component';
 import { FormsModule } from '@angular/forms';
 import { MatSelectModule } from '@angular/material/select';
@@ -45,6 +46,9 @@ import { MatAutocompleteModule } from '@angular/material/autocomplete';
     RoleDialogComponent,
     ResetPasswordDialogComponent,
     ResetPasswordButtonComponent,
+    SupportSignInButtonComponent,
+    SupportSignInDialogComponent,
+    ImpersonationBannerComponent,
     TypeToConfirmDialogComponent
   ],
   imports: [
@@ -86,7 +90,10 @@ import { MatAutocompleteModule } from '@angular/material/autocomplete';
     SearchableMatSelectComponent,
     RoleDialogComponent,
     ResetPasswordDialogComponent,
-    ResetPasswordButtonComponent
+    ResetPasswordButtonComponent,
+    SupportSignInButtonComponent,
+    SupportSignInDialogComponent,
+    ImpersonationBannerComponent
   ],
 })
 export class SharedModule {}
