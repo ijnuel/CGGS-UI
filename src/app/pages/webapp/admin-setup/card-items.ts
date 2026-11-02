@@ -64,6 +64,14 @@ export default [
     url: '/app/payment-gateway-setup'
   },
   {
+    name: 'Audit Trail',
+    icon: 'assets/icons/admin-setup-icon.svg',
+    matIcon: 'policy',
+    description: 'Requests, sign-ins and devices, and every data change',
+    roles: [],
+    url: '/app/audit'
+  },
+  {
     name: 'Support Sessions',
     icon: 'assets/icons/admin-setup-icon.svg',
     matIcon: 'support_agent',

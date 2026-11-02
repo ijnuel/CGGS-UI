@@ -106,6 +106,11 @@ const routes: Routes = [
 
       // ── Admin Setup sub-routes (Admin and above) ──────────────────────────
       {
+        path: 'audit',
+        data: { roles: ADMIN_AND_ABOVE },
+        loadChildren: () => import('./audit/audit.module').then((m) => m.AuditModule),
+      },
+      {
         path: 'support-sessions',
         data: { roles: ADMIN_AND_ABOVE },
         loadChildren: () => import('./support-sessions/support-sessions.module').then((m) => m.SupportSessionsModule),
