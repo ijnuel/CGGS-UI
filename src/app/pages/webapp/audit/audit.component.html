@@ -1,0 +1,217 @@
+<div class="pl-8 pr-9 pt-6 pb-10">
+  <div class="mb-4">
+    <h3 class="text-xl font-bold" style="color: var(--app-primary)">Audit Trail</h3>
+    <p class="text-sm text-gray-500 mt-1">
+      Every request to the system with who made it and from where, sign-ins and other security events, and every change
+      to the data. Passwords and secret keys are never shown.
+    </p>
+  </div>
+
+  <mat-tab-group #tabs (selectedIndexChange)="onTabChange($event)" animationDuration="0ms">
+    <!-- ───────────── Activity ───────────── -->
+    <mat-tab label="Activity">
+      <div class="flex flex-wrap items-end gap-3 mt-4">
+        <mat-form-field class="w-40">
+          <mat-label>From</mat-label>
+          <input matInput [matDatepicker]="aFrom" [(ngModel)]="activityFilter.from" />
+          <mat-datepicker-toggle matIconSuffix [for]="aFrom"></mat-datepicker-toggle>
+          <mat-datepicker #aFrom></mat-datepicker>
+        </mat-form-field>
+        <mat-form-field class="w-40">
+          <mat-label>To</mat-label>
+          <input matInput [matDatepicker]="aTo" [(ngModel)]="activityFilter.to" />
+          <mat-datepicker-toggle matIconSuffix [for]="aTo"></mat-datepicker-toggle>
+          <mat-datepicker #aTo></mat-datepicker>
+        </mat-form-field>
+        <mat-form-field class="w-48">
+          <mat-label>Event</mat-label>
+          <mat-select [(ngModel)]="activityFilter.eventType">
+            <mat-option value="">Any</mat-option>
+            <mat-option *ngFor="let e of eventTypes" [value]="e.value">{{ e.label }}</mat-option>
+          </mat-select>
+        </mat-form-field>
+        <mat-form-field class="w-40">
+          <mat-label>Outcome</mat-label>
+          <mat-select [(ngModel)]="activityFilter.outcome">
+            <mat-option value="">Any</mat-option>
+            <mat-option *ngFor="let o of outcomes" [value]="o">{{ o }}</mat-option>
+          </mat-select>
+        </mat-form-field>
+        <mat-form-field class="w-64">
+          <mat-label>Search</mat-label>
+          <input matInput [(ngModel)]="activityFilter.search" (keyup.enter)="loadActivity()" placeholder="User, path, error, request id" />
+        </mat-form-field>
+        <mat-slide-toggle class="mb-5" [(ngModel)]="activityFilter.securityEventsOnly">Security events only</mat-slide-toggle>
+        <button mat-raised-button color="primary" class="mb-5" (click)="loadActivity()">Apply</button>
+      </div>
+
+      <div *ngIf="activityLoading" class="flex justify-center py-10"><mat-spinner diameter="32"></mat-spinner></div>
+      <p *ngIf="!activityLoading && !activity.length" class="text-sm text-gray-500 py-6">No activity matches these filters.</p>
+
+      <div *ngIf="!activityLoading && activity.length" class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-x-auto">
+        <table class="w-full text-sm">
+          <thead class="text-left text-gray-500 border-b">
+            <tr>
+              <th class="px-4 py-3 font-medium">Time</th>
+              <th class="px-4 py-3 font-medium">User</th>
+              <th class="px-4 py-3 font-medium">Action</th>
+              <th class="px-4 py-3 font-medium">Result</th>
+              <th class="px-4 py-3 font-medium">IP address</th>
+              <th class="px-4 py-3 font-medium">Device</th>
+            </tr>
+          </thead>
+          <tbody>
+            <ng-container *ngFor="let a of activity">
+              <tr class="border-b last:border-0 cursor-pointer hover:bg-gray-50 align-top" (click)="toggleRequest(a)">
+                <td class="px-4 py-3 whitespace-nowrap">{{ asUtc(a.timestamp) | date:'d MMM yyyy, h:mm:ss a' }}</td>
+                <td class="px-4 py-3">
+                  {{ a.userName || 'Not signed in' }}
+                  <div class="text-xs text-gray-500">{{ userTypeLabel(a.userType) }}</div>
+                  <div *ngIf="a.impersonatorName" class="text-xs text-amber-700">via support: {{ a.impersonatorName }}</div>
+                </td>
+                <td class="px-4 py-3">
+                  <div *ngIf="a.eventType" class="font-medium text-gray-800">{{ eventLabel(a.eventType) }}</div>
+                  <div class="text-gray-600"><span class="font-mono text-xs">{{ a.method }}</span> {{ a.endpoint || a.path }}</div>
+                  <div *ngIf="a.dataChangeCount" class="text-xs text-gray-500">{{ a.dataChangeCount }} data change{{ a.dataChangeCount === 1 ? '' : 's' }}</div>
+                </td>
+                <td class="px-4 py-3 whitespace-nowrap">
+                  <span class="text-xs px-2 py-0.5 rounded-full"
+                        [class.bg-gray-100]="a.outcome === 'Success'" [class.text-gray-700]="a.outcome === 'Success'"
+                        [class.bg-amber-50]="a.outcome !== 'Success'" [class.text-amber-800]="a.outcome !== 'Success' && a.outcome !== 'ServerError'"
+                        [class.bg-red-50]="a.outcome === 'ServerError'" [class.text-red-700]="a.outcome === 'ServerError'">
+                    {{ a.statusCode }} {{ a.outcome }}
+                  </span>
+                  <div class="text-xs text-gray-500 mt-1">{{ a.durationMs }} ms</div>
+                </td>
+                <td class="px-4 py-3 font-mono text-xs">{{ a.ipAddress || '—' }}</td>
+                <td class="px-4 py-3 text-gray-600">{{ a.browser || '—' }}<div class="text-xs text-gray-500">{{ a.operatingSystem }} {{ a.deviceType }}</div></td>
+              </tr>
+              <tr *ngIf="expandedRequestId === a.requestId" class="bg-gray-50 border-b">
+                <td colspan="6" class="px-4 py-4">
+                  <div class="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-1 text-xs">
+                    <div><span class="text-gray-500">Request id:</span>&nbsp;<span class="font-mono">{{ a.requestId }}</span></div>
+                    <div><span class="text-gray-500">Path:</span> {{ a.path }}{{ a.queryString }}</div>
+                    <div *ngIf="a.eventDetails"><span class="text-gray-500">Details:</span> {{ a.eventDetails }}</div>
+                    <div *ngIf="a.errorMessage" class="text-red-700"><span class="text-gray-500">Error:</span> {{ a.errorMessage }}</div>
+                    <div *ngIf="a.forwardedFor"><span class="text-gray-500">Forwarded for:</span> {{ a.forwardedFor }}</div>
+                    <div *ngIf="a.origin"><span class="text-gray-500">Origin:</span> {{ a.origin }}</div>
+                    <div class="md:col-span-2 break-all"><span class="text-gray-500">User agent:</span> {{ a.userAgent || '—' }}</div>
+                  </div>
+                  <div *ngIf="requestDetail?.dataChanges?.length" class="mt-3">
+                    <p class="text-xs text-gray-500 uppercase tracking-wide mb-1">Data changed by this request</p>
+                    <div *ngFor="let c of requestDetail!.dataChanges" class="text-xs py-1">
+                      <span class="font-medium">{{ c.action }} {{ c.entityName }}</span>
+                      <span class="text-gray-500 font-mono"> {{ c.entityId }}</span>
+                      <span *ngIf="c.changes.length" class="text-gray-600"> — {{ c.changes.length }} field{{ c.changes.length === 1 ? '' : 's' }}:
+                        <ng-container *ngFor="let f of c.changes; let last = last">{{ f.field }}<ng-container *ngIf="c.action === 'Updated'"> ({{ f.old ?? '∅' }} → {{ f.new ?? '∅' }})</ng-container>{{ last ? '' : ', ' }}</ng-container>
+                      </span>
+                    </div>
+                  </div>
+                </td>
+              </tr>
+            </ng-container>
+          </tbody>
+        </table>
+      </div>
+      <div *ngIf="activityTotal > pageSize" class="flex items-center justify-end gap-3 mt-3 text-sm text-gray-600">
+        <span>Page {{ activityPage }} of {{ totalPages(activityTotal) }} · {{ activityTotal }} records</span>
+        <button mat-stroked-button [disabled]="activityPage <= 1" (click)="loadActivity(activityPage - 1)">Previous</button>
+        <button mat-stroked-button [disabled]="activityPage >= totalPages(activityTotal)" (click)="loadActivity(activityPage + 1)">Next</button>
+      </div>
+    </mat-tab>
+
+    <!-- ───────────── Data changes ───────────── -->
+    <mat-tab label="Data changes">
+      <div class="flex flex-wrap items-end gap-3 mt-4">
+        <mat-form-field class="w-40">
+          <mat-label>From</mat-label>
+          <input matInput [matDatepicker]="cFrom" [(ngModel)]="changesFilter.from" />
+          <mat-datepicker-toggle matIconSuffix [for]="cFrom"></mat-datepicker-toggle>
+          <mat-datepicker #cFrom></mat-datepicker>
+        </mat-form-field>
+        <mat-form-field class="w-40">
+          <mat-label>To</mat-label>
+          <input matInput [matDatepicker]="cTo" [(ngModel)]="changesFilter.to" />
+          <mat-datepicker-toggle matIconSuffix [for]="cTo"></mat-datepicker-toggle>
+          <mat-datepicker #cTo></mat-datepicker>
+        </mat-form-field>
+        <mat-form-field class="w-48">
+          <mat-label>Record type</mat-label>
+          <mat-select [(ngModel)]="changesFilter.entityName">
+            <mat-option value="">Any</mat-option>
+            <mat-option *ngFor="let n of entityNames" [value]="n">{{ n }}</mat-option>
+          </mat-select>
+        </mat-form-field>
+        <mat-form-field class="w-36">
+          <mat-label>Action</mat-label>
+          <mat-select [(ngModel)]="changesFilter.action">
+            <mat-option value="">Any</mat-option>
+            <mat-option *ngFor="let a of actions" [value]="a">{{ a }}</mat-option>
+          </mat-select>
+        </mat-form-field>
+        <mat-form-field class="w-72">
+          <mat-label>Record id</mat-label>
+          <input matInput [(ngModel)]="changesFilter.entityId" (keyup.enter)="loadChanges()" placeholder="History of one record" />
+        </mat-form-field>
+        <button mat-raised-button color="primary" class="mb-5" (click)="loadChanges()">Apply</button>
+      </div>
+
+      <div *ngIf="changesLoading" class="flex justify-center py-10"><mat-spinner diameter="32"></mat-spinner></div>
+      <p *ngIf="!changesLoading && !changes.length" class="text-sm text-gray-500 py-6">No data changes match these filters.</p>
+
+      <div *ngIf="!changesLoading && changes.length" class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-x-auto">
+        <table class="w-full text-sm">
+          <thead class="text-left text-gray-500 border-b">
+            <tr>
+              <th class="px-4 py-3 font-medium">Time</th>
+              <th class="px-4 py-3 font-medium">Changed by</th>
+              <th class="px-4 py-3 font-medium">Record</th>
+              <th class="px-4 py-3 font-medium">Action</th>
+              <th class="px-4 py-3 font-medium">Fields</th>
+            </tr>
+          </thead>
+          <tbody>
+            <ng-container *ngFor="let c of changes">
+              <tr class="border-b last:border-0 cursor-pointer hover:bg-gray-50 align-top" (click)="toggleChange(c)">
+                <td class="px-4 py-3 whitespace-nowrap">{{ asUtc(c.timestamp) | date:'d MMM yyyy, h:mm:ss a' }}</td>
+                <td class="px-4 py-3">
+                  {{ c.impersonatorName || c.userName || (c.requestId ? 'Unknown' : 'System (background job)') }}
+                  <div *ngIf="c.impersonatorName" class="text-xs text-amber-700">while signed in as {{ c.userName }}</div>
+                </td>
+                <td class="px-4 py-3">{{ c.entityName }}<div class="text-xs text-gray-500 font-mono">{{ c.entityId }}</div></td>
+                <td class="px-4 py-3">{{ c.action }}</td>
+                <td class="px-4 py-3 text-gray-600">
+                  <ng-container *ngFor="let f of c.changes | slice:0:4; let last = last">{{ f.field }}{{ last ? '' : ', ' }}</ng-container>
+                  <span *ngIf="c.changes.length > 4"> +{{ c.changes.length - 4 }} more</span>
+                </td>
+              </tr>
+              <tr *ngIf="expandedChangeId === c.id" class="bg-gray-50 border-b">
+                <td colspan="5" class="px-4 py-4">
+                  <table class="text-xs w-full max-w-3xl">
+                    <thead class="text-left text-gray-500"><tr><th class="py-1 pr-4">Field</th><th class="py-1 pr-4">Before</th><th class="py-1">After</th></tr></thead>
+                    <tbody>
+                      <tr *ngFor="let f of c.changes" class="border-t border-gray-200">
+                        <td class="py-1 pr-4 font-medium">{{ f.field }}</td>
+                        <td class="py-1 pr-4 text-gray-600 break-all">{{ f.old ?? '—' }}</td>
+                        <td class="py-1 break-all">{{ f.new ?? '—' }}</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                  <div class="flex gap-4 mt-3 text-xs">
+                    <button mat-button (click)="showHistory(c, tabs); $event.stopPropagation()">Full history of this record</button>
+                    <span *ngIf="c.requestId" class="text-gray-500 self-center">Request <span class="font-mono">{{ c.requestId }}</span></span>
+                  </div>
+                </td>
+              </tr>
+            </ng-container>
+          </tbody>
+        </table>
+      </div>
+      <div *ngIf="changesTotal > pageSize" class="flex items-center justify-end gap-3 mt-3 text-sm text-gray-600">
+        <span>Page {{ changesPage }} of {{ totalPages(changesTotal) }} · {{ changesTotal }} records</span>
+        <button mat-stroked-button [disabled]="changesPage <= 1" (click)="loadChanges(changesPage - 1)">Previous</button>
+        <button mat-stroked-button [disabled]="changesPage >= totalPages(changesTotal)" (click)="loadChanges(changesPage + 1)">Next</button>
+      </div>
+    </mat-tab>
+  </mat-tab-group>
+</div>
