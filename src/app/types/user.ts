@@ -16,5 +16,7 @@ export interface CurrentUserInterface {
   residentialStateId: string;
   phoneNumber: string;
   userType: UserRolesEnum;
+  // Set after a super admin resets the password; the user must change it before anything else
+  mustChangePassword?: boolean;
   userTypeString: string;
 }

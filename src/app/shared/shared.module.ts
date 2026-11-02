@@ -20,6 +20,8 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { ProgramSetupLevelPanelComponent } from './program-setup-level-panel/program-setup-level-panel.component';
 import { SearchableMatSelectComponent } from './searchable-mat-select/searchable-mat-select.component';
 import { RoleDialogComponent } from './role-dialog/role-dialog.component';
+import { ResetPasswordDialogComponent } from './reset-password-dialog/reset-password-dialog.component';
+import { ResetPasswordButtonComponent } from './reset-password-button/reset-password-button.component';
 import { TypeToConfirmDialogComponent } from './type-to-confirm-dialog/type-to-confirm-dialog.component';
 import { FormsModule } from '@angular/forms';
 import { MatSelectModule } from '@angular/material/select';
@@ -41,6 +43,8 @@ import { MatAutocompleteModule } from '@angular/material/autocomplete';
     ProgramSetupLevelPanelComponent,
     SearchableMatSelectComponent,
     RoleDialogComponent,
+    ResetPasswordDialogComponent,
+    ResetPasswordButtonComponent,
     TypeToConfirmDialogComponent
   ],
   imports: [
@@ -80,7 +84,9 @@ import { MatAutocompleteModule } from '@angular/material/autocomplete';
     ProgramSetupLevelPanelComponent,
     MatCheckboxModule,
     SearchableMatSelectComponent,
-    RoleDialogComponent
+    RoleDialogComponent,
+    ResetPasswordDialogComponent,
+    ResetPasswordButtonComponent
   ],
 })
 export class SharedModule {}

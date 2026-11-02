@@ -166,6 +166,11 @@ export class AuthEffect {
                     )
                     .pipe(
                         map((response) => {
+                            // The API answers 200 with entity=false when the current password is wrong
+                            if (response?.entity === false) {
+                                this.toast.openToast('Password not changed. Check your current password and try again.', NotificationTypeEnums.ERROR);
+                                return AuthAction.changePasswordFail({ error: 'Password not changed' });
+                            }
                             this.toast.openToast('Password changed successfully!', NotificationTypeEnums.SUCCESS);
                             return AuthAction.changePasswordSuccess({ payload: response });
                         }),
