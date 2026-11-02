@@ -5,7 +5,7 @@ import {
   FormGroup,
   Validators,
 } from '@angular/forms';
-import { Subject, takeUntil } from 'rxjs';
+import { Observable, Subject, filter, map, take, takeUntil } from 'rxjs';
 import { Router } from '@angular/router';
 import { AuthFacade } from '../../../store/auth/auth.facade';
 import { ChangePasswordDto } from '../../../types/auth';
@@ -34,6 +34,7 @@ export class ChangePasswordComponent implements OnInit, OnDestroy {
   showNewPassword = false;
   showConfirmPassword = false;
   isLoading = false;
+  mustChangePassword$: Observable<boolean>;
 
   constructor(
     private fb: FormBuilder,
@@ -48,6 +49,7 @@ export class ChangePasswordComponent implements OnInit, OnDestroy {
     }, {
       validators: this.passwordMatchValidator
     });
+    this.mustChangePassword$ = this.authFacade.selectedCurrentUser$.pipe(map(user => !!user?.mustChangePassword));
   }
 
   ngOnInit() {
@@ -55,8 +57,14 @@ export class ChangePasswordComponent implements OnInit, OnDestroy {
       .changePasswordSuccessAction()
       .pipe(takeUntil(this.unsubscribe$))
       .subscribe(() => {
-        this.isLoading = false;
-        this.router.navigate(['app/home']);
+        // Reload the profile so the must-change flag is cleared before leaving this page
+        this.authFacade.getCurrentUser();
+        this.authFacade.selectedCurrentUser$
+          .pipe(filter(user => !!user && !user.mustChangePassword), take(1), takeUntil(this.unsubscribe$))
+          .subscribe(() => {
+            this.isLoading = false;
+            this.router.navigate(['app/home']);
+          });
       });
 
     // Handle error case - reset loading state

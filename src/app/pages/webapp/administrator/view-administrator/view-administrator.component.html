@@ -79,10 +79,14 @@
         <p class="text-gray-500 text-sm mt-1">Email: <span class="font-medium text-gray-700">{{ administrator.email ?? '—' }}</span></p>
         <p class="text-gray-500 text-sm">Phone: <span class="font-medium text-gray-700">{{ administrator.phoneNumber ?? '—' }}</span></p>
       </div>
-      <button mat-raised-button color="primary" (click)="navigateToEdit()" class="flex-shrink-0">
-        <mat-icon>edit</mat-icon>
-        Edit
-      </button>
+      <div class="flex gap-2 flex-shrink-0">
+        <app-reset-password-button [userId]="administrator.userId" [name]="administrator.firstName + ' ' + administrator.lastName" [email]="administrator.email">
+        </app-reset-password-button>
+        <button mat-raised-button color="primary" (click)="navigateToEdit()">
+          <mat-icon>edit</mat-icon>
+          Edit
+        </button>
+      </div>
     </div>
 
     <!-- Info Grid -->

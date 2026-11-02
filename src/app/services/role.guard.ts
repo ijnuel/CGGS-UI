@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { ActivatedRouteSnapshot, CanActivateChild, Router, UrlTree } from '@angular/router';
+import { ActivatedRouteSnapshot, CanActivateChild, Router, RouterStateSnapshot, UrlTree } from '@angular/router';
 import { Observable } from 'rxjs';
 import { map, skipWhile, take, withLatestFrom } from 'rxjs/operators';
 import { AuthFacade } from '../store/auth/auth.facade';
@@ -11,11 +11,15 @@ import { UserRolesEnum } from '../types/auth';
 export class RoleGuard implements CanActivateChild {
   constructor(private router: Router, private authFacade: AuthFacade) {}
 
-  canActivateChild(route: ActivatedRouteSnapshot): Observable<boolean | UrlTree> {
+  canActivateChild(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean | UrlTree> {
     return this.authFacade.selectedLoading$.pipe(
       skipWhile((isLoading) => isLoading),
       withLatestFrom(this.authFacade.selectedCurrentUser$),
       map(([, currentUser]) => {
+        // A password reset by a super admin must be changed before anything else
+        if (currentUser?.mustChangePassword && !state.url.startsWith('/app/change-password'))
+          return this.router.parseUrl('/app/change-password');
+
         const allowedRoles = route.data['roles'] as UserRolesEnum[] | undefined;
 
         // No role restriction on this route — allow

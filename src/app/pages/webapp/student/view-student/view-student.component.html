@@ -90,6 +90,8 @@
           <mat-icon>request_quote</mat-icon>
           {{ generatingStatement ? 'Generating...' : 'Statement' }}
         </button>
+        <app-reset-password-button [userId]="student.userId" [name]="student.firstName + ' ' + student.lastName" [email]="student.email">
+        </app-reset-password-button>
         <button mat-raised-button color="primary" (click)="navigateToEdit()">
           <mat-icon>edit</mat-icon>
           Edit
